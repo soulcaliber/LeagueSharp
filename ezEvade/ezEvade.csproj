@@ -60,17 +60,23 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clipper_library">
+      <HintPath>..\..\..\Desktop\LeagueSharp\System\clipper_library.dll</HintPath>
+    </Reference>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Users\Hsiao\Documents\LeagueSharp\LeagueSharp\\System\LeagueSharp.dll</HintPath>
+      <HintPath>..\..\..\Desktop\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\Users\Hsiao\Documents\LeagueSharp\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>..\..\..\Desktop\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Users\Hsiao\Documents\LeagueSharp\LeagueSharp\\System\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\Desktop\LeagueSharp\System\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>..\..\..\Desktop\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

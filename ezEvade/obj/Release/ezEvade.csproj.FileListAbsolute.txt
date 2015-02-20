@@ -1,0 +1,15 @@
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\ezEvade.exe.config
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\ezEvade.exe.manifest
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\ezEvade.application
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\ezEvade.exe
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\ezEvade.pdb
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\clipper_library.dll
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\LeagueSharp.Common.dll
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\LeagueSharp.dll
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\SharpDX.dll
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\bin\Release\LeagueSharp.xml
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\obj\Release\ezEvade.exe.manifest
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\obj\Release\ezEvade.application
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\obj\Release\ezEvade.exe
+C:\Users\ZeroX\Documents\LeagueSharp\ezEvade\obj\Release\ezEvade.pdb
