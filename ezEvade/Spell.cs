@@ -1,31 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using LeagueSharp;
-using LeagueSharp.Common;
+﻿using LeagueSharp;
 using SharpDX;
 
 namespace ezEvade
 {
     public class Spell
     {
-        public float startTime;
-        public float endTime;
-        public Vector2 startPos;
-        public Vector2 endPos;
-        public Vector2 direction;
-        public int heroID;
-        public int projectileID;
-        public SpellData info;
-        public int spellID;
-        public GameObject spellObject;
-
-        public Spell()
-        {
-
-        }
+        public Vector2 Direction;
+        public Vector2 EndPos;
+        public float EndTime;
+        public int HeroId;
+        public SpellData Info;
+        public int ProjectileId;
+        public int SpellId;
+        public GameObject SpellObject;
+        public Vector2 StartPos;
+        public float StartTime;
     }
 }

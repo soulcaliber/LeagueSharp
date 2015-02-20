@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -12,36 +9,39 @@ namespace ezEvade
 {
     internal class SpellDetector
     {
-        public delegate void OnCreateSpellHandler (Spell spell);
-        public static event OnCreateSpellHandler OnCreateSpell;
-        
+        public delegate void OnCreateSpellHandler(Spell spell);
+
         //public static event OnDeleteSpellHandler OnDeleteSpell;
-                
-        public static Dictionary<int, Spell> spells = new Dictionary<int, Spell>();
-        public static Dictionary<int, Spell> drawSpells = new Dictionary<int, Spell>();
 
-        public static Dictionary<string, SpellData> onProcessSpells = new Dictionary<string, SpellData>();
-        public static Dictionary<string, SpellData> onMissileSpells = new Dictionary<string, SpellData>();
-
-        public static Dictionary<string, SpellData> windupSpells = new Dictionary<string, SpellData>();
-
-        private static int spellIDCount = 0;
-
-        private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        private static float gameTime { get { return Game.ClockTime * 1000; } }
-
-        private static Menu menu;
+        public static Dictionary<int, Spell> Spells = new Dictionary<int, Spell>();
+        public static Dictionary<int, Spell> DrawSpells = new Dictionary<int, Spell>();
+        public static Dictionary<string, SpellData> OnProcessSpells = new Dictionary<string, SpellData>();
+        public static Dictionary<string, SpellData> OnMissileSpells = new Dictionary<string, SpellData>();
+        public static Dictionary<string, SpellData> WindupSpells = new Dictionary<string, SpellData>();
+        private static int _spellIdCount;
+        private static Menu _menu;
 
         public SpellDetector(Menu mainMenu)
         {
-
-            Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
-            Obj_SpellMissile.OnDelete += SpellMissile_OnDelete;
+            GameObject.OnCreate += SpellMissile_OnCreate;
+            GameObject.OnDelete += SpellMissile_OnDelete;
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
 
-            menu = mainMenu;
+            _menu = mainMenu;
             Game_OnGameLoad();
         }
+
+        private static Obj_AI_Hero MyHero
+        {
+            get { return ObjectManager.Player; }
+        }
+
+        private static float GameTime
+        {
+            get { return Game.ClockTime*1000; }
+        }
+
+        public static event OnCreateSpellHandler OnCreateSpell;
 
         private void Game_OnGameLoad()
         {
@@ -51,227 +51,245 @@ namespace ezEvade
             LoadSpellDictionary();
         }
 
-        private void SpellMissile_OnCreate (GameObject obj, EventArgs args)
+        private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
         {
             if (!obj.IsValid<Obj_SpellMissile>())
+            {
                 return;
+            }
 
-            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+            var missile = (Obj_SpellMissile) obj;
             SpellData spellData;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team && 
-                missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
-                && missile.StartPosition != null && missile.EndPosition != null)
+            if (missile.SpellCaster == null || missile.SpellCaster.Team == MyHero.Team || missile.SData.Name == null ||
+                !OnMissileSpells.TryGetValue(missile.SData.Name, out spellData) || missile.StartPosition == null ||
+                missile.EndPosition == null)
             {
-                if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
+                return;
+            }
+
+            if (!(missile.StartPosition.Distance(MyHero.Position) < spellData.Range + 1000))
+            {
+                return;
+            }
+
+            var hero = missile.SpellCaster;
+            if (hero.IsVisible)
+            {
+                if (spellData.UsePackets)
                 {
-                    var hero = missile.SpellCaster;
-
-                    if (hero.IsVisible)
-                    {
-                        if(spellData.usePackets){
-                            CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
-                            return;
-                        }
-                        
-                        foreach (KeyValuePair<int, Spell> entry in spells)
-                        {
-                            Spell spell = entry.Value;
-
-                            if (spell.info.missileName == missile.SData.Name
-                                && spell.heroID == missile.SpellCaster.NetworkId)
-                            {
-                                spell.spellObject = obj;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
-                    }               
+                    CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
+                    return;
                 }
+
+                foreach (
+                    var spell in
+                        Spells.Select(entry => entry.Value).Where(spell => spell.Info.MissileName == missile.SData.Name
+                                                                           &&
+                                                                           spell.HeroId == missile.SpellCaster.NetworkId)
+                    )
+                {
+                    spell.SpellObject = obj;
+                }
+            }
+            else
+            {
+                CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
             }
         }
 
         private void SpellMissile_OnDelete(GameObject obj, EventArgs args)
         {
             if (!obj.IsValid<Obj_SpellMissile>())
+            {
                 return;
+            }
 
-            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+            //var missile = (Obj_SpellMissile) obj;
             //SpellData spellData;
 
-            foreach (var spell in spells.Values.ToList().Where(
-                    s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
+            foreach (var spell in Spells.Values.ToList().Where(
+                s => (s.SpellObject != null && s.SpellObject.NetworkId == obj.NetworkId))) // IsAlive
             {
-                DeleteSpell(spell.spellID);
-            }       
+                DeleteSpell(spell.SpellId);
+            }
         }
 
         public void RemoveNonDangerousSpells()
         {
-            foreach (var spell in spells.Values.ToList().Where(
-                    s => (s.info.dangerlevel < 2)))
+            foreach (var spell in Spells.Values.ToList().Where(
+                s => (s.Info.Dangerlevel < 2)))
             {
-                DeleteSpell(spell.spellID);
-            }   
+                DeleteSpell(spell.SpellId);
+            }
         }
 
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
             SpellData spellData;
-
-            if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
+            if (hero.Team == MyHero.Team || !OnProcessSpells.TryGetValue(args.SData.Name, out spellData))
             {
-                if (spellData.usePackets == false)
-                {
-                    CreateSpellData(hero, args.Start, args.End, spellData, null);                
-                }                
+                return;
+            }
+
+            if (spellData.UsePackets == false)
+            {
+                CreateSpellData(hero, args.Start, args.End, spellData, null);
             }
         }
 
-        private void CreateSpellData(Obj_AI_Base hero, Vector3 startStartPos, Vector3 spellEndPos, SpellData spellData, GameObject obj)
+        private void CreateSpellData(Obj_AI_Base hero, Vector3 startStartPos, Vector3 spellEndPos, SpellData spellData,
+            GameObject obj)
         {
-            if (startStartPos.Distance(myHero.Position) < spellData.range + 1000)
+            if (!(startStartPos.Distance(MyHero.Position) < spellData.Range + 1000))
             {
-                Vector2 startPosition = startStartPos.To2D();
-                Vector2 endPosition = spellEndPos.To2D();
-                Vector2 direction = (endPosition - startPosition).Normalized();
-                float endTick = 0;
+                return;
+            }
 
-                if (spellData.rangeCap) //for diana q
+            var startPosition = startStartPos.To2D();
+            var endPosition = spellEndPos.To2D();
+            var direction = (endPosition - startPosition).Normalized();
+            float endTick = 0;
+
+            if (spellData.RangeCap) // For diana q
+            {
+                if (endPosition.Distance(startPosition) > spellData.Range)
                 {
-                    if (endPosition.Distance(startPosition) > spellData.range)
-                    {
-                        //var heroCastPos = hero.ServerPosition.To2D();
-                        //direction = (endPosition - heroCastPos).Normalized();
-                        endPosition = startPosition + direction * spellData.range;
-                    }
+                    //var heroCastPos = hero.ServerPosition.To2D();
+                    //direction = (endPosition - heroCastPos).Normalized();
+                    endPosition = startPosition + direction*spellData.Range;
                 }
+            }
 
-                if (spellData.spellType == SpellType.Line)
-                {
-                    endTick = spellData.spellDelay + (spellData.range / spellData.projectileSpeed) * 1000;
-                    endPosition = startPosition + direction * spellData.range;
+            switch (spellData.SpellType)
+            {
+                case SpellType.Line:
+                    endTick = spellData.SpellDelay + (spellData.Range/spellData.ProjectileSpeed)*1000;
+                    endPosition = startPosition + direction*spellData.Range;
 
                     if (obj != null)
-                        endTick -= spellData.spellDelay;                    
-                }
-                else if (spellData.spellType == SpellType.Circular)
-                {
-                    endTick = spellData.spellDelay;
+                        endTick -= spellData.SpellDelay;
+                    break;
+                case SpellType.Circular:
+                    endTick = spellData.SpellDelay;
 
-                    if (spellData.projectileSpeed == 0)
+                    if (spellData.ProjectileSpeed == 0)
                     {
                         endPosition = hero.ServerPosition.To2D();
                     }
-                    else if (spellData.projectileSpeed > 0)
+                    else if (spellData.ProjectileSpeed > 0)
                     {
-                        endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
+                        endTick = endTick + 1000*startPosition.Distance(endPosition)/spellData.ProjectileSpeed;
                     }
-                }
-                else if (spellData.spellType == SpellType.Cone)
-                {
+                    break;
+                case SpellType.Cone:
+                    break;
+            }
 
-                }
-
-                Spell newSpell = new Spell();
-
-                newSpell.startTime = gameTime;
-                newSpell.endTime = gameTime + endTick;
-                newSpell.startPos = startPosition;
-                newSpell.endPos = endPosition;
-                newSpell.direction = direction;
-                newSpell.heroID = hero.NetworkId;
-                newSpell.info = spellData;
-
-                if(obj != null){
-                    newSpell.spellObject = obj;
-                    newSpell.projectileID = obj.NetworkId;
-                }
-
-                int spellID = CreateSpell(newSpell);
-                Utility.DelayAction.Add((int)endTick, () => DeleteSpell(spellID));
-            }            
-        }
-
-        private int CreateSpell(Spell newSpell)
-        {
-            int spellID = spellIDCount++;
-            newSpell.spellID = spellID;
-                        
-            drawSpells.Add(spellID, newSpell);
-
-            if (!(Evade.isDodgeDangerousEnabled() && newSpell.info.dangerlevel < 2))
+            var newSpell = new Spell
             {
-                spells.Add(spellID, newSpell);
-                if (OnCreateSpell != null)
-                {
-                    OnCreateSpell(newSpell);
-                }
-            }            
-                       
-            return spellID;
+                StartTime = GameTime,
+                EndTime = GameTime + endTick,
+                StartPos = startPosition,
+                EndPos = endPosition,
+                Direction = direction,
+                HeroId = hero.NetworkId,
+                Info = spellData
+            };
+
+
+            if (obj != null)
+            {
+                newSpell.SpellObject = obj;
+                newSpell.ProjectileId = obj.NetworkId;
+            }
+
+            var spellId = CreateSpell(newSpell);
+            Utility.DelayAction.Add((int) endTick, () => DeleteSpell(spellId));
         }
 
-        private void DeleteSpell(int spellID)
+        private static int CreateSpell(Spell newSpell)
         {
-            spells.Remove(spellID);
-            drawSpells.Remove(spellID);
-            
+            var spellId = _spellIdCount++;
+            newSpell.SpellId = spellId;
+
+            DrawSpells.Add(spellId, newSpell);
+
+            if (Evade.IsDodgeDangerousEnabled() && newSpell.Info.Dangerlevel < 2)
+            {
+                return spellId;
+            }
+
+            Spells.Add(spellId, newSpell);
+            if (OnCreateSpell != null)
+            {
+                OnCreateSpell(newSpell);
+            }
+
+            return spellId;
+        }
+
+        private static void DeleteSpell(int spellId)
+        {
+            Spells.Remove(spellId);
+            DrawSpells.Remove(spellId);
         }
 
         public static Vector2 GetCurrentSpellPosition(Spell spell)
         {
-            Vector2 spellPos = spell.startPos;
-            if (gameTime > spell.startTime + spell.info.spellDelay)
+            var spellPos = spell.StartPos;
+            if (GameTime > spell.StartTime + spell.Info.SpellDelay)
             {
-                spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (gameTime - spell.startTime - spell.info.spellDelay) / 1000;
+                spellPos = spell.StartPos +
+                           spell.Direction*spell.Info.ProjectileSpeed*
+                           (GameTime - spell.StartTime - spell.Info.SpellDelay)/1000;
             }
 
-            if (spell.spellObject != null)
+            if (spell.SpellObject != null)
             {
-                spellPos = spell.spellObject.Position.To2D();
+                spellPos = spell.SpellObject.Position.To2D();
             }
             return spellPos;
         }
 
-        private void LoadSpellDictionary()
+        private static void LoadSpellDictionary()
         {
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (hero.IsMe)
                 {
                     foreach (var spell in SpellDatabase.Spells.Where(
-                        s => (s.charName == hero.ChampionName)))
+                        s => (s.CharName == hero.ChampionName))
+                        .Where(spell => !WindupSpells.ContainsKey(spell.SpellName)))
                     {
-                        if (!windupSpells.ContainsKey(spell.spellName))
-                        {
-                            windupSpells.Add(spell.spellName, spell);
-                        }
+                        WindupSpells.Add(spell.SpellName, spell);
                     }
                 }
-                
-                if (hero.Team != myHero.Team)
+
+                if (hero.Team == MyHero.Team)
                 {
-                    foreach (var spell in SpellDatabase.Spells.Where(
-                        s => (s.charName == hero.ChampionName && s.defaultOff == false) ))
+                    continue;
+                }
+
+                foreach (var spell in SpellDatabase.Spells.Where(
+                    s => (s.CharName == hero.ChampionName && s.DefaultOff == false)))
+                {
+                    //Game.PrintChat(spell.spellName);
+
+                    if (spell.MissileName == string.Empty)
                     {
-                        //Game.PrintChat(spell.spellName);
-
-                        if (spell.missileName == "")
-                            spell.missileName = spell.spellName;
-
-                        if (!onProcessSpells.ContainsKey(spell.spellName))
-                        {
-                            onProcessSpells.Add(spell.spellName, spell);
-                            onMissileSpells.Add(spell.missileName, spell);
-                        }
+                        spell.MissileName = spell.SpellName;
                     }
 
+                    if (OnProcessSpells.ContainsKey(spell.SpellName))
+                    {
+                        continue;
+                    }
+
+                    OnProcessSpells.Add(spell.SpellName, spell);
+                    OnMissileSpells.Add(spell.MissileName, spell);
                 }
             }
-
         }
     }
 }

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections.Generic;
 using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
 
 namespace ezEvade
 {
@@ -21,11 +14,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Aatrox",
-                name = "Blade of Torment",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "AatroxE",
+                CharName = "Aatrox",
+                Name = "Blade of Torment",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "AatroxE",
 
             });
 
@@ -36,22 +29,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Ahri",
-                name = "Orb of Deception",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "AhriOrbofDeception",
+                CharName = "Ahri",
+                Name = "Orb of Deception",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "AhriOrbofDeception",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Ahri",
-                name = "Charm",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "AhriSeduce",
+                CharName = "Ahri",
+                Name = "Charm",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "AhriSeduce",
 
             });
             #endregion Ahri
@@ -61,30 +54,30 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Akali",
-                name = "AkaliMota",
-                spellKey = SpellSlot.Q,
-                spellName = "AkaliMota",
+                CharName = "Akali",
+                Name = "AkaliMota",
+                SpellKey = SpellSlot.Q,
+                SpellName = "AkaliMota",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Akali",
-                name = "AkaliSmokeBomb",
-                spellKey = SpellSlot.W,
-                spellName = "AkaliSmokeBomb",
+                CharName = "Akali",
+                Name = "AkaliSmokeBomb",
+                SpellKey = SpellSlot.W,
+                SpellName = "AkaliSmokeBomb",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Akali",
-                name = "AkaliShadowSwipe",
-                spellKey = SpellSlot.E,
-                spellName = "AkaliShadowSwipe",
+                CharName = "Akali",
+                Name = "AkaliShadowSwipe",
+                SpellKey = SpellSlot.E,
+                SpellName = "AkaliShadowSwipe",
 
             });
             #endregion Akali
@@ -94,21 +87,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Alistar",
-                name = "Pulverize",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "Pulverize",
+                CharName = "Alistar",
+                Name = "Pulverize",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "Pulverize",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Alistar",
-                name = "TriumphantRoar",
-                spellKey = SpellSlot.E,
-                spellName = "TriumphantRoar",
+                CharName = "Alistar",
+                Name = "TriumphantRoar",
+                SpellKey = SpellSlot.E,
+                SpellName = "TriumphantRoar",
 
             });
 
@@ -119,11 +112,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Amumu",
-                name = "Tantrum",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "Tantrum",
+                CharName = "Amumu",
+                Name = "Tantrum",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "Tantrum",
 
             });
             #endregion Amumu
@@ -133,22 +126,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Anivia",
-                name = "Flash Frost",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "FlashFrostSpell",
+                CharName = "Anivia",
+                Name = "Flash Frost",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "FlashFrostSpell",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Anivia",
-                name = "Frostbite",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "Frostbite",
+                CharName = "Anivia",
+                Name = "Frostbite",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "Frostbite",
 
             });
             #endregion Anivia
@@ -158,32 +151,32 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Annie",
-                name = "InfernalGuardian",
-                spellKey = SpellSlot.R,
-                spellName = "InfernalGuardian",
+                CharName = "Annie",
+                Name = "InfernalGuardian",
+                SpellKey = SpellSlot.R,
+                SpellName = "InfernalGuardian",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Annie",
-                name = "Disintegrate",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "Disintegrate",
+                CharName = "Annie",
+                Name = "Disintegrate",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "Disintegrate",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Annie",
-                name = "Incinerate",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "Incinerate",
+                CharName = "Annie",
+                Name = "Incinerate",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "Incinerate",
 
             });
             #endregion Annie
@@ -193,11 +186,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Ashe",
-                name = "Volley",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "Volley",
+                CharName = "Ashe",
+                Name = "Volley",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "Volley",
 
             });
 
@@ -208,11 +201,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Blitzcrank",
-                name = "Rocket Grab",
-                spellDelay = 685,
-                spellKey = SpellSlot.Q,
-                spellName = "RocketGrabMissile",
+                CharName = "Blitzcrank",
+                Name = "Rocket Grab",
+                SpellDelay = 685,
+                SpellKey = SpellSlot.Q,
+                SpellName = "RocketGrabMissile",
 
             });
             #endregion Blitzcrank
@@ -222,32 +215,32 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Brand",
-                name = "BrandConflagration",
-                spellKey = SpellSlot.E,
-                spellName = "BrandConflagration",
+                CharName = "Brand",
+                Name = "BrandConflagration",
+                SpellKey = SpellSlot.E,
+                SpellName = "BrandConflagration",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Brand",
-                name = "BrandBlaze",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "BrandBlaze",
+                CharName = "Brand",
+                Name = "BrandBlaze",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "BrandBlaze",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Brand",
-                name = "Pillar of Flame",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "BrandFissure",
+                CharName = "Brand",
+                Name = "Pillar of Flame",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "BrandFissure",
 
             });
             #endregion Brand
@@ -257,11 +250,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Braum",
-                name = "BraumQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "BraumQ",
+                CharName = "Braum",
+                Name = "BraumQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "BraumQ",
 
             });
             #endregion Braum
@@ -271,11 +264,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Caitlyn",
-                name = "Piltover Peacemaker",
-                spellDelay = 625,
-                spellKey = SpellSlot.Q,
-                spellName = "CaitlynPiltoverPeacemaker",
+                CharName = "Caitlyn",
+                Name = "Piltover Peacemaker",
+                SpellDelay = 625,
+                SpellKey = SpellSlot.Q,
+                SpellName = "CaitlynPiltoverPeacemaker",
 
             });
 
@@ -286,31 +279,31 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Cassiopeia",
-                name = "Twin Fang",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "CassiopeiaTwinFang",
+                CharName = "Cassiopeia",
+                Name = "Twin Fang",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "CassiopeiaTwinFang",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Cassiopeia",
-                name = "CassiopeiaMiasma",
-                spellKey = SpellSlot.W,
-                spellName = "CassiopeiaMiasma",
+                CharName = "Cassiopeia",
+                Name = "CassiopeiaMiasma",
+                SpellKey = SpellSlot.W,
+                SpellName = "CassiopeiaMiasma",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Cassiopeia",
-                name = "Noxious Blast",
-                spellKey = SpellSlot.Q,
-                spellName = "CassiopeiaNoxiousBlast",
+                CharName = "Cassiopeia",
+                Name = "Noxious Blast",
+                SpellKey = SpellSlot.Q,
+                SpellName = "CassiopeiaNoxiousBlast",
 
             });
 
@@ -321,22 +314,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Chogath",
-                name = "FeralScream",
-                spellDelay = 500,
-                spellKey = SpellSlot.W,
-                spellName = "FeralScream",
+                CharName = "Chogath",
+                Name = "FeralScream",
+                SpellDelay = 500,
+                SpellKey = SpellSlot.W,
+                SpellName = "FeralScream",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Chogath",
-                name = "Rupture",
-                spellDelay = 500,
-                spellKey = SpellSlot.Q,
-                spellName = "Rupture",
+                CharName = "Chogath",
+                Name = "Rupture",
+                SpellDelay = 500,
+                SpellKey = SpellSlot.Q,
+                SpellName = "Rupture",
 
             });
             #endregion Chogath
@@ -346,22 +339,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Corki",
-                name = "Missile Barrage",
-                spellDelay = 250,
-                spellKey = SpellSlot.R,
-                spellName = "MissileBarrage",
+                CharName = "Corki",
+                Name = "Missile Barrage",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.R,
+                SpellName = "MissileBarrage",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Corki",
-                name = "Phosphorus Bomb",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "PhosphorusBomb",
+                CharName = "Corki",
+                Name = "Phosphorus Bomb",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "PhosphorusBomb",
 
             });
             #endregion Corki
@@ -371,22 +364,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Darius",
-                name = "Decimate",
-                spellDelay = 230,
-                spellKey = SpellSlot.Q,
-                spellName = "DariusCleave",
+                CharName = "Darius",
+                Name = "Decimate",
+                SpellDelay = 230,
+                SpellKey = SpellSlot.Q,
+                SpellName = "DariusCleave",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Darius",
-                name = "Apprehend",
-                spellDelay = 320,
-                spellKey = SpellSlot.E,
-                spellName = "DariusAxeGrabCone",
+                CharName = "Darius",
+                Name = "Apprehend",
+                SpellDelay = 320,
+                SpellKey = SpellSlot.E,
+                SpellName = "DariusAxeGrabCone",
 
             });
             #endregion Darius
@@ -396,21 +389,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Diana",
-                name = "DianaVortex",
-                spellKey = SpellSlot.E,
-                spellName = "DianaVortex",
+                CharName = "Diana",
+                Name = "DianaVortex",
+                SpellKey = SpellSlot.E,
+                SpellName = "DianaVortex",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Diana",
-                name = "DianaArc",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "DianaArc",
+                CharName = "Diana",
+                Name = "DianaArc",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "DianaArc",
 
             });
             #endregion Diana
@@ -420,11 +413,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "DrMundo",
-                name = "Infected Cleaver",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "InfectedCleaverMissile",
+                CharName = "DrMundo",
+                Name = "Infected Cleaver",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "InfectedCleaverMissile",
 
             });
             #endregion DrMundo
@@ -434,11 +427,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Draven",
-                name = "Stand Aside",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "DravenDoubleShot",
+                CharName = "Draven",
+                Name = "Stand Aside",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "DravenDoubleShot",
 
             });
             #endregion Draven
@@ -448,44 +441,44 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Elise",
-                name = "Volatile Spiderling",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "EliseHumanW",
+                CharName = "Elise",
+                Name = "Volatile Spiderling",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "EliseHumanW",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Elise",
-                name = "Venomous Bite",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "EliseSpiderQCast",
+                CharName = "Elise",
+                Name = "Venomous Bite",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "EliseSpiderQCast",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Elise",
-                name = "Cocoon",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "EliseHumanE",
+                CharName = "Elise",
+                Name = "Cocoon",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "EliseHumanE",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Elise",
-                name = "Neurotoxin",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "EliseHumanQ",
+                CharName = "Elise",
+                Name = "Neurotoxin",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "EliseHumanQ",
 
             });
             #endregion Elise
@@ -495,11 +488,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Evelynn",
-                name = "Ravage",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "EvelynnQ",
+                CharName = "Evelynn",
+                Name = "Ravage",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "EvelynnQ",
 
             });
 
@@ -510,33 +503,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Ezreal",
-                name = "Essence Flux",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "EzrealEssenceFlux",
+                CharName = "Ezreal",
+                Name = "Essence Flux",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "EzrealEssenceFlux",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Ezreal",
-                name = "Mystic Shot",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "EzrealMysticShot",
+                CharName = "Ezreal",
+                Name = "Mystic Shot",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "EzrealMysticShot",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Ezreal",
-                name = "Trueshot Barrage",
-                spellDelay = 1000,
-                spellKey = SpellSlot.R,
-                spellName = "EzrealTrueshotBarrage",
+                CharName = "Ezreal",
+                Name = "Trueshot Barrage",
+                SpellDelay = 1000,
+                SpellKey = SpellSlot.R,
+                SpellName = "EzrealTrueshotBarrage",
 
             });
             #endregion Ezreal
@@ -546,31 +539,31 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "FiddleSticks",
-                name = "Crowstorm",
-                spellKey = SpellSlot.R,
-                spellName = "Crowstorm",
+                CharName = "FiddleSticks",
+                Name = "Crowstorm",
+                SpellKey = SpellSlot.R,
+                SpellName = "Crowstorm",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "FiddleSticks",
-                name = "Terrify",
-                spellKey = SpellSlot.Q,
-                spellName = "Terrify",
+                CharName = "FiddleSticks",
+                Name = "Terrify",
+                SpellKey = SpellSlot.Q,
+                SpellName = "Terrify",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "FiddleSticks",
-                name = "Dark Wind",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "FiddlesticksDarkWind",
+                CharName = "FiddleSticks",
+                Name = "Dark Wind",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "FiddlesticksDarkWind",
 
             });
             #endregion FiddleSticks
@@ -580,21 +573,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Galio",
-                name = "GalioResoluteSmite",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "GalioResoluteSmite",
+                CharName = "Galio",
+                Name = "GalioResoluteSmite",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "GalioResoluteSmite",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Galio",
-                name = "GalioRighteousGust",
-                spellKey = SpellSlot.E,
-                spellName = "GalioRighteousGust",
+                CharName = "Galio",
+                Name = "GalioRighteousGust",
+                SpellKey = SpellSlot.E,
+                SpellName = "GalioRighteousGust",
 
             });
 
@@ -605,30 +598,30 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Gangplank",
-                name = "CannonBarrage",
-                spellKey = SpellSlot.R,
-                spellName = "CannonBarrage",
+                CharName = "Gangplank",
+                Name = "CannonBarrage",
+                SpellKey = SpellSlot.R,
+                SpellName = "CannonBarrage",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Gangplank",
-                name = "Parley",
-                spellKey = SpellSlot.Q,
-                spellName = "Parley",
+                CharName = "Gangplank",
+                Name = "Parley",
+                SpellKey = SpellSlot.Q,
+                SpellName = "Parley",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Gangplank",
-                name = "RaiseMorale",
-                spellKey = SpellSlot.E,
-                spellName = "RaiseMorale",
+                CharName = "Gangplank",
+                Name = "RaiseMorale",
+                SpellKey = SpellSlot.E,
+                SpellName = "RaiseMorale",
 
             });
             #endregion Gangplank
@@ -638,11 +631,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Gragas",
-                name = "Barrel Roll",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "GragasBarrelRoll",
+                CharName = "Gragas",
+                Name = "Barrel Roll",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "GragasBarrelRoll",
 
             });
             #endregion Gragas
@@ -652,22 +645,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Graves",
-                name = "Smoke Screen",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "GravesSmokeGrenade",
+                CharName = "Graves",
+                Name = "Smoke Screen",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "GravesSmokeGrenade",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Graves",
-                name = "Buckshot",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "GravesClusterShot",
+                CharName = "Graves",
+                Name = "Buckshot",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "GravesClusterShot",
 
             });
             #endregion Graves
@@ -680,20 +673,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Heimerdinger",
-                name = "HeimerdingerE",
-                spellKey = SpellSlot.E,
-                spellName = "HeimerdingerE",
+                CharName = "Heimerdinger",
+                Name = "HeimerdingerE",
+                SpellKey = SpellSlot.E,
+                SpellName = "HeimerdingerE",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Heimerdinger",
-                name = "HeimerdingerW",
-                spellKey = SpellSlot.W,
-                spellName = "HeimerdingerW",
+                CharName = "Heimerdinger",
+                Name = "HeimerdingerW",
+                SpellKey = SpellSlot.W,
+                SpellName = "HeimerdingerW",
 
             });
             #endregion Heimerdinger
@@ -703,10 +696,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Janna",
-                name = "SowTheWind",
-                spellKey = SpellSlot.W,
-                spellName = "SowTheWind",
+                CharName = "Janna",
+                Name = "SowTheWind",
+                SpellKey = SpellSlot.W,
+                SpellName = "SowTheWind",
 
             });
             #endregion Janna
@@ -716,33 +709,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Jayce",
-                name = "JayceShockBlast",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "jayceshockblast",
+                CharName = "Jayce",
+                Name = "JayceShockBlast",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "jayceshockblast",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Jayce",
-                name = "JayceQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "JayceToTheSkies",
+                CharName = "Jayce",
+                Name = "JayceQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "JayceToTheSkies",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Jayce",
-                name = "Thundering Blow",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "JayceThunderingBlow",
+                CharName = "Jayce",
+                Name = "Thundering Blow",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "JayceThunderingBlow",
 
             });
             #endregion Jayce
@@ -752,11 +745,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Jinx",
-                name = "Zap",
-                spellDelay = 600,
-                spellKey = SpellSlot.W,
-                spellName = "JinxWMissile",
+                CharName = "Jinx",
+                Name = "Zap",
+                SpellDelay = 600,
+                SpellKey = SpellSlot.W,
+                SpellName = "JinxWMissile",
 
             });
             #endregion Jinx
@@ -766,11 +759,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Karma",
-                name = "KarmaQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "KarmaQ",
+                CharName = "Karma",
+                Name = "KarmaQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "KarmaQ",
 
             });
             #endregion Karma
@@ -780,21 +773,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Karthus",
-                name = "Lay Waste",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "karthuslaywastea3",
+                CharName = "Karthus",
+                Name = "Lay Waste",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "karthuslaywastea3",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Karthus",
-                name = "WallOfPain",
-                spellKey = SpellSlot.W,
-                spellName = "WallOfPain",
+                CharName = "Karthus",
+                Name = "WallOfPain",
+                SpellKey = SpellSlot.W,
+                SpellName = "WallOfPain",
 
             });
             #endregion Karthus
@@ -804,22 +797,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Kassadin",
-                name = "Force Pulse",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "ForcePulse",
+                CharName = "Kassadin",
+                Name = "Force Pulse",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "ForcePulse",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Kassadin",
-                name = "Null Sphere",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "NullLance",
+                CharName = "Kassadin",
+                Name = "Null Sphere",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "NullLance",
 
             });
             #endregion Kassadin
@@ -829,10 +822,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Katarina",
-                name = "KatarinaQ",
-                spellKey = SpellSlot.Q,
-                spellName = "KatarinaQ",
+                CharName = "Katarina",
+                Name = "KatarinaQ",
+                SpellKey = SpellSlot.Q,
+                SpellName = "KatarinaQ",
 
             });
             #endregion Katarina
@@ -842,11 +835,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Kayle",
-                name = "Reckoning",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "JudicatorReckoning",
+                CharName = "Kayle",
+                Name = "Reckoning",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "JudicatorReckoning",
 
             });
             #endregion Kayle
@@ -856,11 +849,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Kennen",
-                name = "Thundering Shuriken",
-                spellDelay = 180,
-                spellKey = SpellSlot.Q,
-                spellName = "KennenShurikenHurlMissile1",
+                CharName = "Kennen",
+                Name = "Thundering Shuriken",
+                SpellDelay = 180,
+                SpellKey = SpellSlot.Q,
+                SpellName = "KennenShurikenHurlMissile1",
 
             });
             #endregion Kennen
@@ -870,22 +863,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Khazix",
-                name = "KhazixQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "KhazixQ",
+                CharName = "Khazix",
+                Name = "KhazixQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "KhazixQ",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Khazix",
-                name = "KhazixW",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "KhazixW",
+                CharName = "Khazix",
+                Name = "KhazixW",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "KhazixW",
 
             });
             #endregion Khazix
@@ -895,33 +888,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "KogMaw",
-                name = "Living Artillery",
-                spellDelay = 250,
-                spellKey = SpellSlot.R,
-                spellName = "KogMawLivingArtillery",
+                CharName = "KogMaw",
+                Name = "Living Artillery",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.R,
+                SpellName = "KogMawLivingArtillery",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "KogMaw",
-                name = "Caustic Spittle",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "KogMawCausticSpittle",
+                CharName = "KogMaw",
+                Name = "Caustic Spittle",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "KogMawCausticSpittle",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "KogMaw",
-                name = "Void Ooze",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "KogMawVoidOozeMissile",
+                CharName = "KogMaw",
+                Name = "Void Ooze",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "KogMawVoidOozeMissile",
 
             });
             #endregion KogMaw
@@ -931,22 +924,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Leblanc",
-                name = "Sigil of Silence",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "LeblancChaosOrb",
+                CharName = "Leblanc",
+                Name = "Sigil of Silence",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "LeblancChaosOrb",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Leblanc",
-                name = "Ethereal Chains",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "LeblancSoulShackle",
+                CharName = "Leblanc",
+                Name = "Ethereal Chains",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "LeblancSoulShackle",
 
             });
             #endregion Leblanc
@@ -956,21 +949,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "LeeSin",
-                name = "Sonic Wave",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "BlindMonkQOne",
+                CharName = "LeeSin",
+                Name = "Sonic Wave",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "BlindMonkQOne",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "LeeSin",
-                name = "BlindMonkEOne",
-                spellKey = SpellSlot.E,
-                spellName = "BlindMonkEOne",
+                CharName = "LeeSin",
+                Name = "BlindMonkEOne",
+                SpellKey = SpellSlot.E,
+                SpellName = "BlindMonkEOne",
 
             });
             #endregion LeeSin
@@ -980,20 +973,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Lissandra",
-                name = "LissandraQ",
-                spellKey = SpellSlot.Q,
-                spellName = "LissandraQ",
+                CharName = "Lissandra",
+                Name = "LissandraQ",
+                SpellKey = SpellSlot.Q,
+                SpellName = "LissandraQ",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Lissandra",
-                name = "LissandraW",
-                spellKey = SpellSlot.W,
-                spellName = "LissandraW",
+                CharName = "Lissandra",
+                Name = "LissandraW",
+                SpellKey = SpellSlot.W,
+                SpellName = "LissandraW",
 
             });
 
@@ -1004,22 +997,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Lucian",
-                name = "LucianQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "LucianQ",
+                CharName = "Lucian",
+                Name = "LucianQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "LucianQ",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Lucian",
-                name = "LucianW",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "LucianW",
+                CharName = "Lucian",
+                Name = "LucianW",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "LucianW",
 
             });
             #endregion Lucian
@@ -1029,21 +1022,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Lulu",
-                name = "LuluQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "LuluQ",
+                CharName = "Lulu",
+                Name = "LuluQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "LuluQ",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Lulu",
-                name = "LuluE",
-                spellKey = SpellSlot.E,
-                spellName = "LuluE",
+                CharName = "Lulu",
+                Name = "LuluE",
+                SpellKey = SpellSlot.E,
+                SpellName = "LuluE",
 
             });
             #endregion Lulu
@@ -1053,32 +1046,32 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Lux",
-                name = "Light Binding",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "LuxLightBinding",
+                CharName = "Lux",
+                Name = "Light Binding",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "LuxLightBinding",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Lux",
-                name = "LuxLightStrikeKugel",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "LuxLightStrikeKugel",
+                CharName = "Lux",
+                Name = "LuxLightStrikeKugel",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "LuxLightStrikeKugel",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Lux",
-                name = "LuxPrismaticWave",
-                spellKey = SpellSlot.W,
-                spellName = "LuxPrismaticWave",
+                CharName = "Lux",
+                Name = "LuxPrismaticWave",
+                SpellKey = SpellSlot.W,
+                SpellName = "LuxPrismaticWave",
 
             });
             #endregion Lux
@@ -1088,22 +1081,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Malphite",
-                name = "Seismic Shard",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "SeismicShard",
+                CharName = "Malphite",
+                Name = "Seismic Shard",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "SeismicShard",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Malphite",
-                name = "Ground Slam",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "Landslide",
+                CharName = "Malphite",
+                Name = "Ground Slam",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "Landslide",
 
             });
             #endregion Malphite
@@ -1113,33 +1106,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Malzahar",
-                name = "AlZaharCalloftheVoid",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "AlZaharCalloftheVoid",
+                CharName = "Malzahar",
+                Name = "AlZaharCalloftheVoid",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "AlZaharCalloftheVoid",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Malzahar",
-                name = "Null Zone",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "AlZaharNullZone",
+                CharName = "Malzahar",
+                Name = "Null Zone",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "AlZaharNullZone",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Malzahar",
-                name = "Malefic Visions",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "AlZaharMaleficVisions",
+                CharName = "Malzahar",
+                Name = "Malefic Visions",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "AlZaharMaleficVisions",
 
             });
             #endregion Malzahar
@@ -1149,20 +1142,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Maokai",
-                name = "MaokaiTrunkLine",
-                spellKey = SpellSlot.Q,
-                spellName = "MaokaiTrunkLine",
+                CharName = "Maokai",
+                Name = "MaokaiTrunkLine",
+                SpellKey = SpellSlot.Q,
+                SpellName = "MaokaiTrunkLine",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Maokai",
-                name = "MaokaiSapling2",
-                spellKey = SpellSlot.E,
-                spellName = "MaokaiSapling2",
+                CharName = "Maokai",
+                Name = "MaokaiSapling2",
+                SpellKey = SpellSlot.E,
+                SpellName = "MaokaiSapling2",
 
             });
             #endregion Maokai
@@ -1172,20 +1165,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "MissFortune",
-                name = "MissFortuneRicochetShot",
-                spellKey = SpellSlot.Q,
-                spellName = "MissFortuneRicochetShot",
+                CharName = "MissFortune",
+                Name = "MissFortuneRicochetShot",
+                SpellKey = SpellSlot.Q,
+                SpellName = "MissFortuneRicochetShot",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "MissFortune",
-                name = "MissFortuneScattershot",
-                spellKey = SpellSlot.E,
-                spellName = "MissFortuneScattershot",
+                CharName = "MissFortune",
+                Name = "MissFortuneScattershot",
+                SpellKey = SpellSlot.E,
+                SpellName = "MissFortuneScattershot",
 
             });
             #endregion MissFortune
@@ -1195,10 +1188,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Mordekaiser",
-                name = "MordekaiserSyphonOfDestruction",
-                spellKey = SpellSlot.E,
-                spellName = "MordekaiserSyphonOfDestruction",
+                CharName = "Mordekaiser",
+                Name = "MordekaiserSyphonOfDestruction",
+                SpellKey = SpellSlot.E,
+                SpellName = "MordekaiserSyphonOfDestruction",
 
             });
             #endregion Mordekaiser
@@ -1208,21 +1201,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Morgana",
-                name = "TormentedSoil",
-                spellKey = SpellSlot.W,
-                spellName = "TormentedSoil",
+                CharName = "Morgana",
+                Name = "TormentedSoil",
+                SpellKey = SpellSlot.W,
+                SpellName = "TormentedSoil",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Morgana",
-                name = "Dark Binding",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "DarkBindingMissile",
+                CharName = "Morgana",
+                Name = "Dark Binding",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "DarkBindingMissile",
 
             });
 
@@ -1233,33 +1226,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Nami",
-                name = "NamiQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "NamiQ",
+                CharName = "Nami",
+                Name = "NamiQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "NamiQ",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Nami",
-                name = "TidecallersBlessing",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "NamiE",
+                CharName = "Nami",
+                Name = "TidecallersBlessing",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "NamiE",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Nami",
-                name = "Ebb and Flow",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "NamiW",
+                CharName = "Nami",
+                Name = "Ebb and Flow",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "NamiW",
 
             });
             #endregion Nami
@@ -1269,21 +1262,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Nasus",
-                name = "Wither",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "NasusW",
+                CharName = "Nasus",
+                Name = "Wither",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "NasusW",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Nasus",
-                name = "NasusE",
-                spellKey = SpellSlot.E,
-                spellName = "NasusE",
+                CharName = "Nasus",
+                Name = "NasusE",
+                SpellKey = SpellSlot.E,
+                SpellName = "NasusE",
 
             });
             #endregion Nasus
@@ -1293,10 +1286,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Nautilus",
-                name = "NautilusSplashZone",
-                spellKey = SpellSlot.E,
-                spellName = "NautilusSplashZone",
+                CharName = "Nautilus",
+                Name = "NautilusSplashZone",
+                SpellKey = SpellSlot.E,
+                SpellName = "NautilusSplashZone",
 
             });
 
@@ -1307,31 +1300,31 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Nidalee",
-                name = "PrimalSurge",
-                spellKey = SpellSlot.E,
-                spellName = "PrimalSurge",
+                CharName = "Nidalee",
+                Name = "PrimalSurge",
+                SpellKey = SpellSlot.E,
+                SpellName = "PrimalSurge",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Nidalee",
-                name = "Javelin Toss",
-                spellDelay = 125,
-                spellKey = SpellSlot.Q,
-                spellName = "JavelinToss",
+                CharName = "Nidalee",
+                Name = "Javelin Toss",
+                SpellDelay = 125,
+                SpellKey = SpellSlot.Q,
+                SpellName = "JavelinToss",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Nidalee",
-                name = "Swipe",
-                spellKey = SpellSlot.E,
-                spellName = "Swipe",
+                CharName = "Nidalee",
+                Name = "Swipe",
+                SpellKey = SpellSlot.E,
+                SpellName = "Swipe",
 
             });
             #endregion Nidalee
@@ -1341,22 +1334,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Nocturne",
-                name = "Unspeakable Horror",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "NocturneUnspeakableHorror",
+                CharName = "Nocturne",
+                Name = "Unspeakable Horror",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "NocturneUnspeakableHorror",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Nocturne",
-                name = "NocturneDuskbringer",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "NocturneDuskbringer",
+                CharName = "Nocturne",
+                Name = "NocturneDuskbringer",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "NocturneDuskbringer",
 
             });
             #endregion Nocturne
@@ -1366,22 +1359,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Nunu",
-                name = "IceBlast",
-                spellDelay = 400,
-                spellKey = SpellSlot.E,
-                spellName = "IceBlast",
+                CharName = "Nunu",
+                Name = "IceBlast",
+                SpellDelay = 400,
+                SpellKey = SpellSlot.E,
+                SpellName = "IceBlast",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Nunu",
-                name = "Consume",
-                spellDelay = 400,
-                spellKey = SpellSlot.Q,
-                spellName = "Consume",
+                CharName = "Nunu",
+                Name = "Consume",
+                SpellDelay = 400,
+                SpellKey = SpellSlot.Q,
+                SpellName = "Consume",
 
             });
             #endregion Nunu
@@ -1391,22 +1384,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Olaf",
-                name = "Reckless Swing",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "OlafRecklessStrike",
+                CharName = "Olaf",
+                Name = "Reckless Swing",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "OlafRecklessStrike",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Olaf",
-                name = "Undertow",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "OlafAxeThrow",
+                CharName = "Olaf",
+                Name = "Undertow",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "OlafAxeThrow",
 
             });
             #endregion Olaf
@@ -1416,10 +1409,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Pantheon",
-                name = "Pantheon_Throw",
-                spellKey = SpellSlot.Q,
-                spellName = "Pantheon_Throw",
+                CharName = "Pantheon",
+                Name = "Pantheon_Throw",
+                SpellKey = SpellSlot.Q,
+                SpellName = "Pantheon_Throw",
 
             });
 
@@ -1430,11 +1423,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Quinn",
-                name = "QuinnQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "QuinnQ",
+                CharName = "Quinn",
+                Name = "QuinnQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "QuinnQ",
 
             });
             #endregion Quinn
@@ -1444,10 +1437,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Renekton",
-                name = "RenektonCleave",
-                spellKey = SpellSlot.Q,
-                spellName = "RenektonCleave",
+                CharName = "Renekton",
+                Name = "RenektonCleave",
+                SpellKey = SpellSlot.Q,
+                SpellName = "RenektonCleave",
 
             });
 
@@ -1458,11 +1451,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Rengar",
-                name = "Bola Strike",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "RengarE",
+                CharName = "Rengar",
+                Name = "Bola Strike",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "RengarE",
 
             });
             #endregion Rengar
@@ -1472,11 +1465,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Riven",
-                name = "Ki Burst",
-                spellDelay = 267,
-                spellKey = SpellSlot.W,
-                spellName = "RivenMartyr",
+                CharName = "Riven",
+                Name = "Ki Burst",
+                SpellDelay = 267,
+                SpellKey = SpellSlot.W,
+                SpellName = "RivenMartyr",
 
             });
             #endregion Riven
@@ -1486,11 +1479,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Rumble",
-                name = "RumbleGrenade",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "RumbleGrenade",
+                CharName = "Rumble",
+                Name = "RumbleGrenade",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "RumbleGrenade",
 
             });
             #endregion Rumble
@@ -1500,33 +1493,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Ryze",
-                name = "Overload",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "Overload",
+                CharName = "Ryze",
+                Name = "Overload",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "Overload",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Ryze",
-                name = "Rune Prison",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "RunePrison",
+                CharName = "Ryze",
+                Name = "Rune Prison",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "RunePrison",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Ryze",
-                name = "Spell Flux",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "SpellFlux",
+                CharName = "Ryze",
+                Name = "Spell Flux",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "SpellFlux",
 
             });
             #endregion Ryze
@@ -1536,20 +1529,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Shaco",
-                name = "JackInTheBox",
-                spellKey = SpellSlot.W,
-                spellName = "JackInTheBox",
+                CharName = "Shaco",
+                Name = "JackInTheBox",
+                SpellKey = SpellSlot.W,
+                SpellName = "JackInTheBox",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Shaco",
-                name = "TwoShivPoison",
-                spellKey = SpellSlot.E,
-                spellName = "TwoShivPoison",
+                CharName = "Shaco",
+                Name = "TwoShivPoison",
+                SpellKey = SpellSlot.E,
+                SpellName = "TwoShivPoison",
 
             });
             #endregion Shaco
@@ -1559,10 +1552,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Shen",
-                name = "ShenVorpalStar",
-                spellKey = SpellSlot.Q,
-                spellName = "ShenVorpalStar",
+                CharName = "Shen",
+                Name = "ShenVorpalStar",
+                SpellKey = SpellSlot.Q,
+                SpellName = "ShenVorpalStar",
 
             });
             #endregion Shen
@@ -1572,10 +1565,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Shyvana",
-                name = "ShyvanaFireball",
-                spellKey = SpellSlot.E,
-                spellName = "ShyvanaFireball",
+                CharName = "Shyvana",
+                Name = "ShyvanaFireball",
+                SpellKey = SpellSlot.E,
+                SpellName = "ShyvanaFireball",
 
             });
             #endregion Shyvana
@@ -1585,10 +1578,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Sion",
-                name = "CrypticGaze",
-                spellKey = SpellSlot.Q,
-                spellName = "CrypticGaze",
+                CharName = "Sion",
+                Name = "CrypticGaze",
+                SpellKey = SpellSlot.Q,
+                SpellName = "CrypticGaze",
 
             });
             #endregion Sion
@@ -1598,11 +1591,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Sivir",
-                name = "Boomerang Blade",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "SivirQ",
+                CharName = "Sivir",
+                Name = "Boomerang Blade",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "SivirQ",
 
             });
             #endregion Sivir
@@ -1612,11 +1605,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Skarner",
-                name = "Fracture",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "SkarnerFracture",
+                CharName = "Skarner",
+                Name = "Fracture",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "SkarnerFracture",
 
             });
             #endregion Skarner
@@ -1626,32 +1619,32 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Soraka",
-                name = "Infuse",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "Infuse",
+                CharName = "Soraka",
+                Name = "Infuse",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "Infuse",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Soraka",
-                name = "Starcall",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "Starcall",
+                CharName = "Soraka",
+                Name = "Starcall",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "Starcall",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Soraka",
-                name = "AstralBlessing",
-                spellKey = SpellSlot.W,
-                spellName = "AstralBlessing",
+                CharName = "Soraka",
+                Name = "AstralBlessing",
+                SpellKey = SpellSlot.W,
+                SpellName = "AstralBlessing",
 
             });
             #endregion Soraka
@@ -1661,22 +1654,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Swain",
-                name = "Nevermove",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "SwainShadowGrasp",
+                CharName = "Swain",
+                Name = "Nevermove",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "SwainShadowGrasp",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Swain",
-                name = "Torment",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "SwainTorment",
+                CharName = "Swain",
+                Name = "Torment",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "SwainTorment",
 
             });
             #endregion Swain
@@ -1686,21 +1679,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Syndra",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "SyndraE",
+                CharName = "Syndra",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "SyndraE",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Syndra",
-                name = "SyndraQ",
-                spellDelay = 200,
-                spellKey = SpellSlot.Q,
-                spellName = "SyndraQ",
+                CharName = "Syndra",
+                Name = "SyndraQ",
+                SpellDelay = 200,
+                SpellKey = SpellSlot.Q,
+                SpellName = "SyndraQ",
 
             });
             #endregion Syndra
@@ -1710,11 +1703,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Talon",
-                name = "Rake",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "TalonRake",
+                CharName = "Talon",
+                Name = "Rake",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "TalonRake",
 
             });
 
@@ -1725,32 +1718,32 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Taric",
-                name = "Shatter",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "Shatter",
+                CharName = "Taric",
+                Name = "Shatter",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "Shatter",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Taric",
-                name = "Radiance",
-                spellDelay = 250,
-                spellKey = SpellSlot.R,
-                spellName = "TaricHammerSmash",
+                CharName = "Taric",
+                Name = "Radiance",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.R,
+                SpellName = "TaricHammerSmash",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Taric",
-                name = "Imbue",
-                spellKey = SpellSlot.Q,
-                spellName = "Imbue",
+                CharName = "Taric",
+                Name = "Imbue",
+                SpellKey = SpellSlot.Q,
+                SpellName = "Imbue",
 
             });
             #endregion Taric
@@ -1760,21 +1753,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Teemo",
-                spellDelay = 250,
-                spellKey = SpellSlot.R,
-                spellName = "BantamTrap",
+                CharName = "Teemo",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.R,
+                SpellName = "BantamTrap",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Teemo",
-                name = "BlindingDart",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "BlindingDart",
+                CharName = "Teemo",
+                Name = "BlindingDart",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "BlindingDart",
 
             });
             #endregion Teemo
@@ -1784,11 +1777,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Thresh",
-                name = "ThreshQ",
-                spellDelay = 500,
-                spellKey = SpellSlot.Q,
-                spellName = "ThreshQ",
+                CharName = "Thresh",
+                Name = "ThreshQ",
+                SpellDelay = 500,
+                SpellKey = SpellSlot.Q,
+                SpellName = "ThreshQ",
 
             });
             #endregion Thresh
@@ -1798,11 +1791,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Tristana",
-                name = "Explosive Shot",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "DetonatingShot",
+                CharName = "Tristana",
+                Name = "Explosive Shot",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "DetonatingShot",
 
             });
             #endregion Tristana
@@ -1812,10 +1805,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Trundle",
-                name = "TrundleCircle",
-                spellKey = SpellSlot.E,
-                spellName = "TrundleCircle",
+                CharName = "Trundle",
+                Name = "TrundleCircle",
+                SpellKey = SpellSlot.E,
+                SpellName = "TrundleCircle",
 
             });
             #endregion Trundle
@@ -1825,10 +1818,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Tryndamere",
-                name = "MockingShout",
-                spellKey = SpellSlot.W,
-                spellName = "MockingShout",
+                CharName = "Tryndamere",
+                Name = "MockingShout",
+                SpellKey = SpellSlot.W,
+                SpellName = "MockingShout",
 
             });
             #endregion Tryndamere
@@ -1838,11 +1831,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "TwistedFate",
-                name = "Loaded Dice",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "WildCards",
+                CharName = "TwistedFate",
+                Name = "Loaded Dice",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "WildCards",
 
             });
             #endregion TwistedFate
@@ -1852,20 +1845,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Twitch",
-                name = "Expunge",
-                spellKey = SpellSlot.E,
-                spellName = "Expunge",
+                CharName = "Twitch",
+                Name = "Expunge",
+                SpellKey = SpellSlot.E,
+                SpellName = "Expunge",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Twitch",
-                name = "TwitchVenomCask",
-                spellKey = SpellSlot.W,
-                spellName = "TwitchVenomCask",
+                CharName = "Twitch",
+                Name = "TwitchVenomCask",
+                SpellKey = SpellSlot.W,
+                SpellName = "TwitchVenomCask",
 
             });
             #endregion Twitch
@@ -1875,20 +1868,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Urgot",
-                name = "UrgotPlasmaGrenade",
-                spellKey = SpellSlot.E,
-                spellName = "UrgotPlasmaGrenade",
+                CharName = "Urgot",
+                Name = "UrgotPlasmaGrenade",
+                SpellKey = SpellSlot.E,
+                SpellName = "UrgotPlasmaGrenade",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Urgot",
-                name = "UrgotHeatseekingMissile",
-                spellKey = SpellSlot.Q,
-                spellName = "UrgotHeatseekingMissile",
+                CharName = "Urgot",
+                Name = "UrgotHeatseekingMissile",
+                SpellKey = SpellSlot.Q,
+                SpellName = "UrgotHeatseekingMissile",
 
             });
 
@@ -1899,22 +1892,22 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Varus",
-                name = "Varus E",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "VarusE",
+                CharName = "Varus",
+                Name = "Varus E",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "VarusE",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Varus",
-                name = "Varus Q Missile",
-                spellDelay = 0,
-                spellKey = SpellSlot.Q,
-                spellName = "VarusQ",
+                CharName = "Varus",
+                Name = "Varus Q Missile",
+                SpellDelay = 0,
+                SpellKey = SpellSlot.Q,
+                SpellName = "VarusQ",
 
             });
             #endregion Varus
@@ -1924,10 +1917,10 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Vayne",
-                name = "VayneCondemn",
-                spellKey = SpellSlot.E,
-                spellName = "VayneCondemn",
+                CharName = "Vayne",
+                Name = "VayneCondemn",
+                SpellKey = SpellSlot.E,
+                SpellName = "VayneCondemn",
 
             });
             #endregion Vayne
@@ -1937,32 +1930,32 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Veigar",
-                name = "VeigarDarkMatter",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "VeigarDarkMatter",
+                CharName = "Veigar",
+                Name = "VeigarDarkMatter",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "VeigarDarkMatter",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Veigar",
-                name = "Baleful Strike",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "VeigarBalefulStrike",
+                CharName = "Veigar",
+                Name = "Baleful Strike",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "VeigarBalefulStrike",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Veigar",
-                name = "VeigarEventHorizon",
-                spellKey = SpellSlot.E,
-                spellName = "VeigarEventHorizon",
+                CharName = "Veigar",
+                Name = "VeigarEventHorizon",
+                SpellKey = SpellSlot.E,
+                SpellName = "VeigarEventHorizon",
 
             });
             #endregion Veigar
@@ -1972,30 +1965,30 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Velkoz",
-                name = "VelkozW",
-                spellKey = SpellSlot.W,
-                spellName = "VelkozW",
+                CharName = "Velkoz",
+                Name = "VelkozW",
+                SpellKey = SpellSlot.W,
+                SpellName = "VelkozW",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Velkoz",
-                name = "VelkozQ",
-                spellKey = SpellSlot.Q,
-                spellName = "VelkozQ",
+                CharName = "Velkoz",
+                Name = "VelkozQ",
+                SpellKey = SpellSlot.Q,
+                SpellName = "VelkozQ",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Velkoz",
-                name = "VelkozE",
-                spellKey = SpellSlot.E,
-                spellName = "VelkozE",
+                CharName = "Velkoz",
+                Name = "VelkozE",
+                SpellKey = SpellSlot.E,
+                SpellName = "VelkozE",
 
             });
             #endregion Velkoz
@@ -2008,20 +2001,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Viktor",
-                name = "ViktorPowerTransfer",
-                spellKey = SpellSlot.Q,
-                spellName = "ViktorPowerTransfer",
+                CharName = "Viktor",
+                Name = "ViktorPowerTransfer",
+                SpellKey = SpellSlot.Q,
+                SpellName = "ViktorPowerTransfer",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Viktor",
-                name = "ViktorGravitonField",
-                spellKey = SpellSlot.W,
-                spellName = "ViktorGravitonField",
+                CharName = "Viktor",
+                Name = "ViktorGravitonField",
+                SpellKey = SpellSlot.W,
+                SpellName = "ViktorGravitonField",
 
             });
 
@@ -2032,31 +2025,31 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Vladimir",
-                name = "VladimirTidesofBlood",
-                spellKey = SpellSlot.E,
-                spellName = "VladimirTidesofBlood",
+                CharName = "Vladimir",
+                Name = "VladimirTidesofBlood",
+                SpellKey = SpellSlot.E,
+                SpellName = "VladimirTidesofBlood",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Vladimir",
-                name = "VladimirHemoplague",
-                spellDelay = 389,
-                spellKey = SpellSlot.R,
-                spellName = "VladimirHemoplague",
+                CharName = "Vladimir",
+                Name = "VladimirHemoplague",
+                SpellDelay = 389,
+                SpellKey = SpellSlot.R,
+                SpellName = "VladimirHemoplague",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Vladimir",
-                name = "VladimirTransfusion",
-                spellKey = SpellSlot.Q,
-                spellName = "VladimirTransfusion",
+                CharName = "Vladimir",
+                Name = "VladimirTransfusion",
+                SpellKey = SpellSlot.Q,
+                SpellName = "VladimirTransfusion",
 
             });
             #endregion Vladimir
@@ -2066,11 +2059,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Warwick",
-                name = "Hungering Strike",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "HungeringStrike",
+                CharName = "Warwick",
+                Name = "Hungering Strike",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "HungeringStrike",
 
             });
             #endregion Warwick
@@ -2080,21 +2073,21 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Xerath",
-                name = "XerathMageSpear",
-                spellKey = SpellSlot.E,
-                spellName = "XerathMageSpear",
+                CharName = "Xerath",
+                Name = "XerathMageSpear",
+                SpellKey = SpellSlot.E,
+                SpellName = "XerathMageSpear",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Xerath",
-                name = "XerathArcaneBarrage2",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "XerathArcaneBarrage2",
+                CharName = "Xerath",
+                Name = "XerathArcaneBarrage2",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "XerathArcaneBarrage2",
 
             });
             #endregion Xerath
@@ -2104,11 +2097,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Yasuo",
-                name = "Steel Tempest3",
-                spellDelay = 175,
-                spellKey = SpellSlot.Q,
-                spellName = "YasuoQW",
+                CharName = "Yasuo",
+                Name = "Steel Tempest3",
+                SpellDelay = 175,
+                SpellKey = SpellSlot.Q,
+                SpellName = "YasuoQW",
 
             });
 
@@ -2119,20 +2112,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Yorick",
-                name = "YorickDecayed",
-                spellKey = SpellSlot.W,
-                spellName = "YorickDecayed",
+                CharName = "Yorick",
+                Name = "YorickDecayed",
+                SpellKey = SpellSlot.W,
+                SpellName = "YorickDecayed",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Yorick",
-                name = "YorickRavenous",
-                spellKey = SpellSlot.E,
-                spellName = "YorickRavenous",
+                CharName = "Yorick",
+                Name = "YorickRavenous",
+                SpellKey = SpellSlot.E,
+                SpellName = "YorickRavenous",
 
             });
             #endregion Yorick
@@ -2142,20 +2135,20 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Zac",
-                name = "ZacQ",
-                spellKey = SpellSlot.Q,
-                spellName = "ZacQ",
+                CharName = "Zac",
+                Name = "ZacQ",
+                SpellKey = SpellSlot.Q,
+                SpellName = "ZacQ",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Zac",
-                name = "ZacW",
-                spellKey = SpellSlot.W,
-                spellName = "ZacW",
+                CharName = "Zac",
+                Name = "ZacW",
+                SpellKey = SpellSlot.W,
+                SpellName = "ZacW",
 
             });
             #endregion Zac
@@ -2165,11 +2158,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Zed",
-                name = "ZedShuriken",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "ZedShuriken",
+                CharName = "Zed",
+                Name = "ZedShuriken",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "ZedShuriken",
 
             });
             #endregion Zed
@@ -2179,33 +2172,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Ziggs",
-                name = "ZiggsW",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "ZiggsW",
+                CharName = "Ziggs",
+                Name = "ZiggsW",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "ZiggsW",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Ziggs",
-                name = "ZiggsE",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "ZiggsE",
+                CharName = "Ziggs",
+                Name = "ZiggsE",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "ZiggsE",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Ziggs",
-                name = "ZiggsQ",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "ZiggsQ",
+                CharName = "Ziggs",
+                Name = "ZiggsQ",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "ZiggsQ",
 
             });
 
@@ -2216,11 +2209,11 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Zilean",
-                name = "Time Bomb",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "TimeBomb",
+                CharName = "Zilean",
+                Name = "Time Bomb",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "TimeBomb",
 
             });
 
@@ -2231,33 +2224,33 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                charName = "Zyra",
-                name = "Grasping Roots",
-                spellDelay = 250,
-                spellKey = SpellSlot.E,
-                spellName = "ZyraGraspingRoots",
+                CharName = "Zyra",
+                Name = "Grasping Roots",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.E,
+                SpellName = "ZyraGraspingRoots",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Zyra",
-                name = "Rampant Growth",
-                spellDelay = 250,
-                spellKey = SpellSlot.W,
-                spellName = "ZyraSeed",
+                CharName = "Zyra",
+                Name = "Rampant Growth",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.W,
+                SpellName = "ZyraSeed",
 
             });
 
             Spells.Add(
             new SpellData
             {
-                charName = "Zyra",
-                name = "Deadly Bloom",
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "ZyraQFissure",
+                CharName = "Zyra",
+                Name = "Deadly Bloom",
+                SpellDelay = 250,
+                SpellKey = SpellSlot.Q,
+                SpellName = "ZyraQFissure",
 
             });
             #endregion Zyra

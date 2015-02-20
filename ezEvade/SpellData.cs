@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
+﻿using LeagueSharp;
 
 namespace ezEvade
 {
@@ -18,34 +10,33 @@ namespace ezEvade
     }
 
     public class SpellData
-    {            
-        public string charName;
-        public SpellSlot spellKey = SpellSlot.Q;
-        public int dangerlevel = 1;
-        public string spellName;
-        public string name;
-        public float range;
-        public float radius;
-        public float projectileSpeed = float.MaxValue;
-        public string missileName = "";
-        public SpellType spellType;
-        public float spellDelay = 250;
-        public bool rangeCap = false;
-        public float angle;
-        public float sideRadius;
-        public int splits;
-        public bool usePackets = false;
-        public float extraDelay = 0;
-        public float extraDistance = 0;
-        public bool isThreeWay = false;
-        public bool defaultOff = false;
-        public bool isWall = false;
-        public float extraEndTime = 0;
-        public bool hasEndExplosion = false;
+    {
+        public float Angle;
+        public string CharName;
+        public int Dangerlevel = 1;
+        public bool DefaultOff = false;
+        public float ExtraDelay = 0;
+        public float ExtraDistance = 0;
+        public float ExtraEndTime = 0;
+        public bool HasEndExplosion = false;
+        public bool IsThreeWay = false;
+        public bool IsWall = false;
+        public string MissileName = string.Empty;
+        public string Name;
+        public float ProjectileSpeed = float.MaxValue;
+        public float Radius;
+        public float Range;
+        public bool RangeCap = false;
+        public float SideRadius;
+        public float SpellDelay = 250;
+        public SpellSlot SpellKey = SpellSlot.Q;
+        public string SpellName;
+        public SpellType SpellType;
+        public int Splits;
+        public bool UsePackets = false;
 
         public SpellData()
         {
-        
         }
 
         public SpellData(
@@ -55,16 +46,16 @@ namespace ezEvade
             int range,
             int radius,
             int dangerlevel,
-            SpellType spellType            
+            SpellType spellType
             )
         {
-            this.charName = charName;
-            this.spellName = spellName;
-            this.name = name;
-            this.range = range;
-            this.radius = radius;
-            this.dangerlevel = dangerlevel;
-            this.spellType = spellType;
+            CharName = charName;
+            SpellName = spellName;
+            Name = name;
+            Range = range;
+            Radius = radius;
+            Dangerlevel = dangerlevel;
+            SpellType = spellType;
         }
     }
 }

@@ -1,79 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Color = System.Drawing.Color;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Color = System.Drawing.Color;
 
 namespace ezEvade
 {
-    class EvadeTester
+    internal class EvadeTester
     {
-        public static Menu menu;
-        public static Menu testMenu;
-
-        private static float gameTime { get { return Game.ClockTime * 1000; } }
-        private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-
-        private static Vector2 circleRenderPos;
-
-        private static Vector2 startWalkPos;
-        private static float startWalkTime = 0;
-
-        private static Vector2 testCollisionPos;
-        private static bool testingCollision = false;
+        private const bool TestingCollision = false;
+        public static Menu Menu;
+        public static Menu TestMenu;
+        private static Vector2 _circleRenderPos;
+        private static Vector2 _startWalkPos;
+        private static float _startWalkTime;
+        private static Vector2 _testCollisionPos;
 
         public EvadeTester(Menu mainMenu)
         {
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
+            Obj_AI_Base.OnIssueOrder += Game_OnIssueOrder;
             Game.OnGameUpdate += Game_OnGameUpdate;
 
-            menu = mainMenu;
+            Menu = mainMenu;
 
-            testMenu = new Menu("Test", "Test");
-            testMenu.AddItem(new MenuItem("TestWall", "TestWall").SetValue(true));
-            menu.AddSubMenu(testMenu);
+            TestMenu = new Menu("Test", "Test");
+            TestMenu.AddItem(new MenuItem("TestWall", "TestWall").SetValue(true));
+            Menu.AddSubMenu(TestMenu);
 
             Game_OnGameLoad();
         }
 
-        private void Game_OnGameLoad()
+        private static float GameTime
         {
-            Game.PrintChat("EvadeTester loaded");
-            menu.AddSubMenu(new Menu("Test", "Test"));
-
-            Game.PrintChat("Ping:" + Game.Ping);
-            
+            get { return Game.ClockTime*1000; }
         }
 
-        private void Game_OnGameUpdate(EventArgs args)
+        private static Obj_AI_Hero MyHero
         {
-            if (startWalkTime > 0)
+            get { return ObjectManager.Player; }
+        }
+
+        private static void Game_OnGameLoad()
+        {
+            Game.PrintChat("EvadeTester loaded");
+            Menu.AddSubMenu(new Menu("Test", "Test"));
+
+            Game.PrintChat("Ping:" + Game.Ping);
+        }
+
+        private static void Game_OnGameUpdate(EventArgs args)
+        {
+            if (!(_startWalkTime > 0))
             {
-                if (gameTime - startWalkTime > 500 && myHero.IsMoving == false)
-                {
-                    //Game.PrintChat("walkspeed: " + startWalkPos.Distance(myHero.ServerPosition.To2D()) / (gameTime - startWalkTime));
-                    startWalkTime = 0;
-                }
+                return;
+            }
+
+            if (GameTime - _startWalkTime > 500 && MyHero.IsMoving == false)
+            {
+                //Game.PrintChat("walkspeed: " + startWalkPos.Distance(myHero.ServerPosition.To2D()) / (gameTime - startWalkTime));
+                _startWalkTime = 0;
             }
         }
 
-        private void Game_OnIssueOrder(Obj_AI_Base hero, GameObjectIssueOrderEventArgs args)
+        private static void Game_OnIssueOrder(Obj_AI_Base hero, GameObjectIssueOrderEventArgs args)
         {
             if (!hero.IsMe)
+            {
                 return;
+            }
 
             if (args.Order == GameObjectOrder.MoveTo)
             {
-                if (testingCollision)
+                if (TestingCollision)
                 {
-                    if (args.TargetPosition.To2D().Distance(testCollisionPos) < 3)
+                    if (args.TargetPosition.To2D().Distance(_testCollisionPos) < 3)
                     {
                         //var path = myHero.GetPath();
                         //circleRenderPos
@@ -85,72 +86,80 @@ namespace ezEvade
 
             if (args.Order == GameObjectOrder.MoveTo)
             {
-                Vector2 heroPos = myHero.ServerPosition.To2D();
-                Vector2 pos = args.TargetPosition.To2D();
-                float speed = myHero.MoveSpeed;
+                var heroPos = MyHero.ServerPosition.To2D();
+                var pos = args.TargetPosition.To2D();
+                var speed = MyHero.MoveSpeed;
 
-                startWalkPos = heroPos;
-                startWalkTime = gameTime;
+                _startWalkPos = heroPos;
+                _startWalkTime = GameTime;
 
-                foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
+                foreach (var entry in SpellDetector.Spells)
                 {
-                    Spell spell = entry.Value;
-                    var spellPos = SpellDetector.GetCurrentSpellPosition(spell);
+                    var spell = entry.Value;
                     var walkDir = (pos - heroPos).Normalized();
 
-                    
-                        float spellTime = (gameTime - spell.startTime) - spell.info.spellDelay;
-                        spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
-                        //Game.PrintChat("aaaa" + spellTime);
-                    
 
-                    bool isCollision = false;
-                    float movingCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * (speed - 25), spell.direction * (spell.info.projectileSpeed - 200), myHero.BoundingRadius, EvadeHelper.GetSpellRadius(spell), out isCollision);
-                    if (isCollision)
+                    var spellTime = (GameTime - spell.StartTime) - spell.Info.SpellDelay;
+                    var spellPos = spell.StartPos + spell.Direction*spell.Info.ProjectileSpeed*(spellTime/1000);
+                    //Game.PrintChat("aaaa" + spellTime);
+
+
+                    bool isCollision;
+                    var movingCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir*(speed - 25),
+                        spell.Direction*(spell.Info.ProjectileSpeed - 200), MyHero.BoundingRadius,
+                        EvadeHelper.GetSpellRadius(spell), out isCollision);
+                    if (!isCollision)
                     {
-                        //Game.PrintChat("aaaa" + spellPos.Distance(spell.endPos) / spell.info.projectileSpeed);
-                        if (true)//spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > movingCollisionTime)
-                        {
-                            Game.PrintChat("movingCollisionTime: " + movingCollisionTime);
-                            circleRenderPos = heroPos + walkDir * speed * movingCollisionTime;                            
-                        }
-                            
+                        continue;
+                    }
+
+                    //Game.PrintChat("aaaa" + spellPos.Distance(spell.endPos) / spell.info.projectileSpeed);
+                    if (true) //spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > movingCollisionTime)
+                    {
+                        Game.PrintChat("movingCollisionTime: " + movingCollisionTime);
+                        _circleRenderPos = heroPos + walkDir*speed*movingCollisionTime;
                     }
                 }
             }
         }
 
+/*
         private void GetPath(Vector2 movePos)
         {
-
         }
+*/
 
-        private void Drawing_OnDraw(EventArgs args)
+        private static void Drawing_OnDraw(EventArgs args)
         {
-            Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
-            Render.Circle.DrawCircle(new Vector3(circleRenderPos.X, circleRenderPos.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.Red, 3);
+            Render.Circle.DrawCircle(
+                new Vector3(MyHero.ServerPosition.X, MyHero.ServerPosition.Y, MyHero.ServerPosition.Z),
+                MyHero.BoundingRadius, Color.White, 3);
+            Render.Circle.DrawCircle(new Vector3(_circleRenderPos.X, _circleRenderPos.Y, MyHero.ServerPosition.Z),
+                MyHero.BoundingRadius, Color.Red, 3);
 
-            foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
+            foreach (var entry in SpellDetector.DrawSpells)
             {
-                Spell spell = entry.Value;
-
-                if (spell.info.spellType == SpellType.Line)
+                var spell = entry.Value;
+                if (spell.Info.SpellType != SpellType.Line)
                 {
-                    Vector2 spellPos = SpellDetector.GetCurrentSpellPosition(spell);
+                    continue;
+                }
 
-                    Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);
-                                        
-                    /*spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (60 / 1000); //move the spellPos by 50 miliseconds forwards
+                var spellPos = SpellDetector.GetCurrentSpellPosition(spell);
+
+                Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, MyHero.Position.Z), spell.Info.Radius,
+                    Color.White, 3);
+
+                /*spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (60 / 1000); //move the spellPos by 50 miliseconds forwards
                     spellPos = spellPos + spell.direction * 200; //move the spellPos by 50 units forwards        
 
                     Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);*/
-                }
-                
-
             }
 
-            if (testMenu.Item("TestWall").GetValue<bool>())
+            if (TestMenu.Item("TestWall").GetValue<bool>())
+            {
                 EvadeHelper.GetBestPositionTest();
+            }
         }
-    }    
+    }
 }
