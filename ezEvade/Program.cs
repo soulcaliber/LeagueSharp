@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ezEvade
+﻿namespace ezEvade
 {
-    class Program
+    internal class Program
     {
-        private static Evade evade;
-        
-        static void Main(string[] args)
+        private static Evade _evade;
+
+        private static void Main(string[] args)
         {
-            evade = new Evade();
+            _evade = new Evade();
         }
     }
 }

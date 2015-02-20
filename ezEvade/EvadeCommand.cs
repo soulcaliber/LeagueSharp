@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using LeagueSharp;
-using LeagueSharp.Common;
+﻿using LeagueSharp;
 using SharpDX;
 
 namespace ezEvade
@@ -17,22 +10,31 @@ namespace ezEvade
         CastSpell
     }
 
-    class EvadeCommand
+    internal class EvadeCommand
     {
-        private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        private static float gameTime { get { return Game.ClockTime * 1000; } }
-
-        public EvadeOrderCommand order;
-        public SpellSlot spellKey;
-        public Vector2 targetPosition;
-        public Obj_AI_Base target;
-        public float timestamp;
-        public bool isProcessed;
+        public bool IsProcessed;
+        public EvadeOrderCommand Order;
+        public SpellSlot SpellKey;
+        public Obj_AI_Base Target;
+        public Vector2 TargetPosition;
+        public float TimeStamp;
 
         public EvadeCommand()
         {
-            this.timestamp = gameTime;
-            this.isProcessed = false;
+            TimeStamp = GameTime;
+            IsProcessed = false;
+        }
+
+/*
+        private static Obj_AI_Hero MyHero
+        {
+            get { return ObjectManager.Player; }
+        }
+*/
+
+        private static float GameTime
+        {
+            get { return Game.ClockTime*1000; }
         }
     }
 }
