@@ -34,6 +34,8 @@ namespace ezEvade
             Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
             Game.OnGameUpdate += Game_OnGameUpdate;
 
+            SpellDetector.OnCreateSpell += SpellDetector_OnCreateSpell;
+
             menu = mainMenu;
 
             testMenu = new Menu("Test", "Test");
@@ -50,6 +52,25 @@ namespace ezEvade
 
             Game.PrintChat("Ping:" + Game.Ping);
             
+        }
+
+        private void SpellDetector_OnCreateSpell(Spell newSpell)
+        {
+            var pos1 = newSpell.startPos;//SpellDetector.GetCurrentSpellPosition(newSpell);
+            Utility.DelayAction.Add(250, () => CompareSpellLocation2(newSpell));
+        }
+
+        private void CompareSpellLocation(Spell spell, Vector2 pos, float time)
+        {
+            var pos2 = SpellDetector.GetCurrentSpellPosition(spell);
+            if(spell.spellObject != null)
+                Game.PrintChat("Compare: " + (pos2.Distance(pos)) / (gameTime - time));
+        }
+
+        private void CompareSpellLocation2(Spell spell)
+        {
+            var pos1 = SpellDetector.GetCurrentSpellPosition(spell);
+            Utility.DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, gameTime));
         }
 
         private void Game_OnGameUpdate(EventArgs args)
@@ -69,8 +90,20 @@ namespace ezEvade
             if (!hero.IsMe)
                 return;
 
-            if (args.Order == GameObjectOrder.MoveTo)
+            if (args.Order == GameObjectOrder.HoldPosition)
             {
+                var path = myHero.Path;
+                var heroPoint = myHero.ServerPosition.To2D();
+                if (path.Length > 0)
+                {
+                    var movePos = path[path.Length - 1].To2D();
+                    var walkDir = (movePos - heroPoint).Normalized();
+                    circleRenderPos = heroPoint;// +walkDir * myHero.MoveSpeed * (((float)Game.Ping) / 1000);
+                }
+            }
+
+            if (args.Order == GameObjectOrder.MoveTo)
+            {         
                 if (testingCollision)
                 {
                     if (args.TargetPosition.To2D().Distance(testCollisionPos) < 3)
@@ -127,6 +160,7 @@ namespace ezEvade
 
         private void Drawing_OnDraw(EventArgs args)
         {
+            
             Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
             Render.Circle.DrawCircle(new Vector3(circleRenderPos.X, circleRenderPos.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.Red, 3);
 

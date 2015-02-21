@@ -45,9 +45,38 @@ namespace ezEvade
             }
         }
 
+        public static int GetSpellDangerLevel(Spell spell)
+        {
+            var dangerStr = Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings").Item("DangerLevel").GetValue<StringList>().SelectedValue;
+
+            var dangerlevel = 1;
+
+            switch (dangerStr)
+            {
+                case "Low":
+                    dangerlevel = 0;
+                    break;
+                case "High":
+                    dangerlevel = 2;
+                    break;
+                case "Extreme":
+                    dangerlevel = 3;
+                    break;
+                default:
+                    dangerlevel = 1;
+                    break;
+            }
+
+            return dangerlevel;
+        }
+
         public static float GetSpellRadius(Spell spell)
         {
-            return spell.info.radius;
+            var radius = Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings")
+                .Item("SpellRadius").GetValue<Slider>().Value;
+            var extraRadius = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraSpellRadius").GetValue<Slider>().Value;
+
+            return (float) (radius + extraRadius);
         }
 
         public static bool playerInSkillShot(Spell spell)
@@ -90,8 +119,8 @@ namespace ezEvade
         public static PositionInfo GetBestPositionTest()
         {
             int posChecked = 0;
-            int maxPosToCheck = 100;
-            int posRadius = 25;
+            int maxPosToCheck = 50;
+            int posRadius = 50;
             int radiusIndex = 0;
 
             Vector2 heroPoint = myHero.ServerPosition.To2D();
@@ -131,6 +160,7 @@ namespace ezEvade
                     var path = myHero.GetPath(pos.To3D());
 
                     //Render.Circle.DrawCircle(path[path.Length - 1], (float)posRadius, Color.White, 3);
+                    Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)posRadius, Color.White, 3);
 
                     var posOnScreen = Drawing.WorldToScreen(path[path.Length - 1]);
                     Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + path.Length);
@@ -148,6 +178,14 @@ namespace ezEvade
             int maxPosToCheck = 50;
             int posRadius = 50;
             int radiusIndex = 0;
+
+            var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraDelay").GetValue<Slider>().Value;
+
+            if (Evade.menu.SubMenu("MiscSettings").Item("HigherPrecision").GetValue<bool>())
+            {
+                maxPosToCheck = 100;
+                posRadius = 25;
+            }
 
             Vector2 heroPoint = myHero.ServerPosition.To2D();
             Vector2 lastMovePos = Game.CursorPos.To2D();
@@ -253,7 +291,7 @@ namespace ezEvade
         {
             int posDangerLevel = 0;
             int posDangerCount = 0;
-            List<int> dodgeableSpells = new List<int>();
+            List<int> dodgeableSpells = new List<int>();                      
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
             {
@@ -261,8 +299,8 @@ namespace ezEvade
 
                 if (GetSpellCollisionTimeToPos(spell, pos, speed, delay, myHero.ServerPosition.To2D()))
                 {
-                    posDangerLevel = Math.Max(posDangerLevel, spell.info.dangerlevel);
-                    posDangerCount += spell.info.dangerlevel;
+                    posDangerLevel = Math.Max(posDangerLevel, GetSpellDangerLevel(spell));
+                    posDangerCount += GetSpellDangerLevel(spell);
                 }
                 else
                 {
@@ -312,7 +350,7 @@ namespace ezEvade
 
 
                 //Check if skillshot will hit hero if hero is moving
-                float movingCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * speed, spell.direction * spell.info.projectileSpeed, myHero.BoundingRadius, GetSpellRadius(spell), out isCollision);
+                float movingCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * speed, spell.direction * spell.info.projectileSpeed, myHero.BoundingRadius, GetSpellRadius(spell) + 5, out isCollision);
                 if (isCollision && movingCollisionTime > 0)
                 {
                     if (spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > movingCollisionTime)
@@ -324,6 +362,7 @@ namespace ezEvade
 
                 spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (delay / 1000); //move the spellPos by 50 miliseconds forwards
                 spellPos = spellPos + spell.direction * 50; //move the spellPos by 50 units forwards                
+                                
 
                 //Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);
 
@@ -333,7 +372,7 @@ namespace ezEvade
                     //return true;
                 }
 
-                float extraCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * speed, spell.direction * spell.info.projectileSpeed, myHero.BoundingRadius, GetSpellRadius(spell), out isCollision);
+                float extraCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * speed, spell.direction * spell.info.projectileSpeed, myHero.BoundingRadius, GetSpellRadius(spell) + 5, out isCollision);
                 if (isCollision && extraCollisionTime > 0)
                 {
                     if (spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > extraCollisionTime)
@@ -415,7 +454,7 @@ namespace ezEvade
                 {
                     Vector2 spellPos = SpellDetector.GetCurrentSpellPosition(spell);
 
-                    if (spellPos.Distance(heroPoint) > 500 + spell.info.radius)
+                    if (spellPos.Distance(heroPoint) > 500 + GetSpellRadius(spell))
                     {
                         return GetSpellCollisionTimeToPos(spell, movePos, myHero.MoveSpeed, 0, myHero.ServerPosition.To2D());
                     }

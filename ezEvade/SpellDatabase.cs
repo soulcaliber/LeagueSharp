@@ -196,6 +196,8 @@ namespace ezEvade
 
             });
 
+            //RIP tibbers flash dodge
+            /*
             Spells.Add(
             new SpellData
             {
@@ -209,7 +211,8 @@ namespace ezEvade
                 spellName = "InfernalGuardian",
                 spellType = SpellType.Circular,
 
-            });
+            });*/
+
             #endregion Annie
 
             #region Ashe
@@ -247,6 +250,7 @@ namespace ezEvade
                 spellName = "AzirQ",
                 spellType = SpellType.Line,
                 usePackets = true,
+                isSpecial = true,
 
             });
             #endregion Azir
@@ -865,6 +869,7 @@ namespace ezEvade
                 charName = "Graves",
                 dangerlevel = 1,
                 isThreeWay = true,
+                isSpecial = true,
                 missileName = "GravesClusterShotAttack",
                 name = "Buckshot",
                 projectileSpeed = 2000,
@@ -1522,6 +1527,7 @@ namespace ezEvade
                 charName = "Lucian",
                 dangerlevel = 1,
                 defaultOff = true,
+                isSpecial = true,
                 name = "LucianQ",
                 projectileSpeed = float.MaxValue,
                 radius = 65,
@@ -1550,6 +1556,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "LuluQ",
                 spellType = SpellType.Line,
+                isSpecial = true,
 
             });
             #endregion Lulu
@@ -1633,6 +1640,8 @@ namespace ezEvade
                 charName = "Malzahar",
                 dangerlevel = 1,
                 extraEndTime = 750,
+                defaultOff = true,
+                isSpecial = true,
                 isWall = true,
                 missileName = "AlZaharCalloftheVoidMissile",
                 name = "AlZaharCalloftheVoid",
@@ -1662,7 +1671,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "MonkeyKingSpinToWin",
                 spellType = SpellType.Circular,
-
+                defaultOff = true,
             });
             #endregion MonkeyKing
 
@@ -1799,7 +1808,7 @@ namespace ezEvade
                 spellName = "OrianaIzunaCommand",
                 spellType = SpellType.Circular,
                 usePackets = true,
-
+                isSpecial = true,
             });
 
             Spells.Add(
@@ -1814,7 +1823,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "OrianaDetonateCommand",
                 spellType = SpellType.Circular,
-
+                isSpecial = true,
             });
 
             Spells.Add(
@@ -1828,7 +1837,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "OrianaDissonanceCommand",
                 spellType = SpellType.Circular,
-
+                isSpecial = true,
             });
             #endregion Orianna
 
@@ -1877,7 +1886,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Rengar",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 missileName = "RengarEFinal",
                 name = "Bola Strike",
                 projectileSpeed = 1500,
@@ -1907,7 +1916,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "rivenizunablade",
                 spellType = SpellType.Line,
-
+                isSpecial = true,
             });
 
             Spells.Add(
@@ -1994,7 +2003,6 @@ namespace ezEvade
             {
                 charName = "Shyvana",
                 dangerlevel = 0,
-                defaultOff = true,
                 name = "ShyvanaFireball",
                 projectileSpeed = 1700,
                 radius = 60,
@@ -2202,7 +2210,7 @@ namespace ezEvade
                 spellName = "TalonRake",
                 spellType = SpellType.Line,
                 splits = 3,
-
+                isSpecial = true,
             });
             #endregion Talon
 
@@ -2235,7 +2243,7 @@ namespace ezEvade
                 charName = "TwistedFate",
                 dangerlevel = 1,
                 isThreeWay = true,
-                missileName = "SealFateMissile",
+                //missileName = "SealFateMissile",
                 name = "Loaded Dice",
                 projectileSpeed = 1000,
                 radius = 40,
@@ -2244,7 +2252,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "WildCards",
                 spellType = SpellType.Line,
-
+                isSpecial = true,
             });
             #endregion TwistedFate
 
@@ -2377,7 +2385,6 @@ namespace ezEvade
             {
                 charName = "Velkoz",
                 dangerlevel = 0,
-                defaultOff = true,
                 name = "VelkozW",
                 projectileSpeed = 1200,
                 radius = 90,
@@ -2649,7 +2656,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "ZiggsQ",
                 spellType = SpellType.Circular,
-
+                isSpecial = true,
             });
             #endregion Ziggs
 

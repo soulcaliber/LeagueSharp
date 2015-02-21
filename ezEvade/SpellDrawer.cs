@@ -33,6 +33,36 @@ namespace ezEvade
 
             Menu drawMenu = new Menu("Draw", "Draw");
             drawMenu.AddItem(new MenuItem("DrawSkillShots", "Draw SkillShots").SetValue(true));
+
+            Menu dangerMenu = new Menu("DangerLevel Drawings", "DangerLevelDrawings");
+            Menu lowDangerMenu = new Menu("Low", "0");
+            lowDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(3, 1, 15)));
+            lowDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(60, 255, 255, 255))));
+
+            Menu normalDangerMenu = new Menu("Normal", "1");
+            normalDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(3, 1, 15)));
+            normalDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(140, 255, 255, 255))));
+
+            Menu highDangerMenu = new Menu("High", "2");
+            highDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(4, 1, 15)));
+            highDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
+
+            Menu extremeDangerMenu = new Menu("Extreme", "3");
+            extremeDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(4, 1, 15)));
+            extremeDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
+
+            /*
+            Menu undodgeableDangerMenu = new Menu("Undodgeable", "Undodgeable");
+            undodgeableDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(6, 1, 15)));
+            undodgeableDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 0, 0))));*/
+
+            dangerMenu.AddSubMenu(lowDangerMenu);
+            dangerMenu.AddSubMenu(normalDangerMenu);
+            dangerMenu.AddSubMenu(highDangerMenu);
+            dangerMenu.AddSubMenu(extremeDangerMenu);
+
+            drawMenu.AddSubMenu(dangerMenu);
+            
             menu.AddSubMenu(drawMenu);           
         }
 
@@ -67,21 +97,28 @@ namespace ezEvade
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
                 Spell spell = entry.Value;
+                var spellDrawingConfig = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
+                    .SubMenu(""+EvadeHelper.GetSpellDangerLevel(spell)).Item("Color").GetValue<Circle>();
+                var spellDrawingWidth = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
+                    .SubMenu("" + EvadeHelper.GetSpellDangerLevel(spell)).Item("Width").GetValue<Slider>().Value;
 
-                if (spell.info.spellType == SpellType.Line)
+                if (Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings").Item("DrawSpell").GetValue<bool>()
+                    && spellDrawingConfig.Active)
                 {
-                    Vector2 spellPos = SpellDetector.GetCurrentSpellPosition(spell);
-                    DrawLineRectangle(spellPos, spell.endPos, (int)spell.info.radius, 3, Color.White);
-                }
-                else if (spell.info.spellType == SpellType.Circular)
-                {
-                    Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);
-                }
-                else if (spell.info.spellType == SpellType.Cone)
-                {
+                    if (spell.info.spellType == SpellType.Line)
+                    {
+                        Vector2 spellPos = SpellDetector.GetCurrentSpellPosition(spell);
+                        DrawLineRectangle(spellPos, spell.endPos, (int)EvadeHelper.GetSpellRadius(spell), spellDrawingWidth, spellDrawingConfig.Color);
+                    }
+                    else if (spell.info.spellType == SpellType.Circular)
+                    {
+                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)EvadeHelper.GetSpellRadius(spell), spellDrawingConfig.Color, spellDrawingWidth);
+                    }
+                    else if (spell.info.spellType == SpellType.Cone)
+                    {
 
+                    }
                 }
-
             }
         }
     }

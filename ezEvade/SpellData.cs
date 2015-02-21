@@ -15,7 +15,7 @@ namespace ezEvade
         Line,
         Circular,
         Cone
-    }
+    }  
 
     public class SpellData
     {            
@@ -42,6 +42,7 @@ namespace ezEvade
         public bool isWall = false;
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
+        public bool isSpecial = false;
 
         public SpellData()
         {

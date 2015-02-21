@@ -53,17 +53,31 @@ namespace ezEvade
             Menu mainMenu = new Menu("Main", "Main");
             mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(true));
             mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
+            mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
+            mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
             menu.AddSubMenu(mainMenu);
 
-            Menu keyMenu = new Menu("KeySettings", "KeySettings");
+            spellDetector = new SpellDetector(menu);
+
+            Menu keyMenu = new Menu("Key Settings", "KeySettings");
             keyMenu.AddItem(new MenuItem("DodgeDangerous", "Enable Dodge Only Dangerous Keys").SetValue(false));
             keyMenu.AddItem(new MenuItem("DodgeDangerousKey", "Dodge Only Dangerous Key").SetValue(new KeyBind(32, KeyBindType.Press)));
             keyMenu.AddItem(new MenuItem("DodgeDangerousKey2", "Dodge Only Dangerous Key 2").SetValue(new KeyBind('V', KeyBindType.Press)));
-            menu.AddSubMenu(keyMenu);
+            menu.AddSubMenu(keyMenu);                       
+
+            Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
+            miscMenu.AddItem(new MenuItem("HigherPrecision", "Higher Dodge Precision").SetValue(true));
+            miscMenu.AddItem(new MenuItem("RecalculatePosition", "!!TOP SECRET!!").SetValue(false));
+
+            Menu bufferMenu = new Menu("Extra Buffers", "ExtraBuffers");
+            bufferMenu.AddItem(new MenuItem("ExtraDelay", "Dodge Delay Buffer").SetValue(new Slider(60, 0, 150)));
+            bufferMenu.AddItem(new MenuItem("ExtraSpellRadius", "Extra Spell Radius").SetValue(new Slider(0, 0, 100)));
+
+            miscMenu.AddSubMenu(bufferMenu);
+            menu.AddSubMenu(miscMenu);
 
             menu.AddToMainMenu();
 
-            spellDetector = new SpellDetector(menu);
             spellDrawer = new SpellDrawer(menu);
             //evadeTester = new EvadeTester(menu);
         }
@@ -104,15 +118,6 @@ namespace ezEvade
 
             if (args.Order == GameObjectOrder.MoveTo)
             {
-                if (lastEvadeCommand.isProcessed == false)
-                {
-                    if (lastEvadeCommand.order == EvadeOrderCommand.MoveTo
-                        && lastEvadeCommand.targetPosition.Distance(args.TargetPosition.To2D()) < 3)
-                    {
-                        lastEvadeCommand.isProcessed = true;
-                        return;
-                    }
-                }
 
                 //movement block code goes in here
                 if (isDodging)
@@ -186,6 +191,23 @@ namespace ezEvade
                 {
                     //isDodging = false;
                 }
+
+                if (menu.SubMenu("MiscSettings").Item("RecalculatePosition").GetValue<bool>() && lastPosInfo != null)//recheck path
+                {
+                    var path = myHero.Path;
+                    if (path.Length > 0)
+                    {
+                        var movePos = path[path.Length - 1].To2D();
+
+                        var ret = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, 0);
+                        int posDangerCount = ret.Item2;
+                        if (posDangerCount > lastPosInfo.posDangerCount)
+                        {
+                            //Game.PrintChat("recalc");
+                            EvadeHelper.GetBestPosition();
+                        }
+                    }
+                }
             }
             else
             {
@@ -217,7 +239,7 @@ namespace ezEvade
                 timestamp = gameTime,
                 isProcessed = false
             };
-            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D());
+            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);
         }
 
         public static bool isDodgeDangerousEnabled()
@@ -230,7 +252,7 @@ namespace ezEvade
             if (menu.SubMenu("KeySettings").Item("DodgeDangerous").GetValue<bool>() == true)
             {
                 if (menu.SubMenu("KeySettings").Item("DodgeDangerousKey").GetValue<KeyBind>().Active == true
-                || menu.SubMenu("KeySettings").Item("DodgeDangerousKey2").GetValue<KeyBind>().Active == true)                
+                || menu.SubMenu("KeySettings").Item("DodgeDangerousKey2").GetValue<KeyBind>().Active == true)
                     return true;
             }
 
@@ -240,7 +262,7 @@ namespace ezEvade
         public static void CheckDodgeOnlyDangerous() //Dodge only dangerous event
         {
             bool bDodgeOnlyDangerous = isDodgeDangerousEnabled();
-            
+
             if (dodgeOnlyDangerous == false && bDodgeOnlyDangerous)
             {
                 spellDetector.RemoveNonDangerousSpells();
@@ -249,7 +271,7 @@ namespace ezEvade
             else
             {
                 dodgeOnlyDangerous = bDodgeOnlyDangerous;
-            }                
+            }
         }
 
         private void SpellDetector_OnCreateSpell(Spell newSpell)

@@ -12,11 +12,11 @@ namespace ezEvade
 {
     internal class SpellDetector
     {
-        public delegate void OnCreateSpellHandler (Spell spell);
+        public delegate void OnCreateSpellHandler(Spell spell);
         public static event OnCreateSpellHandler OnCreateSpell;
-        
+
         //public static event OnDeleteSpellHandler OnDeleteSpell;
-                
+
         public static Dictionary<int, Spell> spells = new Dictionary<int, Spell>();
         public static Dictionary<int, Spell> drawSpells = new Dictionary<int, Spell>();
 
@@ -30,11 +30,11 @@ namespace ezEvade
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
         private static float gameTime { get { return Game.ClockTime * 1000; } }
 
-        private static Menu menu;
+        public static Menu menu;
+        public static Menu spellMenu;
 
         public SpellDetector(Menu mainMenu)
         {
-
             Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
             Obj_SpellMissile.OnDelete += SpellMissile_OnDelete;
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
@@ -46,12 +46,13 @@ namespace ezEvade
         private void Game_OnGameLoad()
         {
             //Game.PrintChat("SpellDetector loaded");
-            //menu.AddSubMenu(new Menu("SpellDetector", "SpellDetector"));
+            spellMenu = new Menu("Spells", "Spells");
+            menu.AddSubMenu(spellMenu);
 
             LoadSpellDictionary();
         }
 
-        private void SpellMissile_OnCreate (GameObject obj, EventArgs args)
+        private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
         {
             if (!obj.IsValid<Obj_SpellMissile>())
                 return;
@@ -59,7 +60,7 @@ namespace ezEvade
             Obj_SpellMissile missile = (Obj_SpellMissile)obj;
             SpellData spellData;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team && 
+            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
                 missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
@@ -69,11 +70,12 @@ namespace ezEvade
 
                     if (hero.IsVisible)
                     {
-                        if(spellData.usePackets){
+                        if (spellData.usePackets)
+                        {
                             CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
                             return;
                         }
-                        
+
                         foreach (KeyValuePair<int, Spell> entry in spells)
                         {
                             Spell spell = entry.Value;
@@ -82,13 +84,17 @@ namespace ezEvade
                                 && spell.heroID == missile.SpellCaster.NetworkId)
                             {
                                 spell.spellObject = obj;
+                                //Game.PrintChat("aquired: " + (obj.Position.To2D().Distance(spell.startPos)));
                             }
                         }
                     }
                     else
                     {
-                        CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
-                    }               
+                        if (Evade.menu.SubMenu("Main").Item("DodgeFOWSpells").GetValue<bool>())
+                        {
+                            CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
+                        }
+                    }
                 }
             }
         }
@@ -105,16 +111,16 @@ namespace ezEvade
                     s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
             {
                 DeleteSpell(spell.spellID);
-            }       
+            }
         }
 
         public void RemoveNonDangerousSpells()
         {
             foreach (var spell in spells.Values.ToList().Where(
-                    s => (s.info.dangerlevel < 2)))
+                    s => (EvadeHelper.GetSpellDangerLevel(s) < 2)))
             {
                 DeleteSpell(spell.spellID);
-            }   
+            }
         }
 
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
@@ -125,8 +131,8 @@ namespace ezEvade
             {
                 if (spellData.usePackets == false)
                 {
-                    CreateSpellData(hero, args.Start, args.End, spellData, null);                
-                }                
+                    CreateSpellData(hero, args.Start, args.End, spellData, null);
+                }
             }
         }
 
@@ -155,7 +161,7 @@ namespace ezEvade
                     endPosition = startPosition + direction * spellData.range;
 
                     if (obj != null)
-                        endTick -= spellData.spellDelay;                    
+                        endTick -= spellData.spellDelay;
                 }
                 else if (spellData.spellType == SpellType.Circular)
                 {
@@ -185,32 +191,38 @@ namespace ezEvade
                 newSpell.heroID = hero.NetworkId;
                 newSpell.info = spellData;
 
-                if(obj != null){
+                if (obj != null)
+                {
                     newSpell.spellObject = obj;
                     newSpell.projectileID = obj.NetworkId;
                 }
 
                 int spellID = CreateSpell(newSpell);
                 Utility.DelayAction.Add((int)endTick, () => DeleteSpell(spellID));
-            }            
+            }
         }
 
         private int CreateSpell(Spell newSpell)
         {
             int spellID = spellIDCount++;
             newSpell.spellID = spellID;
-                        
+
             drawSpells.Add(spellID, newSpell);
 
-            if (!(Evade.isDodgeDangerousEnabled() && newSpell.info.dangerlevel < 2))
+            if (!(Evade.isDodgeDangerousEnabled() && EvadeHelper.GetSpellDangerLevel(newSpell) < 2)
+                && Evade.menu.SubMenu("Spells").SubMenu(newSpell.info.charName + newSpell.info.spellName + "Settings").Item("DodgeSpell").GetValue<bool>())
             {
+                if (newSpell.info.spellType == SpellType.Circular
+                    && Evade.menu.SubMenu("Main").Item("DodgeCircularSpells").GetValue<bool>() == false)
+                    return spellID;
+
                 spells.Add(spellID, newSpell);
                 if (OnCreateSpell != null)
                 {
                     OnCreateSpell(newSpell);
                 }
-            }            
-                       
+            }
+
             return spellID;
         }
 
@@ -218,7 +230,7 @@ namespace ezEvade
         {
             spells.Remove(spellID);
             drawSpells.Remove(spellID);
-            
+
         }
 
         public static Vector2 GetCurrentSpellPosition(Spell spell)
@@ -251,11 +263,11 @@ namespace ezEvade
                         }
                     }
                 }
-                
+
                 if (hero.Team != myHero.Team)
                 {
                     foreach (var spell in SpellDatabase.Spells.Where(
-                        s => (s.charName == hero.ChampionName && s.defaultOff == false) ))
+                        s => (s.charName == hero.ChampionName)))
                     {
                         //Game.PrintChat(spell.spellName);
 
@@ -266,6 +278,20 @@ namespace ezEvade
                         {
                             onProcessSpells.Add(spell.spellName, spell);
                             onMissileSpells.Add(spell.missileName, spell);
+
+                            string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
+
+                            var enableSpell = !spell.defaultOff;
+
+                            Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
+                            newSpellMenu.AddItem(new MenuItem("DodgeSpell", "Dodge Spell").SetValue(enableSpell));
+                            newSpellMenu.AddItem(new MenuItem("DrawSpell", "Draw Spell").SetValue(enableSpell));
+                            newSpellMenu.AddItem(new MenuItem("SpellRadius", "Spell Radius")
+                                .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
+                            newSpellMenu.AddItem(new MenuItem("DangerLevel", "Danger Level")
+                                .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel)));
+
+                            spellMenu.AddSubMenu(newSpellMenu);
                         }
                     }
 
