@@ -85,6 +85,9 @@
     <Compile Include="Evade.cs" />
     <Compile Include="EvadeCommand.cs" />
     <Compile Include="EvadeHelper.cs" />
+    <Compile Include="EvadeSpell.cs" />
+    <Compile Include="EvadeSpellData.cs" />
+    <Compile Include="EvadeSpellDatabase.cs" />
     <Compile Include="EvadeTester.cs" />
     <Compile Include="MathUtils.cs" />
     <Compile Include="Program.cs" />
@@ -98,7 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ezEvade_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

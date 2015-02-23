@@ -15,7 +15,7 @@ namespace ezEvade
         Line,
         Circular,
         Cone
-    }  
+    } 
 
     public class SpellData
     {            
@@ -30,7 +30,7 @@ namespace ezEvade
         public string missileName = "";
         public SpellType spellType;
         public float spellDelay = 250;
-        public bool rangeCap = false;
+        public bool fixedRange = false;
         public float angle;
         public float sideRadius;
         public int splits;

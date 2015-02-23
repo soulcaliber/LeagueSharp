@@ -35,21 +35,21 @@ namespace ezEvade
             drawMenu.AddItem(new MenuItem("DrawSkillShots", "Draw SkillShots").SetValue(true));
 
             Menu dangerMenu = new Menu("DangerLevel Drawings", "DangerLevelDrawings");
-            Menu lowDangerMenu = new Menu("Low", "0");
-            lowDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(3, 1, 15)));
-            lowDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(60, 255, 255, 255))));
+            Menu lowDangerMenu = new Menu("Low", "LowDrawing");
+            lowDangerMenu.AddItem(new MenuItem("LowWidth", "Line Width").SetValue(new Slider(3, 1, 15)));
+            lowDangerMenu.AddItem(new MenuItem("LowColor", "Color").SetValue(new Circle(true, Color.FromArgb(60, 255, 255, 255))));
 
-            Menu normalDangerMenu = new Menu("Normal", "1");
-            normalDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(3, 1, 15)));
-            normalDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(140, 255, 255, 255))));
+            Menu normalDangerMenu = new Menu("Normal", "NormalDrawing");
+            normalDangerMenu.AddItem(new MenuItem("NormalWidth", "Line Width").SetValue(new Slider(3, 1, 15)));
+            normalDangerMenu.AddItem(new MenuItem("NormalColor", "Color").SetValue(new Circle(true, Color.FromArgb(140, 255, 255, 255))));
 
-            Menu highDangerMenu = new Menu("High", "2");
-            highDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(4, 1, 15)));
-            highDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
+            Menu highDangerMenu = new Menu("High", "HighDrawing");
+            highDangerMenu.AddItem(new MenuItem("HighWidth", "Line Width").SetValue(new Slider(4, 1, 15)));
+            highDangerMenu.AddItem(new MenuItem("HighColor", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
 
-            Menu extremeDangerMenu = new Menu("Extreme", "3");
-            extremeDangerMenu.AddItem(new MenuItem("Width", "Line Width").SetValue(new Slider(4, 1, 15)));
-            extremeDangerMenu.AddItem(new MenuItem("Color", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
+            Menu extremeDangerMenu = new Menu("Extreme", "ExtremeDrawing");
+            extremeDangerMenu.AddItem(new MenuItem("ExtremeWidth", "Line Width").SetValue(new Slider(4, 1, 15)));
+            extremeDangerMenu.AddItem(new MenuItem("ExtremeColor", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
 
             /*
             Menu undodgeableDangerMenu = new Menu("Undodgeable", "Undodgeable");
@@ -97,12 +97,15 @@ namespace ezEvade
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
                 Spell spell = entry.Value;
-                var spellDrawingConfig = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
-                    .SubMenu(""+EvadeHelper.GetSpellDangerLevel(spell)).Item("Color").GetValue<Circle>();
-                var spellDrawingWidth = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
-                    .SubMenu("" + EvadeHelper.GetSpellDangerLevel(spell)).Item("Width").GetValue<Slider>().Value;
 
-                if (Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings").Item("DrawSpell").GetValue<bool>()
+                var dangerStr = EvadeHelper.GetSpellDangerString(spell);
+                var spellDrawingConfig = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
+                    .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Color").GetValue<Circle>();
+                var spellDrawingWidth = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
+                    .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Width").GetValue<Slider>().Value;
+
+                if (Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings")
+                    .Item(spell.info.spellName + "DrawSpell").GetValue<bool>()
                     && spellDrawingConfig.Active)
                 {
                     if (spell.info.spellType == SpellType.Line)

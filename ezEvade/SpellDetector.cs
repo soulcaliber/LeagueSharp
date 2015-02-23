@@ -40,11 +40,7 @@ namespace ezEvade
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
 
             menu = mainMenu;
-            Game_OnGameLoad();
-        }
 
-        private void Game_OnGameLoad()
-        {
             //Game.PrintChat("SpellDetector loaded");
             spellMenu = new Menu("Spells", "Spells");
             menu.AddSubMenu(spellMenu);
@@ -75,6 +71,7 @@ namespace ezEvade
                             CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
                             return;
                         }
+                                               
 
                         foreach (KeyValuePair<int, Spell> entry in spells)
                         {
@@ -83,8 +80,11 @@ namespace ezEvade
                             if (spell.info.missileName == missile.SData.Name
                                 && spell.heroID == missile.SpellCaster.NetworkId)
                             {
-                                spell.spellObject = obj;
-                                //Game.PrintChat("aquired: " + (obj.Position.To2D().Distance(spell.startPos)));
+                                if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
+                                {
+                                    spell.spellObject = obj;
+                                    //Game.PrintChat("aquired: " + (obj.Position.To2D().Distance(spell.startPos)));
+                                }                                
                             }
                         }
                     }
@@ -117,7 +117,7 @@ namespace ezEvade
         public void RemoveNonDangerousSpells()
         {
             foreach (var spell in spells.Values.ToList().Where(
-                    s => (EvadeHelper.GetSpellDangerLevel(s) < 2)))
+                    s => (EvadeHelper.GetSpellDangerLevel(s) < 3)))
             {
                 DeleteSpell(spell.spellID);
             }
@@ -145,7 +145,7 @@ namespace ezEvade
                 Vector2 direction = (endPosition - startPosition).Normalized();
                 float endTick = 0;
 
-                if (spellData.rangeCap) //for diana q
+                if (spellData.fixedRange) //for diana q
                 {
                     if (endPosition.Distance(startPosition) > spellData.range)
                     {
@@ -209,8 +209,9 @@ namespace ezEvade
 
             drawSpells.Add(spellID, newSpell);
 
-            if (!(Evade.isDodgeDangerousEnabled() && EvadeHelper.GetSpellDangerLevel(newSpell) < 2)
-                && Evade.menu.SubMenu("Spells").SubMenu(newSpell.info.charName + newSpell.info.spellName + "Settings").Item("DodgeSpell").GetValue<bool>())
+            if (!(Evade.isDodgeDangerousEnabled() && EvadeHelper.GetSpellDangerLevel(newSpell) < 3)
+                && Evade.menu.SubMenu("Spells").SubMenu(newSpell.info.charName + newSpell.info.spellName + "Settings")
+                .Item(newSpell.info.spellName + "DodgeSpell").GetValue<bool>())
             {
                 if (newSpell.info.spellType == SpellType.Circular
                     && Evade.menu.SubMenu("Main").Item("DodgeCircularSpells").GetValue<bool>() == false)
@@ -284,12 +285,12 @@ namespace ezEvade
                             var enableSpell = !spell.defaultOff;
 
                             Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
-                            newSpellMenu.AddItem(new MenuItem("DodgeSpell", "Dodge Spell").SetValue(enableSpell));
-                            newSpellMenu.AddItem(new MenuItem("DrawSpell", "Draw Spell").SetValue(enableSpell));
-                            newSpellMenu.AddItem(new MenuItem("SpellRadius", "Spell Radius")
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetValue(enableSpell));
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(enableSpell));
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
-                            newSpellMenu.AddItem(new MenuItem("DangerLevel", "Danger Level")
-                                .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel)));
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
+                                .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel-1)));
 
                             spellMenu.AddSubMenu(newSpellMenu);
                         }

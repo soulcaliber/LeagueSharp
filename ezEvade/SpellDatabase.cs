@@ -16,15 +16,13 @@ namespace ezEvade
 
         static SpellDatabase()
         {
-
-
             #region Aatrox
 
             Spells.Add(
             new SpellData
             {
                 charName = "Aatrox",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "AatroxQ",
                 projectileSpeed = 450,
                 radius = 145,
@@ -40,7 +38,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Aatrox",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Blade of Torment",
                 projectileSpeed = 1200,
                 radius = 100,
@@ -59,7 +57,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ahri",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "AhriOrbMissile",
                 name = "Orb of Deception",
                 projectileSpeed = 1750,
@@ -76,7 +74,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ahri",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "AhriSeduceMissile",
                 name = "Charm",
                 projectileSpeed = 1600,
@@ -93,7 +91,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ahri",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Orb of Deception Back",
                 projectileSpeed = 915,
                 radius = 100,
@@ -112,7 +110,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Alistar",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Pulverize",
                 radius = 365,
                 range = 365,
@@ -129,7 +127,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Amumu",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "CurseoftheSadMummy",
                 radius = 550,
                 range = 550,
@@ -144,7 +142,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Amumu",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "SadMummyBandageToss",
                 name = "Bandage Toss",
                 projectileSpeed = 2000,
@@ -164,7 +162,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Anivia",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "FlashFrostSpell",
                 name = "Flash Frost",
                 projectileSpeed = 600,
@@ -185,7 +183,7 @@ namespace ezEvade
             {
                 angle = 25,
                 charName = "Annie",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Incinerate",
                 radius = 80,
                 range = 625,
@@ -202,7 +200,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Annie",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "InfernalGuardian",
                 radius = 290,
                 range = 600,
@@ -221,7 +219,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ashe",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "Enchanted Arrow",
                 projectileSpeed = 1600,
                 radius = 130,
@@ -240,7 +238,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Azir",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "AzirQ",
                 projectileSpeed = 1000,
                 radius = 80,
@@ -261,7 +259,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Blitzcrank",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 extraDelay = 75,
                 missileName = "RocketGrabMissile",
                 name = "Rocket Grab",
@@ -282,7 +280,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Brand",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "BrandBlazeMissile",
                 name = "BrandBlaze",
                 projectileSpeed = 1600,
@@ -299,7 +297,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Brand",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Pillar of Flame",
                 radius = 250,
                 range = 1100,
@@ -317,7 +315,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Braum",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "GlacialFissure",
                 projectileSpeed = 1125,
                 radius = 100,
@@ -333,7 +331,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Braum",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "BraumQMissile",
                 name = "BraumQ",
                 projectileSpeed = 1200,
@@ -353,7 +351,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Caitlyn",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Piltover Peacemaker",
                 projectileSpeed = 2200,
                 radius = 90,
@@ -369,7 +367,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Caitlyn",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "CaitlynEntrapmentMissile",
                 name = "Caitlyn Entrapment",
                 projectileSpeed = 2000,
@@ -390,7 +388,7 @@ namespace ezEvade
             {
                 angle = 40,
                 charName = "Cassiopeia",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "CassiopeiaPetrifyingGaze",
                 radius = 20,
                 range = 825,
@@ -405,7 +403,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Cassiopeia",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "CassiopeiaNoxiousBlast",
                 radius = 170,
                 range = 600,
@@ -424,7 +422,7 @@ namespace ezEvade
             {
                 angle = 30,
                 charName = "Chogath",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "FeralScream",
                 radius = 20,
                 range = 650,
@@ -439,7 +437,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Chogath",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Rupture",
                 radius = 275,
                 range = 950,
@@ -457,7 +455,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Corki",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 missileName = "MissileBarrageMissile2",
                 name = "Missile Barrage big",
                 projectileSpeed = 2000,
@@ -474,7 +472,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Corki",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "PhosphorusBombMissile",
                 name = "Phosphorus Bomb",
                 projectileSpeed = 1125,
@@ -491,7 +489,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Corki",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 missileName = "MissileBarrageMissile",
                 name = "Missile Barrage",
                 projectileSpeed = 2000,
@@ -512,7 +510,7 @@ namespace ezEvade
             {
                 angle = 25,
                 charName = "Darius",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "DariusAxeGrabCone",
                 radius = 20,
                 range = 570,
@@ -530,12 +528,12 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Diana",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "DianaArc",
                 projectileSpeed = 1600,
                 radius = 195,
                 range = 895,
-                rangeCap = true,
+                fixedRange = true,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "DianaArc",
@@ -550,7 +548,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "DrMundo",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 missileName = "InfectedCleaverMissile",
                 name = "Infected Cleaver",
                 projectileSpeed = 2000,
@@ -570,7 +568,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Draven",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "DravenR",
                 name = "DravenR",
                 projectileSpeed = 2000,
@@ -587,7 +585,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Draven",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "DravenDoubleShotMissile",
                 name = "Stand Aside",
                 projectileSpeed = 1400,
@@ -607,7 +605,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Elise",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Cocoon",
                 projectileSpeed = 1450,
                 radius = 70,
@@ -626,7 +624,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Evelynn",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "EvelynnR",
                 radius = 250,
                 range = 650,
@@ -644,7 +642,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ezreal",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "EzrealMysticShotMissile",
                 name = "Mystic Shot",
                 projectileSpeed = 2000,
@@ -661,7 +659,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ezreal",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Trueshot Barrage",
                 projectileSpeed = 2000,
                 radius = 160,
@@ -677,7 +675,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ezreal",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 missileName = "EzrealEssenceFluxMissile",
                 name = "Essence Flux",
                 projectileSpeed = 1600,
@@ -697,7 +695,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Fizz",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "FizzMarinerDoomMissile",
                 name = "Fizz ULT",
                 projectileSpeed = 1350,
@@ -717,7 +715,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Galio",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "GalioRighteousGust",
                 projectileSpeed = 1300,
                 radius = 120,
@@ -732,7 +730,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Galio",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "GalioResoluteSmite",
                 projectileSpeed = 1200,
                 radius = 235,
@@ -748,7 +746,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Galio",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "GalioIdolOfDurand",
                 radius = 600,
                 range = 600,
@@ -765,7 +763,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Gnar",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Boulder Toss",
                 projectileSpeed = 2000,
                 radius = 90,
@@ -781,7 +779,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Gnar",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "GnarUlt",
                 radius = 500,
                 range = 500,
@@ -796,7 +794,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Gnar",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Wallop",
                 projectileSpeed = float.MaxValue,
                 radius = 100,
@@ -812,7 +810,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Gnar",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Boomerang Throw",
                 projectileSpeed = 2400,
                 radius = 60,
@@ -831,7 +829,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Gragas",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Barrel Roll",
                 projectileSpeed = 1000,
                 radius = 240,
@@ -847,7 +845,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Gragas",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "GragasExplosiveCask",
                 projectileSpeed = 1750,
                 radius = 350,
@@ -867,7 +865,7 @@ namespace ezEvade
             {
                 angle = 18,
                 charName = "Graves",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 isThreeWay = true,
                 isSpecial = true,
                 missileName = "GravesClusterShotAttack",
@@ -886,7 +884,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Graves",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "GravesChargeShotShot",
                 name = "Collateral Damage",
                 projectileSpeed = 2100,
@@ -906,7 +904,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Hecarim",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "HecarimUlt",
                 projectileSpeed = 1100,
                 radius = 300,
@@ -925,7 +923,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Heimerdinger",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "HeimerdingerESpell",
                 name = "HeimerdingerE",
                 projectileSpeed = 1750,
@@ -945,7 +943,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Janna",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "HowlingGaleSpell",
                 name = "HowlingGaleSpell",
                 projectileSpeed = 900,
@@ -965,7 +963,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "JarvanIV",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "JarvanIVDragonStrike",
                 projectileSpeed = 2000,
                 radius = 110,
@@ -984,7 +982,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Jayce",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "JayceShockBlastWallMis",
                 name = "JayceShockBlastCharged",
                 projectileSpeed = 2350,
@@ -1002,7 +1000,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Jayce",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "JayceShockBlastMis",
                 name = "JayceShockBlast",
                 projectileSpeed = 1450,
@@ -1022,7 +1020,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Jinx",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "JinxR",
                 projectileSpeed = 1700,
                 radius = 120,
@@ -1038,7 +1036,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Jinx",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "JinxWMissile",
                 name = "Zap",
                 projectileSpeed = 3300,
@@ -1058,7 +1056,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Kalista",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "KalistaQMissile",
                 name = "KalistaQ",
                 projectileSpeed = 2000,
@@ -1078,7 +1076,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karma",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "KarmaQMissile",
                 name = "KarmaQ",
                 projectileSpeed = 1700,
@@ -1095,7 +1093,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karma",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "KarmaQMissileMantra",
                 name = "KarmaQMantra",
                 projectileSpeed = 1700,
@@ -1116,7 +1114,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karthus",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Lay Waste",
                 radius = 180,
                 range = 875,
@@ -1131,7 +1129,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karthus",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Lay Waste",
                 radius = 180,
                 range = 875,
@@ -1146,7 +1144,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karthus",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Lay Waste",
                 radius = 180,
                 range = 875,
@@ -1161,7 +1159,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karthus",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Lay Waste",
                 radius = 180,
                 range = 875,
@@ -1176,7 +1174,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karthus",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Lay Waste",
                 radius = 180,
                 range = 875,
@@ -1191,7 +1189,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Karthus",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Lay Waste",
                 radius = 180,
                 range = 875,
@@ -1209,7 +1207,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Kassadin",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "RiftWalk",
                 radius = 150,
                 range = 700,
@@ -1225,7 +1223,7 @@ namespace ezEvade
             {
                 angle = 40,
                 charName = "Kassadin",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "ForcePulse",
                 radius = 20,
                 range = 700,
@@ -1243,7 +1241,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Kennen",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "KennenShurikenHurlMissile1",
                 name = "Thundering Shuriken",
                 projectileSpeed = 1700,
@@ -1263,7 +1261,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Khazix",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 missileName = "KhazixWMissile",
                 name = "KhazixW",
                 projectileSpeed = 1700,
@@ -1281,7 +1279,7 @@ namespace ezEvade
             {
                 angle = 22,
                 charName = "Khazix",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 isThreeWay = true,
                 name = "khazixwlong",
                 projectileSpeed = 1700,
@@ -1301,7 +1299,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "KogMaw",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Caustic Spittle",
                 projectileSpeed = 1250,
                 radius = 60,
@@ -1317,7 +1315,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "KogMaw",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "KogMawVoidOoze",
                 projectileSpeed = 1400,
                 radius = 120,
@@ -1333,7 +1331,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "KogMaw",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Living Artillery",
                 radius = 175,
                 range = 2200,
@@ -1351,7 +1349,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Leblanc",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Ethereal Chains R",
                 projectileSpeed = 1600,
                 radius = 70,
@@ -1367,7 +1365,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Leblanc",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Ethereal Chains",
                 projectileSpeed = 1600,
                 radius = 70,
@@ -1383,7 +1381,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Leblanc",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "LeblancSlideM",
                 projectileSpeed = 1600,
                 radius = 250,
@@ -1399,7 +1397,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Leblanc",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "LeblancSlide",
                 projectileSpeed = 1600,
                 radius = 250,
@@ -1418,7 +1416,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "LeeSin",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Sonic Wave",
                 projectileSpeed = 1800,
                 radius = 60,
@@ -1437,7 +1435,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Leona",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "Leona Solar Flare",
                 radius = 250,
                 range = 1200,
@@ -1452,7 +1450,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Leona",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 extraDistance = 65,
                 missileName = "LeonaZenithBladeMissile",
                 name = "Zenith Blade",
@@ -1473,7 +1471,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lissandra",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "LissandraW",
                 projectileSpeed = float.MaxValue,
                 radius = 450,
@@ -1489,7 +1487,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lissandra",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Ice Shard",
                 projectileSpeed = 2250,
                 radius = 75,
@@ -1508,7 +1506,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lucian",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 defaultOff = true,
                 name = "LucianW",
                 projectileSpeed = 1600,
@@ -1525,7 +1523,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lucian",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 defaultOff = true,
                 isSpecial = true,
                 name = "LucianQ",
@@ -1546,7 +1544,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lulu",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "LuluQMissile",
                 name = "LuluQ",
                 projectileSpeed = 1450,
@@ -1567,7 +1565,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lux",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "LuxLightStrikeKugel",
                 projectileSpeed = 1400,
                 radius = 285,
@@ -1583,7 +1581,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lux",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Lux Malice Cannon",
                 projectileSpeed = float.MaxValue,
                 radius = 110,
@@ -1599,7 +1597,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Lux",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "LuxLightBindingMis",
                 name = "Light Binding",
                 projectileSpeed = 1200,
@@ -1619,7 +1617,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Malphite",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "UFSlash",
                 projectileSpeed = 2000,
                 radius = 300,
@@ -1638,7 +1636,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Malzahar",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 extraEndTime = 750,
                 defaultOff = true,
                 isSpecial = true,
@@ -1663,7 +1661,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "MonkeyKing",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "MonkeyKingSpinToWin",
                 radius = 225,
                 range = 300,
@@ -1681,7 +1679,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Morgana",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Dark Binding",
                 projectileSpeed = 1200,
                 radius = 80,
@@ -1700,7 +1698,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Nami",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "NamiQMissile",
                 name = "NamiQ",
                 projectileSpeed = 1500,
@@ -1720,11 +1718,11 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Nautilus",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "NautilusAnchorDragMissile",
                 name = "Dredge Line",
                 projectileSpeed = 2000,
-                radius = 80,
+                radius = 90,
                 range = 1080,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
@@ -1740,7 +1738,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Nidalee",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Javelin Toss",
                 projectileSpeed = 1300,
                 radius = 60,
@@ -1759,7 +1757,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Nocturne",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "NocturneDuskbringer",
                 projectileSpeed = 1400,
                 radius = 60,
@@ -1778,7 +1776,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Olaf",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Undertow",
                 projectileSpeed = 1600,
                 radius = 90,
@@ -1797,7 +1795,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Orianna",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 hasEndExplosion = true,
                 name = "OrianaIzunaCommand",
                 projectileSpeed = 1200,
@@ -1815,7 +1813,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Orianna",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "OrianaDetonateCommand",
                 radius = 400,
                 range = 410,
@@ -1830,7 +1828,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Orianna",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "OrianaDissonanceCommand",
                 radius = 250,
                 range = 1825,
@@ -1848,7 +1846,7 @@ namespace ezEvade
             {
                 angle = 35,
                 charName = "Pantheon",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Heartseeker",
                 radius = 100,
                 range = 650,
@@ -1866,7 +1864,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Quinn",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "QuinnQMissile",
                 name = "QuinnQ",
                 projectileSpeed = 1550,
@@ -1886,7 +1884,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Rengar",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "RengarEFinal",
                 name = "Bola Strike",
                 projectileSpeed = 1500,
@@ -1907,7 +1905,7 @@ namespace ezEvade
             {
                 angle = 15,
                 charName = "Riven",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 isThreeWay = true,
                 name = "WindSlash",
                 projectileSpeed = 2200,
@@ -1923,7 +1921,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Riven",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 defaultOff = true,
                 name = "RivenW",
                 projectileSpeed = 1500,
@@ -1943,7 +1941,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Rumble",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 missileName = "RumbleGrenadeMissile",
                 name = "RumbleGrenade",
                 projectileSpeed = 2000,
@@ -1963,7 +1961,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Sejuani",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 missileName = "SejuaniGlacialPrison",
                 name = "SejuaniR",
                 projectileSpeed = 1600,
@@ -1983,7 +1981,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Shen",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "ShadowDash",
                 projectileSpeed = 1250,
                 radius = 75,
@@ -2002,7 +2000,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Shyvana",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "ShyvanaFireball",
                 projectileSpeed = 1700,
                 radius = 60,
@@ -2017,7 +2015,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Shyvana",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "ShyvanaTransformCast",
                 projectileSpeed = 1100,
                 radius = 160,
@@ -2036,7 +2034,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Sivir",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "SivirQMissile",
                 name = "Boomerang Blade",
                 projectileSpeed = 1350,
@@ -2056,7 +2054,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Skarner",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "SkarnerFractureMissile",
                 name = "SkarnerFracture",
                 projectileSpeed = 1400,
@@ -2076,7 +2074,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Sona",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "Crescendo",
                 projectileSpeed = 2400,
                 radius = 150,
@@ -2095,7 +2093,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Soraka",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "SorakaQ",
                 projectileSpeed = 1100,
                 radius = 250,
@@ -2111,7 +2109,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Soraka",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "SorakaE",
                 radius = 275,
                 range = 925,
@@ -2129,7 +2127,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Swain",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Nevermove",
                 radius = 250,
                 range = 900,
@@ -2148,7 +2146,7 @@ namespace ezEvade
             {
                 angle = 30,
                 charName = "Syndra",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "SyndraE",
                 usePackets = true,
                 projectileSpeed = 1500,
@@ -2165,7 +2163,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Syndra",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "SyndraW",
                 projectileSpeed = 1450,
                 radius = 180,
@@ -2181,7 +2179,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Syndra",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "SyndraQ",
                 radius = 130,
                 range = 800,
@@ -2200,7 +2198,7 @@ namespace ezEvade
             {
                 angle = 20,
                 charName = "Talon",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 isThreeWay = true,
                 name = "TalonRake",
                 projectileSpeed = 2300,
@@ -2220,7 +2218,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Thresh",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "ThreshQMissile",
                 name = "ThreshQ",
                 projectileSpeed = 1900,
@@ -2241,7 +2239,7 @@ namespace ezEvade
             {
                 angle = 28,
                 charName = "TwistedFate",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 isThreeWay = true,
                 //missileName = "SealFateMissile",
                 name = "Loaded Dice",
@@ -2262,7 +2260,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Urgot",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "Acid Hunter",
                 projectileSpeed = 1600,
                 radius = 60,
@@ -2278,7 +2276,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Urgot",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Plasma Grenade",
                 projectileSpeed = 1750,
                 radius = 150,
@@ -2297,7 +2295,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Varus",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 defaultOff = true,
                 name = "Varus E",
                 projectileSpeed = 1500,
@@ -2314,7 +2312,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Varus",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "VarusQMissile",
                 name = "Varus Q Missile",
                 projectileSpeed = 1900,
@@ -2332,7 +2330,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Varus",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "VarusR",
                 projectileSpeed = 1950,
                 radius = 100,
@@ -2351,7 +2349,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Veigar",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "VeigarDarkMatter",
                 radius = 225,
                 range = 900,
@@ -2369,7 +2367,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Velkoz",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "VelkozE",
                 projectileSpeed = 1500,
                 radius = 200,
@@ -2384,7 +2382,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Velkoz",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "VelkozW",
                 projectileSpeed = 1200,
                 radius = 90,
@@ -2399,7 +2397,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Velkoz",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "VelkozQMissileSplit",
                 projectileSpeed = 2100,
                 radius = 90,
@@ -2415,7 +2413,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Velkoz",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "VelkozQ",
                 projectileSpeed = 1300,
                 radius = 90,
@@ -2434,7 +2432,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Vi",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "ViQMissile",
                 projectileSpeed = 1500,
                 radius = 90,
@@ -2453,7 +2451,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Viktor",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "ViktorDeathRayMissile",
                 name = "ViktorDeathRay",
                 projectileSpeed = 780,
@@ -2470,7 +2468,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Viktor",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "ViktorDeathRayMissile2",
                 name = "ViktorDeathRay",
                 projectileSpeed = 780,
@@ -2490,7 +2488,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Vladimir",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "VladimirHemoplague",
                 radius = 300,
                 range = 700,
@@ -2508,7 +2506,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Xerath",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "XerathArcaneBarrage2",
                 radius = 200,
                 range = 1100,
@@ -2523,7 +2521,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Xerath",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "XerathArcanopulse2",
                 projectileSpeed = float.MaxValue,
                 radius = 80,
@@ -2539,7 +2537,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Xerath",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "XerathLocusOfPower2",
                 radius = 200,
                 range = 5600,
@@ -2554,7 +2552,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Xerath",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "XerathMageSpearMissile",
                 name = "XerathMageSpear",
                 projectileSpeed = 1600,
@@ -2573,7 +2571,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Yasuo",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Steel Tempest3",
                 projectileSpeed = 1500,
                 radius = 90,
@@ -2595,7 +2593,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Zed",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "ZedShuriken",
                 projectileSpeed = 1700,
                 radius = 50,
@@ -2614,7 +2612,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ziggs",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "ZiggsE",
                 projectileSpeed = 3000,
                 radius = 235,
@@ -2630,7 +2628,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ziggs",
-                dangerlevel = 0,
+                dangerlevel = 1,
                 name = "ZiggsW",
                 projectileSpeed = 3000,
                 radius = 210,
@@ -2646,12 +2644,12 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ziggs",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "ZiggsQ",
                 projectileSpeed = 1700,
                 radius = 90,
                 range = 850,
-                rangeCap = true,
+                fixedRange = true,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "ZiggsQ",
@@ -2666,7 +2664,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Zyra",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Grasping Roots",
                 projectileSpeed = 1150,
                 radius = 80,
@@ -2682,7 +2680,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Zyra",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "ZyraPassiveDeathMissile",
                 name = "Zyra Passive",
                 projectileSpeed = 2000,
@@ -2699,7 +2697,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Zyra",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "Deadly Bloom",
                 radius = 220,
                 range = 825,

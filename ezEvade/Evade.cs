@@ -19,6 +19,7 @@ namespace ezEvade
         public static SpellDetector spellDetector;
         private static SpellDrawer spellDrawer;
         private static EvadeTester evadeTester;
+        private static EvadeSpell evadeSpell;
 
         private static SpellSlot lastSpellCast;
 
@@ -58,20 +59,23 @@ namespace ezEvade
             menu.AddSubMenu(mainMenu);
 
             spellDetector = new SpellDetector(menu);
+            evadeSpell = new EvadeSpell(menu);
 
             Menu keyMenu = new Menu("Key Settings", "KeySettings");
-            keyMenu.AddItem(new MenuItem("DodgeDangerous", "Enable Dodge Only Dangerous Keys").SetValue(false));
+            keyMenu.AddItem(new MenuItem("DodgeDangerousKeyEnabled", "Enable Dodge Only Dangerous Keys").SetValue(false));
             keyMenu.AddItem(new MenuItem("DodgeDangerousKey", "Dodge Only Dangerous Key").SetValue(new KeyBind(32, KeyBindType.Press)));
             keyMenu.AddItem(new MenuItem("DodgeDangerousKey2", "Dodge Only Dangerous Key 2").SetValue(new KeyBind('V', KeyBindType.Press)));
             menu.AddSubMenu(keyMenu);                       
 
             Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
-            miscMenu.AddItem(new MenuItem("HigherPrecision", "Higher Dodge Precision").SetValue(true));
-            miscMenu.AddItem(new MenuItem("RecalculatePosition", "!!TOP SECRET!!").SetValue(false));
+            miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(true));
+            miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(false));
 
             Menu bufferMenu = new Menu("Extra Buffers", "ExtraBuffers");
             bufferMenu.AddItem(new MenuItem("ExtraDelay", "Dodge Delay Buffer").SetValue(new Slider(60, 0, 150)));
             bufferMenu.AddItem(new MenuItem("ExtraSpellRadius", "Extra Spell Radius").SetValue(new Slider(0, 0, 100)));
+            bufferMenu.AddItem(new MenuItem("ExtraEvadeDistance", "Extra Evade Distance").SetValue(new Slider(0, 0, 100)));
+            bufferMenu.AddItem(new MenuItem("ExtraAvoidDistance", "Extra Avoid Distance").SetValue(new Slider(0, 0, 100)));
 
             miscMenu.AddSubMenu(bufferMenu);
             menu.AddSubMenu(miscMenu);
@@ -134,7 +138,7 @@ namespace ezEvade
                         var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
                         if (posInfo != null)
                         {
-                            Evade_MoveTo(posInfo.position);
+                            EvadeCommand.MoveTo(posInfo.position);
                         }
                         return;
                     }
@@ -155,8 +159,9 @@ namespace ezEvade
                 return;
 
             if (gameTime - lastTickCount > 50) //Tick limiter
-            {
-                DodgeSkillShots();
+            {                
+                DodgeSkillShots(); //walking
+                EvadeSpell.UseEvadeSpell(); //using spells
                 lastTickCount = gameTime;
             }
 
@@ -183,9 +188,7 @@ namespace ezEvade
 
             if (isDodging)
             {
-                Vector2 lastBestPosition = lastPosInfo.position;
-
-                Evade_MoveTo(lastBestPosition);
+                Vector2 lastBestPosition = lastPosInfo.position;                
 
                 if (lastBestPosition.Distance(myHero.ServerPosition.To2D()) < 3) //a bit faulty
                 {
@@ -199,17 +202,18 @@ namespace ezEvade
                     {
                         var movePos = path[path.Length - 1].To2D();
 
-                        var ret = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, 0);
-                        int posDangerCount = ret.Item2;
-                        if (posDangerCount > lastPosInfo.posDangerCount)
+                        var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, 0);
+                        if (posInfo.posDangerCount > lastPosInfo.posDangerCount)
                         {
                             //Game.PrintChat("recalc");
                             EvadeHelper.GetBestPosition();
                         }
                     }
                 }
+
+                EvadeCommand.MoveTo(lastBestPosition);
             }
-            else
+            else //if not dodging
             {
                 //Check if hero will walk into a skillshot
                 var path = myHero.Path;
@@ -222,26 +226,14 @@ namespace ezEvade
                         var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
                         if (posInfo != null)
                         {
-                            Evade_MoveTo(posInfo.position);
+                            EvadeCommand.MoveTo(posInfo.position);
                         }
                         return;
                     }
                 }
             }
-        }
-
-        public static void Evade_MoveTo(Vector2 movePos)
-        {
-            lastEvadeCommand = new EvadeCommand
-            {
-                order = EvadeOrderCommand.MoveTo,
-                targetPosition = movePos,
-                timestamp = gameTime,
-                isProcessed = false
-            };
-            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);
-        }
-
+        }      
+               
         public static bool isDodgeDangerousEnabled()
         {
             if (menu.SubMenu("Main").Item("DodgeDangerous").GetValue<bool>() == true)
@@ -249,7 +241,7 @@ namespace ezEvade
                 return true;
             }
 
-            if (menu.SubMenu("KeySettings").Item("DodgeDangerous").GetValue<bool>() == true)
+            if (menu.SubMenu("KeySettings").Item("DodgeDangerousKeyEnabled").GetValue<bool>() == true)
             {
                 if (menu.SubMenu("KeySettings").Item("DodgeDangerousKey").GetValue<KeyBind>().Active == true
                 || menu.SubMenu("KeySettings").Item("DodgeDangerousKey2").GetValue<KeyBind>().Active == true)
@@ -290,8 +282,8 @@ namespace ezEvade
             if (intersect)
             {
                 var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
-                if (posInfo != null)
-                { //check if there is solution
+                if (posInfo != null) //check if there is solution
+                {
                     myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D());
                 }
             }

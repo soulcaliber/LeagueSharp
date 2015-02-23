@@ -23,16 +23,40 @@ namespace ezEvade
         private static float gameTime { get { return Game.ClockTime * 1000; } }
 
         public EvadeOrderCommand order;
-        public SpellSlot spellKey;
         public Vector2 targetPosition;
-        public Obj_AI_Base target;
         public float timestamp;
         public bool isProcessed;
+        public EvadeSpellData evadeSpellData;
 
         public EvadeCommand()
         {
             this.timestamp = gameTime;
             this.isProcessed = false;
+        }
+
+        public static void MoveTo(Vector2 movePos)
+        {
+            Evade.lastEvadeCommand = new EvadeCommand
+            {
+                order = EvadeOrderCommand.MoveTo,
+                targetPosition = movePos,
+                timestamp = gameTime,
+                isProcessed = false
+            };
+            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);
+        }
+
+        public static void CastSpell(EvadeSpellData spellData, Vector2 movePos)
+        {
+            Evade.lastEvadeCommand = new EvadeCommand
+            {
+                order = EvadeOrderCommand.CastSpell,
+                targetPosition = movePos,
+                evadeSpellData = spellData,
+                timestamp = gameTime,
+                isProcessed = false
+            };
+            myHero.Spellbook.CastSpell(spellData.spellKey, movePos.To3D(), false);
         }
     }
 }
