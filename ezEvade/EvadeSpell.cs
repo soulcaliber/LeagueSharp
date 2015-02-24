@@ -57,12 +57,20 @@ namespace ezEvade
                         var posInfo = EvadeHelper.GetBestPositionDash(spell);
                         if (posInfo != null)
                         {
+                            if(spell.isReversed){
+                                var dir = (posInfo.position - myHero.ServerPosition.To2D()).Normalized();
+                                var range = myHero.ServerPosition.To2D().Distance(posInfo.position);
+                                var pos = myHero.ServerPosition.To2D() - dir * range;
+
+                                posInfo.position = pos;
+                            }
+
                             EvadeCommand.CastSpell(spell, posInfo.position);
                         }
                     }
                     else if (spell.evadeType == EvadeType.SpellShield)
                     {
-
+                        EvadeCommand.CastSpell(spell);
                     }
 
                     return;

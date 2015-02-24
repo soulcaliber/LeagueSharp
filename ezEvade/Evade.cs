@@ -52,7 +52,7 @@ namespace ezEvade
             menu = new Menu("ezEvade", "ezEvade", true);
 
             Menu mainMenu = new Menu("Main", "Main");
-            mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(true));
+            mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
             mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
             mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
             mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
@@ -62,6 +62,7 @@ namespace ezEvade
             evadeSpell = new EvadeSpell(menu);
 
             Menu keyMenu = new Menu("Key Settings", "KeySettings");
+            //keyMenu.AddItem(new MenuItem("DodgeSkillShotsKey", "Dodge SkillShots Key").SetValue(new KeyBind('K', KeyBindType.Press)));
             keyMenu.AddItem(new MenuItem("DodgeDangerousKeyEnabled", "Enable Dodge Only Dangerous Keys").SetValue(false));
             keyMenu.AddItem(new MenuItem("DodgeDangerousKey", "Dodge Only Dangerous Key").SetValue(new KeyBind(32, KeyBindType.Press)));
             keyMenu.AddItem(new MenuItem("DodgeDangerousKey2", "Dodge Only Dangerous Key 2").SetValue(new KeyBind('V', KeyBindType.Press)));
@@ -170,7 +171,7 @@ namespace ezEvade
 
         private void DodgeSkillShots()
         {
-            if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<bool>() == false)
+            if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false)
             {
                 return;
             }

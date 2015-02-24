@@ -48,7 +48,7 @@ namespace ezEvade
 
         public static void CastSpell(EvadeSpellData spellData, Vector2 movePos)
         {
-            Evade.lastEvadeCommand = new EvadeCommand
+            EvadeSpell.lastSpellEvadeCommand = new EvadeCommand
             {
                 order = EvadeOrderCommand.CastSpell,
                 targetPosition = movePos,
@@ -56,7 +56,21 @@ namespace ezEvade
                 timestamp = gameTime,
                 isProcessed = false
             };
+
             myHero.Spellbook.CastSpell(spellData.spellKey, movePos.To3D(), false);
+        }
+
+        public static void CastSpell(EvadeSpellData spellData)
+        {
+            EvadeSpell.lastSpellEvadeCommand = new EvadeCommand
+            {
+                order = EvadeOrderCommand.CastSpell,
+                evadeSpellData = spellData,
+                timestamp = gameTime,
+                isProcessed = false
+            };
+
+            myHero.Spellbook.CastSpell(spellData.spellKey,false);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace ezEvade
                 spellDelay = 0,
                 speed = 1000,
                 isReversed = true,
+                fixedRange = true,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
             });
