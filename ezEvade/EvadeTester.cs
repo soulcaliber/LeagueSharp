@@ -28,6 +28,8 @@ namespace ezEvade
         private static Vector2 testCollisionPos;
         private static bool testingCollision = false;
 
+        private static IOrderedEnumerable<EvadeHelper.PositionInfo> sortedBestPos;
+
         public EvadeTester(Menu mainMenu)
         {
             Drawing.OnDraw += Drawing_OnDraw;
@@ -58,19 +60,31 @@ namespace ezEvade
         {
             var pos1 = newSpell.startPos;//SpellDetector.GetCurrentSpellPosition(newSpell);
             Utility.DelayAction.Add(250, () => CompareSpellLocation2(newSpell));
+
+            sortedBestPos = EvadeHelper.GetBestPositionTest();
         }
 
         private void CompareSpellLocation(Spell spell, Vector2 pos, float time)
         {
             var pos2 = SpellDetector.GetCurrentSpellPosition(spell);
-            if(spell.spellObject != null)
+            if (spell.spellObject != null)
+            {
                 Game.PrintChat("Compare: " + (pos2.Distance(pos)) / (gameTime - time));
+            }
+                
         }
 
         private void CompareSpellLocation2(Spell spell)
         {
             var pos1 = SpellDetector.GetCurrentSpellPosition(spell);
-            Utility.DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, gameTime));
+            var timeNow = gameTime;
+
+            if (spell.spellObject != null)
+            {
+                Game.PrintChat("start distance: " + (spell.startPos.Distance(pos1)));
+            }
+
+            Utility.DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, timeNow));
         }
 
         private void Game_OnGameUpdate(EventArgs args)
@@ -102,6 +116,7 @@ namespace ezEvade
                 }
             }
 
+            /*
             if (args.Order == GameObjectOrder.MoveTo)
             {         
                 if (testingCollision)
@@ -114,7 +129,7 @@ namespace ezEvade
                         args.Process = false;
                     }
                 }
-            }
+            }*/
 
             if (args.Order == GameObjectOrder.MoveTo)
             {
@@ -184,7 +199,17 @@ namespace ezEvade
             }
 
             if (testMenu.Item("TestWall").GetValue<bool>())
-                EvadeHelper.GetBestPositionTest();
+            {                
+                foreach (var posInfo in sortedBestPos)
+                {
+                    if (posInfo.posDangerCount <= 0)
+                    {
+                        var pos = posInfo.position;
+                        Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)25, Color.White, 3);
+                    }
+                }
+            }
+                
         }
     }    
 }

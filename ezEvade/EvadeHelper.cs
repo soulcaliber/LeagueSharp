@@ -133,7 +133,7 @@ namespace ezEvade
             return false;
         }
 
-        public static PositionInfo GetBestPositionTest()
+        public static IOrderedEnumerable<PositionInfo> GetBestPositionTest()
         {
             int posChecked = 0;
             int maxPosToCheck = 50;
@@ -142,6 +142,8 @@ namespace ezEvade
 
             Vector2 heroPoint = myHero.ServerPosition.To2D();
             Vector2 lastMovePos = Game.CursorPos.To2D();
+
+            var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraDelay").GetValue<Slider>().Value;
 
             if (Evade.menu.SubMenu("MiscSettings").Item("HigherPrecision").GetValue<bool>())
             {
@@ -164,35 +166,31 @@ namespace ezEvade
                     var cRadians = (2 * Math.PI / (curCircleChecks - 1)) * i; //check decimals
                     var pos = new Vector2((float)Math.Floor(heroPoint.X + curRadius * Math.Cos(cRadians)), (float)Math.Floor(heroPoint.Y + curRadius * Math.Sin(cRadians)));
 
-                    /*var ret = canHeroWalkToPos(pos, myHero.MoveSpeed, 250);
-                    int posDangerLevel = ret.Item1;
-                    int posDangerCount = ret.Item2;
-                    List<int> dodgeableSpells = ret.Item3;
+                    var posInfo = canHeroWalkToPos(pos, myHero.MoveSpeed, extraDelayBuffer + Game.Ping);
+                    posInfo.isDangerousPos = CheckDangerousPos(pos, 6);
+                    posInfo.distanceToMouse = pos.Distance(lastMovePos);
+                    posTable.Add(posInfo);
 
+                    /*
                     if (posDangerLevel > 0)
                     {
                         Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float) posRadius, Color.White, 3);
-                    }
+                    }*/
 
-                    bool isDangerousPos = CheckDangerousPos(pos, 0);
-                    var dist = pos.Distance(lastMovePos);
-
-                    var posInfo = new PositionInfo(pos, posDangerLevel, posDangerCount, isDangerousPos, dist, dodgeableSpells);
-                    posTable.Add(posInfo);*/
-
+                    
                     var path = myHero.GetPath(pos.To3D());
 
                     //Render.Circle.DrawCircle(path[path.Length - 1], (float)posRadius, Color.White, 3);
-                    Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)posRadius, Color.White, 3);
+                    //Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)posRadius, Color.White, 3);
 
-                    var posOnScreen = Drawing.WorldToScreen(path[path.Length - 1]);
-                    Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + path.Length);
+                    //var posOnScreen = Drawing.WorldToScreen(path[path.Length - 1]);
+                    //Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + path.Length);
                 }
             }
 
             var sortedPosTable = posTable.OrderBy(p => p.isDangerousPos).ThenBy(p => p.posDangerLevel).ThenBy(p => p.posDangerCount).ThenBy(p => p.distanceToMouse);
 
-            return sortedPosTable.First();
+            return sortedPosTable;
         }
 
         public static PositionInfo GetBestPosition()
@@ -229,7 +227,7 @@ namespace ezEvade
                     var cRadians = (2 * Math.PI / (curCircleChecks - 1)) * i; //check decimals
                     var pos = new Vector2((float)Math.Floor(heroPoint.X + curRadius * Math.Cos(cRadians)), (float)Math.Floor(heroPoint.Y + curRadius * Math.Sin(cRadians)));
 
-                    var posInfo = canHeroWalkToPos(pos, myHero.MoveSpeed, 60 + Game.Ping);
+                    var posInfo = canHeroWalkToPos(pos, myHero.MoveSpeed, extraDelayBuffer + Game.Ping);
                     posInfo.isDangerousPos = CheckDangerousPos(pos, 6);
                     posInfo.hasExtraDistance = extraEvadeDistance > 0 ? CheckDangerousPos(pos, extraEvadeDistance) : false;// ? 1 : 0;                    
                     posInfo.distanceToMouse = pos.Distance(lastMovePos);
@@ -389,7 +387,7 @@ namespace ezEvade
                     var cRadians = (2 * Math.PI / (curCircleChecks - 1)) * i; //check decimals
                     var pos = new Vector2((float)Math.Floor(heroPoint.X + curRadius * Math.Cos(cRadians)), (float)Math.Floor(heroPoint.Y + curRadius * Math.Sin(cRadians)));
 
-                    var posInfo = canHeroWalkToPos(pos, spell.speed, 60 + Game.Ping);
+                    var posInfo = canHeroWalkToPos(pos, spell.speed, extraDelayBuffer + Game.Ping);
                     posInfo.isDangerousPos = CheckDangerousPos(pos, 6);
                     posInfo.hasExtraDistance = extraEvadeDistance > 0 ? CheckDangerousPos(pos, extraEvadeDistance) : false;// ? 1 : 0;                    
                     posInfo.distanceToMouse = pos.Distance(lastMovePos);

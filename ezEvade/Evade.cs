@@ -70,7 +70,7 @@ namespace ezEvade
 
             Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
             miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(true));
-            miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(false));
+            miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
 
             Menu bufferMenu = new Menu("Extra Buffers", "ExtraBuffers");
             bufferMenu.AddItem(new MenuItem("ExtraDelay", "Dodge Delay Buffer").SetValue(new Slider(60, 0, 150)));
@@ -198,16 +198,16 @@ namespace ezEvade
 
                 if (menu.SubMenu("MiscSettings").Item("RecalculatePosition").GetValue<bool>() && lastPosInfo != null)//recheck path
                 {
+                    var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraDelay").GetValue<Slider>().Value;
                     var path = myHero.Path;
                     if (path.Length > 0)
                     {
                         var movePos = path[path.Length - 1].To2D();
 
-                        var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, 0);
+                        var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, extraDelayBuffer + Game.Ping);
                         if (posInfo.posDangerCount > lastPosInfo.posDangerCount)
                         {
-                            //Game.PrintChat("recalc");
-                            EvadeHelper.GetBestPosition();
+                            lastPosInfo = EvadeHelper.GetBestPosition();                            
                         }
                     }
                 }
