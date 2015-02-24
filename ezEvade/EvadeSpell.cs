@@ -39,7 +39,10 @@ namespace ezEvade
             {
                 foreach (var spell in evadeSpells)
                 {
-                    if (GetSpellDangerLevel(spell) > posDangerlevel || !(myHero.Spellbook.CanUseSpell(spell.spellKey) == SpellState.Ready))
+                    if (Evade.menu.SubMenu("EvadeSpells").SubMenu(spell.charName + spell.name + "EvadeSpellSettings")
+                .Item(spell.name + "UseEvadeSpell").GetValue<bool>() == false
+                        || GetSpellDangerLevel(spell) > posDangerlevel
+                        || !(myHero.Spellbook.CanUseSpell(spell.spellKey) == SpellState.Ready))
                     {
                         continue; //can't use spell right now
                     }

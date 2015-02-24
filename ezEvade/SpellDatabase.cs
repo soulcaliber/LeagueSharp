@@ -2436,11 +2436,12 @@ namespace ezEvade
                 name = "ViQMissile",
                 projectileSpeed = 1500,
                 radius = 90,
-                range = 2000,
+                range = 725,
                 spellKey = SpellSlot.Q,
                 spellName = "ViQMissile",
                 spellType = SpellType.Line,
                 usePackets = true,
+                defaultOff = true,
 
             });
             #endregion Vi
