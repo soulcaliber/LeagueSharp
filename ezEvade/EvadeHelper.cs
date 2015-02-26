@@ -205,7 +205,7 @@ namespace ezEvade
 
             if (Evade.menu.SubMenu("MiscSettings").Item("HigherPrecision").GetValue<bool>())
             {
-                maxPosToCheck = 100;
+                maxPosToCheck = 150;
                 posRadius = 25;
             }
 
@@ -548,7 +548,9 @@ namespace ezEvade
             else if (spell.info.spellType == SpellType.Circular)
             {
                 var spellHitTime = Math.Max(0, spell.endTime - gameTime);  //extraDelay
-                var tHeroPos = heroPos + walkDir * speed * (spellHitTime / 1000); //Hero predicted pos
+                var walkRange = heroPos.Distance(pos);
+                var predictedRange = speed * (spellHitTime / 1000);
+                var tHeroPos = heroPos + walkDir * Math.Min(predictedRange, walkRange); //Hero predicted pos
 
                 return tHeroPos.Distance(spell.endPos) <= GetSpellRadius(spell) + myHero.BoundingRadius; //+ dodgeBuffer
             }

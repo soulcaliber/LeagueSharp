@@ -178,7 +178,7 @@ namespace ezEvade
                 }
                 else if (spellData.spellType == SpellType.Cone)
                 {
-
+                    return;
                 }
 
                 Spell newSpell = new Spell();
@@ -275,10 +275,14 @@ namespace ezEvade
                         if (spell.missileName == "")
                             spell.missileName = spell.spellName;
 
+                        if (!(spell.spellType == SpellType.Circular || spell.spellType == SpellType.Line))
+                            continue;
+                        
+
                         if (!onProcessSpells.ContainsKey(spell.spellName))
                         {
                             onProcessSpells.Add(spell.spellName, spell);
-                            onMissileSpells.Add(spell.missileName, spell);
+                            onMissileSpells.Add(spell.missileName, spell);                            
 
                             string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
 

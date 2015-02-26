@@ -115,7 +115,7 @@ namespace ezEvade
                 charName = "Kassadin",
                 dangerlevel = 1,
                 name = "RiftWalk",
-                range = 700,
+                range = 450,
                 spellDelay = 150,
                 spellKey = SpellSlot.R,
                 evadeType = EvadeType.Blink,

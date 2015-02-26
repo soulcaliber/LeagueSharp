@@ -195,16 +195,16 @@ namespace ezEvade
                 {
                     //isDodging = false;
                 }
-
+                
                 if (menu.SubMenu("MiscSettings").Item("RecalculatePosition").GetValue<bool>() && lastPosInfo != null)//recheck path
                 {
-                    //var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraDelay").GetValue<Slider>().Value;
+                    var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraDelay").GetValue<Slider>().Value;
                     var path = myHero.Path;
                     if (path.Length > 0)
                     {
                         var movePos = path[path.Length - 1].To2D();
 
-                        var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, Game.Ping);
+                        var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, extraDelayBuffer);
                         if (posInfo.posDangerCount > lastPosInfo.posDangerCount)
                         {
                             lastPosInfo = EvadeHelper.GetBestPosition();                            
