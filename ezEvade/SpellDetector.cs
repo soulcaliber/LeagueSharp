@@ -15,6 +15,9 @@ namespace ezEvade
         public delegate void OnCreateSpellHandler(Spell spell);
         public static event OnCreateSpellHandler OnCreateSpell;
 
+        public delegate void OnProcessSpecialSpellHandler(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData);
+        public static event OnProcessSpecialSpellHandler OnProcessSpecialSpell;
+
         //public static event OnDeleteSpellHandler OnDeleteSpell;
 
         public static Dictionary<int, Spell> spells = new Dictionary<int, Spell>();
@@ -37,7 +40,9 @@ namespace ezEvade
         {
             Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
             Obj_SpellMissile.OnDelete += SpellMissile_OnDelete;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
+
+            Game.OnGameUpdate += Game_OnGameUpdate;
 
             menu = mainMenu;
 
@@ -71,7 +76,7 @@ namespace ezEvade
                             CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
                             return;
                         }
-                                               
+
 
                         foreach (KeyValuePair<int, Spell> entry in spells)
                         {
@@ -84,7 +89,7 @@ namespace ezEvade
                                 {
                                     spell.spellObject = obj;
                                     //Game.PrintChat("aquired: " + (obj.Position.To2D().Distance(spell.startPos)));
-                                }                                
+                                }
                             }
                         }
                     }
@@ -131,12 +136,21 @@ namespace ezEvade
             {
                 if (spellData.usePackets == false)
                 {
-                    CreateSpellData(hero, args.Start, args.End, spellData, null);
+                    if (OnProcessSpecialSpell != null)
+                    {
+                        OnProcessSpecialSpell(hero, args, spellData);
+                    }
+
+                    if (spellData.noProcess == false)
+                    {
+                        CreateSpellData(hero, args.Start, args.End, spellData, null);
+                    }
                 }
             }
         }
 
-        private void CreateSpellData(Obj_AI_Base hero, Vector3 startStartPos, Vector3 spellEndPos, SpellData spellData, GameObject obj)
+        public static void CreateSpellData(Obj_AI_Base hero, Vector3 startStartPos, Vector3 spellEndPos,
+            SpellData spellData, GameObject obj = null, float extraEndTick = 0.0f)
         {
             if (startStartPos.Distance(myHero.Position) < spellData.range + 1000)
             {
@@ -181,6 +195,8 @@ namespace ezEvade
                     return;
                 }
 
+                endTick += extraEndTick;
+
                 Spell newSpell = new Spell();
 
                 newSpell.startTime = gameTime;
@@ -202,7 +218,24 @@ namespace ezEvade
             }
         }
 
-        private int CreateSpell(Spell newSpell)
+        private void Game_OnGameUpdate(EventArgs args)
+        {
+            CheckCasterDead();
+        }
+
+        private void CheckCasterDead()
+        {
+            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
+            {
+                foreach (var spell in spells.Where(
+                        s => (s.Value.heroID == hero.NetworkId && hero.IsDead)))
+                {
+                    DeleteSpell(spell.Key);
+                }
+            }
+        }
+
+        private static int CreateSpell(Spell newSpell)
         {
             int spellID = spellIDCount++;
             newSpell.spellID = spellID;
@@ -227,25 +260,33 @@ namespace ezEvade
             return spellID;
         }
 
-        private void DeleteSpell(int spellID)
+        private static void DeleteSpell(int spellID)
         {
             spells.Remove(spellID);
             drawSpells.Remove(spellID);
-
         }
 
         public static Vector2 GetCurrentSpellPosition(Spell spell)
         {
             Vector2 spellPos = spell.startPos;
-            if (gameTime > spell.startTime + spell.info.spellDelay)
+
+            if (spell.info.spellType == SpellType.Line)
             {
-                spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (gameTime - spell.startTime - spell.info.spellDelay) / 1000;
+                if (gameTime > spell.startTime + spell.info.spellDelay)
+                {
+                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (gameTime - spell.startTime - spell.info.spellDelay) / 1000;
+                }
+            }
+            else if (spell.info.spellType == SpellType.Circular)
+            {
+                spellPos = spell.endPos;
             }
 
             if (spell.spellObject != null)
             {
                 spellPos = spell.spellObject.Position.To2D();
             }
+
             return spellPos;
         }
 
@@ -270,19 +311,36 @@ namespace ezEvade
                     foreach (var spell in SpellDatabase.Spells.Where(
                         s => (s.charName == hero.ChampionName)))
                     {
-                        //Game.PrintChat(spell.spellName);
-
-                        if (spell.missileName == "")
-                            spell.missileName = spell.spellName;
+                        //Game.PrintChat(spell.spellName);                        
 
                         if (!(spell.spellType == SpellType.Circular || spell.spellType == SpellType.Line))
                             continue;
-                        
 
                         if (!onProcessSpells.ContainsKey(spell.spellName))
                         {
+                            if (spell.missileName == "")
+                                spell.missileName = spell.spellName;
+
                             onProcessSpells.Add(spell.spellName, spell);
-                            onMissileSpells.Add(spell.missileName, spell);                            
+                            onMissileSpells.Add(spell.missileName, spell);
+
+                            if (spell.extraSpellNames != null)
+                            {
+                                foreach (string spellName in spell.extraSpellNames)
+                                {
+                                    onProcessSpells.Add(spellName, spell);
+                                }
+                            }
+
+                            if (spell.extraMissileNames != null)
+                            {
+                                foreach (string spellName in spell.extraMissileNames)
+                                {
+                                    onMissileSpells.Add(spellName, spell);
+                                }
+                            }
+
+                            SpecialSpells.LoadSpecialSpell(spell);
 
                             string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
 
@@ -294,7 +352,7 @@ namespace ezEvade
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
-                                .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel-1)));
+                                .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
                             spellMenu.AddSubMenu(newSpellMenu);
                         }

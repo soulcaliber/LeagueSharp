@@ -33,34 +33,47 @@ namespace ezEvade
 
         public static void UseEvadeSpell()
         {
-            int posDangerlevel = EvadeHelper.CheckPosDangerLevel(myHero.ServerPosition.To2D(), 0);
+            //int posDangerlevel = EvadeHelper.CheckPosDangerLevel(myHero.ServerPosition.To2D(), 0);
 
-            if (posDangerlevel > 0 && Evade.lastPosInfo.dodgeableSpells.Count == 0 && gameTime - lastSpellEvadeCommand.timestamp > 1000)
+            if (gameTime - lastSpellEvadeCommand.timestamp < 1000)
             {
-                foreach (var spell in evadeSpells)
+                return;
+            }
+
+            foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
+            {
+                Spell spell = entry.Value;
+
+                if (!Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID))
                 {
-                    if (Evade.menu.SubMenu("EvadeSpells").SubMenu(spell.charName + spell.name + "EvadeSpellSettings")
-                .Item(spell.name + "UseEvadeSpell").GetValue<bool>() == false
-                        || GetSpellDangerLevel(spell) > posDangerlevel
-                        || !(myHero.Spellbook.CanUseSpell(spell.spellKey) == SpellState.Ready))
+                    continue;
+                }
+
+                foreach (var evadeSpell in evadeSpells)
+                {
+                    if (Evade.menu.SubMenu("EvadeSpells").SubMenu(evadeSpell.charName + evadeSpell.name + "EvadeSpellSettings")
+                .Item(evadeSpell.name + "UseEvadeSpell").GetValue<bool>() == false
+                        || GetSpellDangerLevel(evadeSpell) > EvadeHelper.GetSpellDangerLevel(spell)
+                        || !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
                     {
                         continue; //can't use spell right now
                     }
 
-                    if (spell.evadeType == EvadeType.Blink)
+                    if (evadeSpell.evadeType == EvadeType.Blink)
                     {
                         var posInfo = EvadeHelper.GetBestPositionBlink();
                         if (posInfo != null)
                         {
-                            EvadeCommand.CastSpell(spell, posInfo.position);                            
+                            EvadeCommand.CastSpell(evadeSpell, posInfo.position);
                         }
                     }
-                    else if (spell.evadeType == EvadeType.Dash)
+                    else if (evadeSpell.evadeType == EvadeType.Dash)
                     {
-                        var posInfo = EvadeHelper.GetBestPositionDash(spell);
+                        var posInfo = EvadeHelper.GetBestPositionDash(evadeSpell);
                         if (posInfo != null)
                         {
-                            if(spell.isReversed){
+                            if (evadeSpell.isReversed)
+                            {
                                 var dir = (posInfo.position - myHero.ServerPosition.To2D()).Normalized();
                                 var range = myHero.ServerPosition.To2D().Distance(posInfo.position);
                                 var pos = myHero.ServerPosition.To2D() - dir * range;
@@ -68,17 +81,18 @@ namespace ezEvade
                                 posInfo.position = pos;
                             }
 
-                            EvadeCommand.CastSpell(spell, posInfo.position);
+                            EvadeCommand.CastSpell(evadeSpell, posInfo.position);
                         }
                     }
-                    else if (spell.evadeType == EvadeType.SpellShield)
+                    else if (evadeSpell.evadeType == EvadeType.SpellShield)
                     {
-                        EvadeCommand.CastSpell(spell);
+                        EvadeCommand.CastSpell(evadeSpell);
                     }
 
                     return;
-                }                
+                }
             }
+
         }
 
         public static int GetSpellDangerLevel(EvadeSpellData spell)
@@ -148,9 +162,9 @@ namespace ezEvade
                 Menu newSpellMenu = new Menu(menuName, spell.charName + spell.name + "EvadeSpellSettings");
                 newSpellMenu.AddItem(new MenuItem(spell.name + "UseEvadeSpell", "Use Spell").SetValue(true));
                 newSpellMenu.AddItem(new MenuItem(spell.name + "EvadeSpellDangerLevel", "Danger Level")
-                    .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel-1)));
+                    .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
-                evadeSpellMenu.AddSubMenu(newSpellMenu);            
+                evadeSpellMenu.AddSubMenu(newSpellMenu);
             }
 
             evadeSpells.Sort((a, b) => a.dangerlevel.CompareTo(b.dangerlevel));

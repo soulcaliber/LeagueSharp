@@ -39,10 +39,13 @@ namespace ezEvade
         public float extraDistance = 0;
         public bool isThreeWay = false;
         public bool defaultOff = false;
+        public bool noProcess = false;
         public bool isWall = false;
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
         public bool isSpecial = false;
+        public string[] extraSpellNames;
+        public string[] extraMissileNames;
 
         public SpellData()
         {

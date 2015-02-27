@@ -284,7 +284,7 @@ namespace ezEvade
                 missileName = "BrandBlazeMissile",
                 name = "BrandBlaze",
                 projectileSpeed = 1600,
-                radius = 70,
+                radius = 60,
                 range = 1100,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
@@ -1120,85 +1120,12 @@ namespace ezEvade
                 range = 875,
                 spellDelay = 900,
                 spellKey = SpellSlot.Q,
-                spellName = "karthuslaywastedeada3",
-                spellType = SpellType.Circular,
-
-            });
-
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Karthus",
-                dangerlevel = 1,
-                name = "Lay Waste",
-                radius = 180,
-                range = 875,
-                spellDelay = 900,
-                spellKey = SpellSlot.Q,
-                spellName = "karthuslaywastedeada2",
-                spellType = SpellType.Circular,
-
-            });
-
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Karthus",
-                dangerlevel = 1,
-                name = "Lay Waste",
-                radius = 180,
-                range = 875,
-                spellDelay = 900,
-                spellKey = SpellSlot.Q,
-                spellName = "karthuslaywastea2",
-                spellType = SpellType.Circular,
-
-            });
-
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Karthus",
-                dangerlevel = 1,
-                name = "Lay Waste",
-                radius = 180,
-                range = 875,
-                spellDelay = 900,
-                spellKey = SpellSlot.Q,
-                spellName = "karthuslaywastedeada1",
-                spellType = SpellType.Circular,
-
-            });
-
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Karthus",
-                dangerlevel = 1,
-                name = "Lay Waste",
-                radius = 180,
-                range = 875,
-                spellDelay = 900,
-                spellKey = SpellSlot.Q,
                 spellName = "KarthusLayWasteA1",
                 spellType = SpellType.Circular,
+                extraSpellNames = new[] { "karthuslaywastea2", "karthuslaywastea3", "karthuslaywastedeada1", "karthuslaywastedeada2", "karthuslaywastedeada3" },
 
             });
 
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Karthus",
-                dangerlevel = 1,
-                name = "Lay Waste",
-                radius = 180,
-                range = 875,
-                spellDelay = 900,
-                spellKey = SpellSlot.Q,
-                spellName = "karthuslaywastea3",
-                spellType = SpellType.Circular,
-
-            });
             #endregion Karthus
 
             #region Kassadin
@@ -2649,13 +2576,13 @@ namespace ezEvade
                 name = "ZiggsQ",
                 projectileSpeed = 1700,
                 radius = 90,
-                range = 850,
-                fixedRange = true,
-                spellDelay = 250,
+                range = 850,                
+                spellDelay = 300,
                 spellKey = SpellSlot.Q,
                 spellName = "ZiggsQ",
                 spellType = SpellType.Circular,
                 isSpecial = true,
+                noProcess = true,
             });
             #endregion Ziggs
 

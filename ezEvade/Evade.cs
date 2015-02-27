@@ -162,7 +162,7 @@ namespace ezEvade
             if (gameTime - lastTickCount > 50) //Tick limiter
             {                
                 DodgeSkillShots(); //walking
-                EvadeSpell.UseEvadeSpell(); //using spells
+                //EvadeSpell.UseEvadeSpell(); //using spells
                 lastTickCount = gameTime;
             }
 
@@ -176,16 +176,20 @@ namespace ezEvade
                 return;
             }
 
-            bool playerInDanger = EvadeHelper.CheckDangerousPos(myHero.ServerPosition.To2D(), 0);
+            bool playerInDanger = false;
+            foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
+            {
+                Spell spell = entry.Value;
+                                
+                if (lastPosInfo.dodgeableSpells.Contains(spell.spellID) &&
+                    EvadeHelper.inSkillShot(spell, myHero.ServerPosition.To2D(), myHero.BoundingRadius))
+                {
+                    playerInDanger = true;
+                    break;
+                }                
+            }
 
-            if (playerInDanger && lastPosInfo != null && lastPosInfo.dodgeableSpells.Count > 0)
-            {
-                isDodging = true;
-            }
-            else
-            {
-                isDodging = false;
-            }
+            isDodging = playerInDanger;           
 
             if (isDodging)
             {
@@ -274,7 +278,9 @@ namespace ezEvade
 
             //Game.PrintChat("SkillsDodged: " + lastPosInfo.dodgeableSpells.Count + " DangerLevel: " + lastPosInfo.posDangerLevel);
 
-            DodgeSkillShots();
+            DodgeSkillShots(); //walking
+            EvadeSpell.UseEvadeSpell(); //using spells
+
         }
 
         public static void CheckMovingIntoDanger(Vector2 movePos)

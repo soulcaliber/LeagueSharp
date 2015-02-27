@@ -25,6 +25,17 @@ namespace ezEvade
             }            
         }
 
+        public static Vector2 RotateVector(Vector2 start, Vector2 end, float angle)
+        {
+            angle = angle * ((float)(Math.PI / 180));
+            Vector2 ret = end;
+            ret.X = ((float)Math.Cos(angle) * (end.X - start.X) - 
+                (float)Math.Sin(angle) * (end.Y - start.Y) + start.X);
+            ret.Y = ((float)Math.Sin(angle) * (end.X - start.X) +
+                (float)Math.Cos(angle) * (end.Y - start.Y) + start.Y);
+            return ret;
+        }
+
         public static Tuple<float, float> LineToLineIntersection(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
         {
             var d = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
