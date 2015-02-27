@@ -19,16 +19,16 @@ namespace ezEvade
 
         public class PositionInfo
         {
-            public int posDangerLevel;
-            public int posDangerCount;
-            public bool isDangerousPos;
-            public float distanceToMouse;
-            public List<int> dodgeableSpells;
-            public List<int> undodgeableSpells;
-            public List<int> spellList;
+            public int posDangerLevel = 0;
+            public int posDangerCount = 0;
+            public bool isDangerousPos = false;
+            public float distanceToMouse = 0;
+            public List<int> dodgeableSpells = new List<int>();
+            public List<int> undodgeableSpells = new List<int>();
+            public List<int> spellList = new List<int>();
             public Vector2 position;
             public float timestamp;
-            public bool hasExtraDistance;
+            public bool hasExtraDistance = false;
 
             public PositionInfo(
                 Vector2 position,
@@ -515,6 +515,9 @@ namespace ezEvade
             var walkDir = (pos - heroPos).Normalized();
             var zVector = new Vector2(0, 0);
 
+            /*
+            if (Evade.menu.SubMenu("MiscSettings").Item("CalculateHeroPos").GetValue<bool>())
+                heroPos = GetRealHeroPos(); //testing*/
 
             /*if (!myHero.IsMoving)
                 walkDir = zVector;*/
@@ -560,19 +563,12 @@ namespace ezEvade
                 //Check if skillshot will hit hero if hero is moving and the skillshot is moved forwards by 50 units                
 
                 spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (delay / 1000); //move the spellPos by 50 miliseconds forwards
-                spellPos = spellPos + spell.direction * 50; //move the spellPos by 50 units forwards                
-                                
-
-                //Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);
-
-                if (heroPos.Distance(spellPos) <= GetSpellRadius(spell) + 10 + myHero.BoundingRadius)
-                {
-                    //Game.PrintChat("already hit");
-                    //return true;
-                }
+                spellPos = spellPos + spell.direction * 50; //move the spellPos by 50 units forwards              
+                
+                var finalExtraDelay = (50/spell.info.projectileSpeed) + (delay/1000);
 
                 float extraCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * speed, spell.direction * spell.info.projectileSpeed, myHero.BoundingRadius, GetSpellRadius(spell) + 5, out isCollision);
-                if (isCollision && extraCollisionTime > 0)
+                if (isCollision && extraCollisionTime > -finalExtraDelay)
                 {
                     if (spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > extraCollisionTime)
                         return true; //if collision happens when the skillshot is in flight
@@ -598,6 +594,23 @@ namespace ezEvade
             }
 
             return false;
+        }
+
+        public static Vector2 GetRealHeroPos()
+        {
+            var path = myHero.Path;
+            if (path.Length < 1)
+            {
+                return myHero.ServerPosition.To2D();
+            }
+
+            var serverPos = myHero.ServerPosition.To2D();
+            var heroPos = myHero.Position.To2D();
+
+            var walkDir = (path[path.Length - 1].To2D() - serverPos).Normalized();
+            var realPos = heroPos + walkDir * myHero.MoveSpeed * ((float)Game.Ping / 2000);
+
+            return realPos;
         }
 
         public static bool CheckPathCollision(Obj_AI_Base unit, Vector2 movePos)
@@ -628,6 +641,11 @@ namespace ezEvade
             }
 
             return false;
+        }
+
+        public static bool isSamePosInfo(PositionInfo posInfo1, PositionInfo posInfo2)
+        {
+            return new HashSet<int>(posInfo1.spellList).SetEquals(posInfo2.spellList);
         }
 
         public static bool LineIntersectLinearSpell(Vector2 a, Vector2 b, Spell spell)

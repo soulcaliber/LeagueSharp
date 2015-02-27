@@ -53,9 +53,10 @@ namespace ezEvade
 
             Menu mainMenu = new Menu("Main", "Main");
             mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
+            mainMenu.AddItem(new MenuItem("UseEvadeSpells", "Use Evade Spells").SetValue(true));
             mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
             mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
-            mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
+            mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));            
             menu.AddSubMenu(mainMenu);
 
             spellDetector = new SpellDetector(menu);
@@ -71,6 +72,7 @@ namespace ezEvade
             Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
             miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(true));
             miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
+            //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
 
             Menu bufferMenu = new Menu("Extra Buffers", "ExtraBuffers");
             bufferMenu.AddItem(new MenuItem("ExtraDelay", "Dodge Delay Buffer").SetValue(new Slider(60, 0, 150)));
@@ -202,16 +204,19 @@ namespace ezEvade
                 
                 if (menu.SubMenu("MiscSettings").Item("RecalculatePosition").GetValue<bool>() && lastPosInfo != null)//recheck path
                 {
-                    var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraDelay").GetValue<Slider>().Value;
+                    //var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraDelay").GetValue<Slider>().Value;
                     var path = myHero.Path;
                     if (path.Length > 0)
                     {
                         var movePos = path[path.Length - 1].To2D();
 
-                        var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, extraDelayBuffer);
-                        if (posInfo.posDangerCount > lastPosInfo.posDangerCount)
+                        if (movePos.Distance(lastPosInfo.position) < 5) //more strict checking
                         {
-                            lastPosInfo = EvadeHelper.GetBestPosition();                            
+                            var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, 0);
+                            if (EvadeHelper.isSamePosInfo(posInfo, lastPosInfo) && posInfo.posDangerCount > lastPosInfo.posDangerCount)
+                            {
+                                lastPosInfo = EvadeHelper.GetBestPosition();
+                            }
                         }
                     }
                 }

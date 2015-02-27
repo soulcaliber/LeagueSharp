@@ -118,7 +118,7 @@ namespace ezEvade
                 var spellDrawingConfig = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
                     .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Color").GetValue<Circle>();
                 var spellDrawingWidth = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
-                    .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Width").GetValue<Slider>().Value;
+                    .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Width").GetValue<Slider>().Value;                
 
                 if (Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings")
                     .Item(spell.info.spellName + "DrawSpell").GetValue<bool>()

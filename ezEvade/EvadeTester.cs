@@ -108,11 +108,15 @@ namespace ezEvade
             {
                 var path = myHero.Path;
                 var heroPoint = myHero.ServerPosition.To2D();
+
+                
                 if (path.Length > 0)
                 {
                     var movePos = path[path.Length - 1].To2D();
                     var walkDir = (movePos - heroPoint).Normalized();
-                    circleRenderPos = heroPoint;// +walkDir * myHero.MoveSpeed * (((float)Game.Ping) / 1000);
+                    
+                    circleRenderPos = EvadeHelper.GetRealHeroPos();
+                        //heroPoint;// +walkDir * myHero.MoveSpeed * (((float)Game.Ping) / 1000);
                 }
             }
 
@@ -132,7 +136,8 @@ namespace ezEvade
             }*/
 
             if (args.Order == GameObjectOrder.MoveTo)
-            {
+            {               
+
                 Vector2 heroPos = myHero.ServerPosition.To2D();
                 Vector2 pos = args.TargetPosition.To2D();
                 float speed = myHero.MoveSpeed;
@@ -175,8 +180,11 @@ namespace ezEvade
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            
-            Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
+            var path = myHero.Path;
+            var heroPos2 = path[path.Length - 1].To2D();//EvadeHelper.GetRealHeroPos();
+
+            Render.Circle.DrawCircle(new Vector3(heroPos2.X, heroPos2.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
+            //Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
             Render.Circle.DrawCircle(new Vector3(circleRenderPos.X, circleRenderPos.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.Red, 3);
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)

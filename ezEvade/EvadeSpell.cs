@@ -33,6 +33,11 @@ namespace ezEvade
 
         public static void UseEvadeSpell()
         {
+            if (!Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<bool>())
+            {
+                return;
+            }
+            
             //int posDangerlevel = EvadeHelper.CheckPosDangerLevel(myHero.ServerPosition.To2D(), 0);
 
             if (gameTime - lastSpellEvadeCommand.timestamp < 1000)
