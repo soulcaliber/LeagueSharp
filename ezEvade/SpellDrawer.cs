@@ -33,6 +33,7 @@ namespace ezEvade
 
             Menu drawMenu = new Menu("Draw", "Draw");
             drawMenu.AddItem(new MenuItem("DrawSkillShots", "Draw SkillShots").SetValue(true));
+            drawMenu.AddItem(new MenuItem("ShowStatus", "Show Evade Status").SetValue(true));
 
             Menu dangerMenu = new Menu("DangerLevel Drawings", "DangerLevelDrawings");
             Menu lowDangerMenu = new Menu("Low", "LowDrawing");
@@ -92,7 +93,22 @@ namespace ezEvade
             if (menu.SubMenu("Draw").Item("DrawSkillShots").GetValue<bool>() == false)
             {
                 return;
-            }     
+            }
+
+            if (menu.SubMenu("Draw").Item("ShowStatus").GetValue<bool>())
+            {
+                var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
+                
+                if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active
+                    && Evade.isDodgeDangerousEnabled())
+                {
+                    Drawing.DrawText(heroPos.X, heroPos.Y, Color.Red, "Evade: ON");
+                }
+                else if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
+                {
+                    Drawing.DrawText(heroPos.X, heroPos.Y, Color.White, "Evade: ON");
+                }            
+            }
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
