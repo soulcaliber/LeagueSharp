@@ -141,7 +141,18 @@ namespace ezEvade
                         var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
                         if (posInfo != null)
                         {
-                            EvadeCommand.MoveTo(posInfo.position);
+                            VirtualMouse.disableOrbClick = true;
+                            if (Utils.TickCount - VirtualMouse.clickdelay > 500 /*add menu instead of number*/)
+                            {
+                                VirtualMouse.coordX = (int)movePos.X;
+                                VirtualMouse.coordY = (int)movePos.Y;
+                                VirtualMouse.RightClick();
+                                VirtualMouse.clickdelay = Utils.TickCount;
+                            }
+                            else 
+                            {
+                                EvadeCommand.MoveTo(posInfo.position);
+                            }
                         }
                         return;
                     }
@@ -221,7 +232,18 @@ namespace ezEvade
                     }
                 }
 
-                EvadeCommand.MoveTo(lastBestPosition);
+                VirtualMouse.disableOrbClick = true;
+                if (Utils.TickCount - VirtualMouse.clickdelay > 500 /*add menu instead of number*/)
+                {
+                    VirtualMouse.coordX = (int)lastBestPosition.X;
+                    VirtualMouse.coordY = (int)lastBestPosition.Y;
+                    VirtualMouse.RightClick();
+                    VirtualMouse.clickdelay = Utils.TickCount;
+                }
+                else
+                {
+                    EvadeCommand.MoveTo(lastBestPosition);
+                }
             }
             else //if not dodging
             {
@@ -236,7 +258,18 @@ namespace ezEvade
                         var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
                         if (posInfo != null)
                         {
-                            EvadeCommand.MoveTo(posInfo.position);
+                            VirtualMouse.disableOrbClick = true;
+                            if (Utils.TickCount - VirtualMouse.clickdelay > 500 /*add menu instead of number*/)
+                            {
+                                VirtualMouse.coordX = (int)posInfo.position.X;
+                                VirtualMouse.coordY = (int)posInfo.position.Y;
+                                VirtualMouse.RightClick();
+                                VirtualMouse.clickdelay = Utils.TickCount;
+                            }
+                            else
+                            {
+                                EvadeCommand.MoveTo(posInfo.position);
+                            }
                         }
                         return;
                     }
@@ -296,7 +329,18 @@ namespace ezEvade
                 var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
                 if (posInfo != null) //check if there is solution
                 {
-                    myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D());
+                    VirtualMouse.disableOrbClick = true;
+                    if (Utils.TickCount - VirtualMouse.clickdelay > 500 /*add menu instead of number*/)
+                    {
+                        VirtualMouse.coordX = (int)posInfo.position.X;
+                        VirtualMouse.coordY = (int)posInfo.position.Y;
+                        VirtualMouse.RightClick();
+                        VirtualMouse.clickdelay = Utils.TickCount;
+                    }
+                    else
+                    {
+                        myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D());
+                    }
                 }
             }
         }
