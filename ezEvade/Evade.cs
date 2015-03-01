@@ -144,7 +144,7 @@ namespace ezEvade
                             VirtualMouse.disableOrbClick = true;
                             if (Utils.TickCount - VirtualMouse.clickdelay > 500 /*add menu instead of number*/)
                             {
-                                VirtualMouse.coordX = (int)movePos.X;
+                                VirtualMouse.coordX = (int)movePos.X; //these doesn't matter atm, it will use vector when its implemented
                                 VirtualMouse.coordY = (int)movePos.Y;
                                 VirtualMouse.RightClick();
                                 VirtualMouse.clickdelay = Utils.TickCount;
