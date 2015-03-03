@@ -103,9 +103,9 @@ namespace ezEvade
         }
 
         private void Game_OnSendPacket(GamePacketEventArgs args)
-        {
+        {            
             // Check if the packet sent is a spell cast
-            if (args.PacketData[0] == 104)
+            if (args.PacketData[0] == 228)
             {
                 if (isDodging)
                 {
