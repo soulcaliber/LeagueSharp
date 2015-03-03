@@ -14,7 +14,6 @@ namespace ezEvade
     {
 
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        private static float gameTime { get { return Game.ClockTime * 1000; } }
 
         public static Dictionary<string, bool> pDict = new Dictionary<string, bool>();
 

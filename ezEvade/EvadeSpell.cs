@@ -13,10 +13,9 @@ namespace ezEvade
     class EvadeSpell
     {
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        private static float gameTime { get { return Game.ClockTime * 1000; } }
 
         public static List<EvadeSpellData> evadeSpells = new List<EvadeSpellData>();
-        public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = gameTime };
+        public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = Evade.GetTickCount() };
 
         public static Menu menu;
         public static Menu evadeSpellMenu;
@@ -40,7 +39,7 @@ namespace ezEvade
             
             //int posDangerlevel = EvadeHelper.CheckPosDangerLevel(myHero.ServerPosition.To2D(), 0);
 
-            if (gameTime - lastSpellEvadeCommand.timestamp < 1000)
+            if (Evade.GetTickCount() - lastSpellEvadeCommand.timestamp < 1000)
             {
                 return;
             }

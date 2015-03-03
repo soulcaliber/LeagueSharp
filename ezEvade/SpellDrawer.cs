@@ -15,7 +15,7 @@ namespace ezEvade
     internal class SpellDrawer
     {
         public static Menu menu;
-        private static float gameTime { get { return Game.ClockTime * 1000; } }
+
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
 
 
@@ -34,6 +34,7 @@ namespace ezEvade
             Menu drawMenu = new Menu("Draw", "Draw");
             drawMenu.AddItem(new MenuItem("DrawSkillShots", "Draw SkillShots").SetValue(true));
             drawMenu.AddItem(new MenuItem("ShowStatus", "Show Evade Status").SetValue(true));
+            drawMenu.AddItem(new MenuItem("DrawSpellPos", "Draw Spell Position").SetValue(false));
 
             Menu dangerMenu = new Menu("DangerLevel Drawings", "DangerLevelDrawings");
             Menu lowDangerMenu = new Menu("Low", "LowDrawing");
@@ -88,17 +89,12 @@ namespace ezEvade
             Drawing.DrawLine(lEndPos, rEndPos, width, color);
         }
 
-        private void Drawing_OnDraw(EventArgs args)
+        private void DrawEvadeStatus()
         {
-            if (menu.SubMenu("Draw").Item("DrawSkillShots").GetValue<bool>() == false)
-            {
-                return;
-            }
-
             if (menu.SubMenu("Draw").Item("ShowStatus").GetValue<bool>())
             {
                 var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
-                
+
                 if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active
                     && Evade.isDodgeDangerousEnabled())
                 {
@@ -107,8 +103,18 @@ namespace ezEvade
                 else if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
                 {
                     Drawing.DrawText(heroPos.X, heroPos.Y, Color.White, "Evade: ON");
-                }            
+                }
             }
+        }
+
+        private void Drawing_OnDraw(EventArgs args)
+        {
+            if (menu.SubMenu("Draw").Item("DrawSkillShots").GetValue<bool>() == false)
+            {
+                return;
+            }
+
+            DrawEvadeStatus();
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
@@ -126,8 +132,20 @@ namespace ezEvade
                 {
                     if (spell.info.spellType == SpellType.Line)
                     {
-                        Vector2 spellPos = SpellDetector.GetCurrentSpellPosition(spell);
+                        Vector2 spellPos = SpellDetector.GetCurrentSpellPosition(spell);                                             
                         DrawLineRectangle(spellPos, spell.endPos, (int)EvadeHelper.GetSpellRadius(spell), spellDrawingWidth, spellDrawingConfig.Color);
+
+                        if (menu.SubMenu("Draw").Item("DrawSpellPos").GetValue<bool>())
+                        {
+                            /*if (true)
+                            {
+                                var spellPos2 = spell.startPos + spell.direction * spell.info.projectileSpeed * (Evade.GetTickCount() - spell.startTime - spell.info.spellDelay) / 1000 + spell.direction * spell.info.projectileSpeed * ((float)Game.Ping / 1000);
+                                Render.Circle.DrawCircle(new Vector3(spellPos2.X, spellPos2.Y, myHero.Position.Z), (int)EvadeHelper.GetSpellRadius(spell), Color.Red, 8);
+                            }*/
+                            
+                            Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int)EvadeHelper.GetSpellRadius(spell), spellDrawingConfig.Color, spellDrawingWidth);
+                        } 
+
                     }
                     else if (spell.info.spellType == SpellType.Circular)
                     {

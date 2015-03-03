@@ -31,7 +31,6 @@ namespace ezEvade
         private static int spellIDCount = 0;
 
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        private static float gameTime { get { return Game.ClockTime * 1000; } }
 
         public static Menu menu;
         public static Menu spellMenu;
@@ -199,8 +198,8 @@ namespace ezEvade
 
                 Spell newSpell = new Spell();
 
-                newSpell.startTime = gameTime;
-                newSpell.endTime = gameTime + endTick;
+                newSpell.startTime = Evade.GetTickCount();
+                newSpell.endTime = Evade.GetTickCount() + endTick;
                 newSpell.startPos = startPosition;
                 newSpell.endPos = endPosition;
                 newSpell.direction = direction;
@@ -266,15 +265,21 @@ namespace ezEvade
             drawSpells.Remove(spellID);
         }
 
-        public static Vector2 GetCurrentSpellPosition(Spell spell)
+        public static Vector2 GetCurrentSpellPosition(Spell spell, bool allowNegative = false, float delay = 0)
         {
             Vector2 spellPos = spell.startPos;
 
             if (spell.info.spellType == SpellType.Line)
             {
-                if (gameTime > spell.startTime + spell.info.spellDelay)
+                float spellTime = Evade.GetTickCount() - spell.startTime - spell.info.spellDelay;
+
+                if (spellTime >= 0)
                 {
-                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (gameTime - spell.startTime - spell.info.spellDelay) / 1000;
+                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * spellTime / 1000;
+                }
+                else if(allowNegative)
+                {                    
+                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
                 }
             }
             else if (spell.info.spellType == SpellType.Circular)
@@ -285,6 +290,11 @@ namespace ezEvade
             if (spell.spellObject != null)
             {
                 spellPos = spell.spellObject.Position.To2D();
+            }
+
+            if (delay > 0)
+            {
+                spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (delay / 1000);
             }
 
             return spellPos;

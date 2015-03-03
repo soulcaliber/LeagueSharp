@@ -90,6 +90,7 @@
     <Compile Include="EvadeSpellDatabase.cs" />
     <Compile Include="EvadeTester.cs" />
     <Compile Include="MathUtils.cs" />
+    <Compile Include="MathUtilsCPA.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialSpells.cs" />

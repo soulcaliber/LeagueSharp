@@ -2276,7 +2276,24 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Veigar",
-                dangerlevel = 1,
+                dangerlevel = 2,
+                name = "VeigarBalefulStrike",
+                radius = 70,
+                range = 850,
+                spellDelay = 250,
+                projectileSpeed = 1750,
+                spellKey = SpellSlot.Q,
+                spellName = "VeigarBalefulStrike",
+                missileName = "VeigarBalefulStrikeMis",
+                spellType = SpellType.Line,
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Veigar",
+                dangerlevel = 2,
                 name = "VeigarDarkMatter",
                 radius = 225,
                 range = 900,

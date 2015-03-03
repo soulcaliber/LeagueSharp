@@ -50,7 +50,7 @@ namespace ezEvade
                     ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / d);
             }
         }
-
+        
         //https://code.google.com/p/xna-circle-collision-detection/downloads/detail?name=Circle%20Collision%20Example.zip&can=2&q=
 
         public static float GetCollisionTime(Vector2 Pa, Vector2 Pb, Vector2 Va, Vector2 Vb, float Ra, float Rb, out bool collision)
