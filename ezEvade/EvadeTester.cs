@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 using System.Diagnostics;
 
 using Color = System.Drawing.Color;
@@ -53,8 +53,15 @@ namespace ezEvade
             lastTimerCheck = getTickCountTimer;
 
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
+            //Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
             Game.OnGameUpdate += Game_OnGameUpdate;
+
+            Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
+            //Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
+
+            //GameObject.OnFloatPropertyChange += GameObject_OnFloatPropertyChange;
+            //GameObject.OnIntegerPropertyChange += GameObject_OnIntegerPropertyChange;
+            //Game.OnGameNotifyEvent += Game_OnGameNotifyEvent;
 
             SpellDetector.OnCreateSpell += SpellDetector_OnCreateSpell;
 
@@ -81,10 +88,28 @@ namespace ezEvade
         private void SpellDetector_OnCreateSpell(Spell newSpell)
         {
             var pos1 = newSpell.startPos;//SpellDetector.GetCurrentSpellPosition(newSpell);
-            Utility.DelayAction.Add(250, () => CompareSpellLocation2(newSpell));
+            //Utility.DelayAction.Add(250, () => CompareSpellLocation2(newSpell));
                         
             sortedBestPos = EvadeHelper.GetBestPositionTest();
             circleRenderPos = Evade.lastPosInfo.position;
+        }
+
+        private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
+        {
+            if (!obj.IsValid<Obj_SpellMissile>())
+                return;
+
+            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+            Game.PrintChat("Offset: " + missile.SData.ParticleStartOffset);
+            Game.PrintChat("Missile Speed " + missile.SData.MissileSpeed);
+            Game.PrintChat("LineWidth " + missile.SData.LineWidth);
+            circleRenderPos = missile.SData.ParticleStartOffset.To2D();
+        }
+
+        private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
+        {
+            Game.PrintChat("" + args.SData.Name);
+            circleRenderPos = args.SData.ParticleStartOffset.To2D();
         }
 
         private void CompareSpellLocation(Spell spell, Vector2 pos, float time)
@@ -119,6 +144,34 @@ namespace ezEvade
                     //Game.PrintChat("walkspeed: " + startWalkPos.Distance(myHero.ServerPosition.To2D()) / (Evade.GetTickCount() - startWalkTime));
                     startWalkTime = 0;
                 }
+            }
+        }
+
+        private void Game_OnGameNotifyEvent(GameNotifyEventArgs args)
+        {
+            Game.PrintChat(""+args.EventId);
+        }
+
+        private void GameObject_OnFloatPropertyChange(GameObject obj, GameObjectFloatPropertyChangeEventArgs args)
+        {
+
+                if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal" )
+                {
+                    Game.PrintChat(args.Property + ": " + args.NewValue);
+                }
+                    
+            
+        }
+
+        private void GameObject_OnIntegerPropertyChange(GameObject obj, GameObjectIntegerPropertyChangeEventArgs args)
+        {
+            if (!obj.IsMe)
+            {
+                if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal")
+                {
+                    Game.PrintChat("Int" + args.Property + ": " + args.NewValue);
+                }
+
             }
         }
 
@@ -298,13 +351,12 @@ namespace ezEvade
                 foreach (var posInfo in sortedBestPos)
                 {
                     var posOnScreen = Drawing.WorldToScreen(posInfo.position.To3D());
-                    Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + posInfo.hasComfortZone);
+                    //Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + (int)posInfo.closestDistance);
                     
-                    /*if (posInfo.closestDistance > 0)
-                    {
-                        var posOnScreen = Drawing.WorldToScreen(posInfo.position.To3D());
+                    if (posInfo.closestDistance < 10000)
+                    {                       
                         Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + (int)posInfo.closestDistance);
-                    }*/
+                    }
 
 
                     /*if (posInfo.posDangerCount <= 0)

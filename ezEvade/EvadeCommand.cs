@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -41,8 +40,8 @@ namespace ezEvade
                 targetPosition = movePos,
                 timestamp = Evade.GetTickCount(),
                 isProcessed = false
-            };
-            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);
+            };            
+            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);            
         }
 
         public static void CastSpell(EvadeSpellData spellData, Vector2 movePos)
