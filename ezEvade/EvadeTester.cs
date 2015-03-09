@@ -281,7 +281,8 @@ namespace ezEvade
         {
             //PrintTimers();
 
-            
+            //EvadeHelper.GetBestPositionTest();
+
             var path = myHero.Path;
 
             if (path.Length > 0)
@@ -353,11 +354,10 @@ namespace ezEvade
                     var posOnScreen = Drawing.WorldToScreen(posInfo.position.To3D());
                     //Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + (int)posInfo.closestDistance);
                     
-                    if (posInfo.closestDistance < 10000)
+                    if (!posInfo.rejectPosition)
                     {                       
                         Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + (int)posInfo.closestDistance);
-                    }
-
+                    }                    
 
                     /*if (posInfo.posDangerCount <= 0)
                     {

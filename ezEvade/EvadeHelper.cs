@@ -28,6 +28,7 @@ namespace ezEvade
             public float timestamp;
             public bool hasExtraDistance = false;
             public float closestDistance = float.MaxValue;
+            public float intersectionTime = float.MaxValue;
             public bool rejectPosition = false;
             public float posDistToChamps = float.MaxValue;
             public bool hasComfortZone = true;
@@ -70,13 +71,14 @@ namespace ezEvade
             var posInfo = canHeroWalkToPos(pos, myHero.MoveSpeed, extraDelayBuffer + Game.Ping, extraDist);
             posInfo.isDangerousPos = CheckDangerousPos(pos, 6);
             posInfo.hasExtraDistance = extraEvadeDistance > 0 ? CheckDangerousPos(pos, extraEvadeDistance) : false;// ? 1 : 0;            
-            posInfo.closestDistance = GetIntersectTime(lowestEvadeTimeSpell, myHero.ServerPosition.To2D(), pos);
+            posInfo.closestDistance = posInfo.distanceToMouse;
+            posInfo.intersectionTime = GetIntersectTime(lowestEvadeTimeSpell, myHero.ServerPosition.To2D(), pos);
             posInfo.distanceToMouse = pos.Distance(lastMovePos);
             posInfo.posDistToChamps = GetDistanceToChampions(pos);
 
             if (Evade.menu.SubMenu("MiscSettings").SubMenu("FastEvade").Item("RejectMinDistance").GetValue<Slider>().Value > 0
             && Evade.menu.SubMenu("MiscSettings").SubMenu("FastEvade").Item("RejectMinDistance").GetValue<Slider>().Value >
-                posInfo.closestDistance)
+                posInfo.closestDistance) //reject closestdistance
             {
                 posInfo.rejectPosition = true;
             }
@@ -224,6 +226,11 @@ namespace ezEvade
 
                     posTable.Add(InitPositionInfo(pos, extraDelayBuffer, extraEvadeDistance, lastMovePos, lowestEvadeTimeSpell));
 
+
+                    if (pos.IsWall())
+                    {
+                        //Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)25, Color.White, 3);
+                    }
                     /*
                     if (posDangerLevel > 0)
                     {
@@ -252,6 +259,8 @@ namespace ezEvade
             int maxPosToCheck = 50;
             int posRadius = 50;
             int radiusIndex = 0;
+
+            bool fastEvadeMode = false;
 
             var extraDelayBuffer = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraPingBuffer").GetValue<Slider>().Value;
             var extraEvadeDistance = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraEvadeDistance").GetValue<Slider>().Value;
@@ -299,16 +308,17 @@ namespace ezEvade
             IOrderedEnumerable<PositionInfo> sortedPosTable;
 
             if (Evade.menu.SubMenu("MiscSettings").SubMenu("FastEvade").Item("FastEvadeActivationTime").GetValue<Slider>().Value > 0
-                && Evade.menu.SubMenu("MiscSettings").SubMenu("FastEvade").Item("FastEvadeActivationTime").GetValue<Slider>().Value >
+                && Evade.menu.SubMenu("MiscSettings").SubMenu("FastEvade").Item("FastEvadeActivationTime").GetValue<Slider>().Value + Game.Ping >
                 lowestEvadeTime)
             {
                 sortedPosTable =
-                posTable.OrderBy(p => p.closestDistance)
+                posTable.OrderBy(p => p.intersectionTime)
                         .ThenBy(p => p.posDangerLevel)
                         .ThenBy(p => p.posDangerCount)
                         .ThenBy(p => p.isDangerousPos)
                         .ThenBy(p => p.hasExtraDistance);
 
+                fastEvadeMode = true;
                 //Game.PrintChat("fast evade: " + lowestEvadeTime);
             }
             else
@@ -327,7 +337,16 @@ namespace ezEvade
             foreach (var posInfo in sortedPosTable)
             {
                 if (CheckPathCollision(myHero, posInfo.position) == false)
+                {
+                    if (fastEvadeMode)
+                    {
+                        return canHeroWalkToPos(posInfo.position, myHero.MoveSpeed, Game.Ping/2, 0);                        
+                    }
+
                     return posInfo;
+                }
+                
+                    
             }
 
             return sortedPosTable.First();
@@ -711,7 +730,7 @@ namespace ezEvade
         {
             int posDangerLevel = 0;
             int posDangerCount = 0;
-            //float closestDistance = float.MaxValue;
+            float closestDistance = float.MaxValue;
             List<int> dodgeableSpells = new List<int>();
             List<int> undodgeableSpells = new List<int>();
 
@@ -719,7 +738,8 @@ namespace ezEvade
             {
                 Spell spell = entry.Value;
 
-                //closestDistance = GetIntersectTime(spell, myHero.ServerPosition.To2D(), pos);
+                closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, myHero.MoveSpeed, delay, myHero.ServerPosition.To2D(), extraDist));
+                //GetIntersectTime(spell, myHero.ServerPosition.To2D(), pos);
                 //Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, myHero.MoveSpeed, delay, myHero.ServerPosition.To2D()));
 
                 if (PredictSpellCollision(spell, pos, speed, delay, myHero.ServerPosition.To2D(), extraDist))
@@ -739,7 +759,7 @@ namespace ezEvade
                 posDangerLevel,
                 posDangerCount,
                 posDangerCount > 0,
-                0,
+                closestDistance,
                 dodgeableSpells,
                 undodgeableSpells);
         }
