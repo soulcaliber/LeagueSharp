@@ -33,7 +33,6 @@ using SharpDX;
 
 #endregion
 
-using System.Diagnostics;
 
 namespace LeagueSharp.Common
 {
@@ -61,11 +60,9 @@ namespace LeagueSharp.Common
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
-        private static Stopwatch stopWatch = Stopwatch.StartNew();
-
         public static int TickCount
         {
-            get { return Environment.TickCount & int.MaxValue; }//get { return (int) (Game.ClockTime * 1000); }
+            get { return (int)DateTime.Now.TimeOfDay.TotalMilliseconds; }
         }
 
         /// <summary>
