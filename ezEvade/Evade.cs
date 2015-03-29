@@ -241,32 +241,30 @@ namespace ezEvade
 
             if (isDodging)
             {
-                Vector2 lastBestPosition = lastPosInfo.position;
-
-                if (lastBestPosition.Distance(myHero.ServerPosition.To2D()) < 3) //a bit faulty
+                if (lastPosInfo != null)
                 {
-                    //isDodging = false;
-                }
+                    Vector2 lastBestPosition = lastPosInfo.position;
 
-                if (menu.SubMenu("MiscSettings").Item("RecalculatePosition").GetValue<bool>() && lastPosInfo != null)//recheck path
-                {
-                    var path = myHero.Path;
-                    if (path.Length > 0)
+                    if (menu.SubMenu("MiscSettings").Item("RecalculatePosition").GetValue<bool>())//recheck path
                     {
-                        var movePos = path[path.Length - 1].To2D();
-
-                        if (movePos.Distance(lastPosInfo.position) < 5) //more strict checking
+                        var path = myHero.Path;
+                        if (path.Length > 0)
                         {
-                            var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0);
-                            if (EvadeHelper.isSamePosInfo(posInfo, lastPosInfo) && posInfo.posDangerCount > lastPosInfo.posDangerCount)
+                            var movePos = path[path.Length - 1].To2D();
+
+                            if (movePos.Distance(lastPosInfo.position) < 5) //more strict checking
                             {
-                                lastPosInfo = EvadeHelper.GetBestPosition();
+                                var posInfo = EvadeHelper.canHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0);
+                                if (EvadeHelper.isSamePosInfo(posInfo, lastPosInfo) && posInfo.posDangerCount > lastPosInfo.posDangerCount)
+                                {
+                                    lastPosInfo = EvadeHelper.GetBestPosition();
+                                }
                             }
                         }
                     }
-                }
 
-                EvadeCommand.MoveTo(lastBestPosition);
+                    EvadeCommand.MoveTo(lastBestPosition);
+                }
             }
             else //if not dodging
             {
@@ -328,6 +326,7 @@ namespace ezEvade
 
             //Game.PrintChat("SkillsDodged: " + lastPosInfo.dodgeableSpells.Count + " DangerLevel: " + lastPosInfo.posDangerLevel);
 
+            CheckHeroInDanger();
             DodgeSkillShots(); //walking
             EvadeSpell.UseEvadeSpell(); //using spells
 

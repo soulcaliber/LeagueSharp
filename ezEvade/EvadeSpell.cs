@@ -43,6 +43,9 @@ namespace ezEvade
                 return;
             }
 
+            if (Evade.lastPosInfo == null)
+                return;
+
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
             {
                 Spell spell = entry.Value;
