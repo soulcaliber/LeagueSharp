@@ -54,7 +54,7 @@ namespace ezEvade
 
             Drawing.OnDraw += Drawing_OnDraw;
             //Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
 
             Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
             //Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;

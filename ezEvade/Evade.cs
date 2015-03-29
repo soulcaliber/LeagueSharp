@@ -41,8 +41,8 @@ namespace ezEvade
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
             Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
             Spellbook.OnCastSpell += Game_OnCastSpell;
-            Game.OnGameUpdate += Game_OnGameUpdate;
-            Game.OnGameSendPacket += Game_OnSendPacket;
+            Game.OnUpdate += Game_OnGameUpdate;
+            Game.OnSendPacket += Game_OnSendPacket;
 
             SpellDetector.OnCreateSpell += SpellDetector_OnCreateSpell;
         }
@@ -77,14 +77,14 @@ namespace ezEvade
             //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
 
             Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
-            fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "Fast Evade Time").SetValue(new Slider(300, 0, 500)));
-            fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(40, 0, 100)));
+            fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "Fast Evade Time").SetValue(new Slider(200, 0, 500)));
+            fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(10, 0, 100)));
 
             miscMenu.AddSubMenu(fastEvadeMenu);
 
             Menu bufferMenu = new Menu("Extra Buffers", "ExtraBuffers");
-            bufferMenu.AddItem(new MenuItem("ExtraPingBuffer", "Extra Ping Buffer").SetValue(new Slider(10, 0, 150)));
-            bufferMenu.AddItem(new MenuItem("ExtraCPADistance", "Extra Collision Distance").SetValue(new Slider(30, 0, 150)));
+            bufferMenu.AddItem(new MenuItem("ExtraPingBuffer", "Extra Ping Buffer").SetValue(new Slider(65, 0, 150)));
+            bufferMenu.AddItem(new MenuItem("ExtraCPADistance", "Extra Collision Distance").SetValue(new Slider(10, 0, 150)));
             bufferMenu.AddItem(new MenuItem("ExtraSpellRadius", "Extra Spell Radius").SetValue(new Slider(0, 0, 100)));
             bufferMenu.AddItem(new MenuItem("ExtraEvadeDistance", "Extra Evade Distance").SetValue(new Slider(20, 0, 100)));
             bufferMenu.AddItem(new MenuItem("ExtraAvoidDistance", "Extra Avoid Distance").SetValue(new Slider(0, 0, 100)));
@@ -112,7 +112,7 @@ namespace ezEvade
 
             // Check if the packet sent is a spell cast
 
-            if (args != null && args.GetPacketId() == 228) //if(args.PacketData[0] == 228)            
+            if (args != null && args.GetPacketId() == 161) //if(args.PacketData[0] == 228)            
             {                
                 //Game.PrintChat("" + args.GetPacketId());
                 
