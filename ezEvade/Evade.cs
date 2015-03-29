@@ -39,16 +39,17 @@ namespace ezEvade
         public Evade()
         {
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+        }
+
+        private void Game_OnGameLoad(EventArgs args)
+        {
             Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
             Spellbook.OnCastSpell += Game_OnCastSpell;
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnSendPacket += Game_OnSendPacket;
 
             SpellDetector.OnCreateSpell += SpellDetector_OnCreateSpell;
-        }
 
-        private void Game_OnGameLoad(EventArgs args)
-        {
             Game.PrintChat("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
                "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
 
