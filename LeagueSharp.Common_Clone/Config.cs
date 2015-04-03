@@ -35,8 +35,23 @@ namespace LeagueSharp.Common
     public static class Config
     {
         private static string _leagueSharpDirectory;
+        private static string _appDataDirectory;
         private static byte _showMenuHotkey;
         private static byte _showMenuToggleHotkey;
+
+        public static string AppDataDirectory
+        {
+            get
+            {
+                if (_appDataDirectory == null)
+                {
+                    _appDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                        "LS" + Environment.UserName.GetHashCode().ToString("X"));
+                }
+
+                return _appDataDirectory;
+            }
+        }
 
         public static string LeagueSharpDirectory
         {
@@ -47,10 +62,7 @@ namespace LeagueSharp.Common
                     try
                     {
                         _leagueSharpDirectory =
-                            Process.GetCurrentProcess()
-                                .Modules.Cast<ProcessModule>()
-                                .First(p => Path.GetFileName(p.ModuleName) == "Leaguesharp.Core.dll")
-                                .FileName;
+                            AppDomain.CurrentDomain.BaseDirectory;
                         _leagueSharpDirectory =
                             Directory.GetParent(Path.GetDirectoryName(_leagueSharpDirectory)).FullName;
                     }

@@ -118,7 +118,7 @@ namespace ezEvade
             foreach (var spell in spells.Values.ToList().Where(
                     s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
             {
-                DeleteSpell(spell.spellID);
+                Utility.DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }
 
@@ -127,7 +127,7 @@ namespace ezEvade
             foreach (var spell in spells.Values.ToList().Where(
                     s => (EvadeHelper.GetSpellDangerLevel(s) < 3)))
             {
-                DeleteSpell(spell.spellID);
+                Utility.DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }
 
@@ -245,7 +245,7 @@ namespace ezEvade
         {
             foreach (var spell in spells.Where(s => (s.Value.endTime < Evade.GetTickCount())))
             {
-                DeleteSpell(spell.Key);
+                Utility.DelayAction.Add(1, () => DeleteSpell(spell.Key));
             }
         }
 
@@ -256,7 +256,7 @@ namespace ezEvade
                 foreach (var spell in spells.Where(
                         s => (s.Value.heroID == hero.NetworkId && hero.IsDead)))
                 {
-                    DeleteSpell(spell.Key);
+                    Utility.DelayAction.Add(1, () => DeleteSpell(spell.Key));
                 }
             }
         }

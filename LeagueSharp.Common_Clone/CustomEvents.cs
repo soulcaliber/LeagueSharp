@@ -38,31 +38,49 @@ namespace LeagueSharp.Common
 
             public delegate void OnGameLoaded(EventArgs args);
 
+            private static readonly List<Delegate> NotifiedSubscribers = new List<Delegate>();
             private static readonly List<Obj_HQ> NexusList = new List<Obj_HQ>();
             private static bool _endGameCalled;
 
             static Game()
             {
+                Utility.DelayAction.Add(0, Initialize);
+            }
+
+            public static void Initialize()
+            {
+
                 foreach (var hq in ObjectManager.Get<Obj_HQ>().Where(hq => hq.IsValid))
                 {
                     NexusList.Add(hq);
                 }
 
-                LeagueSharp.Game.OnGameUpdate += Game_OnGameUpdate;
-
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
                     //Otherwise the .ctor didn't return yet and no callback will occur
-                    Utility.DelayAction.Add(0, () => Game_OnGameStart(new EventArgs()));
+                    Utility.DelayAction.Add(500, () =>
+                    {
+                        Game_OnGameStart(new EventArgs());
+                    });
                 }
                 else
                 {
-                    LeagueSharp.Game.OnGameStart += Game_OnGameStart;
+                    LeagueSharp.Game.OnStart += Game_OnGameStart;
                 }
             }
 
             private static void Game_OnGameUpdate(EventArgs args)
             {
+                if (OnGameLoad != null)
+                {
+                    foreach (var subscriber in OnGameLoad.GetInvocationList()
+                        .Where(s => !NotifiedSubscribers.Contains(s)))
+                    {
+                        NotifiedSubscribers.Add(subscriber);
+                        subscriber.DynamicInvoke(new EventArgs());
+                    }
+                }
+
                 if (NexusList.Count == 0 || _endGameCalled)
                 {
                     return;
@@ -88,14 +106,17 @@ namespace LeagueSharp.Common
             public static event OnGameLoaded OnGameLoad;
 
             /// <summary>
-            ///     OnGameEnd is getting called when the game ends. Same as Game.OnGameEnd but this one works :^).
+            ///     OnGameEnd is getting called when the game ends. Same as Game.OnEnd but this one works :^).
             /// </summary>
             public static event OnGameEnded OnGameEnd;
 
             private static void Game_OnGameStart(EventArgs args)
             {
+                LeagueSharp.Game.OnUpdate += Game_OnGameUpdate;
+
                 if (OnGameLoad != null)
                 {
+                    NotifiedSubscribers.AddRange(OnGameLoad.GetInvocationList());
                     OnGameLoad(new EventArgs());
                 }
             }
@@ -111,7 +132,7 @@ namespace LeagueSharp.Common
 
             static Unit()
             {
-                LeagueSharp.Game.OnGameProcessPacket += PacketHandler;
+                LeagueSharp.Game.OnProcessPacket += PacketHandler;
 
                 //Initializes ondash class:
                 ObjectManager.Player.IsDashing();

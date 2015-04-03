@@ -1,4 +1,4 @@
-﻿#region LICENSE
+#region LICENSE
 
 /*
  Copyright 2014 - 2014 LeagueSharp
@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Input;
@@ -131,9 +132,32 @@ namespace LeagueSharp.Common
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
 
+        // Convert an object to a byte array
+        internal static byte[] Serialize(Object obj)
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+            var bf = new BinaryFormatter();
+            var ms = new System.IO.MemoryStream();
+            bf.Serialize(ms, obj);
+            return ms.ToArray();
+        }
+
+        // Convert a byte array to an Object
+        internal static T Deserialize<T>(byte[] arrBytes)
+        {
+            var memStream = new System.IO.MemoryStream();
+            var binForm = new BinaryFormatter();
+            memStream.Write(arrBytes, 0, arrBytes.Length);
+            memStream.Seek(0, System.IO.SeekOrigin.Begin);
+            return (T)binForm.Deserialize(memStream);
+        }
+
         public static int TickCount
         {
-            get { return (int)DateTime.Now.TimeOfDay.TotalMilliseconds; }
+            get { return Environment.TickCount & int.MaxValue; }
         }
 
         /// <summary>
@@ -293,11 +317,12 @@ namespace LeagueSharp.Common
         /// </summary>
         public static void EnableConsoleEditMode()
         {
+            /*
             int mode;
             var handle = GetStdHandle(STD_INPUT_HANDLE);
             GetConsoleMode(handle, out mode);
             mode |= ENABLE_QUICK_EDIT_MODE;
-            SetConsoleMode(handle, mode);
+            SetConsoleMode(handle, mode);*/
         }
 
         public static double NextDouble(this Random rng, double min, double max)

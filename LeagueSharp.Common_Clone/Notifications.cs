@@ -39,7 +39,7 @@ namespace LeagueSharp.Common
 
         static Notifications()
         {
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
 
@@ -330,8 +330,7 @@ namespace LeagueSharp.Common
         {
             get
             {
-                return System.IO.Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LeagueSharp", "Notifications");
+                return System.IO.Path.Combine(Config.AppDataDirectory, "Notifications");
             }
         }
 
