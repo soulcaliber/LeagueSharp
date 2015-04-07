@@ -153,8 +153,9 @@ namespace ezEvade
             {
 
                 //movement block code goes in here
-                if (isDodging)
+                if (isDodging && SpellDetector.spells.Count() > 0)
                 {
+                    CheckHeroInDanger();
                     args.Process = false; //Block the command
                 }
                 else

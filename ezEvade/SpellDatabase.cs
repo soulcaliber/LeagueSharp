@@ -650,6 +650,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "EzrealMysticShot",
+                extraSpellNames = new[] { "ezrealmysticshotwrapper", },
                 spellType = SpellType.Line,
 
             });
