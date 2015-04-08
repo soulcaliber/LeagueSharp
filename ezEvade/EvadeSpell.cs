@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Timers;
 
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -21,24 +20,22 @@ namespace ezEvade
         public static Menu menu;
         public static Menu evadeSpellMenu;
 
-        private static Timer itemTimer;
-
         public EvadeSpell(Menu mainMenu)
         {
             menu = mainMenu;
 
-            Game.OnUpdate += Game_OnGameUpdate;
+            //Game.OnUpdate += Game_OnGameUpdate;
 
             evadeSpellMenu = new Menu("Evade Spells", "EvadeSpells");
             menu.AddSubMenu(evadeSpellMenu);
 
             LoadEvadeSpellList();
+            CheckForItems();
         }
 
         private void Game_OnGameUpdate(EventArgs args)
         {
             //CheckDashing();
-            SetItemIntervalTimer();
         }
 
         public static void CheckDashing()
@@ -53,15 +50,7 @@ namespace ezEvade
             }
         }
 
-        private void SetItemIntervalTimer()
-        {
-            itemTimer = new Timer(5000);
-            itemTimer.Elapsed += CheckForItems;
-            itemTimer.AutoReset = true;
-            itemTimer.Enabled = true;
-        }
-
-        private static void CheckForItems(Object source, ElapsedEventArgs e)
+        private static void CheckForItems()
         {
             foreach (var spell in itemSpells)
             {
@@ -81,6 +70,8 @@ namespace ezEvade
                     evadeSpellMenu.AddSubMenu(newSpellMenu);
                 }
             }
+
+            Utility.DelayAction.Add(5000, () => CheckForItems());
         }
 
         public static void UseEvadeSpell()
@@ -189,7 +180,7 @@ namespace ezEvade
         {
             if (Evade.lastPosInfo == null)
                 return false;
-
+                        
             if (Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID))
             {
                 return true;

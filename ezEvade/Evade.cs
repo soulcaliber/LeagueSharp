@@ -353,10 +353,11 @@ namespace ezEvade
 
                             if (movePos.Distance(lastPosInfo.position) < 5) //more strict checking
                             {
-                                var posInfo = EvadeHelper.CanHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0);
+                                var posInfo = EvadeHelper.CanHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0, false);
                                 if (EvadeHelper.isSamePosInfo(posInfo, lastPosInfo) && posInfo.posDangerCount > lastPosInfo.posDangerCount)
-                                {
+                                {                                    
                                     lastPosInfo = EvadeHelper.GetBestPosition();
+                                    CheckHeroInDanger();
                                 }
                             }
                         }

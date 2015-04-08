@@ -225,7 +225,7 @@ namespace ezEvade
             Vector2 lastMovePos = Game.CursorPos.To2D();
 
             List<PositionInfo> posTable = new List<PositionInfo>();
-                        
+
             CalculateEvadeTime();
 
             Spell lowestEvadeTimeSpell;
@@ -255,7 +255,7 @@ namespace ezEvade
                     posTable.Add(InitPositionInfo(pos, extraDelayBuffer, extraEvadeDistance, lastMovePos, lowestEvadeTimeSpell));
                 }
             }
-                        
+
             IOrderedEnumerable<PositionInfo> sortedPosTable;
 
             if (SpellDetector.spells.Count() == 1
@@ -284,7 +284,7 @@ namespace ezEvade
                         .ThenBy(p => p.distanceToMouse);
             }
 
-            
+
             foreach (var posInfo in sortedPosTable)
             {
                 if (CheckPathCollision(myHero, posInfo.position) == false)
@@ -300,7 +300,7 @@ namespace ezEvade
                     {
                         Spell spell = entry.Value;
 
-                        float timeElapsed = Evade.GetTickCount() - posInfo.timestamp;                        
+                        float timeElapsed = Evade.GetTickCount() - posInfo.timestamp;
 
                         if (spell.info.spellType == SpellType.Line)
                         {
@@ -322,14 +322,14 @@ namespace ezEvade
 
                     if (canDodge)
                     {
-                    
-                    if (CheckDangerousPos(posInfo.position, extraEvadeDistance))
-                    {
-                        posInfo.position = GetExtendedSafePosition(myHero.ServerPosition.To2D(), posInfo.position, extraEvadeDistance);
-                    }
 
-                    //posInfo.position = GetExtendedSafePosition(myHero.ServerPosition.To2D(), posInfo.position, extraEvadeDistance);
-                    return posInfo;
+                        if (CheckDangerousPos(posInfo.position, extraEvadeDistance))
+                        {
+                            posInfo.position = GetExtendedSafePosition(myHero.ServerPosition.To2D(), posInfo.position, extraEvadeDistance);
+                        }
+
+                        //posInfo.position = GetExtendedSafePosition(myHero.ServerPosition.To2D(), posInfo.position, extraEvadeDistance);
+                        return posInfo;
                     }
                 }
 
@@ -342,7 +342,7 @@ namespace ezEvade
 
                 Game.PrintChat("" + (Evade.GetTickCount() - spell.startTime));
             }*/
-            
+
 
             return sortedPosTable.First();
         }
@@ -888,7 +888,7 @@ namespace ezEvade
             return spellList;
         }
 
-        public static PositionInfo CanHeroWalkToPos(Vector2 pos, float speed, float delay, float extraDist)
+        public static PositionInfo CanHeroWalkToPos(Vector2 pos, float speed, float delay, float extraDist, bool useServerPosition = true)
         {
             int posDangerLevel = 0;
             int posDangerCount = 0;
@@ -896,15 +896,22 @@ namespace ezEvade
             List<int> dodgeableSpells = new List<int>();
             List<int> undodgeableSpells = new List<int>();
 
+            Vector2 heroPos = myHero.ServerPosition.To2D();
+
+            if (useServerPosition == false)
+            {
+                heroPos = myHero.Position.To2D();
+            }
+
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
             {
                 Spell spell = entry.Value;
 
-                closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, myHero.MoveSpeed, delay, myHero.ServerPosition.To2D(), extraDist));
+                closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, myHero.MoveSpeed, delay, heroPos, extraDist));
                 //GetIntersectTime(spell, myHero.ServerPosition.To2D(), pos);
                 //Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, myHero.MoveSpeed, delay, myHero.ServerPosition.To2D()));
 
-                if (PredictSpellCollision(spell, pos, speed, delay, myHero.ServerPosition.To2D(), extraDist))
+                if (PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist))
                 {
                     posDangerLevel = Math.Max(posDangerLevel, spell.GetSpellDangerLevel());
                     posDangerCount += spell.GetSpellDangerLevel();

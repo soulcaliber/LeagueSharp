@@ -65,7 +65,7 @@ namespace ezEvade
 
             Obj_SpellMissile missile = (Obj_SpellMissile)obj;
             SpellData spellData;
-
+            
             if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
                 missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
@@ -159,8 +159,8 @@ namespace ezEvade
                         {
                             OnProcessSpecialSpell(hero, args, spellData, specialSpellArgs);
                         }
-
-                        if (specialSpellArgs.Process != true && spellData.noProcess == false)
+                        
+                        if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
                             CreateSpellData(hero, args.Start, args.End, spellData, null);
                         }
@@ -359,6 +359,7 @@ namespace ezEvade
 
                             spells.Add(spellID, newSpell);
                             drawSpells.Add(spellID, newSpell);
+
                             if (OnCreateSpell != null)
                             {
                                 OnCreateSpell(newSpell);
@@ -375,7 +376,7 @@ namespace ezEvade
             newSpell.spellID = spellID;           
             
             detectedSpells.Add(spellID, newSpell);
-            
+                        
             if(processSpell)
                 AddDetectedSpells();
             

@@ -230,6 +230,7 @@ namespace ezEvade
                     startWalkTime = 0;
                 }
             }
+                        
         }
 
         private void Game_OnGameNotifyEvent(GameNotifyEventArgs args)
@@ -239,6 +240,19 @@ namespace ezEvade
 
         private void GameObject_OnFloatPropertyChange(GameObject obj, GameObjectFloatPropertyChangeEventArgs args)
         {
+            //Game.PrintChat(obj.Name);
+
+            /*foreach (var sth in ObjectManager.Get<Obj_AI_Base>())
+            {
+                Console.WriteLine(sth.Name);
+
+            }*/
+
+            if (obj.Name == "RobotBuddy")
+            {
+                renderPositions.Add(new RenderPosition(obj.Position.To2D(), Evade.GetTickCount() + 10));
+            }
+
             if (!obj.IsMe)
             {
                 return;

@@ -1787,7 +1787,6 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "OrianaIzunaCommand",
                 spellType = SpellType.Circular,
-                usePackets = true,
                 isSpecial = true,
             });
 
@@ -1803,7 +1802,6 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "OrianaDetonateCommand",
                 spellType = SpellType.Circular,
-                isSpecial = true,
             });
 
             Spells.Add(
@@ -1817,7 +1815,6 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "OrianaDissonanceCommand",
                 spellType = SpellType.Circular,
-                isSpecial = true,
             });
             #endregion Orianna
 
@@ -2465,9 +2462,10 @@ namespace ezEvade
                 name = "ViktorDeathRay",
                 projectileSpeed = 780,
                 radius = 90,
-                range = 1100,
+                range = 800,
                 spellKey = SpellSlot.E,
                 spellName = "ViktorDeathRay",
+                extraMissileNames = new[] { "viktoreaugmissile", },
                 spellType = SpellType.Line,
                 usePackets = true,
 
@@ -2478,17 +2476,16 @@ namespace ezEvade
             {
                 charName = "Viktor",
                 dangerlevel = 2,
-                missileName = "ViktorDeathRayMissile2",
-                name = "ViktorDeathRay",
-                projectileSpeed = 780,
-                radius = 90,
-                range = 1100,
-                spellKey = SpellSlot.E,
-                spellName = "ViktorDeathRayFixMissileAugmented",
-                spellType = SpellType.Line,
-                usePackets = true,
-
+                name = "GravitonField",
+                radius = 290,
+                range = 625,
+                spellDelay = 1500,
+                spellKey = SpellSlot.W,
+                spellName = "ViktorGravitonField",
+                spellType = SpellType.Circular,
+                defaultOff = true,
             });
+
             #endregion Viktor
 
             #region Vladimir
@@ -2613,8 +2610,23 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "ZedShuriken",
                 spellType = SpellType.Line,
-
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Zed",
+                dangerlevel = 1,
+                name = "ZedE",
+                radius = 290,
+                range = 290,
+                spellKey = SpellSlot.E,
+                spellName = "ZedPBAOEDummy",
+                spellType = SpellType.Circular,
+                isSpecial = true,
+                defaultOff = true,
+            });
+
             #endregion Zed
 
             #region Ziggs
