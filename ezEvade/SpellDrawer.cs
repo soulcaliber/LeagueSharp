@@ -96,7 +96,7 @@ namespace ezEvade
                 var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
                 var dimension = Drawing.GetTextExtent("Evade: ON");
 
-                if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active
+                /*if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active
                     && Evade.isDodgeDangerousEnabled())
                 {
                     Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "Evade: ON");
@@ -104,7 +104,29 @@ namespace ezEvade
                 else if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
                 {
                     Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.White, "Evade: ON");
+                }*/
+
+                if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
+                {
+                    if (Evade.isDodging)
+                    {
+                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "Evade: ON");
+                    }
+                    else
+                    {
+                        if (Evade.isDodgeDangerousEnabled())
+                            Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Yellow, "Evade: ON");
+                        else
+                            Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.White, "Evade: ON");
+                    }
                 }
+                else
+                {
+                    Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: OFF");
+                }
+
+
+
             }
         }
 
@@ -130,7 +152,7 @@ namespace ezEvade
             {
                 Spell spell = entry.Value;
 
-                var dangerStr = EvadeHelper.GetSpellDangerString(spell);
+                var dangerStr = spell.GetSpellDangerString();
                 var spellDrawingConfig = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
                     .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Color").GetValue<Circle>();
                 var spellDrawingWidth = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
@@ -142,24 +164,31 @@ namespace ezEvade
                 {
                     if (spell.info.spellType == SpellType.Line)
                     {
-                        Vector2 spellPos = SpellDetector.GetCurrentSpellPosition(spell);
-                        DrawLineRectangle(spellPos, spell.endPos, (int)EvadeHelper.GetSpellRadius(spell), spellDrawingWidth, spellDrawingConfig.Color);
+                        Vector2 spellPos = spell.GetCurrentSpellPosition();
+                        DrawLineRectangle(spellPos, spell.endPos, (int)spell.GetSpellRadius(), spellDrawingWidth, spellDrawingConfig.Color);
 
-                        if (menu.SubMenu("Draw").Item("DrawSpellPos").GetValue<bool>())
+                        /*foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
                         {
+                            Render.Circle.DrawCircle(new Vector3(hero.ServerPosition.X, hero.ServerPosition.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), Color.Red, 5);
+                        }*/
+
+                        if (menu.SubMenu("Draw").Item("DrawSpellPos").GetValue<bool>())// && spell.spellObject != null)
+                        {
+                            //spellPos = SpellDetector.GetCurrentSpellPosition(spell, true, Game.Ping);
+
                             /*if (true)
                             {
                                 var spellPos2 = spell.startPos + spell.direction * spell.info.projectileSpeed * (Evade.GetTickCount() - spell.startTime - spell.info.spellDelay) / 1000 + spell.direction * spell.info.projectileSpeed * ((float)Game.Ping / 1000);
-                                Render.Circle.DrawCircle(new Vector3(spellPos2.X, spellPos2.Y, myHero.Position.Z), (int)EvadeHelper.GetSpellRadius(spell), Color.Red, 8);
+                                Render.Circle.DrawCircle(new Vector3(spellPos2.X, spellPos2.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), Color.Red, 8);
                             }*/
 
-                            Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int)EvadeHelper.GetSpellRadius(spell), spellDrawingConfig.Color, spellDrawingWidth);
+                            Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), spellDrawingConfig.Color, spellDrawingWidth);
                         }
 
                     }
                     else if (spell.info.spellType == SpellType.Circular)
                     {
-                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)EvadeHelper.GetSpellRadius(spell), spellDrawingConfig.Color, spellDrawingWidth);
+                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), spellDrawingConfig.Color, spellDrawingWidth);
                     }
                     else if (spell.info.spellType == SpellType.Cone)
                     {

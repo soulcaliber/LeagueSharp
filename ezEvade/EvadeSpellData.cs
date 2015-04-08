@@ -16,7 +16,7 @@ namespace ezEvade
         Self,
     }
 
-    public enum SpellValidTargets
+    public enum SpellTargets
     {
         AllyMinions,
         EnemyMinions,
@@ -50,6 +50,10 @@ namespace ezEvade
         public EvadeType evadeType;
         public bool isReversed = false;
         public bool isSummonerSpell = false;
+        public bool isItem = false;
+        public ItemId itemID = 0;
+        public CastType castType = CastType.Position;
+        public SpellTargets[] spellTargets = { };
 
         public EvadeSpellData()
         {

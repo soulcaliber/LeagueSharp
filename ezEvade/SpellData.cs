@@ -14,7 +14,13 @@ namespace ezEvade
         Line,
         Circular,
         Cone
-    } 
+    }
+
+    public enum CollisionObjectType
+    {
+        EnemyChampions,
+        EnemyMinions,
+    }
 
     public class SpellData
     {            
@@ -45,6 +51,7 @@ namespace ezEvade
         public bool isSpecial = false;
         public string[] extraSpellNames;
         public string[] extraMissileNames;
+        public CollisionObjectType[] collisionObjects = { };
 
         public SpellData()
         {

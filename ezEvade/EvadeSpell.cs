@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -14,14 +15,19 @@ namespace ezEvade
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
 
         public static List<EvadeSpellData> evadeSpells = new List<EvadeSpellData>();
+        public static List<EvadeSpellData> itemSpells = new List<EvadeSpellData>();
         public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = Evade.GetTickCount() };
 
         public static Menu menu;
         public static Menu evadeSpellMenu;
 
+        private static Timer itemTimer;
+
         public EvadeSpell(Menu mainMenu)
         {
             menu = mainMenu;
+
+            Game.OnUpdate += Game_OnGameUpdate;
 
             evadeSpellMenu = new Menu("Evade Spells", "EvadeSpells");
             menu.AddSubMenu(evadeSpellMenu);
@@ -29,76 +35,175 @@ namespace ezEvade
             LoadEvadeSpellList();
         }
 
+        private void Game_OnGameUpdate(EventArgs args)
+        {
+            //CheckDashing();
+            SetItemIntervalTimer();
+        }
+
+        public static void CheckDashing()
+        {
+            if (Evade.GetTickCount() - lastSpellEvadeCommand.timestamp < 250 && myHero.IsDashing() 
+                && lastSpellEvadeCommand.evadeSpellData.evadeType == EvadeType.Dash)
+            {
+                var dashInfo = myHero.GetDashInfo();
+
+                Game.PrintChat("" + dashInfo.EndPos.Distance(lastSpellEvadeCommand.targetPosition));   
+                lastSpellEvadeCommand.targetPosition = dashInfo.EndPos;
+            }
+        }
+
+        private void SetItemIntervalTimer()
+        {
+            itemTimer = new Timer(5000);
+            itemTimer.Elapsed += CheckForItems;
+            itemTimer.AutoReset = true;
+            itemTimer.Enabled = true;
+        }
+
+        private static void CheckForItems(Object source, ElapsedEventArgs e)
+        {
+            foreach (var spell in itemSpells)
+            {
+                var hasItem = Items.HasItem((int)spell.itemID);
+
+                if (hasItem && !evadeSpells.Exists(s => s.spellName == spell.spellName))
+                {
+                    evadeSpells.Add(spell);
+
+                    string menuName = spell.name  + " Settings";
+
+                    Menu newSpellMenu = new Menu(menuName, spell.charName + spell.name + "EvadeSpellSettings");
+                    newSpellMenu.AddItem(new MenuItem(spell.name + "UseEvadeSpell", "Use Spell").SetValue(true));
+                    newSpellMenu.AddItem(new MenuItem(spell.name + "EvadeSpellDangerLevel", "Danger Level")
+                        .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
+
+                    evadeSpellMenu.AddSubMenu(newSpellMenu);
+                }
+            }
+        }
+
         public static void UseEvadeSpell()
         {
-            if (!Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<bool>())
+            if (!Situation.ShouldUseEvadeSpell())
             {
                 return;
             }
-            
+
             //int posDangerlevel = EvadeHelper.CheckPosDangerLevel(myHero.ServerPosition.To2D(), 0);
 
             if (Evade.GetTickCount() - lastSpellEvadeCommand.timestamp < 1000)
             {
                 return;
             }
-
-            if (Evade.lastPosInfo == null)
-                return;
-
+                        
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
             {
                 Spell spell = entry.Value;
 
-                if (!Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID))
+                if (ShouldActivateEvadeSpell(spell))
                 {
-                    continue;
-                }
-
-                foreach (var evadeSpell in evadeSpells)
-                {
-                    if (Evade.menu.SubMenu("EvadeSpells").SubMenu(evadeSpell.charName + evadeSpell.name + "EvadeSpellSettings")
-                .Item(evadeSpell.name + "UseEvadeSpell").GetValue<bool>() == false
-                        || GetSpellDangerLevel(evadeSpell) > EvadeHelper.GetSpellDangerLevel(spell)
-                        || !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
+                    foreach (var evadeSpell in evadeSpells)
                     {
-                        continue; //can't use spell right now
-                    }
-
-                    if (evadeSpell.evadeType == EvadeType.Blink)
-                    {
-                        var posInfo = EvadeHelper.GetBestPositionBlink();
-                        if (posInfo != null)
+                        if (Evade.menu.SubMenu("EvadeSpells").SubMenu(evadeSpell.charName + evadeSpell.name + "EvadeSpellSettings")
+                                .Item(evadeSpell.name + "UseEvadeSpell").GetValue<bool>() == false
+                            || GetSpellDangerLevel(evadeSpell) > spell.GetSpellDangerLevel()
+                            || (evadeSpell.isItem == false && !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
+                            || (evadeSpell.isItem == true && !(Items.CanUseItem((int)evadeSpell.itemID))))
                         {
-                            EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                            continue; //can't use spell right now               
                         }
-                    }
-                    else if (evadeSpell.evadeType == EvadeType.Dash)
-                    {
-                        var posInfo = EvadeHelper.GetBestPositionDash(evadeSpell);
-                        if (posInfo != null)
+
+                        if (evadeSpell.evadeType == EvadeType.Blink)
                         {
-                            if (evadeSpell.isReversed)
+                            if (evadeSpell.castType == CastType.Position)
                             {
-                                var dir = (posInfo.position - myHero.ServerPosition.To2D()).Normalized();
-                                var range = myHero.ServerPosition.To2D().Distance(posInfo.position);
-                                var pos = myHero.ServerPosition.To2D() - dir * range;
-
-                                posInfo.position = pos;
+                                var posInfo = EvadeHelper.GetBestPositionBlink();
+                                if (posInfo != null)
+                                {
+                                    EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));                                
+                                }
                             }
-
-                            EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                            else if (evadeSpell.castType == CastType.Target)
+                            {
+                                var posInfo = EvadeHelper.GetBestPositionTargetedDash(evadeSpell);
+                                if (posInfo != null)
+                                {
+                                    EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                                }
+                            }
                         }
-                    }
-                    else if (evadeSpell.evadeType == EvadeType.SpellShield)
-                    {
-                        EvadeCommand.CastSpell(evadeSpell);
+                        else if (evadeSpell.evadeType == EvadeType.Dash)
+                        {
+                            if (evadeSpell.castType == CastType.Position)
+                            {
+                                var posInfo = EvadeHelper.GetBestPositionDash(evadeSpell);
+                                if (posInfo != null)
+                                {
+                                    if (evadeSpell.isReversed)
+                                    {
+                                        var dir = (posInfo.position - myHero.ServerPosition.To2D()).Normalized();
+                                        var range = myHero.ServerPosition.To2D().Distance(posInfo.position);
+                                        var pos = myHero.ServerPosition.To2D() - dir * range;
+
+                                        posInfo.position = pos;
+                                    }
+
+                                    EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                                }
+                            }
+                            else if (evadeSpell.castType == CastType.Target)
+                            {
+                                var posInfo = EvadeHelper.GetBestPositionTargetedDash(evadeSpell);
+                                if (posInfo != null)
+                                {
+                                    EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                                }
+                            }                            
+                        }
+                        else if (evadeSpell.evadeType == EvadeType.SpellShield)
+                        {
+                            if (evadeSpell.isItem)
+                            {
+                                Items.UseItem((int)evadeSpell.itemID);                                
+                            }
+                            else
+                            {
+                                EvadeCommand.CastSpell(evadeSpell);
+                            }                            
+                        }
+                        
+                        return;
                     }
 
-                    return;
                 }
             }
 
+        }
+
+        private static bool ShouldActivateEvadeSpell(Spell spell)
+        {
+            if (Evade.lastPosInfo == null)
+                return false;
+
+            if (Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID))
+            {
+                return true;
+            }
+
+            /*float activationTime = Evade.menu.SubMenu("MiscSettings").SubMenu("EvadeSpellMisc").Item("EvadeSpellActivationTime")
+                .GetValue<Slider>().Value + Game.Ping;
+
+            if (spell.spellHitTime != float.MinValue && activationTime > spell.spellHitTime - spell.evadeTime)
+            {
+                return true;
+            }*/
+
+            return false;
         }
 
         public static int GetSpellDangerLevel(EvadeSpellData spell)
@@ -159,6 +264,12 @@ namespace ezEvade
                     {
                         spell.spellKey = spellKey;
                     }
+                }
+
+                if (spell.isItem)
+                {
+                    itemSpells.Add(spell);
+                    continue;
                 }
 
                 evadeSpells.Add(spell);

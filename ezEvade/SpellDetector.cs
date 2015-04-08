@@ -14,13 +14,15 @@ namespace ezEvade
         public delegate void OnCreateSpellHandler(Spell spell);
         public static event OnCreateSpellHandler OnCreateSpell;
 
-        public delegate void OnProcessSpecialSpellHandler(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData);
+        public delegate void OnProcessSpecialSpellHandler(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, 
+            SpellData spellData, SpecialSpellEventArgs specialSpellArgs);
         public static event OnProcessSpecialSpellHandler OnProcessSpecialSpell;
 
         //public static event OnDeleteSpellHandler OnDeleteSpell;
 
         public static Dictionary<int, Spell> spells = new Dictionary<int, Spell>();
         public static Dictionary<int, Spell> drawSpells = new Dictionary<int, Spell>();
+        public static Dictionary<int, Spell> detectedSpells = new Dictionary<int, Spell>();
 
         public static Dictionary<string, string> channeledSpells = new Dictionary<string, string>();
 
@@ -44,7 +46,7 @@ namespace ezEvade
             Obj_SpellMissile.OnDelete += SpellMissile_OnDelete;
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
 
-            Drawing.OnDraw += Game_OnGameUpdate; //in case ongameupdate crashes
+            Game.OnUpdate += Game_OnGameUpdate; //in case ongameupdate crashes
 
             menu = mainMenu;
 
@@ -68,6 +70,7 @@ namespace ezEvade
                 missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
+
                 if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
                 {
                     var hero = missile.SpellCaster;
@@ -79,7 +82,6 @@ namespace ezEvade
                             CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
                             return;
                         }
-
 
                         foreach (KeyValuePair<int, Spell> entry in spells)
                         {
@@ -125,7 +127,7 @@ namespace ezEvade
         public void RemoveNonDangerousSpells()
         {
             foreach (var spell in spells.Values.ToList().Where(
-                    s => (EvadeHelper.GetSpellDangerLevel(s) < 3)))
+                    s => (s.GetSpellDangerLevel() < 3)))
             {
                 Utility.DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
@@ -133,37 +135,46 @@ namespace ezEvade
 
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
-            if (hero.IsMe)
-            {                
-                string name;
-                if (channeledSpells.TryGetValue(args.SData.Name, out name))
-                {
-                    Evade.isChanneling = true;
-                    Evade.channelPosition = myHero.ServerPosition.To2D();
-                }
-            }
-            
-            SpellData spellData;
-
-            if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
+            try
             {
-                if (spellData.usePackets == false)
+                if (hero.IsMe)
                 {
-                    if (OnProcessSpecialSpell != null)
+                    string name;
+                    if (channeledSpells.TryGetValue(args.SData.Name, out name))
                     {
-                        OnProcessSpecialSpell(hero, args, spellData);
+                        Evade.isChanneling = true;
+                        Evade.channelPosition = myHero.ServerPosition.To2D();
                     }
+                }
 
-                    if (spellData.noProcess == false)
+
+                SpellData spellData;
+
+                if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
+                {
+                    if (spellData.usePackets == false)
                     {
-                        CreateSpellData(hero, args.Start, args.End, spellData, null);
+                        var specialSpellArgs = new SpecialSpellEventArgs();
+                        if (OnProcessSpecialSpell != null)
+                        {
+                            OnProcessSpecialSpell(hero, args, spellData, specialSpellArgs);
+                        }
+
+                        if (specialSpellArgs.Process != true && spellData.noProcess == false)
+                        {
+                            CreateSpellData(hero, args.Start, args.End, spellData, null);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Game.PrintChat(e.StackTrace);
+            }            
         }
 
         public static void CreateSpellData(Obj_AI_Base hero, Vector3 startStartPos, Vector3 spellEndPos,
-            SpellData spellData, GameObject obj = null, float extraEndTick = 0.0f)
+            SpellData spellData, GameObject obj = null, float extraEndTick = 0.0f, bool processSpell = true)
         {
             if (startStartPos.Distance(myHero.Position) < spellData.range + 1000)
             {
@@ -226,63 +237,148 @@ namespace ezEvade
                     newSpell.projectileID = obj.NetworkId;
                 }
 
-                int spellID = CreateSpell(newSpell);
+                int spellID = CreateSpell(newSpell, processSpell);
+                
                 Utility.DelayAction.Add((int)endTick, () => DeleteSpell(spellID));
             }
         }
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (Evade.GetTickCount() - lastCheckTime > 100)
+            if (Evade.GetTickCount() - lastCheckTime > 1)
             {
-                CheckCasterDead();
+                //CheckCasterDead();
                 CheckSpellEndTime();
+                AddDetectedSpells();
                 lastCheckTime = Evade.GetTickCount();
-            }            
+            }
         }
 
         private void CheckSpellEndTime()
         {
-            foreach (var spell in spells.Where(s => (s.Value.endTime < Evade.GetTickCount())))
+            foreach (KeyValuePair<int, Spell> entry in detectedSpells)
             {
-                Utility.DelayAction.Add(1, () => DeleteSpell(spell.Key));
+                Spell spell = entry.Value;
+
+                foreach (var hero in HeroManager.Enemies)
+                {
+                    if (hero.IsDead && spell.heroID == hero.NetworkId)
+                    {
+                        if (spell.spellObject == null)
+                        Utility.DelayAction.Add(1, () => DeleteSpell(entry.Key));
+                    }
+                }
+
+                if (spell.endTime < Evade.GetTickCount() || CanHeroWalkIntoSpell(spell) == false)
+                    Utility.DelayAction.Add(1, () => DeleteSpell(entry.Key));                
             }
         }
 
         private void CheckCasterDead()
         {
-            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
+            foreach (var hero in HeroManager.Enemies)
             {
                 foreach (var spell in spells.Where(
-                        s => (s.Value.heroID == hero.NetworkId && hero.IsDead)))
+                        s => (s.Value.heroID == hero.NetworkId && hero.IsDead))) //check this condition
                 {
-                    Utility.DelayAction.Add(1, () => DeleteSpell(spell.Key));
+                    if(spell.Value.spellObject == null)
+                        Utility.DelayAction.Add(1, () => DeleteSpell(spell.Key));     
                 }
             }
         }
 
-        private static int CreateSpell(Spell newSpell)
+        public static bool CanHeroWalkIntoSpell(Spell spell)
         {
-            int spellID = spellIDCount++;
-            newSpell.spellID = spellID;
-
-            drawSpells.Add(spellID, newSpell);
-
-            if (!(Evade.isDodgeDangerousEnabled() && EvadeHelper.GetSpellDangerLevel(newSpell) < 3)
-                && Evade.menu.SubMenu("Spells").SubMenu(newSpell.info.charName + newSpell.info.spellName + "Settings")
-                .Item(newSpell.info.spellName + "DodgeSpell").GetValue<bool>())
+            Vector2 heroPos = myHero.ServerPosition.To2D();
+            
+            if (spell.info.spellType == SpellType.Line)
             {
-                if (newSpell.info.spellType == SpellType.Circular
-                    && Evade.menu.SubMenu("Main").Item("DodgeCircularSpells").GetValue<bool>() == false)
-                    return spellID;
+                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.GetTickCount())/1000 + myHero.BoundingRadius + spell.info.radius;
+                var spellPos = spell.GetCurrentSpellPosition(true);
+                var isCollision = false;
 
-                spells.Add(spellID, newSpell);
-                if (OnCreateSpell != null)
+                /*MathUtils.VectorMovementCollisionEx(spellPos, spell.direction, spell.info.projectileSpeed, myHero.ServerPosition.To2D(), myHero.MoveSpeed, out isCollision, 0, 0);
+
+                if (isCollision)
+                    return true;
+                    //Game.PrintChat("Collision");
+                */
+                
+                Vector2 int1, int2;
+                int intersections = MathUtils.FindLineCircleIntersections(heroPos.X, heroPos.Y, walkRadius, spellPos, spell.endPos, out int1, out int2);
+
+                if (intersections > 0)
                 {
-                    OnCreateSpell(newSpell);
+                    return true;
                 }
             }
+            else if (spell.info.spellType == SpellType.Circular)
+            {
+                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.GetTickCount()) / 1000 + myHero.BoundingRadius + spell.info.radius;
 
+                if (heroPos.Distance(spell.endPos) < walkRadius)
+                {
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+
+        private static void AddDetectedSpells()
+        {           
+
+            foreach (KeyValuePair<int, Spell> entry in detectedSpells)
+            {
+                Spell spell = entry.Value;
+                
+                float evadeTime, spellHitTime;
+                spell.CanHeroEvade(myHero, out evadeTime, out spellHitTime);
+
+                spell.spellHitTime = spellHitTime;
+                spell.evadeTime = evadeTime;
+
+                if (spell.spellHitTime - spell.evadeTime < 1500 && CanHeroWalkIntoSpell(spell))
+                {
+                    Spell newSpell = spell;
+                    int spellID = spell.spellID;
+
+                    if (!spells.ContainsKey(spell.spellID))
+                    {
+                        if (!(Evade.isDodgeDangerousEnabled() && newSpell.GetSpellDangerLevel() < 3)
+                            && Evade.menu.SubMenu("Spells").SubMenu(newSpell.info.charName + newSpell.info.spellName + "Settings")
+                            .Item(newSpell.info.spellName + "DodgeSpell").GetValue<bool>())
+                        {
+                            if (newSpell.info.spellType == SpellType.Circular
+                                && Evade.menu.SubMenu("Main").Item("DodgeCircularSpells").GetValue<bool>() == false)
+                            {
+                                //return spellID;
+                                continue;
+                            }
+
+                            spells.Add(spellID, newSpell);
+                            drawSpells.Add(spellID, newSpell);
+                            if (OnCreateSpell != null)
+                            {
+                                OnCreateSpell(newSpell);
+                            }
+                        }
+                    }
+                }                
+            }
+        }
+
+        private static int CreateSpell(Spell newSpell, bool processSpell = true)
+        {
+            int spellID = spellIDCount++;
+            newSpell.spellID = spellID;           
+            
+            detectedSpells.Add(spellID, newSpell);
+            
+            if(processSpell)
+                AddDetectedSpells();
+            
             return spellID;
         }
 
@@ -290,10 +386,11 @@ namespace ezEvade
         {
             spells.Remove(spellID);
             drawSpells.Remove(spellID);
+            detectedSpells.Remove(spellID);
         }
 
         public static void InitChannelSpells()
-        {           
+        {
 
             channeledSpells["Drain"] = "FiddleSticks";
             channeledSpells["Crowstorm"] = "FiddleSticks";
@@ -309,42 +406,10 @@ namespace ezEvade
             channeledSpells["VelkozR"] = "Velkoz";
             channeledSpells["XerathLocusOfPower2"] = "Xerath";
             channeledSpells["ZacE"] = "Zac";
-            
-        }
 
-        public static Vector2 GetCurrentSpellPosition(Spell spell, bool allowNegative = false, float delay = 0)
-        {
-            Vector2 spellPos = spell.startPos;
+            channeledSpells["OdinRecall"] = "AllChampions";
+            channeledSpells["Recall"] = "AllChampions";
 
-            if (spell.info.spellType == SpellType.Line)
-            {
-                float spellTime = Evade.GetTickCount() - spell.startTime - spell.info.spellDelay;
-
-                if (spellTime >= 0)
-                {
-                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * spellTime / 1000;
-                }
-                else if(allowNegative)
-                {                    
-                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
-                }
-            }
-            else if (spell.info.spellType == SpellType.Circular)
-            {
-                spellPos = spell.endPos;
-            }
-
-            if (spell.spellObject != null)
-            {
-                spellPos = spell.spellObject.Position.To2D();
-            }
-
-            if (delay > 0)
-            {
-                spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (delay / 1000);
-            }
-
-            return spellPos;
         }
 
         private void LoadSpellDictionary()

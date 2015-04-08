@@ -31,6 +31,7 @@ namespace ezEvade
                 fixedRange = true,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -49,6 +50,7 @@ namespace ezEvade
                 speed = 975,
                 spellKey = SpellSlot.W,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -66,6 +68,7 @@ namespace ezEvade
                 spellDelay = 150,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Blink,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -84,6 +87,7 @@ namespace ezEvade
                 speed = 900,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -102,6 +106,7 @@ namespace ezEvade
                 speed = 1250,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -118,6 +123,7 @@ namespace ezEvade
                 spellDelay = 150,
                 spellKey = SpellSlot.R,
                 evadeType = EvadeType.Blink,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -134,6 +140,8 @@ namespace ezEvade
                 spellDelay = 50,
                 spellKey = SpellSlot.R,
                 evadeType = EvadeType.SpellShield, //Invulnerability
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.AllyChampions },
             });
 
             #endregion
@@ -152,6 +160,7 @@ namespace ezEvade
                 speed = 1600,
                 spellKey = SpellSlot.W,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             Spells.Add(
@@ -167,6 +176,7 @@ namespace ezEvade
                 speed = 1600,
                 spellKey = SpellSlot.R,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
                         
             #endregion
@@ -185,6 +195,7 @@ namespace ezEvade
                 speed = 1350,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -201,6 +212,8 @@ namespace ezEvade
                 spellDelay = 50,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.SpellShield,
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.AllyChampions },
             });
 
             #endregion
@@ -217,6 +230,7 @@ namespace ezEvade
                 spellDelay = 50,
                 spellKey = SpellSlot.W,
                 evadeType = EvadeType.SpellShield,
+                castType = CastType.Self,
             });
 
             #endregion
@@ -236,6 +250,7 @@ namespace ezEvade
                 speed = 560,
                 spellKey = SpellSlot.Q,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             Spells.Add(
@@ -251,6 +266,7 @@ namespace ezEvade
                 speed = 1200,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -267,6 +283,7 @@ namespace ezEvade
                 spellDelay = 50,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.SpellShield,
+                castType = CastType.Self,
             });
 
             #endregion
@@ -285,6 +302,7 @@ namespace ezEvade
                 speed = 1100,
                 spellKey = SpellSlot.W,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });         
 
             #endregion
@@ -301,8 +319,9 @@ namespace ezEvade
                 range = 660,
                 spellDelay = 0,
                 speed = 900,
-                spellKey = SpellSlot.W,
+                spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });    
 
             #endregion
@@ -322,6 +341,7 @@ namespace ezEvade
                 spellDelay = 0,
                 spellKey = SpellSlot.Q,
                 evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -338,6 +358,37 @@ namespace ezEvade
                 isSummonerSpell = true,
                 spellKey = SpellSlot.R,
                 evadeType = EvadeType.Blink,
+                castType = CastType.Position,
+            });
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "AllChampions",
+                dangerlevel = 4,
+                name = "Hourglass",
+                spellName = "ZhonyasHourglass",
+                spellDelay = 50,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.SpellShield, //Invulnerability
+                castType = CastType.Self,
+                isItem = true,
+                itemID = ItemId.Zhonyas_Hourglass,
+            });
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "AllChampions",
+                dangerlevel = 4,
+                name = "Witchcap",
+                spellName = "Witchcap",
+                spellDelay = 50,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.SpellShield, //Invulnerability
+                castType = CastType.Self,
+                isItem = true,
+                itemID = ItemId.Wooglets_Witchcap,
             });
         }
     }

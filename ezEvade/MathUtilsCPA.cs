@@ -27,7 +27,7 @@ using System.Text;
 using SharpDX;
 
 namespace ezEvade
-{  
+{
 
     class MathUtilsCPA
     {
@@ -94,7 +94,7 @@ namespace ezEvade
         //    Input:  two 3D lines L1 and L2
         //    Return: the shortest distance between L1 and L2
         public static float dist3D_Line_to_Line(Line L1, Line L2)
-        {         
+        {
 
             Vector2 u = L1.P1 - L1.P0;
             Vector2 v = L2.P1 - L2.P0;
@@ -242,7 +242,8 @@ namespace ezEvade
         }
         //===================================================================
 
-        public static float cpa_distance(Vector2 p1, Vector2 v1, Vector2 p2, Vector2 v2) {
+        public static float cpa_distance(Vector2 p1, Vector2 v1, Vector2 p2, Vector2 v2)
+        {
             return cpa_distance(new Track(p1, v1), new Track(p2, v2));
         }
 
@@ -252,13 +253,44 @@ namespace ezEvade
             Track Tr2 = new Track(p2, v2);
 
             float ctime = cpa_time(Tr1, Tr2);
+
             Vector2 P1 = Tr1.P0 + (ctime * Tr1.v);
             Vector2 P2 = Tr2.P0 + (ctime * Tr2.v);
+
+            if (ctime <= 0)
+            {
+                P1 = Tr1.P0;
+                P2 = Tr2.P0;
+            }
 
             ret1 = P1;
             ret2 = P2;
 
             return d(P1, P2);
+        }
+
+        public static float CPAPointsEx(Vector2 p1, Vector2 v1, Vector2 p2, Vector2 v2, Vector2 p1end, Vector2 p2end)
+        {
+            Track Tr1 = new Track(p1, v1);
+            Track Tr2 = new Track(p2, v2);
+
+            float ctime = Math.Max(0, cpa_time(Tr1, Tr2));
+
+            Vector2 P1 = Tr1.P0 + (ctime * Tr1.v);
+            Vector2 P2 = Tr2.P0 + (ctime * Tr2.v);
+
+            P1 = d(p1, P1) > d(p1, p1end) ? p1end : P1;
+            P2 = d(p2, P2) > d(p2, p2end) ? p2end : P2;
+            
+            return d(P1, P2);
+        }
+
+        public static float CPATime(Vector2 p1, Vector2 v1, Vector2 p2, Vector2 v2)
+        {
+            Track Tr1 = new Track(p1, v1);
+            Track Tr2 = new Track(p2, v2);
+
+            return cpa_time(Tr1, Tr2);
         }
     }
 }

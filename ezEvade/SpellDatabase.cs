@@ -83,6 +83,7 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "AhriSeduce",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -151,6 +152,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "BandageToss",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Amumu
@@ -227,6 +229,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "EnchantedCrystalArrow",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
 
             });
             #endregion Ashe
@@ -252,6 +255,27 @@ namespace ezEvade
             });
             #endregion Azir
 
+            #region Bard
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Bard",
+                dangerlevel = 2,
+                name = "BardQ",
+                missileName = "BardQMissile",
+                projectileSpeed = 1600,
+                radius = 60,
+                range = 950,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "BardQ",
+                spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+
+            });
+            #endregion Bard
+
             #region Blitzcrank
 
             Spells.Add(
@@ -269,6 +293,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "RocketGrab",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Blitzcrank
@@ -289,6 +314,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "BrandBlaze",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -340,6 +366,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "BraumQ",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Braum
@@ -376,6 +403,7 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "CaitlynEntrapment",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Caitlyn
@@ -464,6 +492,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "MissileBarrage2",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -498,6 +527,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "MissileBarrage",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Corki
@@ -557,6 +587,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "InfectedCleaverMissileCast",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion DrMundo
@@ -606,13 +637,14 @@ namespace ezEvade
                 charName = "Elise",
                 dangerlevel = 3,
                 name = "Cocoon",
-                projectileSpeed = 1450,
+                projectileSpeed = 1600,
                 radius = 70,
                 range = 1100,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
                 spellName = "EliseHumanE",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Elise
@@ -652,6 +684,7 @@ namespace ezEvade
                 spellName = "EzrealMysticShot",
                 extraSpellNames = new[] { "ezrealmysticshotwrapper", },
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -705,6 +738,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "FizzMarinerDoom",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
 
             });
             #endregion Fizz
@@ -772,6 +806,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "gnarbigq",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -819,6 +854,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "GnarQ",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Gnar
@@ -993,6 +1029,7 @@ namespace ezEvade
                 spellName = "JayceShockBlastWall",
                 spellType = SpellType.Line,
                 usePackets = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -1010,6 +1047,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "jayceshockblast",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Jayce
@@ -1029,6 +1067,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "JinxR",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
 
             });
 
@@ -1046,6 +1085,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "JinxWMissile",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Jinx
@@ -1057,15 +1097,16 @@ namespace ezEvade
             {
                 charName = "Kalista",
                 dangerlevel = 2,
-                missileName = "KalistaQMissile",
+                missileName = "kalistamysticshotmistrue",
                 name = "KalistaQ",
                 projectileSpeed = 2000,
                 radius = 70,
                 range = 1200,
-                spellDelay = 250,
+                spellDelay = 350,
                 spellKey = SpellSlot.Q,
                 spellName = "KalistaMysticShot",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Kalista
@@ -1086,6 +1127,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "KarmaQ",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -1104,6 +1146,7 @@ namespace ezEvade
                 spellName = "KarmaQMissileMantra",
                 spellType = SpellType.Line,
                 usePackets = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Karma
@@ -1178,6 +1221,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "KennenShurikenHurlMissile1",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Kennen
@@ -1198,6 +1242,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "KhazixW",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -1216,6 +1261,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "khazixwlong",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Khazix
@@ -1235,6 +1281,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "KogMawQ",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -1285,6 +1332,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "LeblancSoulShackleM",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -1301,6 +1349,7 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "LeblancSoulShackle",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -1352,6 +1401,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "BlindMonkQOne",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion LeeSin
@@ -1443,6 +1493,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "LucianW",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -1534,6 +1585,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "LuxLightBinding",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Lux
@@ -1615,6 +1667,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "DarkBindingMissile",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Morgana
@@ -1655,6 +1708,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "NautilusAnchorDrag",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Nautilus
@@ -1674,6 +1728,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "JavelinToss",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Nidalee
@@ -1801,6 +1856,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "QuinnQ",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Quinn
@@ -1821,6 +1877,7 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "RengarE",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Rengar
@@ -1878,6 +1935,7 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "RumbleGrenade",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Rumble
@@ -2155,6 +2213,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "ThreshQ",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Thresh
@@ -2196,6 +2255,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "UrgotHeatseekingLineMissile",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -2266,6 +2326,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "VarusR",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
 
             });
             #endregion Varus
@@ -2279,7 +2340,7 @@ namespace ezEvade
                 dangerlevel = 2,
                 name = "VeigarBalefulStrike",
                 radius = 70,
-                range = 850,
+                range = 950,
                 spellDelay = 250,
                 projectileSpeed = 1750,
                 spellKey = SpellSlot.Q,
@@ -2350,6 +2411,7 @@ namespace ezEvade
                 spellName = "VelkozQMissileSplit",
                 spellType = SpellType.Line,
                 usePackets = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
 
@@ -2366,6 +2428,7 @@ namespace ezEvade
                 missileName = "VelkozQMissile",
                 spellName = "VelkozQ",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Velkoz
@@ -2386,6 +2449,7 @@ namespace ezEvade
                 spellType = SpellType.Line,
                 usePackets = true,
                 defaultOff = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
 
             });
             #endregion Vi
@@ -2501,11 +2565,13 @@ namespace ezEvade
                 missileName = "XerathMageSpearMissile",
                 name = "XerathMageSpear",
                 projectileSpeed = 1600,
+                spellDelay = 200,
                 radius = 60,
                 range = 1125,
                 spellKey = SpellSlot.E,
                 spellName = "XerathMageSpear",
                 spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
             #endregion Xerath
