@@ -117,6 +117,18 @@ namespace ezEvade
             return 0;
         }
 
+        public static bool PointOnLineSegment(Vector2 point, Vector2 start, Vector2 end)
+        {
+            var dotProduct = Vector2.Dot((end - start), (point - start));
+            if (dotProduct < 0)
+                return false;
+
+            var lengthSquared = Vector2.DistanceSquared(start, end);
+            if (dotProduct > lengthSquared)
+                return false;
+
+            return true;
+        }
 
         //https://code.google.com/p/xna-circle-collision-detection/downloads/detail?name=Circle%20Collision%20Example.zip&can=2&q=
 

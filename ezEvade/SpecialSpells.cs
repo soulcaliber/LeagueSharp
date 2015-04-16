@@ -55,6 +55,7 @@ namespace ezEvade
             if (spellData.spellName == "ZedShuriken" && !pDict.ContainsKey("ProcessSpell_ProcessZedShuriken"))
             {
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_ZedShuriken;
+                Obj_SpellMissile.OnCreate += SpellMissile_ZedShadowDash;
                 Obj_AI_Minion.OnCreate += OnCreateObj_ZedShuriken;
                 Obj_AI_Minion.OnDelete += OnDeleteObj_ZedShuriken;
                 pDict["ProcessSpell_ProcessZedShuriken"] = true;
@@ -79,15 +80,40 @@ namespace ezEvade
 
                         objTracker.Add(hero.NetworkId, info);
                     }
-                }  
+                }
 
 
                 Obj_AI_Minion.OnCreate += OnCreateObj_OrianaIzunaCommand;
                 Obj_AI_Minion.OnDelete += OnDeleteObj_OrianaIzunaCommand;
                 Obj_AI_Hero.OnProcessSpellCast += ProcessSpell_OrianaRedactCommand;
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_OrianaIzunaCommand;
-                
+
                 pDict["ProcessSpell_OrianaIzunaCommand"] = true;
+            }
+
+            if (spellData.spellName == "AlZaharCalloftheVoid" && !pDict.ContainsKey("ProcessSpell_AlZaharCalloftheVoid"))
+            {
+                SpellDetector.OnProcessSpecialSpell += ProcessSpell_AlZaharCalloftheVoid;
+                pDict["ProcessSpell_AlZaharCalloftheVoid"] = true;
+            }
+        }
+
+        private static void ProcessSpell_AlZaharCalloftheVoid(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
+            SpecialSpellEventArgs specialSpellArgs)
+        {
+            if (spellData.spellName == "AlZaharCalloftheVoid")
+            {
+                var direction = (args.End.To2D() - args.Start.To2D()).Normalized();
+                var pDirection = direction.Perpendicular();
+                var targetPoint = args.End.To2D();
+
+                var pos1 = targetPoint - pDirection * spellData.sideRadius;
+                var pos2 = targetPoint + pDirection * spellData.sideRadius;
+
+                SpellDetector.CreateSpellData(hero, pos1.To3D(), pos2.To3D(), spellData, null, 0, false);
+                SpellDetector.CreateSpellData(hero, pos2.To3D(), pos1.To3D(), spellData, null, 0);
+
+                specialSpellArgs.noProcess = true;
             }
         }
 
@@ -109,7 +135,7 @@ namespace ezEvade
                             {
                                 info.obj = hero;
                             }
-                        }                        
+                        }
                     }
                 }
             }
@@ -177,14 +203,14 @@ namespace ezEvade
                     {
                         if (info.usePosition)
                         {
-                            SpellDetector.CreateSpellData(hero, info.position, args.End, spellData, null, 0, false);
+                            SpellDetector.CreateSpellData(hero, info.position, args.End, spellData, null, 0);
                         }
                         else
                         {
                             if (info.obj == null)
                                 return;
 
-                            SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0, false);
+                            SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0);
                         }
 
                         specialSpellArgs.noProcess = true;
@@ -206,15 +232,15 @@ namespace ezEvade
                         if (info.usePosition)
                         {
                             Vector3 endPos2 = info.position;
-                            SpellDetector.CreateSpellData(hero, endPos2, endPos2, spellData, null, 0, false);
+                            SpellDetector.CreateSpellData(hero, endPos2, endPos2, spellData, null, 0);
                         }
                         else
                         {
-                            if (info.obj == null)                            
+                            if (info.obj == null)
                                 return;
-                            
+
                             Vector3 endPos2 = info.obj.Position;
-                            SpellDetector.CreateSpellData(hero, endPos2, endPos2, spellData, null, 0, false);
+                            SpellDetector.CreateSpellData(hero, endPos2, endPos2, spellData, null, 0);
                         }
 
                         specialSpellArgs.noProcess = true;
@@ -243,7 +269,7 @@ namespace ezEvade
                 Utility.DelayAction.Add(5000, () => GetLuluPix());
             }
         }
-                
+
         private static void ProcessSpell_LuluQ(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
             SpecialSpellEventArgs specialSpellArgs)
         {
@@ -256,14 +282,14 @@ namespace ezEvade
                     if (entry.Value.Name == "RobotBuddy")
                     {
                         if (info.obj == null || info.obj.IsDead)
-                        {                            
+                        {
                             continue;
                         }
                         else
                         {
                             Vector3 endPos2 = info.obj.Position.Extend(args.End, spellData.range);
                             SpellDetector.CreateSpellData(hero, info.obj.Position, endPos2, spellData, null, 0, false);
-                        }                        
+                        }
                     }
                 }
             }
@@ -274,7 +300,20 @@ namespace ezEvade
             if (obj.Name == "Shadow" && obj.IsEnemy)
             {
                 if (!objTracker.ContainsKey(obj.NetworkId))
+                {
                     objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj));
+
+                    foreach (KeyValuePair<int, ObjectTrackerInfo> entry in objTracker)
+                    {
+                        var info = entry.Value;
+
+                        if (info.Name == "Shadow" && info.usePosition && info.position.Distance(obj.Position) < 5)
+                        {
+                            info.usePosition = false;
+                            info.obj = obj;
+                        }
+                    }
+                }
             }
         }
 
@@ -295,19 +334,53 @@ namespace ezEvade
                 {
                     var info = entry.Value;
 
-                    if (info.obj.Name == "Shadow")
+                    if (info.obj.Name == "Shadow" || info.Name == "Shadow")
                     {
-                        if (info.obj == null || info.obj.IsDead)
+                        if (info.usePosition == false && (info.obj == null || info.obj.IsDead))
                         {
                             Utility.DelayAction.Add(1, () => objTracker.Remove(info.obj.NetworkId));
                             continue;
                         }
                         else
                         {
-                            Vector3 endPos2 = info.obj.Position.Extend(args.End, spellData.range);
-                            SpellDetector.CreateSpellData(hero, info.obj.Position, endPos2, spellData, null, 0, false);
-                        }                        
+                            Vector3 endPos2;
+                            if (info.usePosition == false)
+                            {
+                                endPos2 = info.obj.Position.Extend(args.End, spellData.range);
+                                SpellDetector.CreateSpellData(hero, info.obj.Position, endPos2, spellData, null, 0, false);
+                            }
+                            else
+                            {
+                                endPos2 = info.position.Extend(args.End, spellData.range);
+                                SpellDetector.CreateSpellData(hero, info.position, endPos2, spellData, null, 0, false);
+                            }
+
+                        }
                     }
+                }
+            }
+        }
+
+        private static void SpellMissile_ZedShadowDash(GameObject obj, EventArgs args)
+        {
+            if (!obj.IsValid<Obj_SpellMissile>())
+                return;
+
+            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+
+            if (missile.SpellCaster.IsEnemy && missile.SData.Name == "ZedShadowDashMissile")
+            {
+                if (!objTracker.ContainsKey(obj.NetworkId))
+                {
+                    ObjectTrackerInfo info = new ObjectTrackerInfo(obj);
+                    info.Name = "Shadow";
+                    info.OwnerNetworkID = missile.SpellCaster.NetworkId;
+                    info.usePosition = true;
+                    info.position = missile.EndPosition;
+
+                    objTracker.Add(obj.NetworkId, info);
+
+                    Utility.DelayAction.Add(1000, () => objTracker.Remove(obj.NetworkId));
                 }
             }
         }
@@ -345,7 +418,7 @@ namespace ezEvade
                 SpellDetector.CreateSpellData(hero, args.Start, endPos2.To3D(), spellData, null, 250, false);
 
                 var endPos3 = endPos2 + dir * 0.6f * endPos.Distance(endPos2);
-                SpellDetector.CreateSpellData(hero, args.Start, endPos3.To3D(), spellData, null, 800, true);
+                SpellDetector.CreateSpellData(hero, args.Start, endPos3.To3D(), spellData, null, 800);
 
                 specialSpellArgs.noProcess = true;
             }

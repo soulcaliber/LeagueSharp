@@ -1414,7 +1414,7 @@ namespace ezEvade
                 charName = "Leona",
                 dangerlevel = 4,
                 name = "Leona Solar Flare",
-                radius = 250,
+                radius = 300,
                 range = 1200,
                 spellDelay = 1000,
                 spellKey = SpellSlot.R,
@@ -1616,17 +1616,17 @@ namespace ezEvade
             {
                 charName = "Malzahar",
                 dangerlevel = 2,
-                extraEndTime = 750,
-                defaultOff = true,
+                //extraEndTime = 750,
+                //defaultOff = true,
                 isSpecial = true,
                 isWall = true,
-                missileName = "AlZaharCalloftheVoidMissile",
+                //missileName = "AlZaharCalloftheVoidMissile",
                 name = "AlZaharCalloftheVoid",
-                projectileSpeed = float.MaxValue,
+                projectileSpeed = 1600,
                 radius = 85,
                 range = 900,
                 sideRadius = 400,
-                spellDelay = 1350,
+                spellDelay = 1000,
                 spellKey = SpellSlot.Q,
                 spellName = "AlZaharCalloftheVoid",
                 spellType = SpellType.Line,
@@ -1857,6 +1857,27 @@ namespace ezEvade
 
             });
             #endregion Quinn
+
+            #region Rengar
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "RekSai",
+                dangerlevel = 2,
+                missileName = "RekSaiQBurrowedMis",
+                name = "RekSaiQ",
+                projectileSpeed = 1950,
+                radius = 65,
+                range = 1500,
+                spellDelay = 125,
+                spellKey = SpellSlot.E,
+                spellName = "reksaiqburrowed",
+                spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+
+            });
+            #endregion Rengar
 
             #region Rengar
 
@@ -2461,7 +2482,7 @@ namespace ezEvade
                 missileName = "ViktorDeathRayMissile",
                 name = "ViktorDeathRay",
                 projectileSpeed = 780,
-                radius = 90,
+                radius = 80,
                 range = 800,
                 spellKey = SpellSlot.E,
                 spellName = "ViktorDeathRay",

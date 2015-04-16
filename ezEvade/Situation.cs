@@ -22,15 +22,8 @@ namespace ezEvade
         public static bool ShouldDodge()
         {
             if(Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false
-                || Evade.isChanneling
-                || myHero.IsDead
-                || myHero.IsInvulnerable
+                || CommonChecks()
                 || myHero.IsImmovable
-                || (myHero.ChampionName == "Sion" && myHero.HasBuff("SionR"))
-                || (myHero.ChampionName == "KogMaw" && myHero.HasBuff("kogmawicathiansurprise"))
-                //|| HasSpellShield(myHero)
-                || myHero.IsDashing()
-                || Evade.hasGameEnded == true
                 )
             {
                 //has spellshield - sivir, noc, morgana
@@ -52,6 +45,45 @@ namespace ezEvade
             
 
               return true;
+        }
+
+        public static bool ShouldUseEvadeSpell()
+        {
+            if (Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<bool>() == false
+                || CommonChecks()
+                )
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool CommonChecks()
+        {
+            return
+
+                Evade.isChanneling
+                || myHero.IsDead
+                || myHero.IsInvulnerable
+                || myHero.IsTargetable == false
+                //|| HasSpellShield(myHero)
+                || ChampionSpecificChecks()
+                || myHero.IsDashing()
+                || Evade.hasGameEnded == true;
+        }
+
+        public static bool ChampionSpecificChecks()
+        {
+            return (myHero.ChampionName == "Sion" && myHero.HasBuff("SionR"))
+                ;
+                
+                //Untargetable
+                //|| (myHero.ChampionName == "KogMaw" && myHero.HasBuff("kogmawicathiansurprise"))
+                //|| (myHero.ChampionName == "Karthus" && myHero.HasBuff("KarthusDeathDefiedBuff"))
+
+                //Invulnerable
+                //|| myHero.HasBuff("kalistarallyspelllock"); 
         }
 
         //from Evade by Esk0r
@@ -87,20 +119,6 @@ namespace ezEvade
 
             return false;
         }
-
-        public static bool ShouldUseEvadeSpell()
-        {
-            if (Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<bool>() == false
-                || Evade.isChanneling
-                || myHero.IsDead
-                || myHero.IsInvulnerable
-                || Evade.hasGameEnded == true
-                )
-            {
-                return false;
-            }
-
-            return true;
-        }
+                
     }
 }
