@@ -24,6 +24,8 @@ namespace ezEvade
         public static SpellSlot lastSpellCast;
         public static float lastSpellCastTime = 0;
 
+        public static float lastWindupTime = 0;
+
         public static float lastTickCount = 0;
         public static float lastStopEvadeTime = 0;
 
@@ -93,6 +95,7 @@ namespace ezEvade
             miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(true));
             miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
             miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
+            miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
             miscMenu.AddItem(new MenuItem("LoadPingTester", "Load Ping Tester").SetValue(true));
             //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
 
@@ -259,9 +262,9 @@ namespace ezEvade
                         {
                             return;
                         }
-                        
+
                         lastMovementBlockPos = args.TargetPosition;
-                        lastMovementBlockTime = GetTickCount();                        
+                        lastMovementBlockTime = GetTickCount();
 
                         var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
                         if (posInfo != null)
@@ -380,7 +383,7 @@ namespace ezEvade
                     {
                         Spell spell = entry.Value;
 
-                        Game.PrintChat("" + (GetTickCount()-spell.startTime));
+                        Game.PrintChat("" + (int)(GetTickCount()-spell.startTime));
                     }*/
 
 
@@ -398,8 +401,17 @@ namespace ezEvade
                                 var posInfo = EvadeHelper.CanHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0, false);
                                 if (EvadeHelper.isSamePosInfo(posInfo, lastPosInfo) && posInfo.posDangerCount > lastPosInfo.posDangerCount)
                                 {
-                                    lastPosInfo = EvadeHelper.GetBestPosition();
-                                    CheckHeroInDanger();
+                                    var newPosInfo = EvadeHelper.GetBestPosition();
+                                    if (newPosInfo.posDangerCount < posInfo.posDangerCount)
+                                    {
+                                        lastPosInfo = newPosInfo;
+                                        CheckHeroInDanger();
+                                    }
+                                    else if (EvadeSpell.PreferEvadeSpell())
+                                    {
+                                        lastPosInfo = EvadeHelper.SetAllUndodgeable();
+                                        EvadeSpell.UseEvadeSpell(); //using spells)
+                                    }
                                 }
                             }
                         }
@@ -473,8 +485,21 @@ namespace ezEvade
                 }
                 else
                 {
-                    lastPosInfo = EvadeHelper.GetBestPosition();
+                    var posInfo = EvadeHelper.GetBestPosition();
 
+                    /*if (EvadeHelper.GetHighestDetectedSpellID() > EvadeHelper.GetHighestSpellID(posInfo))
+                    {
+                        return;
+                    }*/
+
+                    if (lastPosInfo != null && posInfo != null && lastPosInfo.posDangerCount < posInfo.posDangerCount)
+                    {
+                        return;
+                    }
+
+                    lastPosInfo = posInfo;
+
+                    CheckHeroInDanger();
                     DodgeSkillShots(); //walking
                     EvadeSpell.UseEvadeSpell(); //using spells
                 }
@@ -483,9 +508,9 @@ namespace ezEvade
             {
                 lastPosInfo = EvadeHelper.SetAllDodgeable();
             }
-                
 
-            //Game.PrintChat("SkillsDodged: " + lastPosInfo.dodgeableSpells.Count + " DangerLevel: " + lastPosInfo.posDangerLevel);            
+
+            //Game.PrintChat("SkillsDodged: " + lastPosInfo.dodgeableSpells.Count + " DangerLevel: " + lastPosInfo.undodgeableSpells.Count);            
         }
     }
 }

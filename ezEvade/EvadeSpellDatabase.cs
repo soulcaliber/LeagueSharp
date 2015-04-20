@@ -92,6 +92,42 @@ namespace ezEvade
 
             #endregion
 
+            #region Gnar
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Gnar",
+                dangerlevel = 3,
+                name = "GnarE",
+                spellName = "GnarE",
+                range = 475,
+                spellDelay = 0,
+                speed = 900,
+                checkSpellName = true,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
+            });
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Gnar",
+                dangerlevel = 4,
+                name = "GnarE",
+                spellName = "gnarbige",
+                range = 475,
+                spellDelay = 0,
+                speed = 800,
+                checkSpellName = true,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
+            });
+
+            #endregion
+
             #region Graves
 
             Spells.Add(

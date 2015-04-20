@@ -148,6 +148,13 @@ namespace ezEvade
                         Evade.isChanneling = true;
                         Evade.channelPosition = myHero.ServerPosition.To2D();
                     }
+
+                    var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
+                    if (castTime > 0 && hero.Spellbook.IsCastingSpell)
+                    {
+                        var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
+                        Evade.lastWindupTime = Evade.GetTickCount() + castTime - Game.Ping - extraDelayBuffer;
+                    }
                 }
 
 
@@ -388,6 +395,11 @@ namespace ezEvade
             detectedSpells.Remove(spellID);
         }
 
+        public static int GetCurrentSpellID()
+        {
+            return spellIDCount;
+        }
+
         public static void InitChannelSpells()
         {
 
@@ -405,6 +417,7 @@ namespace ezEvade
             channeledSpells["VelkozR"] = "Velkoz";
             channeledSpells["XerathLocusOfPower2"] = "Xerath";
             channeledSpells["ZacE"] = "Zac";
+            channeledSpells["Pantheon_Heartseeker"] = "Pantheon";
 
             channeledSpells["OdinRecall"] = "AllChampions";
             channeledSpells["Recall"] = "AllChampions";

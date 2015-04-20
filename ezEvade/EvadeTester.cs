@@ -42,6 +42,8 @@ namespace ezEvade
         private static Vector2 testCollisionPos;
         private static bool testingCollision = false;
 
+        private static float lastStopingTime = 0;
+
         private static IOrderedEnumerable<EvadeHelper.PositionInfo> sortedBestPos;
 
         private static float lastGameTimerStart = 0;
@@ -92,9 +94,15 @@ namespace ezEvade
             testMenu.AddItem(new MenuItem("TestWall", "TestWall").SetValue(true));
             testMenu.AddItem(new MenuItem("TestPath", "TestPath").SetValue(true));
             testMenu.AddItem(new MenuItem("TestTracker", "TestTracker").SetValue(false));
+            testMenu.AddItem(new MenuItem("TestHeroPos", "TestHeroPos").SetValue(true));
             testMenu.AddItem(new MenuItem("DrawHeroPos", "DrawHeroPos").SetValue(true));
             testMenu.AddItem(new MenuItem("TestSpellEndTime", "TestSpellEndTime").SetValue(true));
             testMenu.AddItem(new MenuItem("ShowBuffs", "ShowBuffs").SetValue(true));
+            testMenu.AddItem(new MenuItem("ShowDashInfo", "ShowDashInfo").SetValue(true));
+            testMenu.AddItem(new MenuItem("ShowProcessSpell", "ShowProcessSpell").SetValue(true));
+            testMenu.AddItem(new MenuItem("ShowMissileInfo", "ShowMissileInfo").SetValue(true));
+            testMenu.AddItem(new MenuItem("ShowWindupTime", "ShowWindupTime").SetValue(true));
+            testMenu.AddItem(new MenuItem("TestMoveTo", "TestMoveTo").SetValue(new KeyBind('L', KeyBindType.Toggle, false)));
             menu.AddSubMenu(testMenu);
 
             Game_OnGameLoad();
@@ -130,6 +138,11 @@ namespace ezEvade
         {
             if (!obj.IsValid<Obj_SpellMissile>())
                 return;
+
+            if (testMenu.Item("ShowMissileInfo").GetValue<bool>() == false)
+            {
+                return;
+            }
 
             Obj_SpellMissile missile = (Obj_SpellMissile)obj;
 
@@ -182,8 +195,10 @@ namespace ezEvade
 
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
-            Game.PrintChat("" + args.SData.Name);
-            Game.PrintChat("CastTime: " + (hero.Spellbook.CastTime - Game.Time));
+            if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
+            {
+                Game.PrintChat(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
+            }
             //circleRenderPos = args.SData.ParticleStartOffset.To2D();
 
             /*renderPositions.Add(
@@ -208,6 +223,11 @@ namespace ezEvade
                 var testVar = cacheVar;
             }
             Game.PrintChat("Test time1: " + (Evade.GetTickCount() - testTime));*/
+
+            if (hero.IsMe)
+            {
+
+            }
         }
 
         private void CompareSpellLocation(Spell spell, Vector2 pos, float time)
@@ -244,11 +264,33 @@ namespace ezEvade
                 }
             }
 
+            if (testMenu.Item("ShowWindupTime").GetValue<bool>())
+            {
+                if (myHero.IsMoving && lastStopingTime > 0)
+                {
+                    Game.PrintChat("WindupTime: " + (Evade.GetTickCount() - lastStopingTime));
+                    lastStopingTime = 0;
+                }
+                else if (!myHero.IsMoving && lastStopingTime == 0)
+                {
+                    lastStopingTime = Evade.GetTickCount();
+                }
+            }
+
+            if (testMenu.Item("ShowDashInfo").GetValue<bool>())
+            {
+                if (myHero.IsDashing())
+                {
+                    var dashInfo = myHero.GetDashInfo();
+                    Game.PrintChat("Dash Speed: " + dashInfo.Speed + " Dash dist: " + dashInfo.EndPos.Distance(dashInfo.StartPos));
+                }
+            }
+
         }
 
         private void Game_OnGameNotifyEvent(GameNotifyEventArgs args)
         {
-            Game.PrintChat("" + args.EventId);
+            //Game.PrintChat("" + args.EventId);
         }
 
         private void GameObject_OnFloatPropertyChange(GameObject obj, GameObjectFloatPropertyChangeEventArgs args)
@@ -266,10 +308,10 @@ namespace ezEvade
                 renderPositions.Add(new RenderPosition(obj.Position.To2D(), Evade.GetTickCount() + 10));
             }
 
+
             if (args.Property == "mHP" && args.OldValue > args.NewValue)
             {
-                Game.PrintChat("Damage taken: " + (Evade.GetTickCount() - lastSpellCastTime));
-
+                //Game.PrintChat("Damage taken: " + (Evade.GetTickCount() - lastSpellCastTime));
             }
 
             if (!obj.IsMe)
@@ -405,28 +447,26 @@ namespace ezEvade
             lastWatchTimerTick = getWatchTimer;
         }
 
+        private static void RenderTestCircles()
+        {
+            foreach (RenderPosition rendPos in renderPositions)
+            {
+                if (rendPos.renderEndTime - Evade.GetTickCount() > 0)
+                {
+                    Render.Circle.DrawCircle(rendPos.renderPosition.To3D(), 50, Color.White, 3);
+                }
+                else
+                {
+                    Utility.DelayAction.Add(1, () => renderPositions.Remove(rendPos));
+                }
+            }
+        }
+
         private void Drawing_OnDraw(EventArgs args)
         {
             //PrintTimers();
 
-            //EvadeHelper.CheckMovePath(Game.CursorPos.To2D());
-
-            var path = myHero.Path;
-
-            if (path.Length > 0)
-            {
-                var heroPos2 = EvadeHelper.GetRealHeroPos(Game.Ping + 50);// path[path.Length - 1].To2D();
-                var heroPos1 = myHero.ServerPosition.To2D();
-
-                Render.Circle.DrawCircle(new Vector3(heroPos2.X, heroPos2.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.Red, 3);
-                Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
-
-                var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
-                var dimension = Drawing.GetTextExtent("Evade: ON");
-                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "" + (int)(heroPos2.Distance(heroPos1)));
-
-                Render.Circle.DrawCircle(new Vector3(circleRenderPos.X, circleRenderPos.Y, myHero.ServerPosition.Z), 10, Color.Red, 3);
-            }
+            //EvadeHelper.CheckMovePath(Game.CursorPos.To2D());            
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
@@ -443,25 +483,45 @@ namespace ezEvade
 
                     Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);*/
                 }
-
-
             }
 
-            foreach (RenderPosition rendPos in renderPositions)
+            RenderTestCircles();
+
+            if (testMenu.Item("TestHeroPos").GetValue<bool>())
             {
-                if (rendPos.renderEndTime - Evade.GetTickCount() > 0)
+                var path = myHero.Path;
+                if (path.Length > 0)
                 {
-                    Render.Circle.DrawCircle(rendPos.renderPosition.To3D(), 50, Color.White, 3);
-                }
-                else
-                {
-                    Utility.DelayAction.Add(1, () => renderPositions.Remove(rendPos));
+                    var heroPos2 = EvadeHelper.GetRealHeroPos(Game.Ping + 50);// path[path.Length - 1].To2D();
+                    var heroPos1 = myHero.ServerPosition.To2D();
+
+                    Render.Circle.DrawCircle(new Vector3(heroPos2.X, heroPos2.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.Red, 3);
+                    Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
+
+                    var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
+                    var dimension = Drawing.GetTextExtent("Evade: ON");
+                    Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "" + (int)(heroPos2.Distance(heroPos1)));
+
+                    Render.Circle.DrawCircle(new Vector3(circleRenderPos.X, circleRenderPos.Y, myHero.ServerPosition.Z), 10, Color.Red, 3);
                 }
             }
 
             if (testMenu.Item("DrawHeroPos").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), myHero.BoundingRadius, Color.White, 3);
+            }
+
+            if (testMenu.Item("TestMoveTo").GetValue<KeyBind>().Active)
+            {
+                var keyBind = testMenu.Item("TestMoveTo").GetValue<KeyBind>();
+                testMenu.Item("TestMoveTo").SetValue(new KeyBind(keyBind.Key, KeyBindType.Toggle, false));
+
+                myHero.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+
+                var dir = (Game.CursorPos - myHero.Position).Normalized();
+                var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
+                
+                Utility.DelayAction.Add(1, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
             }
 
             if (testMenu.Item("TestPath").GetValue<bool>())

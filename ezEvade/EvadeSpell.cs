@@ -102,7 +102,8 @@ namespace ezEvade
                                 .Item(evadeSpell.name + "UseEvadeSpell").GetValue<bool>() == false
                             || GetSpellDangerLevel(evadeSpell) > spell.GetSpellDangerLevel()
                             || (evadeSpell.isItem == false && !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
-                            || (evadeSpell.isItem == true && !(Items.CanUseItem((int)evadeSpell.itemID))))
+                            || (evadeSpell.isItem == true && !(Items.CanUseItem((int)evadeSpell.itemID)))
+                            || (evadeSpell.checkSpellName == true && myHero.Spellbook.GetSpell(evadeSpell.spellKey).Name != evadeSpell.spellName))
                         {
                             continue; //can't use spell right now               
                         }
@@ -141,7 +142,8 @@ namespace ezEvade
                                 .Item(evadeSpell.name + "UseEvadeSpell").GetValue<bool>() == false
                             || GetSpellDangerLevel(evadeSpell) > spell.GetSpellDangerLevel()
                             || (evadeSpell.isItem == false && !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
-                            || (evadeSpell.isItem == true && !(Items.CanUseItem((int)evadeSpell.itemID))))
+                            || (evadeSpell.isItem == true && !(Items.CanUseItem((int)evadeSpell.itemID)))
+                            || (evadeSpell.checkSpellName == true && myHero.Spellbook.GetSpell(evadeSpell.spellKey).Name != evadeSpell.spellName))
                         {
                             continue; //can't use spell right now               
                         }

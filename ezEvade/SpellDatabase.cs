@@ -720,6 +720,23 @@ namespace ezEvade
                 spellType = SpellType.Line,
 
             });
+
+            //Testing purpose
+            /*Spells.Add(
+            new SpellData
+            {
+                charName = "Ezreal",
+                dangerlevel = 1,
+                name = "Essence Flux2",
+                radius = 250,
+                range = 1050,
+                spellDelay = 825,
+                spellKey = SpellSlot.W,
+                spellName = "EzrealEssenceFlux",
+                spellType = SpellType.Circular,
+
+            });*/
+
             #endregion Ezreal
 
             #region Fizz
@@ -1858,7 +1875,7 @@ namespace ezEvade
             });
             #endregion Quinn
 
-            #region Rengar
+            #region RekSai
 
             Spells.Add(
             new SpellData
@@ -1877,7 +1894,7 @@ namespace ezEvade
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
-            #endregion Rengar
+            #endregion RekSai
 
             #region Rengar
 
