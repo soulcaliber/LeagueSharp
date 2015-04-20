@@ -299,7 +299,7 @@ namespace ezEvade
                     if (fastEvadeMode)
                     {
                         posInfo.position = GetExtendedSafePosition(myHero.ServerPosition.To2D(), posInfo.position, extraEvadeDistance);
-                        return CanHeroWalkToPos(posInfo.position, myHero.MoveSpeed, Game.Ping + 65, 10);
+                        return CanHeroWalkToPos(posInfo.position, myHero.MoveSpeed, Game.Ping, 10);
                     }                                      
 
                     if (PositionInfoStillValid(posInfo))
