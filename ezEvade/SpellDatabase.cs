@@ -15,6 +15,29 @@ namespace ezEvade
 
         static SpellDatabase()
         {
+            #region AllChampions
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "AllChampions",
+                dangerlevel = 1,
+                missileName = "SummonerSnowball",
+                name = "Poro Throw",
+                projectileSpeed = 1300,
+                radius = 60,
+                range = 2500,
+                spellDelay = 0,
+                spellKey = SpellSlot.Q,
+                spellName = "summonersnowball",
+                extraSpellNames = new[] { "summonerporothrow", },
+                spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+
+            });
+
+            #endregion AllChampions
+
             #region Aatrox
 
             Spells.Add(
@@ -1519,7 +1542,7 @@ namespace ezEvade
             {
                 charName = "Lucian",
                 dangerlevel = 2,
-                defaultOff = true,
+                //defaultOff = true,
                 isSpecial = true,
                 name = "LucianQ",
                 projectileSpeed = float.MaxValue,
@@ -1974,6 +1997,29 @@ namespace ezEvade
 
             });
             #endregion Rumble
+
+            #region Ryze
+            
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Ryze",
+                dangerlevel = 2,
+                missileName = "RyzeQ",
+                name = "RyzeQ",
+                projectileSpeed = 1700,
+                radius = 60,
+                range = 900,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "RyzeQ",
+                spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+
+            });
+
+            #endregion Ryze
+
 
             #region Sejuani
 

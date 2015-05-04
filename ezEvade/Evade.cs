@@ -148,7 +148,11 @@ namespace ezEvade
 
         public static void SetCastSpellPacketID()
         {
-            if (Game.Version.StartsWith("5.7"))
+            if (Game.Version.StartsWith("5.8"))
+            {
+                CastSpellPacketID = 135;
+            }
+            else if (Game.Version.StartsWith("5.7"))
             {
                 CastSpellPacketID = 233;
             }
@@ -172,18 +176,21 @@ namespace ezEvade
         }
 
         private void Game_OnSendPacket(GamePacketEventArgs args)
-        {
+        {           
+
             if (!Situation.ShouldDodge())
                 return;
 
-            // Check if the packet sent is a spell cast
+            /*if (args.GetPacketId() != 84 && args.GetPacketId() != 41)
+            {
+                Console.WriteLine("" + args.GetPacketId());
+            }*/
 
-            //Game.PrintChat("" + args.GetPacketId());
-
+            // Check if the packet sent is a spell cast           
 
             if (args != null && args.GetPacketId() == CastSpellPacketID)
             {
-                //Game.PrintChat("" + Game.Version);
+                //Console.WriteLine("" + Game.Version);
 
                 if (isDodging && SpellDetector.spells.Count() > 0)
                 {

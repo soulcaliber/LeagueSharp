@@ -110,16 +110,16 @@ namespace ezEvade
 
         private void Game_OnGameLoad()
         {
-            Game.PrintChat("EvadeTester loaded");
+            Console.WriteLine("EvadeTester loaded");
             menu.AddSubMenu(new Menu("Test", "Test"));
 
-            Game.PrintChat("Ping:" + Game.Ping);
+            Console.WriteLine("Ping:" + Game.Ping);
 
         }
 
         private void Game_OnGameInput(GameInputEventArgs args)
         {
-            Game.PrintChat("" + args.Input);
+            Console.WriteLine("" + args.Input);
 
         }
 
@@ -136,6 +136,20 @@ namespace ezEvade
 
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
         {
+            if (obj.IsValid<MissileClient>())
+            {
+                MissileClient autoattack = (MissileClient)obj;
+
+                /*if (!autoattack.SpellCaster.IsMinion)
+                {
+                    Console.WriteLine("Missile Name " + autoattack.SData.Name);
+                    Console.WriteLine("Missile Speed " + autoattack.SData.MissileSpeed);
+                    Console.WriteLine("LineWidth " + autoattack.SData.LineWidth);
+                    Console.WriteLine("Range " + autoattack.SData.CastRange);
+                    Console.WriteLine("Accel " + autoattack.SData.MissileAccel);
+                }*/
+            }
+
             if (!obj.IsValid<Obj_SpellMissile>())
                 return;
 
@@ -146,13 +160,16 @@ namespace ezEvade
 
             Obj_SpellMissile missile = (Obj_SpellMissile)obj;
 
-            Game.PrintChat("Missile Name " + missile.SData.Name);
-            Game.PrintChat("Missile Speed " + missile.SData.MissileSpeed);
-            Game.PrintChat("LineWidth " + missile.SData.LineWidth);
-            Game.PrintChat("Range " + missile.SData.CastRange);
-            /*Game.PrintChat("Offset: " + missile.SData.ParticleStartOffset);
-            Game.PrintChat("Missile Speed " + missile.SData.MissileSpeed);
-            Game.PrintChat("LineWidth " + missile.SData.LineWidth);
+            
+
+            Console.WriteLine("Missile Name " + missile.SData.Name);
+            Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);
+            Console.WriteLine("LineWidth " + missile.SData.LineWidth);
+            Console.WriteLine("Range " + missile.SData.CastRange);
+            Console.WriteLine("Accel " + missile.SData.MissileAccel);
+            /*Console.WriteLine("Offset: " + missile.SData.ParticleStartOffset);
+            Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);
+            Console.WriteLine("LineWidth " + missile.SData.LineWidth);
             circleRenderPos = missile.SData.ParticleStartOffset.To2D();*/
 
             renderPositions.Add(
@@ -183,7 +200,7 @@ namespace ezEvade
                                 if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                 {
                                     //spell.spellObject = obj;
-                                    Game.PrintChat("Aquired: " + (Evade.GetTickCount() - spell.startTime));
+                                    Console.WriteLine("Aquired: " + (Evade.GetTickCount() - spell.startTime));
                                 }
                             }
                         }
@@ -195,9 +212,12 @@ namespace ezEvade
 
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
+            if (hero.IsMinion)
+                return;
+            
             if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
             {
-                Game.PrintChat(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
+                Console.WriteLine(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
             }
             //circleRenderPos = args.SData.ParticleStartOffset.To2D();
 
@@ -214,7 +234,7 @@ namespace ezEvade
             {
                 var testVar = myHero.BoundingRadius;
             }
-            Game.PrintChat("Test time1: " + (Evade.GetTickCount() - testTime));
+            Console.WriteLine("Test time1: " + (Evade.GetTickCount() - testTime));
 
             testTime = Evade.GetTickCount();
             var cacheVar = myHero.BoundingRadius;
@@ -222,11 +242,11 @@ namespace ezEvade
             {
                 var testVar = cacheVar;
             }
-            Game.PrintChat("Test time1: " + (Evade.GetTickCount() - testTime));*/
+            Console.WriteLine("Test time1: " + (Evade.GetTickCount() - testTime));*/
 
             if (hero.IsMe)
             {
-
+                lastSpellCastTime = Evade.GetTickCount();
             }
         }
 
@@ -235,7 +255,7 @@ namespace ezEvade
             var pos2 = spell.GetCurrentSpellPosition();
             if (spell.spellObject != null)
             {
-                Game.PrintChat("Compare: " + (pos2.Distance(pos)) / (Evade.GetTickCount() - time));
+                Console.WriteLine("Compare: " + (pos2.Distance(pos)) / (Evade.GetTickCount() - time));
             }
 
         }
@@ -247,7 +267,7 @@ namespace ezEvade
 
             if (spell.spellObject != null)
             {
-                Game.PrintChat("start distance: " + (spell.startPos.Distance(pos1)));
+                Console.WriteLine("start distance: " + (spell.startPos.Distance(pos1)));
             }
 
             Utility.DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, timeNow));
@@ -259,7 +279,7 @@ namespace ezEvade
             {
                 if (Evade.GetTickCount() - startWalkTime > 500 && myHero.IsMoving == false)
                 {
-                    //Game.PrintChat("walkspeed: " + startWalkPos.Distance(myHero.ServerPosition.To2D()) / (Evade.GetTickCount() - startWalkTime));
+                    //Console.WriteLine("walkspeed: " + startWalkPos.Distance(myHero.ServerPosition.To2D()) / (Evade.GetTickCount() - startWalkTime));
                     startWalkTime = 0;
                 }
             }
@@ -268,7 +288,7 @@ namespace ezEvade
             {
                 if (myHero.IsMoving && lastStopingTime > 0)
                 {
-                    Game.PrintChat("WindupTime: " + (Evade.GetTickCount() - lastStopingTime));
+                    Console.WriteLine("WindupTime: " + (Evade.GetTickCount() - lastStopingTime));
                     lastStopingTime = 0;
                 }
                 else if (!myHero.IsMoving && lastStopingTime == 0)
@@ -282,7 +302,7 @@ namespace ezEvade
                 if (myHero.IsDashing())
                 {
                     var dashInfo = myHero.GetDashInfo();
-                    Game.PrintChat("Dash Speed: " + dashInfo.Speed + " Dash dist: " + dashInfo.EndPos.Distance(dashInfo.StartPos));
+                    Console.WriteLine("Dash Speed: " + dashInfo.Speed + " Dash dist: " + dashInfo.EndPos.Distance(dashInfo.StartPos));
                 }
             }
 
@@ -290,12 +310,12 @@ namespace ezEvade
 
         private void Game_OnGameNotifyEvent(GameNotifyEventArgs args)
         {
-            //Game.PrintChat("" + args.EventId);
+            //Console.WriteLine("" + args.EventId);
         }
 
         private void GameObject_OnFloatPropertyChange(GameObject obj, GameObjectFloatPropertyChangeEventArgs args)
         {
-            //Game.PrintChat(obj.Name);
+            //Console.WriteLine(obj.Name);
 
             /*foreach (var sth in ObjectManager.Get<Obj_AI_Base>())
             {
@@ -311,7 +331,7 @@ namespace ezEvade
 
             if (args.Property == "mHP" && args.OldValue > args.NewValue)
             {
-                //Game.PrintChat("Damage taken: " + (Evade.GetTickCount() - lastSpellCastTime));
+                Console.WriteLine("Damage taken time: " + (Evade.GetTickCount() - lastSpellCastTime));
             }
 
             if (!obj.IsMe)
@@ -323,7 +343,7 @@ namespace ezEvade
 
             if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal")
             {
-                //Game.PrintChat(args.Property + ": " + args.NewValue);
+                //Console.WriteLine(args.Property + ": " + args.NewValue);
             }
         }
 
@@ -333,7 +353,7 @@ namespace ezEvade
             {
                 if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal")
                 {
-                    Game.PrintChat("Int" + args.Property + ": " + args.NewValue);
+                    Console.WriteLine("Int" + args.Property + ": " + args.NewValue);
                 }
 
             }
@@ -395,17 +415,17 @@ namespace ezEvade
 
                     float spellTime = (Evade.GetTickCount() - spell.startTime) - spell.info.spellDelay;
                     spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
-                    //Game.PrintChat("aaaa" + spellTime);
+                    //Console.WriteLine("aaaa" + spellTime);
 
 
                     bool isCollision = false;
                     float movingCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * (speed - 25), spell.direction * (spell.info.projectileSpeed - 200), myHero.BoundingRadius, spell.GetSpellRadius(), out isCollision);
                     if (isCollision)
                     {
-                        //Game.PrintChat("aaaa" + spellPos.Distance(spell.endPos) / spell.info.projectileSpeed);
+                        //Console.WriteLine("aaaa" + spellPos.Distance(spell.endPos) / spell.info.projectileSpeed);
                         if (true)//spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > movingCollisionTime)
                         {
-                            Game.PrintChat("movingCollisionTime: " + movingCollisionTime);
+                            Console.WriteLine("movingCollisionTime: " + movingCollisionTime);
                             //circleRenderPos = heroPos + walkDir * speed * movingCollisionTime;
                         }
 
@@ -427,7 +447,7 @@ namespace ezEvade
 
             if (getTickCountTimer - lastTimerCheck > 1000)
             {
-                Game.PrintChat("" + ((getGameTimer - lastGameTimerStart) - (getTickCountTimer - lastTickCountTimerStart)));
+                Console.WriteLine("" + ((getGameTimer - lastGameTimerStart) - (getTickCountTimer - lastTickCountTimerStart)));
                 lastTimerCheck = getTickCountTimer;
             }
 
@@ -562,7 +582,7 @@ namespace ezEvade
                     var cpa = MathUtilsCPA.CPAPointsEx(myHero.Position.To2D(), dir * myHero.MoveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed, to, spell.endPos);
                     var cpaTime = MathUtilsCPA.CPATime(myHero.Position.To2D(), dir * myHero.MoveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed);
 
-                    //Game.PrintChat("" + cpaTime);
+                    //Console.WriteLine("" + cpaTime);
                     //Render.Circle.DrawCircle(cPos1.To3D(), myHero.BoundingRadius, Color.Red, 3);
 
                     if (cpa < myHero.BoundingRadius + spell.GetSpellRadius())
@@ -583,13 +603,13 @@ namespace ezEvade
 
                 var buffs = target.Buffs;
 
-                //Game.PrintChat(myHero.ChampionName);
+                //Console.WriteLine(myHero.ChampionName);
 
                 //if(myHero.IsDead)
-                //    Game.PrintChat("dead");
+                //    Console.WriteLine("dead");
 
                 if (!target.IsTargetable)
-                    Game.PrintChat("invul" + Evade.GetTickCount());
+                    Console.WriteLine("invul" + Evade.GetTickCount());
 
                 int height = 20;
 
@@ -600,7 +620,7 @@ namespace ezEvade
                         Drawing.DrawText(10, height, Color.White, buff.Name);
                         height += 20;
 
-                        Game.PrintChat(buff.Name);
+                        Console.WriteLine(buff.Name);
                     }
                 }
             }

@@ -96,6 +96,34 @@ namespace ezEvade
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_AlZaharCalloftheVoid;
                 pDict["ProcessSpell_AlZaharCalloftheVoid"] = true;
             }
+
+            if (spellData.spellName == "LucianQ" && !pDict.ContainsKey("ProcessSpell_LucianQ"))
+            {
+                SpellDetector.OnProcessSpecialSpell += ProcessSpell_LucianQ;
+                pDict["ProcessSpell_LucianQ"] = true;
+            }
+        }
+
+        private static void ProcessSpell_LucianQ(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
+            SpecialSpellEventArgs specialSpellArgs)
+        {
+            if (spellData.spellName == "LucianQ")
+            {
+
+                if (args.Target.IsValid<Obj_AI_Hero>())
+                {
+                    var target = args.Target as Obj_AI_Hero;
+
+                    float spellDelay = ((float)(350 - Game.Ping))/1000;
+                    var heroWalkDir = (target.ServerPosition - target.Position).Normalized();
+                    var predictedHeroPos = target.Position + heroWalkDir * target.MoveSpeed * (spellDelay);
+
+
+                    SpellDetector.CreateSpellData(hero, args.Start, predictedHeroPos, spellData, null, 0);
+
+                    specialSpellArgs.noProcess = true;
+                }                
+            }
         }
 
         private static void ProcessSpell_AlZaharCalloftheVoid(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,

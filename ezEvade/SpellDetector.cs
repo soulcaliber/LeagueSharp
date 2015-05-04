@@ -73,7 +73,7 @@ namespace ezEvade
                 missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
-
+                
                 if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
                 {
                     var hero = missile.SpellCaster;
@@ -443,12 +443,21 @@ namespace ezEvade
                 if (hero.Team != myHero.Team)
                 {
                     foreach (var spell in SpellDatabase.Spells.Where(
-                        s => (s.charName == hero.ChampionName)))
+                        s => (s.charName == hero.ChampionName) || (s.charName == "AllChampions")))
                     {
-                        //Game.PrintChat(spell.spellName);                        
-
+                        //Game.PrintChat(spell.spellName); 
+                        
                         if (!(spell.spellType == SpellType.Circular || spell.spellType == SpellType.Line))
                             continue;
+
+                        if (spell.charName == "AllChampions")
+                        {
+                            SpellSlot slot = hero.GetSpellSlot(spell.spellName);
+                            if (slot == SpellSlot.Unknown)
+                            {
+                                continue;
+                            }
+                        }
 
                         if (!onProcessSpells.ContainsKey(spell.spellName))
                         {
