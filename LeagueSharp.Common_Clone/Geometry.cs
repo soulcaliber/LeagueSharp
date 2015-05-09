@@ -166,7 +166,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static float Distance(this Vector2 v, Obj_AI_Base to, bool squared = false)
         {
-            return v.Distance(to.ServerPosition.To2D());
+            return v.Distance(to.ServerPosition.To2D(), squared);
         }
 
         /// <summary>
@@ -213,7 +213,17 @@ namespace LeagueSharp.Common
         {
             return v + distance * (to - v).Normalized();
         }
+        
+        public static Vector2 Shorten(this Vector2 v, Vector2 to, float distance)
+        {
+            return v - distance * (to - v).Normalized();
+        }
 
+        public static Vector3 Shorten(this Vector3 v, Vector3 to, float distance)
+        {
+            return v - distance * (to - v).Normalized();
+        }
+        
         public static Vector3 SwitchYZ(this Vector3 v)
         {
             return new Vector3(v.X, v.Z, v.Y);

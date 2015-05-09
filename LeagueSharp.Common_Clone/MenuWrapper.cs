@@ -106,7 +106,7 @@ namespace LeagueSharp.Common
             {
                 // Initialize this submenu
                 Parent = parent;
-                _subMenu = new Menu(name, GetName(name));
+                _subMenu = new Menu(name, GetName(this, name));
 
                 // Add submenu to the parent menu
                 parent.MenuHandle.AddSubMenu(_subMenu);
@@ -121,7 +121,7 @@ namespace LeagueSharp.Common
 
             public SubMenu GetSubMenu(string name)
             {
-                return new SubMenu(_subMenu.SubMenu(GetName(name)));
+                return new SubMenu(_subMenu.SubMenu(GetName(this, name))) { Parent = this };
             }
 
             #endregion
@@ -130,7 +130,7 @@ namespace LeagueSharp.Common
 
             public SubMenu AddBool(string name, bool defaultValue = true)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(defaultValue));
+                _subMenu.AddItem(new MenuItem(GetName(this, name), name).SetValue(defaultValue));
                 return this;
             }
 
@@ -142,7 +142,7 @@ namespace LeagueSharp.Common
 
             public bool GetBool(string name)
             {
-                return _subMenu.Item(GetName(name)).GetValue<bool>();
+                return _subMenu.Item(GetName(this, name)).GetValue<bool>();
             }
 
             public BoolLink CreateBoolLink(string name)
@@ -156,7 +156,7 @@ namespace LeagueSharp.Common
 
             public SubMenu AddCircle(string name, bool enabled, Color color, float radius = 100)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Circle(enabled, color, radius)));
+                _subMenu.AddItem(new MenuItem(GetName(this, name), name).SetValue(new Circle(enabled, color, radius)));
                 return this;
             }
 
@@ -168,7 +168,7 @@ namespace LeagueSharp.Common
 
             public Circle GetCircle(string name)
             {
-                return _subMenu.Item(GetName(name)).GetValue<Circle>();
+                return _subMenu.Item(GetName(this, name)).GetValue<Circle>();
             }
 
             public CircleLink CreateCircleLink(string name)
@@ -182,7 +182,7 @@ namespace LeagueSharp.Common
 
             public SubMenu AddKeyBind(string name, uint key, KeyBindType type, bool defaultValue = false)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new KeyBind(key, type, defaultValue)));
+                _subMenu.AddItem(new MenuItem(GetName(this, name), name).SetValue(new KeyBind(key, type, defaultValue)));
                 return this;
             }
 
@@ -194,7 +194,7 @@ namespace LeagueSharp.Common
 
             public KeyBind GetKeyBind(string name)
             {
-                return _subMenu.Item(GetName(name)).GetValue<KeyBind>();
+                return _subMenu.Item(GetName(this, name)).GetValue<KeyBind>();
             }
 
             public KeyBindLink CreateKeyBindLink(string name)
@@ -208,7 +208,7 @@ namespace LeagueSharp.Common
 
             public SubMenu AddSlider(string name, int value, int minValue = 0, int maxValue = 100)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new Slider(value, minValue, maxValue)));
+                _subMenu.AddItem(new MenuItem(GetName(this, name), name).SetValue(new Slider(value, minValue, maxValue)));
                 return this;
             }
 
@@ -220,7 +220,7 @@ namespace LeagueSharp.Common
 
             public Slider GetSlider(string name)
             {
-                return _subMenu.Item(GetName(name)).GetValue<Slider>();
+                return _subMenu.Item(GetName(this, name)).GetValue<Slider>();
             }
 
             public SliderLink CreateSliderLink(string name)
@@ -234,7 +234,7 @@ namespace LeagueSharp.Common
 
             public SubMenu AddStringList(string name, string[] sList, int defaultSelectedIndex = 0)
             {
-                _subMenu.AddItem(new MenuItem(GetName(name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
+                _subMenu.AddItem(new MenuItem(GetName(this, name), name).SetValue(new StringList(sList, defaultSelectedIndex)));
                 return this;
             }
 
@@ -246,7 +246,7 @@ namespace LeagueSharp.Common
 
             public StringList GetStringList(string name)
             {
-                return _subMenu.Item(GetName(name)).GetValue<StringList>();
+                return _subMenu.Item(GetName(this, name)).GetValue<StringList>();
             }
 
             public StringListLink CreateStringListLink(string name)
@@ -260,140 +260,125 @@ namespace LeagueSharp.Common
             {
                 get { return _subMenu; }
             }
-
-            private string GetName(string name, bool fullName = true)
-            {
-                var prefix = "";
-                if (fullName)
-                {
-                    var currentSubMenu = Parent;
-                    while (currentSubMenu != null)
-                    {
-                        prefix = currentSubMenu.MenuHandle.Name + prefix;
-                        currentSubMenu = currentSubMenu.Parent;
-                    }
-                }
-                return Regex.Replace(prefix + name.ToLower(), @"\s+", "");
-            }
         }
 
         #region MenuItemLinks
 
         public class BoolLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public BoolLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public bool Value
             {
-                get { return menu.GetBool(name); }
-                set { menu.MenuHandle.Item(name).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<bool>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public BoolLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class CircleLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public CircleLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public Circle Value
             {
-                get { return menu.GetCircle(name); }
-                set { menu.MenuHandle.Item(name).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<Circle>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public CircleLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class KeyBindLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public KeyBindLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public KeyBind Value
             {
-                get { return menu.GetKeyBind(name); }
-                set { menu.MenuHandle.Item(name).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<KeyBind>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public KeyBindLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class SliderLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public SliderLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public Slider Value
             {
-                get { return menu.GetSlider(name); }
-                set { menu.MenuHandle.Item(name).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<Slider>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public SliderLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         public class StringListLink
         {
-            private readonly SubMenu menu;
-            private readonly string name;
-
-            public StringListLink(SubMenu menu, string name)
-            {
-                this.menu = menu;
-                this.name = name;
-            }
+            public SubMenu SubMenu { get; private set; }
+            public string DisplayName { get; private set; }
+            public string Name { get; private set; }
 
             public StringList Value
             {
-                get { return menu.GetStringList(name); }
-                set { menu.MenuHandle.Item(name).SetValue(value); }
+                get { return SubMenu.MenuHandle.Item(Name).GetValue<StringList>(); }
+                set { SubMenu.MenuHandle.Item(Name).SetValue(value); }
             }
 
-            public SubMenu SubMenu
+            public StringListLink(SubMenu menu, string displayName)
             {
-                get { return menu; }
+                SubMenu = menu;
+                DisplayName = displayName;
+                Name = GetName(menu, displayName);
             }
         }
 
         #endregion
+
+        private static string GetName(SubMenu menu, string name, bool fullName = true)
+        {
+            var prefix = "";
+            if (fullName)
+            {
+                var currentPartent = menu;
+                while (currentPartent != null && currentPartent.MenuHandle != null)
+                {
+                    prefix = string.Format("{0}.{1}", currentPartent.MenuHandle.DisplayName, prefix);
+                    currentPartent = currentPartent.Parent;
+                }
+            }
+            return Regex.Replace(prefix + name.ToLower(), @"\s+", "_");
+        }
     }
 }

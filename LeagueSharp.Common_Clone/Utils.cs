@@ -131,6 +131,7 @@ namespace LeagueSharp.Common
     {
         private const int STD_INPUT_HANDLE = -10;
         private const int ENABLE_QUICK_EDIT_MODE = 0x40 | 0x80;
+        private static DateTime assemblyLoadTime = DateTime.Now;
 
         // Convert an object to a byte array
         internal static byte[] Serialize(Object obj)
@@ -155,9 +156,31 @@ namespace LeagueSharp.Common
             return (T)binForm.Deserialize(memStream);
         }
 
+        public static byte FixVirtualKey(byte key)
+        {
+            switch (key)
+            {
+                case 160:
+                    return 0x10;
+                case 161:
+                    return 0x10;
+                case 162:
+                    return 0x11;
+                case 163:
+                    return 0x11;
+            }
+
+            return key;
+        }
+
         public static int TickCount
         {
             get { return Environment.TickCount & int.MaxValue; }
+        }
+
+        public static int TickCountEx
+        {
+            get { return (int)DateTime.Now.Subtract(assemblyLoadTime).TotalMilliseconds; }
         }
 
         /// <summary>
@@ -166,11 +189,6 @@ namespace LeagueSharp.Common
         public static Vector2 GetCursorPos()
         {
             return CursorPosT.GetCursorPos();
-        }
-
-        public static bool IsKeyPressed(this Key key)
-        {
-            return Keyboard.IsKeyDown(key);
         }
 
         public static string KeyToText(uint vKey)

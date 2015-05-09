@@ -150,7 +150,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Corki",
-                IsActive = (source, target) => (source.HasBuff("RapidReload")),
+                IsActive = (source, target) => (source.HasBuff("rapidreload")),
                 GetDamage =
                     (source, target) => ((float) 0.1d * (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
             };
@@ -236,7 +236,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Nasus",
-                IsActive = (source, target) => (source.HasBuff("SiphoningStrike")),
+                IsActive = (source, target) => (source.HasBuff("NasusQ")),
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
@@ -248,7 +248,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Orianna",
-                IsActive = (source, target) => (source.HasBuff("OrianaSpellSword")),
+                IsActive = (source, target) => (source.HasBuff("orianaspellsword")),
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -267,7 +267,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Teemo",
-                IsActive = (source, target) => (source.HasBuff("Toxic Attack")),
+                IsActive = (source, target) => (source.HasBuff("ToxicShot")),
                 GetDamage =
                     (source, target) =>
                         ((float)
@@ -284,7 +284,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "TwistedFate",
-                IsActive = (source, target) => (source.HasBuff("Pick A Card Blue")),
+                IsActive = (source, target) => (source.HasBuff("bluecardpreattack")),
                 GetDamage =
                     (source, target) =>
                         (float) source.GetSpellDamage(target, SpellSlot.W) -
@@ -297,7 +297,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "TwistedFate",
-                IsActive = (source, target) => (source.HasBuff("CardMasterStackParticle")),
+                IsActive = (source, target) => (source.HasBuff("cardmasterstackparticle")),
                 GetDamage = (source, target) => (float) source.GetSpellDamage(target, SpellSlot.E),
             };
             AttackPassives.Add(p);
@@ -321,7 +321,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Vayne",
-                IsActive = (source, target) => (source.HasBuff("VayneTumble")),
+                IsActive = (source, target) => (source.HasBuff("vaynetumblebonus")),
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
@@ -331,7 +331,7 @@ namespace LeagueSharp.Common
                 ChampionName = "Vayne",
                 IsActive =
                     (source, target) =>
-                        (from buff in target.Buffs where buff.DisplayName == "VayneSilverDebuff" select buff.Count)
+                        (from buff in target.Buffs where buff.Name == "vaynesilvereddebuff" select buff.Count)
                             .FirstOrDefault() == 2,
                 GetDamage = (source, target) => ((float) source.GetSpellDamage(target, SpellSlot.W)),
             };
@@ -344,7 +344,7 @@ namespace LeagueSharp.Common
             p = new PassiveDamage
             {
                 ChampionName = "Ziggs",
-                IsActive = (source, target) => (source.HasBuff("ziggsShortFuse")),
+                IsActive = (source, target) => (source.HasBuff("ziggsshortfuse")),
                 GetDamage =
                     (source, target) =>
                         (float)
@@ -769,7 +769,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 80, 120, 160, 200, 240 }[level] + 0.50 * source.FlatMagicDamageMod
+                                new double[] { 80, 125, 170, 215, 260 }[level] + 0.65 * source.FlatMagicDamageMod
                     },
                 });
 
@@ -1102,11 +1102,13 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage = (source, target, level) =>
                         {
-                            if (target.IsMinion)
+                            if (target is Obj_AI_Minion)
                             {
                                 return Math.Min(
                                     new double[] { 300, 400, 500, 600, 700 }[level],
-                                    new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health);
+                                    Math.Max(
+                                        new double[] { 80, 130, 180, 230, 280 }[level],
+                                        new double[] { 15, 18, 21, 23, 25 }[level] / 100 * target.Health));
                             }
                             return Math.Max(
                                 new double[] { 80, 130, 180, 230, 280 }[level],
@@ -1202,7 +1204,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 30, 45, 60, 75, 90 }[level] +
+                                new double[] { 40, 55, 70, 85, 100 }[level] +
                                 new double[] { 35, 40, 45, 50, 55 }[level] / 100 * source.FlatMagicDamageMod +
                                 new double[] { 50, 55, 60, 65, 70 }[level] / 100 * source.FlatPhysicalDamageMod
                     },
@@ -1354,8 +1356,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 10, 20, 30, 40, 50 }[level] +
-                                new double[] { 4, 5, 6, 7, 8 }[level] / 100 * (target.MaxHealth - target.Health)
+                                new double[] { 10, 20, 30, 40, 50 }[level] + 0.25 * source.FlatMagicDamageMod
                     },
                     //E
                     new DamageSpell
@@ -1598,8 +1599,18 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 95, 130, 165, 200 }[level] + 0.8 * source.FlatPhysicalDamageMod
+                                new double[] { 60, 90, 120, 150, 180 }[level] + 0.75 * source.FlatPhysicalDamageMod
                     },
+                    //Q
+                    new DamageSpell
+                    {
+                        Slot = SpellSlot.Q,
+                        Stage = 1,
+                        DamageType = DamageType.Physical,
+                        Damage =
+                            (source, target, level) =>
+                                new double[] { 120, 180, 240, 300, 360 }[level] + 1.50 * source.FlatPhysicalDamageMod
+                    },                    
                     //W
                     new DamageSpell
                     {
@@ -1924,9 +1935,7 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Physical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 125, 175, 225 }[level] +
-                                new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) +
-                                0.5 * source.FlatPhysicalDamageMod
+                                new double[] { 25, 30, 35 }[level] + 0.1 * source.FlatPhysicalDamageMod
                     },
                     //R - Max
                     new DamageSpell
@@ -3034,7 +3043,7 @@ namespace LeagueSharp.Common
                         Damage =
                             (source, target, level) =>
                                 (from buff in ObjectManager.Player.Buffs
-                                    where buff.DisplayName == "NasusQStacks"
+                                    where buff.Name == "nasusqstacks"
                                     select buff.Count).FirstOrDefault() + new double[] { 30, 50, 70, 90, 110 }[level]
                     },
                     //E - Initial
@@ -3687,8 +3696,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 55, 75, 95, 115, 135 }[level] + 0.4 * source.FlatMagicDamageMod +
-                                0.065 * source.MaxMana
+                                new double[] { 65, 90, 115, 140, 165 }[level] + 0.55 * source.FlatMagicDamageMod +
+                                new double[]{2, 2.5, 3, 3.5, 4}[level] / 100 * source.MaxMana
                     },
                     //W
                     new DamageSpell
@@ -3697,8 +3706,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 60, 95, 130, 165, 200 }[level] + 0.6 * source.FlatMagicDamageMod +
-                                0.045 * source.MaxMana
+                                new double[] { 65, 95, 125, 155, 185 }[level] + 0.4 * source.FlatMagicDamageMod +
+                                0.025 * source.MaxMana
                     },
                     //E
                     new DamageSpell
@@ -3707,8 +3716,8 @@ namespace LeagueSharp.Common
                         DamageType = DamageType.Magical,
                         Damage =
                             (source, target, level) =>
-                                new double[] { 50, 70, 90, 110, 130 }[level] + 0.35 * source.FlatMagicDamageMod +
-                                0.01 * source.MaxMana
+                                new double[] { 50, 66, 82, 98, 114 }[level] + 0.3 * source.FlatMagicDamageMod +
+                                0.02 * source.MaxMana
                     },
                 });
 
