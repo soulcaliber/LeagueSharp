@@ -504,7 +504,7 @@ namespace LeagueSharp.Common
 
                 /* Delay sliders */
                 _config.AddItem(
-                    new MenuItem("ExtraWindupEx", "Extra windup time").SetShared().SetValue(new Slider(0, 0, 200)));
+                    new MenuItem("ExtraWindupEx", "Extra windup time").SetShared().SetValue(new Slider(0, -100, 200)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
                 _config.AddItem(
                     new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(20, 0, 250)))
