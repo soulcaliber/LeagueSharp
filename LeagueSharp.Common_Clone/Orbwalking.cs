@@ -244,7 +244,7 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Utils.TickCountEx)
             {
-                return Utils.TickCountEx - 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+                return Utils.TickCountEx >= LastAATick + Player.AttackDelay * 1000 && Attack;
             }
 
             return false;
@@ -398,6 +398,7 @@ namespace LeagueSharp.Common
             if (missile != null && missile.SpellCaster.IsMe && IsAutoAttack(missile.SData.Name))
             {
                 _missileLaunched = true;
+                LastAATick = Utils.TickCountEx - (int)(Player.AttackCastDelay * 1000);
             }
         }
 
@@ -506,7 +507,7 @@ namespace LeagueSharp.Common
                     new MenuItem("ExtraWindupEx", "Extra windup time").SetShared().SetValue(new Slider(0, 0, 200)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
                 _config.AddItem(
-                    new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(80, 0, 250)))
+                    new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(20, 0, 250)))
                     .ValueChanged += (sender, args) => SetMovementDelay(args.GetNewValue<Slider>().Value);
 
 
