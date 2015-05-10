@@ -358,8 +358,8 @@ namespace LeagueSharp.Common
                     if (!DisableNextAttack)
                     {
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-
-                        LastAATick = Utils.TickCountEx + (int)(Player.AttackCastDelay * 1000) + Game.Ping * 2;
+                        
+                        LastAATick = Utils.TickCountEx + Game.Ping;
                         _lastTarget = target;
                         return;
                     }
@@ -504,7 +504,7 @@ namespace LeagueSharp.Common
 
                 /* Delay sliders */
                 _config.AddItem(
-                    new MenuItem("ExtraWindupEx", "Extra windup time").SetShared().SetValue(new Slider(0, -100, 200)));
+                    new MenuItem("ExtraWindupEx", "Extra windup time").SetShared().SetValue(new Slider(0, -100, 100)));
                 _config.AddItem(new MenuItem("FarmDelay", "Farm delay").SetShared().SetValue(new Slider(0, 0, 200)));
                 _config.AddItem(
                     new MenuItem("MovementDelay", "Movement delay").SetShared().SetValue(new Slider(20, 0, 250)))
