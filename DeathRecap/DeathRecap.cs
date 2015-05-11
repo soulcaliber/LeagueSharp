@@ -49,6 +49,7 @@ namespace DeathRecap
         public float trueDamage = 0;
         public float mixedDamage = 0;
         public float totalDamage = 0;
+        public int comboCount = 0;
 
         /*public int magicalDamagePercent = 0;
         public int physicalDamagePercent = 0;
@@ -60,6 +61,16 @@ namespace DeathRecap
         {
             this.sourceID = sourceID;
             this.sourceName = sourceName;
+        }
+
+        public void ResetDamage()
+        {
+            magicalDamage = 0;
+            physicalDamage = 0;
+            trueDamage = 0;
+            mixedDamage = 0;
+            totalDamage = 0;
+            comboCount = 0;
         }
     }
 
@@ -76,8 +87,8 @@ namespace DeathRecap
         public static Dictionary<int, TotalDamageInfo> myFinalDamage = new Dictionary<int, TotalDamageInfo>();
         public static List<TotalDamageInfo> orderedMyFinalDamage = new List<TotalDamageInfo>();
 
-        public static float totalDamageTaken = 0;
-        public static float totalDamageDealt = 0;
+        public static TotalDamageInfo totalDamageTaken = new TotalDamageInfo(myHero.NetworkId, myHero.ChampionName);
+        public static TotalDamageInfo totalDamageDealt = new TotalDamageInfo(myHero.NetworkId, myHero.ChampionName);
 
         public static int DamageTypeMagical = 163;
         public static int DamageTypePhysical = 78; //real value is 70
@@ -99,6 +110,7 @@ namespace DeathRecap
             menu.AddItem(new MenuItem("ShowRecapPress", "Show Recap Key").SetValue(new KeyBind('J', KeyBindType.Press)));
             menu.AddItem(new MenuItem("ShowWhenDead", "Show Only When Dead").SetValue(true));
             menu.AddItem(new MenuItem("RecalculateOnDamage", "Recalculate On Damage").SetValue(true));
+            menu.AddItem(new MenuItem("ShowDamageText", "Show Damage Text").SetValue(true));
             menu.AddItem(new MenuItem("TimeFrame", "Data Time Frame (Seconds)").SetValue(new Slider(30, 1, 300)));
 
             /*Menu damageTypeMenu = new Menu("DamageType", "DamageType");
@@ -115,7 +127,7 @@ namespace DeathRecap
 
             Drawing.OnDraw += Drawing_OnDraw;
 
-            Obj_AI_Base.OnPlayAnimation += Hero_OnPlayAnimation;            
+            Obj_AI_Base.OnPlayAnimation += Hero_OnPlayAnimation;
 
             InitializeCache();
         }
@@ -155,6 +167,7 @@ namespace DeathRecap
             }
 
             totalDamage.totalDamage += damageInfo.damageValue;
+            totalDamage.comboCount += 1;
         }
 
         private static void Hero_OnPlayAnimation(Obj_AI_Base obj, GameObjectPlayAnimationEventArgs args)
@@ -164,9 +177,9 @@ namespace DeathRecap
 
             /*for (int i = 1; i < 10; i++)
             {
-                dmgCache.Add(new DamageInfo(i, "SomeDude", 1, (DamageType)70));
-                dmgCache.Add(new DamageInfo(i, "SomeDude", 2, (DamageType)163));
-                dmgCache.Add(new DamageInfo(i, "SomeDude", 2, (DamageType)78));
+                dmgCache.Add(new DamageInfo(i, "SomeDude" + i, 1, (DamageType)70));
+                dmgCache.Add(new DamageInfo(i, "SomeDude" + i, 2, (DamageType)163));
+                dmgCache.Add(new DamageInfo(i, "SomeDude" + i, 2, (DamageType)78));
             }
 
             myDmgCache.Add(new DamageInfo(10, "SomeDude", 1, (DamageType)70));
@@ -183,8 +196,8 @@ namespace DeathRecap
         private static void RecalculateFinalDamage(bool clearCache = false)
         {
             CleanDamageCache();
-            totalDamageTaken = 0;
-            totalDamageDealt = 0;
+            totalDamageTaken.ResetDamage();
+            totalDamageDealt.ResetDamage();
 
             finalDamage = new Dictionary<string, TotalDamageInfo>();
             foreach (var damageInfo in dmgCache)
@@ -201,7 +214,7 @@ namespace DeathRecap
                     finalDamage.Add(damageInfo.sourceName, totalDamage);
 
                 }
-                totalDamageTaken += damageInfo.damageValue;
+                IncrementTotalDamage(damageInfo, ref totalDamageTaken);
             }
 
             myFinalDamage = new Dictionary<int, TotalDamageInfo>();
@@ -219,7 +232,7 @@ namespace DeathRecap
                     myFinalDamage.Add(damageInfo.sourceID, totalDamage);
 
                 }
-                totalDamageDealt += damageInfo.damageValue;
+                IncrementTotalDamage(damageInfo, ref totalDamageDealt);
             }
 
             orderedFinalDamage = finalDamage.Values.OrderByDescending(value => value.totalDamage).ToList();
@@ -248,7 +261,40 @@ namespace DeathRecap
                 }
                 hpText += text;
                 hpPixelStart += hpPixels;
-            }            
+            }
+        }
+
+        private static string GetDamageText(TotalDamageInfo totalDamageInfo, float targetMaxHp)
+        {
+            string text = "";
+                        
+            if (totalDamageInfo.physicalDamage > 0)
+            {
+                text += GetDamageSubText("Physical: ", totalDamageInfo.physicalDamage, targetMaxHp);
+            }
+
+            if (totalDamageInfo.magicalDamage > 0)
+            {
+                text += GetDamageSubText("Magical: ", totalDamageInfo.magicalDamage, targetMaxHp);
+            }
+
+            if (totalDamageInfo.mixedDamage > 0)
+            {
+                text += GetDamageSubText("Mixed: ", totalDamageInfo.mixedDamage, targetMaxHp);
+            }
+
+            if (totalDamageInfo.trueDamage > 0)
+            {
+                text += GetDamageSubText("True: ", totalDamageInfo.trueDamage, targetMaxHp);
+            }
+
+            return text;
+        }
+
+        private static string GetDamageSubText(string typeStr, float dmg, float targetMaxHp)
+        {
+            int percentHp = (int)(100 * dmg / targetMaxHp);
+            return typeStr + " " + percentHp + "% ";
         }
 
         private void Drawing_OnDraw(EventArgs args)
@@ -267,17 +313,17 @@ namespace DeathRecap
             }
 
             int padding = 15;
-            int hStart = (Drawing.Width / 2) - 500 + padding;            
+            int hStart = (Drawing.Width / 2) - 500 + padding;
             int lineHeight = 15;
             int hpBarHeight = 50;
             int hpBarPadding = 2;
             int boxHeight = 525;
-            int vStart = 200;           
-            
+            int vStart = 200;
+
             if (Drawing.Height <= 1080)
             {
                 vStart = (int)(vStart * ((float)Drawing.Height / 1080)); //150
-                boxHeight = (int)(boxHeight * ((float)Drawing.Height/1080));//Drawing.Height - 400;
+                boxHeight = (int)(boxHeight * ((float)Drawing.Height / 1080));//Drawing.Height - 400;
                 hpBarHeight = (int)(hpBarHeight * ((float)Drawing.Height / 1080));//25;
             }
 
@@ -291,14 +337,22 @@ namespace DeathRecap
                 boxHeight + padding * 2, Color.FromArgb(28, 28, 28));
             Drawing.DrawLine(hStart, height, hStart + 1000, height, boxHeight, Color.Black);
 
-            Drawing.DrawText(hStart, height, Color.White, "Damage Taken: " + (int)totalDamageTaken
-                + " (" + (int)(100 * totalDamageTaken / myHero.MaxHealth) + "%)");
+            Drawing.DrawText(hStart, height, Color.White, "Damage Taken: " + (int)totalDamageTaken.totalDamage
+                + " (" + (int)(100 * totalDamageTaken.totalDamage / myHero.MaxHealth) + "%)");
+
+            if (menu.Item("ShowDamageText").GetValue<bool>())
+            {
+                height += lineHeight;
+                Drawing.DrawText(hStart, height, Color.White, GetDamageText(totalDamageTaken, myHero.MaxHealth));
+            }
+            
             height += 30;
 
             foreach (var totalDamageInfo in orderedFinalDamage)
             {
                 string nameText = totalDamageInfo.sourceName + ": " + (int)totalDamageInfo.totalDamage
-                    + " (" + (int)(100 * totalDamageInfo.totalDamage / myHero.MaxHealth) + "%)";
+                    + " (" + (int)(100 * totalDamageInfo.totalDamage / myHero.MaxHealth) + "%) "
+                    + totalDamageInfo.comboCount + "x";
                 Drawing.DrawText(hStart, height, Color.White, nameText);
 
                 int hpBarLength = 400;
@@ -337,7 +391,10 @@ namespace DeathRecap
                         ref hpPixelStart, ref hpText, hpBarPadding, height, hpBarHeight, hpPixelMax, hpBarLength);
                 }
 
-                Drawing.DrawText(hStart, height - lineHeight, Color.White, hpText);
+                if (menu.Item("ShowDamageText").GetValue<bool>())
+                {
+                    Drawing.DrawText(hStart, height - lineHeight, Color.White, hpText);
+                }
 
                 height += damageInfoHeight;
 
@@ -348,8 +405,15 @@ namespace DeathRecap
             hStart += 500;
             height = vStart;
 
-            Drawing.DrawText(hStart, height, Color.White, "Damage Dealt: " + (int)totalDamageDealt
-                + " (" + (int)(100 * totalDamageDealt / myHero.MaxHealth) + "%)");
+            Drawing.DrawText(hStart, height, Color.White, "Damage Dealt: " + (int)totalDamageDealt.totalDamage
+                + " (" + (int)(100 * totalDamageDealt.totalDamage / myHero.MaxHealth) + "%)");
+
+            if (menu.Item("ShowDamageText").GetValue<bool>())
+            {
+                height += lineHeight;
+                Drawing.DrawText(hStart, height, Color.White, GetDamageText(totalDamageDealt, myHero.MaxHealth));
+            }
+
             height += 30;
 
             foreach (var totalDamageInfo in orderedMyFinalDamage)
@@ -362,7 +426,8 @@ namespace DeathRecap
                 }
 
                 string nameText = totalDamageInfo.sourceName + ": " + (int)totalDamageInfo.totalDamage
-                    + " (" + (int)(100 * totalDamageInfo.totalDamage / target.MaxHealth) + "%)";
+                    + " (" + (int)(100 * totalDamageInfo.totalDamage / target.MaxHealth) + "%) "
+                    + totalDamageInfo.comboCount + "x";
                 Drawing.DrawText(hStart, height, Color.White, nameText);
 
                 int hpBarLength = 400;
@@ -402,7 +467,10 @@ namespace DeathRecap
                         ref hpPixelStart, ref hpText, hpBarPadding, height, hpBarHeight, hpPixelMax, hpBarLength);
                 }
 
-                Drawing.DrawText(hStart, height - lineHeight, Color.White, hpText);
+                if (menu.Item("ShowDamageText").GetValue<bool>())
+                {
+                    Drawing.DrawText(hStart, height - lineHeight, Color.White, hpText);
+                }
 
                 height += damageInfoHeight;
 
@@ -494,7 +562,7 @@ namespace DeathRecap
         {
             float curTime = Utils.TickCount;
             int timeFrame = 1000 * menu.Item("TimeFrame").GetValue<Slider>().Value;
-            
+
             foreach (var damageInfo in dmgCache)
             {
                 if (curTime - damageInfo.timestamp > timeFrame)
