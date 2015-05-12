@@ -143,7 +143,7 @@ namespace ezEvade
 
         public static float GetTickCount()
         {
-            return (float)DateTime.Now.Subtract(assemblyLoadTime).TotalMilliseconds; //Game.ClockTime * 1000;
+            return Game.Time * 1000;
         }
 
         public static void SetCastSpellPacketID()
@@ -238,7 +238,7 @@ namespace ezEvade
                 return;
 
             if (!Situation.ShouldDodge())
-                return;
+                return;            
 
             if (args.Order == GameObjectOrder.MoveTo)
             {

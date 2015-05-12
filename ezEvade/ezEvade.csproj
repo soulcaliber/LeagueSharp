@@ -85,6 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DelayAction.cs" />
     <Compile Include="Evade.cs" />
     <Compile Include="EvadeCommand.cs" />
     <Compile Include="EvadeHelper.cs" />

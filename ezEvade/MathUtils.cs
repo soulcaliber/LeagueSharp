@@ -89,9 +89,7 @@ namespace ezEvade
             float a = velocityX * velocityX + velocityY * velocityY - projSpeed * projSpeed;
             float b = 2 * velocityX * relStartX + 2 * velocityY * relStartY;
             float c = Math.Max(0, relStartX * relStartX + relStartY * relStartY + extraDist * extraDist);
-
-            Console.WriteLine(c);
-
+            
             float disc = b * b - 4 * a * c;
 
             if (disc >= 0)

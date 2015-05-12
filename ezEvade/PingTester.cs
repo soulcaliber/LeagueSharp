@@ -73,7 +73,7 @@ namespace ezEvade
 
             if (recursionCount > 1)
             {
-                Utility.DelayAction.Add(500, () => IssueTestMove(recursionCount - 1));
+                DelayAction.Add(500, () => IssueTestMove(recursionCount - 1));
             }
 
         }

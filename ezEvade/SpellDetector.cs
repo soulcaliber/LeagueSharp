@@ -123,7 +123,7 @@ namespace ezEvade
             foreach (var spell in spells.Values.ToList().Where(
                     s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
             {
-                Utility.DelayAction.Add(1, () => DeleteSpell(spell.spellID));
+                DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }
 
@@ -132,7 +132,7 @@ namespace ezEvade
             foreach (var spell in spells.Values.ToList().Where(
                     s => (s.GetSpellDangerLevel() < 3)))
             {
-                Utility.DelayAction.Add(1, () => DeleteSpell(spell.spellID));
+                DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }
 
@@ -161,7 +161,7 @@ namespace ezEvade
                 SpellData spellData;
 
                 if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
-                {
+                {                    
                     if (spellData.usePackets == false)
                     {
                         var specialSpellArgs = new SpecialSpellEventArgs();
@@ -228,7 +228,7 @@ namespace ezEvade
                 {
                     return;
                 }
-
+                
                 endTick += extraEndTick;
 
                 Spell newSpell = new Spell();
@@ -249,7 +249,7 @@ namespace ezEvade
 
                 int spellID = CreateSpell(newSpell, processSpell);
 
-                Utility.DelayAction.Add((int)endTick, () => DeleteSpell(spellID));
+                DelayAction.Add((int)endTick, () => DeleteSpell(spellID));
             }
         }
 
@@ -275,12 +275,12 @@ namespace ezEvade
                     if (hero.IsDead && spell.heroID == hero.NetworkId)
                     {
                         if (spell.spellObject == null)
-                            Utility.DelayAction.Add(1, () => DeleteSpell(entry.Key));
+                            DelayAction.Add(1, () => DeleteSpell(entry.Key));
                     }
                 }
 
                 if (spell.endTime < Evade.GetTickCount() || CanHeroWalkIntoSpell(spell) == false)
-                    Utility.DelayAction.Add(1, () => DeleteSpell(entry.Key));
+                    DelayAction.Add(1, () => DeleteSpell(entry.Key));
             }
         }
 
@@ -292,7 +292,7 @@ namespace ezEvade
                         s => (s.Value.heroID == hero.NetworkId && hero.IsDead))) //check this condition
                 {
                     if (spell.Value.spellObject == null)
-                        Utility.DelayAction.Add(1, () => DeleteSpell(spell.Key));
+                        DelayAction.Add(1, () => DeleteSpell(spell.Key));
                 }
             }
         }

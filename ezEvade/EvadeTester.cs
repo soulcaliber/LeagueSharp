@@ -54,9 +54,9 @@ namespace ezEvade
         private static float lastTickCountTimerTick = 0;
         private static float lastWatchTimerTick = 0;
 
-        private static float getGameTimer { get { return Environment.TickCount & int.MaxValue; } }
-        private static float getTickCountTimer { get { return (float)DateTime.Now.TimeOfDay.TotalMilliseconds; } }
-        private static float getWatchTimer { get { return (float)((int)Evade.GetTickCount()); } }
+        private static float getGameTimer { get { return Game.ClockTime*1000; } }
+        private static float getTickCountTimer { get { return Environment.TickCount & int.MaxValue; } }
+        private static float getWatchTimer { get { return Evade.GetTickCount(); } }
 
         private static float lastTimerCheck = 0;
         private static bool lastRandomMoveCoeff = false;
@@ -64,6 +64,7 @@ namespace ezEvade
         private static EvadeCommand lastTestMoveToCommand;
 
         private static float lastSpellCastTime = 0;
+        private static float lastHeroSpellCastTime = 0;
 
         public EvadeTester(Menu mainMenu)
         {
@@ -126,7 +127,7 @@ namespace ezEvade
         private void SpellDetector_OnProcessDetectedSpells()
         {
             //var pos1 = newSpell.startPos;//SpellDetector.GetCurrentSpellPosition(newSpell);
-            //Utility.DelayAction.Add(250, () => CompareSpellLocation2(newSpell));
+            //DelayAction.Add(250, () => CompareSpellLocation2(newSpell));
 
             sortedBestPos = EvadeHelper.GetBestPositionTest();
             circleRenderPos = Evade.lastPosInfo.position;
@@ -160,8 +161,8 @@ namespace ezEvade
 
             Obj_SpellMissile missile = (Obj_SpellMissile)obj;
 
-            
 
+            Console.WriteLine("CastTime: " + (Evade.GetTickCount() - lastHeroSpellCastTime));
             Console.WriteLine("Missile Name " + missile.SData.Name);
             Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);
             Console.WriteLine("LineWidth " + missile.SData.LineWidth);
@@ -244,6 +245,8 @@ namespace ezEvade
             }
             Console.WriteLine("Test time1: " + (Evade.GetTickCount() - testTime));*/
 
+            lastHeroSpellCastTime = Evade.GetTickCount();
+
             if (hero.IsMe)
             {
                 lastSpellCastTime = Evade.GetTickCount();
@@ -270,7 +273,7 @@ namespace ezEvade
                 Console.WriteLine("start distance: " + (spell.startPos.Distance(pos1)));
             }
 
-            Utility.DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, timeNow));
+            DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, timeNow));
         }
 
         private void Game_OnGameUpdate(EventArgs args)
@@ -451,14 +454,14 @@ namespace ezEvade
                 lastTimerCheck = getTickCountTimer;
             }
 
-            /*
+            
             Drawing.DrawText(10, 70, Color.White, "Timer1 Freq: " + (getGameTimer - lastGameTimerStart));
             Drawing.DrawText(10, 90, Color.White, "Timer2 Freq: " + (getTickCountTimer - lastTickCountTimerStart));
-            Drawing.DrawText(10, 100, Color.White, "Timer3 Freq: " + (getWatchTimer - lastWatchTimerStart));*/
+            Drawing.DrawText(10, 110, Color.White, "Timer3 Freq: " + (getWatchTimer - lastWatchTimerStart));
 
-            Drawing.DrawText(10, 70, Color.White, "Timer1 Freq: " + (getGameTimer));
+            /*Drawing.DrawText(10, 70, Color.White, "Timer1 Freq: " + (getGameTimer));
             Drawing.DrawText(10, 90, Color.White, "Timer2 Freq: " + (getTickCountTimer));
-            Drawing.DrawText(10, 100, Color.White, "Timer3 Freq: " + (getWatchTimer));
+            Drawing.DrawText(10, 100, Color.White, "Timer3 Freq: " + (getWatchTimer));*/
 
 
 
@@ -477,7 +480,7 @@ namespace ezEvade
                 }
                 else
                 {
-                    Utility.DelayAction.Add(1, () => renderPositions.Remove(rendPos));
+                    DelayAction.Add(1, () => renderPositions.Remove(rendPos));
                 }
             }
         }
@@ -541,7 +544,7 @@ namespace ezEvade
                 var dir = (Game.CursorPos - myHero.Position).Normalized();
                 var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
                 
-                Utility.DelayAction.Add(1, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
+                DelayAction.Add(1, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
             }
 
             if (testMenu.Item("TestPath").GetValue<bool>())

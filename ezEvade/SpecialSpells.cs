@@ -294,7 +294,7 @@ namespace ezEvade
 
             if (gotObj == false)
             {
-                Utility.DelayAction.Add(5000, () => GetLuluPix());
+                DelayAction.Add(5000, () => GetLuluPix());
             }
         }
 
@@ -366,7 +366,7 @@ namespace ezEvade
                     {
                         if (info.usePosition == false && (info.obj == null || info.obj.IsDead))
                         {
-                            Utility.DelayAction.Add(1, () => objTracker.Remove(info.obj.NetworkId));
+                            DelayAction.Add(1, () => objTracker.Remove(info.obj.NetworkId));
                             continue;
                         }
                         else
@@ -408,7 +408,7 @@ namespace ezEvade
 
                     objTracker.Add(obj.NetworkId, info);
 
-                    Utility.DelayAction.Add(1000, () => objTracker.Remove(obj.NetworkId));
+                    DelayAction.Add(1000, () => objTracker.Remove(obj.NetworkId));
                 }
             }
         }

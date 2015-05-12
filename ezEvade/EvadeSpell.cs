@@ -71,7 +71,7 @@ namespace ezEvade
                 }
             }
 
-            Utility.DelayAction.Add(5000, () => CheckForItems());
+            DelayAction.Add(5000, () => CheckForItems());
         }        
 
         public static bool PreferEvadeSpell()
@@ -156,7 +156,7 @@ namespace ezEvade
                                 if (posInfo != null)
                                 {
                                     EvadeCommand.CastSpell(evadeSpell, posInfo.position);
-                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));                                
+                                    //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));                                
                                 }
                             }
                             else if (evadeSpell.castType == CastType.Target)
@@ -165,7 +165,7 @@ namespace ezEvade
                                 if (posInfo != null)
                                 {
                                     EvadeCommand.CastSpell(evadeSpell, posInfo.position);
-                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                                    //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                                 }
                             }
                         }
@@ -186,7 +186,7 @@ namespace ezEvade
                                     }
 
                                     EvadeCommand.CastSpell(evadeSpell, posInfo.position);
-                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                                    //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                                 }
                             }
                             else if (evadeSpell.castType == CastType.Target)
@@ -195,7 +195,7 @@ namespace ezEvade
                                 if (posInfo != null)
                                 {
                                     EvadeCommand.CastSpell(evadeSpell, posInfo.position);
-                                    //Utility.DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                                    //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                                 }
                             }
                         }
