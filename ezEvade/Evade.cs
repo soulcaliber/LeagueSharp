@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Diagnostics;
+
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -20,6 +22,8 @@ namespace ezEvade
         private static EvadeTester evadeTester;
         private static PingTester pingTester;
         private static EvadeSpell evadeSpell;
+
+        private static Stopwatch stopWatch = Stopwatch.StartNew();
 
         public static SpellSlot lastSpellCast;
         public static float lastSpellCastTime = 0;
@@ -143,7 +147,7 @@ namespace ezEvade
 
         public static float GetTickCount()
         {
-            return Game.Time * 1000;
+            return stopWatch.ElapsedMilliseconds;
         }
 
         public static void SetCastSpellPacketID()
@@ -238,8 +242,8 @@ namespace ezEvade
                 return;
 
             if (!Situation.ShouldDodge())
-                return;            
-
+                return;
+            
             if (args.Order == GameObjectOrder.MoveTo)
             {
                 //movement block code goes in here
