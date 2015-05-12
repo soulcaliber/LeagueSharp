@@ -86,6 +86,8 @@ namespace LeagueSharp.Common
         // Champs whose auto attacks can't be cancelled
         private static readonly string[] NoCancelChamps = { "Kalista" };
         public static int LastAATick = Utils.TickCountEx;
+        public static float LastAACastDelay = 0;
+        public static float LastAADelay = 0;
         public static bool Attack = true;
         public static bool DisableNextAttack;
         public static bool Move = true;
@@ -244,6 +246,7 @@ namespace LeagueSharp.Common
         {
             if (LastAATick <= Utils.TickCountEx)
             {
+                var aaDelay = Math.Max(LastAADelay, Player.AttackDelay * 1000);
                 return Utils.TickCountEx + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
             }
 
@@ -260,9 +263,10 @@ namespace LeagueSharp.Common
 
             if (LastAATick <= Utils.TickCountEx)
             {
+                var aaCastDelay = Math.Max(LastAACastDelay, Player.AttackCastDelay * 1000);
                 return NoCancelChamps.Contains(Player.ChampionName)
                     ? (Utils.TickCountEx - LastAATick > 250)
-                    : (Utils.TickCountEx + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup);
+                    : (Utils.TickCountEx + Game.Ping / 2 >= LastAATick + aaCastDelay + extraWindup);
             }
 
             return false;
@@ -358,6 +362,9 @@ namespace LeagueSharp.Common
                     if (!DisableNextAttack)
                     {
                         Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+
+                        LastAACastDelay = Player.AttackCastDelay * 1000;
+                        LastAADelay = Player.AttackDelay * 1000;
 
                         LastAATick = Utils.TickCountEx + Game.Ping / 2;
                         _lastTarget = target;
