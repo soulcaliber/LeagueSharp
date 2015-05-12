@@ -49,8 +49,8 @@ namespace LeagueSharp.Common
                 var path = new List<Vector2> { sender.ServerPosition.To2D() };
                 path.AddRange(args.Path.ToList().To2D());
 
-                DetectedDashes[sender.NetworkId].StartTick = Utils.TickCount - Game.Ping / 2;
-                DetectedDashes[sender.NetworkId].Speed = args.Speed;
+                DetectedDashes[sender.NetworkId].StartTick = Utils.TickCountEx;
+                DetectedDashes[sender.NetworkId].Speed = GetDashSpeed(sender, args.Speed);
                 DetectedDashes[sender.NetworkId].StartPos = sender.ServerPosition.To2D();
                 DetectedDashes[sender.NetworkId].Unit = sender;
                 DetectedDashes[sender.NetworkId].Path = path;
@@ -66,6 +66,34 @@ namespace LeagueSharp.Common
             }
         }
 
+        public static float GetDashSpeed(this Obj_AI_Base unit, float dashSpeed)
+        {
+            if (unit is Obj_AI_Hero)
+            {
+                var hero = unit as Obj_AI_Hero;
+
+                if (hero.ChampionName == "Jax" && hero.LastCastedSpellName() == "JaxLeapStrike")
+                {
+                    return 1500;
+                }
+                else if (hero.ChampionName == "LeeSin" && hero.LastCastedSpellName() == "blindmonkqtwo")
+                {
+                    return 2000;
+                }
+                else if (hero.ChampionName == "Khazix" && hero.LastCastedSpellName() == "KhazixE")
+                {
+                    return 1000;
+                }
+                else if (hero.ChampionName == "Vayne" && hero.LastCastedSpellName() == "VayneTumble")
+                {
+                    return 900;
+                }
+
+            }
+
+            return dashSpeed;
+        }
+
         /// <summary>
         /// Returns true if the unit is dashing.
         /// </summary>
@@ -73,7 +101,7 @@ namespace LeagueSharp.Common
         {
             if (DetectedDashes.ContainsKey(unit.NetworkId))
             {
-                return DetectedDashes[unit.NetworkId].EndTick > Utils.TickCount;
+                return DetectedDashes[unit.NetworkId].EndTick > Utils.TickCountEx;
             }
             return false;
         }

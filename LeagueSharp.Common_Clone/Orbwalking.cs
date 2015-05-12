@@ -86,6 +86,7 @@ namespace LeagueSharp.Common
         // Champs whose auto attacks can't be cancelled
         private static readonly string[] NoCancelChamps = { "Kalista" };
         public static int LastAATick = Utils.TickCountEx;
+        public static int castBlockTime = 0;
         public static float LastAACastDelay = 0;
         public static float LastAADelay = 0;
         public static bool Attack = true;
@@ -244,7 +245,7 @@ namespace LeagueSharp.Common
         /// </summary>
         public static bool CanAttack()
         {
-            if (LastAATick <= Utils.TickCountEx)
+            if (LastAATick <= Utils.TickCountEx && castBlockTime <= Utils.TickCountEx && !Player.IsDashing())
             {
                 var aaDelay = Math.Max(LastAADelay, Player.AttackDelay * 1000);
                 return Utils.TickCountEx + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
@@ -261,7 +262,7 @@ namespace LeagueSharp.Common
             if (!Move)
                 return false;
 
-            if (LastAATick <= Utils.TickCountEx)
+            if (LastAATick <= Utils.TickCountEx && castBlockTime <= Utils.TickCountEx && !Player.IsDashing())
             {
                 var aaCastDelay = Math.Max(LastAACastDelay, Player.AttackCastDelay * 1000);
                 return NoCancelChamps.Contains(Player.ChampionName)
@@ -416,19 +417,17 @@ namespace LeagueSharp.Common
 
                 if (IsAutoAttackReset(spellName) && unit.IsMe)
                 {
-                    var castTime = (unit.Spellbook.CastTime - Game.Time) * 1000;
-                    if (castTime > 0)
-                    {
-                        Utility.DelayAction.Add((int)castTime, ResetAutoAttackTimer);
-                    }
-                    else
-                    {
-                        ResetAutoAttackTimer();
-                    }
+                    ResetAutoAttackTimer();
                 }
 
                 if (!IsAutoAttack(spellName))
                 {
+                    var castTime = (unit.Spellbook.CastTime - Game.Time) * 1000;
+                    if (castTime > 0)
+                    {
+                        castBlockTime = Utils.TickCountEx + (int)castTime;
+                    }
+
                     return;
                 }
 

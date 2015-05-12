@@ -87,8 +87,8 @@ namespace LeagueSharp.Common
         // simulates a click-and-release action of the right mouse button at its current position
         public static void RightClick()
         {
-                mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
-                mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTDOWN, coordX, coordY, 0, 0);
+            mouse_event((int)MouseEvents.MOUSEEVENTF_RIGHTUP, coordX, coordY, 0, 0);
         }
 
         public static void RightClick(Vector2 position)
