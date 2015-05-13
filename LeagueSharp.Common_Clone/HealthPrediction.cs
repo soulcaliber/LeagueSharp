@@ -47,15 +47,15 @@ namespace LeagueSharp.Common
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Utils.TickCount - LastTick <= 60 * 1000)
+            if (Utils.TickCountEx - LastTick <= 60 * 1000)
             {
                 return;
             }
             ActiveAttacks.ToList()
-                .Where(pair => pair.Value.StartTick < Utils.TickCount - 60000)
+                .Where(pair => pair.Value.StartTick < Utils.TickCountEx - 60000)
                 .ToList()
                 .ForEach(pair => ActiveAttacks.Remove(pair.Key));
-            LastTick = Utils.TickCount;
+            LastTick = Utils.TickCountEx;
         }
 
         private static void SpellbookOnStopCast(Spellbook spellbook, SpellbookStopCastEventArgs args)
@@ -72,19 +72,22 @@ namespace LeagueSharp.Common
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is Obj_AI_Hero ||
-                !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
+                (!Orbwalking.IsAutoAttack(args.SData.Name)) || !(args.Target is Obj_AI_Base))
             {
                 return;
             }
 
-            var target = (Obj_AI_Base) args.Target;
+            var target = (Obj_AI_Base)args.Target;
             ActiveAttacks.Remove(sender.NetworkId);
 
             var attackData = new PredictedDamage(
-                sender, target, Utils.TickCount - Game.Ping / 2, sender.AttackCastDelay * 1000,
+                sender, target, Utils.TickCountEx - Game.Ping / 2,
+                sender.AttackCastDelay * 1000
+                    + (sender is Obj_AI_Turret ? 50 + (1000 * sender.Distance(target) + 400) / 1200 : 0),
                 sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
-                sender.IsMelee() ? int.MaxValue : (int) args.SData.MissileSpeed,
-                (float) sender.GetAutoAttackDamage(target, true));
+                (sender.IsMelee() || sender is Obj_AI_Turret) ? int.MaxValue : (int)args.SData.MissileSpeed,
+                (float)sender.GetAutoAttackDamage(target, true));
+
             ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 
@@ -104,7 +107,7 @@ namespace LeagueSharp.Common
                     var landTime = attack.StartTick + attack.Delay +
                                    1000 * unit.Distance(attack.Source) / attack.ProjectileSpeed + delay;
 
-                    if (Utils.TickCount < landTime - delay && landTime < Utils.TickCount + time)
+                    if (Utils.TickCountEx < landTime - delay && landTime < Utils.TickCountEx + time)
                     {
                         attackDamage = attack.Damage;
                     }
@@ -126,21 +129,21 @@ namespace LeagueSharp.Common
             foreach (var attack in ActiveAttacks.Values)
             {
                 var n = 0;
-                if (Utils.TickCount - 100 <= attack.StartTick + attack.AnimationTime &&
+                if (Utils.TickCountEx - 100 <= attack.StartTick + attack.AnimationTime &&
                     attack.Target.IsValidTarget(float.MaxValue, false) &&
                     attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var fromT = attack.StartTick;
-                    var toT = Utils.TickCount + time;
+                    var toT = Utils.TickCountEx + time;
 
                     while (fromT < toT)
                     {
-                        if (fromT >= Utils.TickCount &&
+                        if (fromT >= Utils.TickCountEx &&
                             (fromT + attack.Delay + unit.Distance(attack.Source) / attack.ProjectileSpeed < toT))
                         {
                             n++;
                         }
-                        fromT += (int) attack.AnimationTime;
+                        fromT += (int)attack.AnimationTime;
                     }
                 }
                 predictedDamage += n * attack.Damage;
