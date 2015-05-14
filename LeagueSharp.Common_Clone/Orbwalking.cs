@@ -262,7 +262,7 @@ namespace LeagueSharp.Common
             if (!Move)
                 return false;
 
-            if (LastAATick <= Utils.TickCountEx && castBlockTime <= Utils.TickCountEx && !Player.IsDashing())
+            if (LastAATick <= Utils.TickCountEx)
             {
                 var aaCastDelay = Math.Max(LastAACastDelay, Player.AttackCastDelay * 1000);
                 return NoCancelChamps.Contains(Player.ChampionName)
@@ -653,7 +653,8 @@ namespace LeagueSharp.Common
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion))
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) &&
+                                    minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
                             .OrderByDescending(minion => minion.MaxHealth)
                         )
                     {
@@ -661,17 +662,14 @@ namespace LeagueSharp.Common
                                 1000 * (int)Player.Distance(minion) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
-                        if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
+                        if (predHealth <= 0)
                         {
-                            if (predHealth <= 0)
-                            {
-                                FireOnNonKillableMinion(minion);
-                            }
+                            FireOnNonKillableMinion(minion);
+                        }
 
-                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
-                            {
-                                return minion;
-                            }
+                        if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
+                        {
+                            return minion;
                         }
                     }
                 }
