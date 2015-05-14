@@ -422,11 +422,14 @@ namespace LeagueSharp.Common
 
                 if (!IsAutoAttack(spellName))
                 {
-                    var castTime = (unit.Spellbook.CastTime - Game.Time) * 1000;
-                    if (castTime > 0)
+                    if (unit.IsMe)
                     {
-                        castBlockTime = Utils.TickCountEx + (int)castTime;
-                    }
+                        var castTime = (unit.Spellbook.CastTime - Game.Time) * 1000;
+                        if (castTime > 0)
+                        {
+                            castBlockTime = Utils.TickCountEx + (int)castTime;
+                        }
+                    }                    
 
                     return;
                 }
