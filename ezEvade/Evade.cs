@@ -66,7 +66,7 @@ namespace ezEvade
             Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
             Spellbook.OnCastSpell += Game_OnCastSpell;
             Game.OnUpdate += Game_OnGameUpdate;
-            Game.OnSendPacket += Game_OnSendPacket;
+            //Game.OnSendPacket += Game_OnSendPacket;
             Game.OnEnd += Game_OnGameEnd;
             SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
 
@@ -216,7 +216,7 @@ namespace ezEvade
         {
             if (!spellbook.Owner.IsMe)
                 return;
-
+            
             var sData = spellbook.GetSpell(args.Slot);
             string name;
 
@@ -234,6 +234,25 @@ namespace ezEvade
 
             lastSpellCast = args.Slot;
             lastSpellCastTime = GetTickCount();
+
+            //moved from processPacket
+
+            if (Situation.ShouldDodge())
+            {
+                if (isDodging && SpellDetector.spells.Count() > 0)
+                {
+                    foreach (KeyValuePair<String, SpellData> entry in SpellDetector.windupSpells)
+                    {
+                        SpellData spellData = entry.Value;
+
+                        if (spellData.spellKey == args.Slot) //check if it's a spell that we should block
+                        {
+                            args.Process = false;
+                            return;
+                        }
+                    }
+                }
+            }            
         }
 
         private void Game_OnIssueOrder(Obj_AI_Base hero, GameObjectIssueOrderEventArgs args)
