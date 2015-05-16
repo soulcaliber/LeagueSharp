@@ -149,15 +149,15 @@ namespace DeathRecap
 
         private static void IncrementTotalDamage(DamageInfo damageInfo, ref TotalDamageInfo totalDamage)
         {
-            if ((int)damageInfo.type == DamageTypeMagical)
+            if (damageInfo.type == DamageType.Magical)
             {
                 totalDamage.magicalDamage += damageInfo.damageValue;
             }
-            else if ((int)damageInfo.type == DamageTypePhysical)
+            else if (damageInfo.type == DamageType.Physical)
             {
                 totalDamage.physicalDamage += damageInfo.damageValue;
             }
-            else if ((int)damageInfo.type == DamageTypeTrue)
+            else if (damageInfo.type == DamageType.True)
             {
                 totalDamage.trueDamage += damageInfo.damageValue;
             }
@@ -533,6 +533,9 @@ namespace DeathRecap
                         dmgCache.Add(new DamageInfo(args.SourceNetworkId, source.BaseSkinName, args.Damage, args.Type));
                     }
 
+                    //Console.WriteLine(target.ChampionName + " : " + args.Damage);
+                    //Console.WriteLine("DamageType: " + args.Type);
+
                     if (menu.Item("RecalculateOnDamage").GetValue<bool>())
                     {
                         RecalculateFinalDamage();
@@ -546,10 +549,7 @@ namespace DeathRecap
                 if (heroCache.TryGetValue(args.TargetNetworkId, out target))
                 {
                     myDmgCache.Add(new DamageInfo(args.TargetNetworkId, target.ChampionName, args.Damage, args.Type));
-
-                    //Console.WriteLine(target.ChampionName + " : " + args.Damage);
-                    //Console.WriteLine("DamageType: " + args.Type);
-
+                                        
                     if (menu.Item("RecalculateOnDamage").GetValue<bool>())
                     {
                         RecalculateFinalDamage();
