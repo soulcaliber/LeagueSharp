@@ -87,13 +87,13 @@ namespace TowerRange
                         }
                     }
 
-                    if (tTarget != null && tTarget.IsMe)
+                    if (tTarget != null && (tTarget.IsMe || (turret.IsAlly && tTarget is Obj_AI_Hero)))
                     {
                         Render.Circle.DrawCircle(turret.Position, turretRange,
                             Color.FromArgb(255, 255, 0, 0), 20);
                     }
                     else
-                    {
+                    {                   
                         var alpha = distToTurret > turretRange ? (turretRange + 500 - distToTurret) / 2 : 250;
                         Render.Circle.DrawCircle(turret.Position, turretRange,
                             Color.FromArgb((int)alpha, 0, 255, 0), 10);
