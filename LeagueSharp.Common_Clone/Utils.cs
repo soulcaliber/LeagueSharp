@@ -183,6 +183,11 @@ namespace LeagueSharp.Common
             get { return (int)DateTime.Now.Subtract(assemblyLoadTime).TotalMilliseconds; }
         }
 
+        public static int GameTimeTickCount
+        {
+            get { return (int)(Game.Time * 1000); }
+        }
+
         /// <summary>
         ///     Returns the cursor position on the screen.
         /// </summary>
