@@ -57,7 +57,7 @@ namespace TowerRange
 
                 var circlePadding = 20;
 
-                if (turret.IsValidTarget(float.MaxValue, false))
+                if (turret == null || !turret.IsValid || turret.IsDead)
                 {
                     Utility.DelayAction.Add(1, () => turretCache.Remove(entry.Key));
                     continue;
