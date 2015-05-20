@@ -57,7 +57,7 @@ namespace TowerRange
 
                 var circlePadding = 20;
 
-                if (turret == null || turret.IsDead)
+                if (turret.IsValidTarget(float.MaxValue, false))
                 {
                     Utility.DelayAction.Add(1, () => turretCache.Remove(entry.Key));
                     continue;
@@ -73,7 +73,7 @@ namespace TowerRange
                 if (distToTurret < turretRange + 500)
                 {
                     var tTarget = turret.Target;
-                    if (tTarget != null && tTarget.IsValidTarget(float.MaxValue, false))
+                    if (tTarget.IsValidTarget(float.MaxValue, false))
                     {
                         if (tTarget is Obj_AI_Hero)
                         {
