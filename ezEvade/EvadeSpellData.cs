@@ -23,6 +23,8 @@ namespace ezEvade
 
         AllyChampions,
         EnemyChampions,
+
+        Targetables,
     }
 
     public enum EvadeType

@@ -73,7 +73,7 @@ namespace ezEvade
                 missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
-                
+
                 if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
                 {
                     var hero = missile.SpellCaster;
@@ -149,19 +149,23 @@ namespace ezEvade
                         Evade.channelPosition = myHero.ServerPosition.To2D();
                     }
 
-                    var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
-                    if (castTime > 0 && hero.Spellbook.IsCastingSpell)
+                    if (Evade.menu.Item("CalculateWindupDelay").GetValue<bool>())
                     {
-                        var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
-                        Evade.lastWindupTime = Evade.GetTickCount() + castTime - Game.Ping - extraDelayBuffer;
+                        var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
+                        if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name))
+                        {
+                            //var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
+                            Evade.lastWindupTime = Evade.GetTickCount() + castTime - Game.Ping;
+                        }
                     }
+
                 }
 
 
                 SpellData spellData;
 
                 if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
-                {                    
+                {
                     if (spellData.usePackets == false)
                     {
                         var specialSpellArgs = new SpecialSpellEventArgs();
@@ -228,7 +232,7 @@ namespace ezEvade
                 {
                     return;
                 }
-                
+
                 endTick += extraEndTick;
 
                 Spell newSpell = new Spell();
@@ -258,6 +262,7 @@ namespace ezEvade
             if (Evade.GetTickCount() - lastCheckTime > 1)
             {
                 //CheckCasterDead();
+                CheckSpellCollision();
                 CheckSpellEndTime();
                 AddDetectedSpells();
                 lastCheckTime = Evade.GetTickCount();
@@ -284,7 +289,33 @@ namespace ezEvade
             }
         }
 
-        private void CheckCasterDead()
+        private static void CheckSpellCollision()
+        {
+            if (Evade.menu.Item("CheckSpellCollision").GetValue<bool>() == false)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<int, Spell> entry in detectedSpells)
+            {
+                Spell spell = entry.Value;
+
+                var collisionObject = spell.CheckSpellCollision();
+
+                if (collisionObject != null)
+                {
+                    spell.predictedEndPos = spell.GetSpellProjection(collisionObject.ServerPosition.To2D());
+
+                    if (spell.GetCurrentSpellPosition().Distance(collisionObject.ServerPosition) 
+                        < collisionObject.BoundingRadius + spell.GetSpellRadius())
+                    {
+                        DelayAction.Add(1, () => DeleteSpell(entry.Key));
+                    }
+                }
+            }
+        }
+
+        private static void CheckCasterDead()
         {
             foreach (var hero in HeroManager.Enemies)
             {
@@ -305,8 +336,9 @@ namespace ezEvade
             {
                 var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.GetTickCount()) / 1000 + myHero.BoundingRadius + spell.info.radius;
                 var spellPos = spell.GetCurrentSpellPosition();
+                var spellEndPos = spell.GetSpellEndPosition();
 
-                var projection = heroPos.ProjectOn(spellPos, spell.endPos);
+                var projection = heroPos.ProjectOn(spellPos, spellEndPos);
 
                 return projection.SegmentPoint.Distance(heroPos) <= walkRadius;
             }
@@ -348,6 +380,18 @@ namespace ezEvade
                         drawSpells.Add(spellID, newSpell);
                     }
 
+                    //var spellFlyTime = Evade.GetTickCount() - spell.startTime;
+                    if (spellHitTime < Evade.menu.Item("ReactionTime").GetValue<Slider>().Value)
+                    {
+                        continue;
+                    }
+
+                    if (Evade.menu.Item("CheckSpellCollision").GetValue<bool>()
+                        && spell.predictedEndPos != Vector2.Zero)
+                    {
+                        continue;
+                    }
+
                     if (!spells.ContainsKey(spell.spellID))
                     {
                         if (!(Evade.isDodgeDangerousEnabled() && newSpell.GetSpellDangerLevel() < 3)
@@ -383,7 +427,10 @@ namespace ezEvade
             detectedSpells.Add(spellID, newSpell);
 
             if (processSpell)
+            {
+                CheckSpellCollision();
                 AddDetectedSpells();
+            }
 
             return spellID;
         }
@@ -446,7 +493,7 @@ namespace ezEvade
                         s => (s.charName == hero.ChampionName) || (s.charName == "AllChampions")))
                     {
                         //Game.PrintChat(spell.spellName); 
-                        
+
                         if (!(spell.spellType == SpellType.Circular || spell.spellType == SpellType.Line))
                             continue;
 

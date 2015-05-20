@@ -13,10 +13,55 @@ namespace ezEvade
     public static class Situation
     {
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
+        private static Dictionary<int, Obj_AI_Turret> turretCache = new Dictionary<int, Obj_AI_Turret>();
 
         static Situation()
         {
+            InitializeCache();
+        }
 
+        private static void InitializeCache()
+        {
+            foreach (var obj in ObjectManager.Get<Obj_AI_Turret>())
+            {
+                if (!turretCache.ContainsKey(obj.NetworkId))
+                {
+                    turretCache.Add(obj.NetworkId, obj);
+                }
+            }
+        }
+
+        public static bool IsUnderTurret(this Vector2 pos, bool checkEnemy = true)
+        {
+            if (!Evade.menu.Item("PreventDodgingUnderTower").GetValue<bool>())
+            {
+                return false;
+            }
+            
+            var turretRange = 800 + myHero.BoundingRadius;
+
+            foreach (var entry in turretCache)
+            {
+                var turret = entry.Value;
+                if (turret == null || !turret.IsValid || turret.IsDead)
+                {
+                    Utility.DelayAction.Add(1, () => turretCache.Remove(entry.Key));
+                    continue;
+                }
+
+                if (checkEnemy && turret.IsAlly)
+                {
+                    continue;
+                }
+
+                var distToTurret = pos.Distance(turret.Position.To2D());                
+                if (distToTurret <= turretRange)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool ShouldDodge()
@@ -51,6 +96,7 @@ namespace ezEvade
         {
             if (Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<bool>() == false
                 || CommonChecks()
+                || Evade.lastWindupTime - Evade.GetTickCount() > 0
                 )
             {
                 return false;

@@ -100,11 +100,15 @@ namespace ezEvade
             miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
             miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
             miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
+            miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(true));
+            miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(true));
+            //miscMenu.AddItem(new MenuItem("FasterCrossing", "Fast Crossing").SetValue(false));
             miscMenu.AddItem(new MenuItem("LoadPingTester", "Load Ping Tester").SetValue(true));
             //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
 
-            Menu limiterMenu = new Menu("Limiter", "Limiter");
+            Menu limiterMenu = new Menu("Humanizer", "Limiter");
             limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(50, 0, 200)));
+            limiterMenu.AddItem(new MenuItem("ReactionTime", "Reaction Time").SetValue(new Slider(0, 0, 1000)));
             miscMenu.AddSubMenu(limiterMenu);
 
             Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
@@ -227,7 +231,7 @@ namespace ezEvade
                 lastStopEvadeTime = GetTickCount() + Game.Ping + 100;
             }
 
-            if (EvadeSpell.lastSpellEvadeCommand != null && EvadeSpell.lastSpellEvadeCommand.timestamp + Game.Ping + 100 > GetTickCount())
+            if (EvadeSpell.lastSpellEvadeCommand != null && EvadeSpell.lastSpellEvadeCommand.timestamp + Game.Ping + 150 > GetTickCount())
             {
                 args.Process = false;
             }
@@ -440,7 +444,6 @@ namespace ezEvade
                                     else if (EvadeSpell.PreferEvadeSpell())
                                     {
                                         lastPosInfo = EvadeHelper.SetAllUndodgeable();
-                                        EvadeSpell.UseEvadeSpell(); //using spells)
                                     }
                                 }
                             }
@@ -505,13 +508,18 @@ namespace ezEvade
 
         private void SpellDetector_OnProcessDetectedSpells()
         {
+            if (Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false)
+            {
+                lastPosInfo = EvadeHelper.SetAllUndodgeable();
+                EvadeSpell.UseEvadeSpell();
+                return;
+            }
+
             if (EvadeHelper.CheckDangerousPos(myHero.ServerPosition.To2D(), 0))
             {
-                if (Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false
-                    || EvadeSpell.PreferEvadeSpell())
+                if (EvadeSpell.PreferEvadeSpell())
                 {
                     lastPosInfo = EvadeHelper.SetAllUndodgeable();
-                    EvadeSpell.UseEvadeSpell(); //using spells
                 }
                 else
                 {

@@ -165,7 +165,9 @@ namespace ezEvade
                     if (spell.info.spellType == SpellType.Line)
                     {
                         Vector2 spellPos = spell.GetCurrentSpellPosition();
-                        DrawLineRectangle(spellPos, spell.endPos, (int)spell.GetSpellRadius(), spellDrawingWidth, spellDrawingConfig.Color);
+                        Vector2 spellEndPos = spell.GetSpellEndPosition();
+
+                        DrawLineRectangle(spellPos, spellEndPos, (int)spell.GetSpellRadius(), spellDrawingWidth, spellDrawingConfig.Color);
 
                         /*foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
                         {

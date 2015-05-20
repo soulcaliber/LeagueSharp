@@ -20,7 +20,8 @@ namespace ezEvade
         public int projectileID;
         public SpellData info;
         public int spellID;
-        public GameObject spellObject;
+        public GameObject spellObject = null;
+        public Vector2 predictedEndPos = Vector2.Zero;
         public float evadeTime = float.MinValue;
         public float spellHitTime = float.MinValue;
 
@@ -82,11 +83,21 @@ namespace ezEvade
             }
         }
 
-        public static Vector2 GetSpellProjection(this Spell spell, Vector2 pos)
+        public static Vector2 GetSpellProjection(this Spell spell, Vector2 pos, bool predictPos = false)
         {
             if (spell.info.spellType == SpellType.Line)
             {
-                return pos.ProjectOn(spell.startPos, spell.endPos).SegmentPoint;
+                if (predictPos)
+                {
+                    var spellPos = spell.GetCurrentSpellPosition();
+                    var spellEndPos = spell.GetSpellEndPosition();
+
+                    return pos.ProjectOn(spellPos, spellEndPos).SegmentPoint;
+                }
+                else
+                {
+                    return pos.ProjectOn(spell.startPos, spell.endPos).SegmentPoint;
+                }
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
@@ -96,11 +107,11 @@ namespace ezEvade
             return Vector2.Zero;
         }
 
-        public static bool CheckSpellCollision(this Spell spell)
+        public static Obj_AI_Base CheckSpellCollision(this Spell spell)
         {
             if (spell.info.collisionObjects.Count() < 1)
             {
-                return false;
+                return null;
             }
 
             List<Obj_AI_Base> collisionCandidates = new List<Obj_AI_Base>();
@@ -109,7 +120,8 @@ namespace ezEvade
 
             if (spell.info.collisionObjects.Contains(CollisionObjectType.EnemyChampions))
             {
-                foreach (var hero in HeroManager.Allies.Where(h => h.Distance(spellPos) < distanceToHero && !h.IsDead))
+                foreach (var hero in HeroManager.Allies
+                    .Where(h => !h.IsMe && h.IsValidTarget(distanceToHero, false, spellPos.To3D())))
                 {
                     collisionCandidates.Add(hero);
                 }
@@ -118,8 +130,14 @@ namespace ezEvade
             if (spell.info.collisionObjects.Contains(CollisionObjectType.EnemyMinions))
             {
                 foreach (var minion in ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(h=> h.Team == Evade.myHero.Team && h.Distance(spellPos) < distanceToHero && !h.IsDead))
+                    .Where(h => h.Team == Evade.myHero.Team && h.IsValidTarget(distanceToHero, false, spellPos.To3D())))
                 {
+                    if (minion.BaseSkinName.ToLower() == "teemomushroom"
+                        || minion.BaseSkinName.ToLower() == "shacobox2")
+                    {
+                        continue;
+                    }
+
                     collisionCandidates.Add(minion);
                 }
             }
@@ -128,13 +146,13 @@ namespace ezEvade
 
             foreach (var candidate in sortedCandidates)
             {
-                if (EvadeHelper.InSkillShot(spell, candidate.ServerPosition.To2D(), candidate.BoundingRadius))
+                if (EvadeHelper.InSkillShot(spell, candidate.ServerPosition.To2D(), candidate.BoundingRadius, false))
                 {
-                    return true;
+                    return candidate;
                 }
             }
 
-            return false;
+            return null;
         }
 
         public static float GetSpellHitTime(this Spell spell, Vector2 pos)
@@ -189,13 +207,18 @@ namespace ezEvade
             var pSpellDir = spell.direction.Perpendicular();
             var spellRadius = spell.GetSpellRadius();
             var spellPos = spell.GetCurrentSpellPosition() - spellDir * myBoundingRadius; //leave some space at back of spell
-            var endPos = spell.endPos + spellDir * myBoundingRadius; //leave some space at the front of spell
+            var endPos = spell.GetSpellEndPosition() + spellDir * myBoundingRadius; //leave some space at the front of spell
 
             var startRightPos = spellPos + pSpellDir * (spellRadius + myBoundingRadius);
             var endLeftPos = endPos - pSpellDir * (spellRadius + myBoundingRadius);
 
 
             return new BoundingBox(new Vector3(endLeftPos.X, endLeftPos.Y, -1), new Vector3(startRightPos.X, startRightPos.Y, 1));
+        }
+
+        public static Vector2 GetSpellEndPosition(this Spell spell)
+        {
+            return spell.predictedEndPos == Vector2.Zero ? spell.endPos : spell.predictedEndPos;
         }
 
         public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0)
@@ -228,7 +251,7 @@ namespace ezEvade
                 spellPos = spell.spellObject.Position.To2D();
             }
 
-            if (delay > 0)
+            if (delay > 0 && spell.info.projectileSpeed != float.MaxValue)
             {
                 spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (delay / 1000);
             }

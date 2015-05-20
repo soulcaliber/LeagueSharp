@@ -285,6 +285,26 @@ namespace ezEvade
             return d(P1, P2);
         }
 
+        public static float CPAPointsEx(Vector2 p1, Vector2 v1, Vector2 p2, Vector2 v2, Vector2 p1end, Vector2 p2end,
+            out Vector2 p1out, out Vector2 p2out)
+        {
+            Track Tr1 = new Track(p1, v1);
+            Track Tr2 = new Track(p2, v2);
+
+            float ctime = Math.Max(0, cpa_time(Tr1, Tr2));
+
+            Vector2 P1 = Tr1.P0 + (ctime * Tr1.v);
+            Vector2 P2 = Tr2.P0 + (ctime * Tr2.v);
+
+            P1 = d(p1, P1) > d(p1, p1end) ? p1end : P1;
+            P2 = d(p2, P2) > d(p2, p2end) ? p2end : P2;
+
+            p1out = P1;
+            p2out = P2;
+
+            return d(P1, P2);
+        }
+
         public static float CPATime(Vector2 p1, Vector2 v1, Vector2 p2, Vector2 v2)
         {
             Track Tr1 = new Track(p1, v1);

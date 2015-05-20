@@ -54,7 +54,7 @@ namespace ezEvade
         private static float lastTickCountTimerTick = 0;
         private static float lastWatchTimerTick = 0;
 
-        private static float getGameTimer { get { return Game.ClockTime*1000; } }
+        private static float getGameTimer { get { return Game.ClockTime * 1000; } }
         private static float getTickCountTimer { get { return Environment.TickCount & int.MaxValue; } }
         private static float getWatchTimer { get { return Evade.GetTickCount(); } }
 
@@ -63,6 +63,7 @@ namespace ezEvade
 
         private static EvadeCommand lastTestMoveToCommand;
 
+        private static float lastSpellCastTimeEx = 0;
         private static float lastSpellCastTime = 0;
         private static float lastHeroSpellCastTime = 0;
 
@@ -82,10 +83,13 @@ namespace ezEvade
             Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
 
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
-
+            Spellbook.OnCastSpell += Game_OnCastSpell;
             GameObject.OnFloatPropertyChange += GameObject_OnFloatPropertyChange;
             //GameObject.OnIntegerPropertyChange += GameObject_OnIntegerPropertyChange;
             //Game.OnGameNotifyEvent += Game_OnGameNotifyEvent;
+
+
+            Obj_AI_Hero.OnNewPath += ObjAiHeroOnOnNewPath;
 
             SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
 
@@ -122,6 +126,22 @@ namespace ezEvade
         {
             Console.WriteLine("" + args.Input);
 
+        }
+
+        private static void ObjAiHeroOnOnNewPath(Obj_AI_Base unit, GameObjectNewPathEventArgs args)
+        {
+            if (unit.IsMe)
+            {
+                Console.WriteLine("Dash windup: " + (Evade.GetTickCount() - EvadeSpell.lastSpellEvadeCommand.timestamp));
+            }
+        }
+
+        private void Game_OnCastSpell(Spellbook spellbook, SpellbookCastSpellEventArgs args)
+        {
+            if (!spellbook.Owner.IsMe)
+                return;
+
+            lastSpellCastTimeEx = Evade.GetTickCount();
         }
 
         private void SpellDetector_OnProcessDetectedSpells()
@@ -215,7 +235,7 @@ namespace ezEvade
         {
             if (hero.IsMinion)
                 return;
-            
+
             if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
             {
                 Console.WriteLine(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
@@ -454,7 +474,7 @@ namespace ezEvade
                 lastTimerCheck = getTickCountTimer;
             }
 
-            
+
             Drawing.DrawText(10, 70, Color.White, "Timer1 Freq: " + (getGameTimer - lastGameTimerStart));
             Drawing.DrawText(10, 90, Color.White, "Timer2 Freq: " + (getTickCountTimer - lastTickCountTimerStart));
             Drawing.DrawText(10, 110, Color.White, "Timer3 Freq: " + (getWatchTimer - lastWatchTimerStart));
@@ -485,11 +505,25 @@ namespace ezEvade
             }
         }
 
+        private void TestUnderTurret()
+        {
+            if (Game.CursorPos.To2D().IsUnderTurret())
+            {
+                Render.Circle.DrawCircle(Game.CursorPos, 50, Color.Red, 3);
+            }
+            else
+            {
+                Render.Circle.DrawCircle(Game.CursorPos, 50, Color.White, 3);
+            }
+        }
+
         private void Drawing_OnDraw(EventArgs args)
         {
             //PrintTimers();
 
             //EvadeHelper.CheckMovePath(Game.CursorPos.To2D());            
+
+            //TestUnderTurret();
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
@@ -543,7 +577,7 @@ namespace ezEvade
 
                 var dir = (Game.CursorPos - myHero.Position).Normalized();
                 var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
-                
+
                 DelayAction.Add(1, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
             }
 

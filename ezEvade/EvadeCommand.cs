@@ -22,6 +22,7 @@ namespace ezEvade
 
         public EvadeOrderCommand order;
         public Vector2 targetPosition;
+        public Obj_AI_Base target;
         public float timestamp;
         public bool isProcessed;
         public EvadeSpellData evadeSpellData;
@@ -42,6 +43,20 @@ namespace ezEvade
                 isProcessed = false
             };            
             myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);            
+        }
+
+        public static void CastSpell(EvadeSpellData spellData, Obj_AI_Base target)
+        {
+            EvadeSpell.lastSpellEvadeCommand = new EvadeCommand
+            {
+                order = EvadeOrderCommand.CastSpell,
+                target = target,
+                evadeSpellData = spellData,
+                timestamp = Evade.GetTickCount(),
+                isProcessed = false
+            };
+
+            myHero.Spellbook.CastSpell(spellData.spellKey, target, false);
         }
 
         public static void CastSpell(EvadeSpellData spellData, Vector2 movePos)

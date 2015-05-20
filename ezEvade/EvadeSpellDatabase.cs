@@ -382,6 +382,69 @@ namespace ezEvade
 
             #endregion
 
+            #region Yasuo
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Yasuo",
+                dangerlevel = 1,
+                name = "SweepingBlade",
+                spellName = "YasuoDashWrapper",
+                range = 475,
+                fixedRange = true,
+                speed = 1000,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.EnemyChampions, SpellTargets.EnemyMinions },
+            });
+
+            #endregion
+
+            #region MasterYi
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "MasterYi",
+                dangerlevel = 3,
+                name = "AlphaStrike",
+                spellName = "AlphaStrike",
+                range = 600,
+                speed = float.MaxValue,
+                spellDelay = 0,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.Blink,
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.EnemyChampions, SpellTargets.EnemyMinions },
+            });
+
+            #endregion
+
+            #region Katarina
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Katarina",
+                dangerlevel = 3,
+                name = "KatarinaE",
+                spellName = "KatarinaE",
+                range = 700,
+                speed = float.MaxValue,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Blink, //behind target
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.Targetables },
+            });
+
+            #endregion
+
+            #region AllChampions
+
             Spells.Add(
             new EvadeSpellData
             {
@@ -426,6 +489,8 @@ namespace ezEvade
                 isItem = true,
                 itemID = ItemId.Wooglets_Witchcap,
             });
+
+            #endregion AllChampions
         }
     }
 }
