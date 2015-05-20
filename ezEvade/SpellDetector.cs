@@ -39,6 +39,7 @@ namespace ezEvade
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
 
         public static float lastCheckTime = 0;
+        public static float lastCheckSpellCollisionTime = 0;
 
         public static Menu menu;
         public static Menu spellMenu;
@@ -261,11 +262,16 @@ namespace ezEvade
         {
             if (Evade.GetTickCount() - lastCheckTime > 1)
             {
-                //CheckCasterDead();
-                CheckSpellCollision();
+                //CheckCasterDead();                
                 CheckSpellEndTime();
                 AddDetectedSpells();
                 lastCheckTime = Evade.GetTickCount();
+            }
+
+            if (Evade.GetTickCount() - lastCheckSpellCollisionTime > 100)
+            {
+                CheckSpellCollision();
+                lastCheckSpellCollisionTime = Evade.GetTickCount();
             }
         }
 
