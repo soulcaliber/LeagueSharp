@@ -504,7 +504,7 @@ namespace ezEvade
             {
                 dodgeOnlyDangerous = bDodgeOnlyDangerous;
             }
-        }
+        }       
 
         private void SpellDetector_OnProcessDetectedSpells()
         {
@@ -529,14 +529,11 @@ namespace ezEvade
                     {
                         return;
                     }*/
-
-                    if (lastPosInfo != null && posInfo != null && lastPosInfo.posDangerCount < posInfo.posDangerCount)
+                    if (posInfo != null)
                     {
-                        return;
+                        lastPosInfo = EvadeHelper.CompareLastMovePos(posInfo);                        
                     }
-
-                    lastPosInfo = posInfo;
-
+                    
                     CheckHeroInDanger();
                     DodgeSkillShots(); //walking
                     EvadeSpell.UseEvadeSpell(); //using spells

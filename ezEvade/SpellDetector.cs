@@ -260,18 +260,18 @@ namespace ezEvade
 
         private void Game_OnGameUpdate(EventArgs args)
         {
+            if (Evade.GetTickCount() - lastCheckSpellCollisionTime > 100)
+            {
+                CheckSpellCollision();
+                lastCheckSpellCollisionTime = Evade.GetTickCount();
+            }
+
             if (Evade.GetTickCount() - lastCheckTime > 1)
             {
                 //CheckCasterDead();                
                 CheckSpellEndTime();
                 AddDetectedSpells();
                 lastCheckTime = Evade.GetTickCount();
-            }
-
-            if (Evade.GetTickCount() - lastCheckSpellCollisionTime > 100)
-            {
-                CheckSpellCollision();
-                lastCheckSpellCollisionTime = Evade.GetTickCount();
             }
         }
 

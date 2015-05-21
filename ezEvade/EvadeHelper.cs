@@ -743,6 +743,8 @@ namespace ezEvade
 
         public static bool PositionInfoStillValid(PositionInfo posInfo, float moveSpeed = 0)
         {
+            return true; //too buggy
+
             if (moveSpeed == 0)
                 moveSpeed = myHero.MoveSpeed;
 
@@ -750,6 +752,11 @@ namespace ezEvade
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells) //final check
             {
                 Spell spell = entry.Value;
+
+                if (posInfo.undodgeableSpells.Contains(entry.Key))
+                {
+                    continue;
+                }
 
                 float timeElapsed = Evade.GetTickCount() - posInfo.timestamp;
                 if (spell.info.spellType == SpellType.Line)
@@ -1193,6 +1200,28 @@ namespace ezEvade
         public static bool isSamePosInfo(PositionInfo posInfo1, PositionInfo posInfo2)
         {
             return new HashSet<int>(posInfo1.spellList).SetEquals(posInfo2.spellList);
+        }
+
+        public static PositionInfo CompareLastMovePos(PositionInfo newPosInfo)
+        {          
+            PositionInfo posInfo = null;
+            var path = myHero.Path;
+            if (path.Length > 0)
+            {
+                var movePos = path[path.Length - 1].To2D();
+                posInfo = EvadeHelper.CanHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0, false);
+            }
+            else
+            {
+                posInfo = EvadeHelper.CanHeroWalkToPos(myHero.ServerPosition.To2D(), myHero.MoveSpeed, 0, 0, false);
+            }
+
+            if (posInfo.posDangerCount < newPosInfo.posDangerCount)
+            {
+                return posInfo;
+            }
+
+            return newPosInfo;
         }
 
         public static int GetHighestDetectedSpellID()
