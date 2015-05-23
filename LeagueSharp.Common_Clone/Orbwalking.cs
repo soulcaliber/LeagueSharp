@@ -69,7 +69,7 @@ namespace LeagueSharp.Common
         //Spells that are not attacks even if they have the "attack" word in their name.
         private static readonly string[] NoAttacks =
         {
-            "jarvanivcataclysmattack", "monkeykingdoubleattack",
+            "jarvanivcataclysmattack", "monkeykingdoubleattack", "sivirwattackbounce",
             "shyvanadoubleattack", "shyvanadoubleattackdragon", "zyragraspingplantattack", "zyragraspingplantattack2",
             "zyragraspingplantattackfire", "zyragraspingplantattack2fire", "viktorpowertransfer"
         };
@@ -243,12 +243,13 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the player's auto-attack is ready.
         /// </summary>
-        public static bool CanAttack()
+        public static bool CanAttack(float extraWindup = 90)
         {
             if (LastAATick <= Utils.TickCountEx && castBlockTime <= Utils.TickCountEx && !Player.IsDashing())
             {
                 var aaDelay = Math.Max(LastAADelay, Player.AttackDelay * 1000);
-                return Utils.TickCountEx + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+                return Utils.TickCountEx + Game.Ping / 2 + 25 
+                    >= LastAATick + aaDelay * 1000 + extraWindup && Attack;
             }
 
             return false;
@@ -355,7 +356,7 @@ namespace LeagueSharp.Common
         {
             try
             {
-                if (target.IsValidTarget() && CanAttack())
+                if (target.IsValidTarget() && CanAttack(extraWindup))
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
