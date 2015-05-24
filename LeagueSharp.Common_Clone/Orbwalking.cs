@@ -243,13 +243,12 @@ namespace LeagueSharp.Common
         /// <summary>
         ///     Returns if the player's auto-attack is ready.
         /// </summary>
-        public static bool CanAttack(float extraWindup = 90)
+        public static bool CanAttack()
         {
             if (LastAATick <= Utils.TickCountEx && castBlockTime <= Utils.TickCountEx && !Player.IsDashing())
             {
                 var aaDelay = Math.Max(LastAADelay, Player.AttackDelay * 1000);
-                return Utils.TickCountEx + Game.Ping / 2 + 25 
-                    >= LastAATick + aaDelay * 1000 + extraWindup && Attack;
+                return Utils.TickCountEx + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
             }
 
             return false;
@@ -356,7 +355,7 @@ namespace LeagueSharp.Common
         {
             try
             {
-                if (target.IsValidTarget() && CanAttack(extraWindup))
+                if (target.IsValidTarget() && CanAttack())
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -430,7 +429,7 @@ namespace LeagueSharp.Common
                         {
                             castBlockTime = Utils.TickCountEx + (int)castTime;
                         }
-                    }                    
+                    }
 
                     return;
                 }
