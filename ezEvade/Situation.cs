@@ -13,22 +13,36 @@ namespace ezEvade
     public static class Situation
     {
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        private static Dictionary<int, Obj_AI_Turret> turretCache = new Dictionary<int, Obj_AI_Turret>();
-
+        
         static Situation()
         {
-            InitializeCache();
+
         }
 
-        private static void InitializeCache()
+        public static bool isNearEnemy(this Vector2 pos, float distance, bool alreadyNear = true)
         {
-            foreach (var obj in ObjectManager.Get<Obj_AI_Turret>())
+            if (Evade.menu.Item("PreventDodgingNearEnemy").GetValue<bool>())
             {
-                if (!turretCache.ContainsKey(obj.NetworkId))
+                var curDistToEnemies = myHero.ServerPosition.To2D().GetDistanceToChampions();
+                var posDistToEnemies = pos.GetDistanceToChampions();
+                
+                if (curDistToEnemies < distance)
                 {
-                    turretCache.Add(obj.NetworkId, obj);
+                    if (curDistToEnemies > posDistToEnemies)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (posDistToEnemies < distance)
+                    {
+                        return true;
+                    }
                 }
             }
+
+            return false;
         }
 
         public static bool IsUnderTurret(this Vector2 pos, bool checkEnemy = true)
@@ -37,15 +51,15 @@ namespace ezEvade
             {
                 return false;
             }
-            
+
             var turretRange = 800 + myHero.BoundingRadius;
 
-            foreach (var entry in turretCache)
+            foreach (var entry in ObjectCache.turrets)
             {
                 var turret = entry.Value;
                 if (turret == null || !turret.IsValid || turret.IsDead)
                 {
-                    Utility.DelayAction.Add(1, () => turretCache.Remove(entry.Key));
+                    Utility.DelayAction.Add(1, () => ObjectCache.turrets.Remove(entry.Key));
                     continue;
                 }
 
@@ -54,7 +68,7 @@ namespace ezEvade
                     continue;
                 }
 
-                var distToTurret = pos.Distance(turret.Position.To2D());                
+                var distToTurret = pos.Distance(turret.Position.To2D());
                 if (distToTurret <= turretRange)
                 {
                     return true;
@@ -66,7 +80,7 @@ namespace ezEvade
 
         public static bool ShouldDodge()
         {
-            if(Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false
+            if (Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false
                 || CommonChecks()
                 || myHero.IsImmovable
                 )
@@ -87,16 +101,16 @@ namespace ezEvade
                 return false;
             }
 
-            
 
-              return true;
+
+            return true;
         }
 
         public static bool ShouldUseEvadeSpell()
         {
-            if (Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<bool>() == false
+            if (Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<KeyBind>().Active == false
                 || CommonChecks()
-                || Evade.lastWindupTime - Evade.GetTickCount() > 0
+                || Evade.lastWindupTime - Evade.TickCount > 0
                 )
             {
                 return false;
@@ -123,13 +137,13 @@ namespace ezEvade
         {
             return (myHero.ChampionName == "Sion" && myHero.HasBuff("SionR"))
                 ;
-                
-                //Untargetable
-                //|| (myHero.ChampionName == "KogMaw" && myHero.HasBuff("kogmawicathiansurprise"))
-                //|| (myHero.ChampionName == "Karthus" && myHero.HasBuff("KarthusDeathDefiedBuff"))
 
-                //Invulnerable
-                //|| myHero.HasBuff("kalistarallyspelllock"); 
+            //Untargetable
+            //|| (myHero.ChampionName == "KogMaw" && myHero.HasBuff("kogmawicathiansurprise"))
+            //|| (myHero.ChampionName == "Karthus" && myHero.HasBuff("KarthusDeathDefiedBuff"))
+
+            //Invulnerable
+            //|| myHero.HasBuff("kalistarallyspelllock"); 
         }
 
         //from Evade by Esk0r
@@ -146,25 +160,25 @@ namespace ezEvade
             }
 
             //Sivir E
-            if (unit.LastCastedSpellName() == "SivirE" && (Evade.GetTickCount() - Evade.lastSpellCastTime) < 300)
+            if (unit.LastCastedSpellName() == "SivirE" && (Evade.TickCount - Evade.lastSpellCastTime) < 300)
             {
                 return true;
             }
 
             //Morganas E
-            if (unit.LastCastedSpellName() == "BlackShield" && (Evade.GetTickCount() - Evade.lastSpellCastTime) < 300)
+            if (unit.LastCastedSpellName() == "BlackShield" && (Evade.TickCount - Evade.lastSpellCastTime) < 300)
             {
                 return true;
             }
 
             //Nocturnes E
-            if (unit.LastCastedSpellName() == "NocturneShit" && (Evade.GetTickCount() - Evade.lastSpellCastTime) < 300)
+            if (unit.LastCastedSpellName() == "NocturneShit" && (Evade.TickCount - Evade.lastSpellCastTime) < 300)
             {
                 return true;
             }
 
             return false;
         }
-                
+
     }
 }

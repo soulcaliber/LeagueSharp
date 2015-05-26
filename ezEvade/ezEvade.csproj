@@ -67,7 +67,10 @@
     <Compile Include="EvadeTester.cs" />
     <Compile Include="MathUtils.cs" />
     <Compile Include="MathUtilsCPA.cs" />
+    <Compile Include="ObjectCache.cs" />
     <Compile Include="PingTester.cs" />
+    <Compile Include="Position.cs" />
+    <Compile Include="PositionInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Situation.cs" />

@@ -155,8 +155,8 @@ namespace ezEvade
                         var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
                         if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name))
                         {
-                            //var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
-                            Evade.lastWindupTime = Evade.GetTickCount() + castTime - Game.Ping;
+                            var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
+                            Evade.lastWindupTime = Evade.TickCount + castTime - Game.Ping - extraDelayBuffer;
                         }
                     }
 
@@ -238,8 +238,8 @@ namespace ezEvade
 
                 Spell newSpell = new Spell();
 
-                newSpell.startTime = Evade.GetTickCount();
-                newSpell.endTime = Evade.GetTickCount() + endTick;
+                newSpell.startTime = Evade.TickCount;
+                newSpell.endTime = Evade.TickCount + endTick;
                 newSpell.startPos = startPosition;
                 newSpell.endPos = endPosition;
                 newSpell.direction = direction;
@@ -260,18 +260,18 @@ namespace ezEvade
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (Evade.GetTickCount() - lastCheckSpellCollisionTime > 100)
+            if (Evade.TickCount - lastCheckSpellCollisionTime > 100)
             {
                 CheckSpellCollision();
-                lastCheckSpellCollisionTime = Evade.GetTickCount();
+                lastCheckSpellCollisionTime = Evade.TickCount;
             }
 
-            if (Evade.GetTickCount() - lastCheckTime > 1)
+            if (Evade.TickCount - lastCheckTime > 1)
             {
                 //CheckCasterDead();                
                 CheckSpellEndTime();
                 AddDetectedSpells();
-                lastCheckTime = Evade.GetTickCount();
+                lastCheckTime = Evade.TickCount;
             }
         }
 
@@ -290,7 +290,7 @@ namespace ezEvade
                     }
                 }
 
-                if (spell.endTime < Evade.GetTickCount() || CanHeroWalkIntoSpell(spell) == false)
+                if (spell.endTime < Evade.TickCount || CanHeroWalkIntoSpell(spell) == false)
                     DelayAction.Add(1, () => DeleteSpell(entry.Key));
             }
         }
@@ -321,26 +321,13 @@ namespace ezEvade
             }
         }
 
-        private static void CheckCasterDead()
-        {
-            foreach (var hero in HeroManager.Enemies)
-            {
-                foreach (var spell in spells.Where(
-                        s => (s.Value.heroID == hero.NetworkId && hero.IsDead))) //check this condition
-                {
-                    if (spell.Value.spellObject == null)
-                        DelayAction.Add(1, () => DeleteSpell(spell.Key));
-                }
-            }
-        }
-
         public static bool CanHeroWalkIntoSpell(Spell spell)
         {
             Vector2 heroPos = myHero.Position.To2D();
 
             if (spell.info.spellType == SpellType.Line)
             {
-                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.GetTickCount()) / 1000 + myHero.BoundingRadius + spell.info.radius;
+                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius;
                 var spellPos = spell.GetCurrentSpellPosition();
                 var spellEndPos = spell.GetSpellEndPosition();
 
@@ -350,7 +337,7 @@ namespace ezEvade
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.GetTickCount()) / 1000 + myHero.BoundingRadius + spell.info.radius;
+                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius;
 
                 if (heroPos.Distance(spell.endPos) < walkRadius)
                 {
@@ -386,18 +373,25 @@ namespace ezEvade
                         drawSpells.Add(spellID, newSpell);
                     }
 
-                    //var spellFlyTime = Evade.GetTickCount() - spell.startTime;
+                    //var spellFlyTime = Evade.GetTickCount - spell.startTime;
                     if (spellHitTime < Evade.menu.Item("ReactionTime").GetValue<Slider>().Value)
                     {
                         continue;
                     }
 
-                    if (Evade.menu.Item("CheckSpellCollision").GetValue<bool>()
-                        && spell.predictedEndPos != Vector2.Zero)
+                    var dodgeInterval = menu.Item("DodgeInterval").GetValue<Slider>().Value;
+                    if (Evade.lastPosInfo != null && dodgeInterval > 0)
                     {
-                        continue;
-                    }
+                        var timeElapsed = Evade.TickCount - Evade.lastPosInfo.timestamp;
 
+                        if (dodgeInterval > timeElapsed)
+                        {
+                            //var delay = dodgeInterval - timeElapsed;
+                            //DelayAction.Add((int)delay, () => SpellDetector_OnProcessDetectedSpells());
+                            continue;
+                        }
+                    }
+                                        
                     if (!spells.ContainsKey(spell.spellID))
                     {
                         if (!(Evade.isDodgeDangerousEnabled() && newSpell.GetSpellDangerLevel() < 3)
@@ -415,6 +409,12 @@ namespace ezEvade
 
                             spellAdded = true;
                         }
+                    }
+
+                    if (Evade.menu.Item("CheckSpellCollision").GetValue<bool>()
+                        && spell.predictedEndPos != Vector2.Zero)
+                    {
+                        spellAdded = false;
                     }
                 }
             }
@@ -451,6 +451,73 @@ namespace ezEvade
         public static int GetCurrentSpellID()
         {
             return spellIDCount;
+        }
+
+        public static List<int> GetSpellList()
+        {
+            List<int> spellList = new List<int>();
+
+            foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
+            {
+                Spell spell = entry.Value;
+                spellList.Add(spell.spellID);
+            }
+
+            return spellList;
+        }
+
+        public static int GetHighestDetectedSpellID()
+        {
+            int highest = 0;
+
+            foreach (var spell in SpellDetector.spells)
+            {
+                highest = Math.Max(highest, spell.Key);
+            }
+
+            return highest;
+        }
+
+        public static float GetLowestEvadeTime(out Spell lowestSpell)
+        {
+            float lowest = float.MaxValue;
+            lowestSpell = null;
+
+            foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
+            {
+                Spell spell = entry.Value;
+
+                if (spell.spellHitTime != float.MinValue)
+                {
+                    //Game.PrintChat("spellhittime: " + spell.spellHitTime);
+                    lowest = Math.Min(lowest, (spell.spellHitTime - spell.evadeTime));
+                    lowestSpell = spell;
+                }
+            }
+
+            return lowest;
+        }
+
+        public static Spell GetMostDangerousSpell(bool hasProjectile = false)
+        {
+            int maxDanger = 0;
+            Spell maxDangerSpell = null;
+
+            foreach (Spell spell in SpellDetector.spells.Values)
+            {
+                if (!hasProjectile || (spell.info.projectileSpeed > 0 && spell.info.projectileSpeed != float.MaxValue))
+                {
+                    var dangerlevel = spell.GetSpellDangerLevel();
+
+                    if (dangerlevel > maxDanger)
+                    {
+                        maxDanger = dangerlevel;
+                        maxDangerSpell = spell;
+                    }
+                }
+            }
+
+            return maxDangerSpell;
         }
 
         public static void InitChannelSpells()

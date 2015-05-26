@@ -217,6 +217,26 @@ namespace ezEvade
                         
             #endregion
 
+            #region LeeSin
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "LeeSin",
+                dangerlevel = 3,
+                name = "LeeSinE",
+                spellName = "BlindMonkEOne",
+                range = 700,
+                speed = 1400,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.AllyChampions, SpellTargets.AllyMinions },
+            });
+
+            #endregion
+
             #region Lucian
 
             Spells.Add(
@@ -324,6 +344,38 @@ namespace ezEvade
 
             #endregion
 
+            #region Shaco
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Shaco",
+                dangerlevel = 3,
+                name = "Deceive",
+                spellName = "Deceive",
+                range = 400,
+                spellDelay = 150,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.Blink,
+                castType = CastType.Position,
+            });
+
+            /*Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Shaco",
+                dangerlevel = 3,
+                name = "JackInTheBox",
+                spellName = "JackInTheBox",
+                range = 425,
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                evadeType = EvadeType.WindWall,
+                castType = CastType.Position,
+            });*/
+
+            #endregion
+
             #region Tristana
 
             Spells.Add(
@@ -388,7 +440,7 @@ namespace ezEvade
             new EvadeSpellData
             {
                 charName = "Yasuo",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 name = "SweepingBlade",
                 spellName = "YasuoDashWrapper",
                 range = 475,
@@ -399,6 +451,20 @@ namespace ezEvade
                 evadeType = EvadeType.Dash,
                 castType = CastType.Target,
                 spellTargets = new[] { SpellTargets.EnemyChampions, SpellTargets.EnemyMinions },
+            });
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Yasuo",
+                dangerlevel = 3,
+                name = "WindWall",
+                spellName = "YasuoWMovingWall",
+                range = 400,
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                evadeType = EvadeType.WindWall,
+                castType = CastType.Position,
             });
 
             #endregion
@@ -439,6 +505,26 @@ namespace ezEvade
                 evadeType = EvadeType.Blink, //behind target
                 castType = CastType.Target,
                 spellTargets = new[] { SpellTargets.Targetables },
+            });
+
+            #endregion
+
+            #region Talon
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Talon",
+                dangerlevel = 3,
+                name = "Cutthroat",
+                spellName = "TalonCutthroat",
+                range = 700,
+                speed = float.MaxValue,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Blink, //behind target
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.EnemyChampions, SpellTargets.EnemyMinions },
             });
 
             #endregion

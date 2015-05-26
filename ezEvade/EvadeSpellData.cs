@@ -35,6 +35,7 @@ namespace ezEvade
         MovementSpeedBuff,
         Shield,
         SpellShield,
+        WindWall,
     }
 
     class EvadeSpellData
@@ -51,6 +52,7 @@ namespace ezEvade
         public bool fixedRange = false;
         public EvadeType evadeType;
         public bool isReversed = false;
+        public bool behindTarget = false;
         public bool isSummonerSpell = false;
         public bool isItem = false;
         public ItemId itemID = 0;

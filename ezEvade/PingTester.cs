@@ -66,7 +66,7 @@ namespace ezEvade
             {
                 order = EvadeOrderCommand.MoveTo,
                 targetPosition = movePos,
-                timestamp = Evade.GetTickCount(),
+                timestamp = Evade.TickCount,
                 isProcessed = false
             };
             myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), true);
@@ -95,7 +95,7 @@ namespace ezEvade
         {
             if (testMenu.Item("AutoSetPing").GetValue<bool>())
             {
-                Game.PrintChat("Testing Ping...Please wait 10 seconds");
+                Console.WriteLine("Testing Ping...Please wait 10 seconds");
 
                 int testAmount = 20;
 
@@ -110,19 +110,19 @@ namespace ezEvade
             {
                 testMenu.Item("PrintResults").SetValue(false);
 
-                Game.PrintChat("Average Extra Delay: " + averagePingTime);
-                Game.PrintChat("Max Extra Delay: " + maxPingTime);
+                Console.WriteLine("Average Extra Delay: " + averagePingTime);
+                Console.WriteLine("Max Extra Delay: " + maxPingTime);
             }
 
             if (autoTestPing == true && testCount >= autoTestCount)
             {
-                Game.PrintChat("Auto Set Ping Complete");
+                Console.WriteLine("Auto Set Ping Complete");
 
-                Game.PrintChat("Average Extra Delay: " + averagePingTime);
-                Game.PrintChat("Max Extra Delay: " + maxPingTime);
+                Console.WriteLine("Average Extra Delay: " + averagePingTime);
+                Console.WriteLine("Max Extra Delay: " + maxPingTime);
 
                 SetPing((int)(averagePingTime+10));
-                Game.PrintChat("Set Average extra ping + 10: " + (averagePingTime+10));
+                Console.WriteLine("Set Average extra ping + 10: " + (averagePingTime+10));
 
                 autoTestPing = false;
             }
@@ -146,11 +146,11 @@ namespace ezEvade
 
                 if (testCount < 10)
                 {
-                    Game.PrintChat("Please test 10 times before setting ping");
+                    Console.WriteLine("Please test 10 times before setting ping");
                 }
                 else
                 {
-                    Game.PrintChat("Set Max extra ping: " + maxPingTime);
+                    Console.WriteLine("Set Max extra ping: " + maxPingTime);
                     SetPing((int)maxPingTime);
                 }                
             }
@@ -161,11 +161,11 @@ namespace ezEvade
 
                 if (testCount < 10)
                 {
-                    Game.PrintChat("Please test 10 times before setting ping");
+                    Console.WriteLine("Please test 10 times before setting ping");
                 }
                 else
                 {
-                    Game.PrintChat("Set Average extra ping: " + averagePingTime);
+                    Console.WriteLine("Set Average extra ping: " + averagePingTime);
                     SetPing((int)averagePingTime);
                 }                         
             }
@@ -182,8 +182,8 @@ namespace ezEvade
 
                         if (movePos.Distance(lastTestMoveToCommand.targetPosition) < 10)
                         {
-                            float moveTime = Evade.GetTickCount() - lastTestMoveToCommand.timestamp - Game.Ping;
-                            Game.PrintChat("Extra Delay: " + moveTime);
+                            float moveTime = Evade.TickCount - lastTestMoveToCommand.timestamp - Game.Ping;
+                            Console.WriteLine("Extra Delay: " + moveTime);
                             lastTestMoveToCommand.isProcessed = true;
 
                             sumPingTime += moveTime;

@@ -31,7 +31,6 @@ namespace ezEvade
 
     class SpecialSpells
     {
-
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
 
         public static Dictionary<string, bool> pDict = new Dictionary<string, bool>();
@@ -70,21 +69,30 @@ namespace ezEvade
 
             if (spellData.spellName == "OrianaIzunaCommand" && !pDict.ContainsKey("ProcessSpell_OrianaIzunaCommand"))
             {
-                foreach (var hero in HeroManager.Enemies)
+                Obj_AI_Hero hero = null;
+                foreach (var tHero in HeroManager.Enemies)
                 {
                     if (hero.ChampionName == "Orianna")
                     {
+                        hero = tHero;
+
                         ObjectTrackerInfo info = new ObjectTrackerInfo(hero);
                         info.Name = "TheDoomBall";
                         info.OwnerNetworkID = hero.NetworkId;
 
                         objTracker.Add(hero.NetworkId, info);
+                        break;
                     }
                 }
 
+                if (hero == null)
+                {
+                    return;
+                }
 
-                Obj_AI_Minion.OnCreate += OnCreateObj_OrianaIzunaCommand;
-                Obj_AI_Minion.OnDelete += OnDeleteObj_OrianaIzunaCommand;
+
+                Obj_AI_Minion.OnCreate += (obj, args) => OnCreateObj_OrianaIzunaCommand(obj, args, hero);
+                Obj_AI_Minion.OnDelete += (obj, args) => OnDeleteObj_OrianaIzunaCommand(obj, args, hero);
                 Obj_AI_Hero.OnProcessSpellCast += ProcessSpell_OrianaRedactCommand;
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_OrianaIzunaCommand;
 
@@ -102,6 +110,66 @@ namespace ezEvade
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_LucianQ;
                 pDict["ProcessSpell_LucianQ"] = true;
             }
+
+            if (spellData.spellName == "LuxMaliceCannon" && !pDict.ContainsKey("ProcessSpell_LuxMaliceCannon"))
+            {
+                var hero = HeroManager.Enemies.Find(h => h.ChampionName == "Lux");
+                if (hero != null)
+                {
+                    GameObject.OnCreate += (obj, args) => OnCreateObj_LuxMaliceCannon(obj, args, hero, spellData);
+                }
+
+                pDict["ProcessSpell_LuxMaliceCannon"] = true;
+            }
+
+            /*if (spellData.spellName == "JinxWMissile" && !pDict.ContainsKey("ProcessSpell_JinxWMissile"))
+            {
+                var hero = HeroManager.Enemies.Find(h => h.ChampionName == "Jinx");
+                if (hero != null)
+                {
+                    GameObject.OnCreate += (obj, args) => OnCreateObj_JinxWMissile(obj, args, hero, spellData);
+                }
+
+                pDict["ProcessSpell_JinxWMissile"] = true;
+            }*/
+        }
+
+        private static void OnCreateObj_JinxWMissile(GameObject obj, EventArgs args, Obj_AI_Hero hero, SpellData spellData)
+        {
+            if (hero != null && !hero.IsVisible
+                && obj.IsEnemy && obj.Name.Contains("Jinx") && obj.Name.Contains("W_Cas"))
+            {
+                var pos1 = hero.Position;
+                var dir = (obj.Position - myHero.Position).Normalized();
+                var pos2 = pos1 + dir * 500;
+                SpellDetector.CreateSpellData(hero, pos1, pos2, spellData, null, 0);
+                Console.WriteLine("aaa");
+            }
+        }
+
+        private static void OnCreateObj_LuxMaliceCannon(GameObject obj, EventArgs args, Obj_AI_Hero hero, SpellData spellData)
+        {
+            if (hero != null && !hero.IsVisible 
+                && obj.Name == "hiu" && obj.IsEnemy)
+            {
+                objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj));
+                DelayAction.Add(250, () => objTracker.Remove(obj.NetworkId));
+
+                var objList = objTracker.Values.Where(o => o.Name == "hiu");
+                if (objList.Count() > 4)
+                {
+                    var pos1 = objList.First().obj.Position;
+                    var pos2 = objList.Last().obj.Position;
+                    SpellDetector.CreateSpellData(hero, pos1, pos2, spellData, null, 0);
+                    
+                    foreach (ObjectTrackerInfo gameObj in objList)
+                    {
+                        DelayAction.Add(1, () => objTracker.Remove(gameObj.obj.NetworkId));
+                    }
+                }
+
+
+            }
         }
 
         private static void ProcessSpell_LucianQ(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
@@ -110,11 +178,11 @@ namespace ezEvade
             if (spellData.spellName == "LucianQ")
             {
 
-                if (args.Target.IsValid<Obj_AI_Hero>())
+                if (args.Target.IsValid<Obj_AI_Base>())
                 {
-                    var target = args.Target as Obj_AI_Hero;
+                    var target = args.Target as Obj_AI_Base;
 
-                    float spellDelay = ((float)(350 - Game.Ping))/1000;
+                    float spellDelay = ((float)(350 - Game.Ping)) / 1000;
                     var heroWalkDir = (target.ServerPosition - target.Position).Normalized();
                     var predictedHeroPos = target.Position + heroWalkDir * target.MoveSpeed * (spellDelay);
 
@@ -122,7 +190,7 @@ namespace ezEvade
                     SpellDetector.CreateSpellData(hero, args.Start, predictedHeroPos, spellData, null, 0);
 
                     specialSpellArgs.noProcess = true;
-                }                
+                }
             }
         }
 
@@ -145,7 +213,7 @@ namespace ezEvade
             }
         }
 
-        private static void OnCreateObj_OrianaIzunaCommand(GameObject obj, EventArgs args)
+        private static void OnCreateObj_OrianaIzunaCommand(GameObject obj, EventArgs args, Obj_AI_Hero hero)
         {
             if (obj.Name == "Orianna_Ball_Flash_Reverse.troy" && obj.IsEnemy)
             {
@@ -155,21 +223,14 @@ namespace ezEvade
 
                     if (entry.Value.Name == "TheDoomBall")
                     {
-                        info.usePosition = false;
-
-                        foreach (var hero in HeroManager.Enemies)
-                        {
-                            if (hero.ChampionName == "Orianna")
-                            {
-                                info.obj = hero;
-                            }
-                        }
+                        info.usePosition = false;                        
+                        info.obj = hero;
                     }
                 }
             }
         }
 
-        private static void OnDeleteObj_OrianaIzunaCommand(GameObject obj, EventArgs args)
+        private static void OnDeleteObj_OrianaIzunaCommand(GameObject obj, EventArgs args, Obj_AI_Hero hero)
         {
             if (obj.Name == "oriana_ball_glow_red.troy" && obj.IsEnemy)
             {
@@ -180,14 +241,7 @@ namespace ezEvade
                     if (entry.Value.Name == "TheDoomBall")
                     {
                         info.usePosition = false;
-
-                        foreach (var hero in HeroManager.Enemies)
-                        {
-                            if (hero.ChampionName == "Orianna")
-                            {
-                                info.obj = hero;
-                            }
-                        }
+                        info.obj = hero;
                     }
                 }
             }

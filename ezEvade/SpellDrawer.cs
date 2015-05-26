@@ -96,16 +96,6 @@ namespace ezEvade
                 var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
                 var dimension = Drawing.GetTextExtent("Evade: ON");
 
-                /*if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active
-                    && Evade.isDodgeDangerousEnabled())
-                {
-                    Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "Evade: ON");
-                }
-                else if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
-                {
-                    Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.White, "Evade: ON");
-                }*/
-
                 if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
                 {
                     if (Evade.isDodging)
@@ -122,7 +112,14 @@ namespace ezEvade
                 }
                 else
                 {
-                    Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: OFF");
+                    if (menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<KeyBind>().Active)
+                    {
+                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: Spell");
+                    }
+                    else
+                    {
+                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: OFF");
+                    }
                 }
 
 
@@ -180,7 +177,7 @@ namespace ezEvade
 
                             /*if (true)
                             {
-                                var spellPos2 = spell.startPos + spell.direction * spell.info.projectileSpeed * (Evade.GetTickCount() - spell.startTime - spell.info.spellDelay) / 1000 + spell.direction * spell.info.projectileSpeed * ((float)Game.Ping / 1000);
+                                var spellPos2 = spell.startPos + spell.direction * spell.info.projectileSpeed * (Evade.GetTickCount - spell.startTime - spell.info.spellDelay) / 1000 + spell.direction * spell.info.projectileSpeed * ((float)Game.Ping / 1000);
                                 Render.Circle.DrawCircle(new Vector3(spellPos2.X, spellPos2.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), Color.Red, 8);
                             }*/
 

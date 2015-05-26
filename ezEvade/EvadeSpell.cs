@@ -15,7 +15,7 @@ namespace ezEvade
 
         public static List<EvadeSpellData> evadeSpells = new List<EvadeSpellData>();
         public static List<EvadeSpellData> itemSpells = new List<EvadeSpellData>();
-        public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = Evade.GetTickCount() };
+        public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = Evade.TickCount };
 
         public static Menu menu;
         public static Menu evadeSpellMenu;
@@ -40,7 +40,7 @@ namespace ezEvade
 
         public static void CheckDashing()
         {
-            if (Evade.GetTickCount() - lastSpellEvadeCommand.timestamp < 250 && myHero.IsDashing()
+            if (Evade.TickCount - lastSpellEvadeCommand.timestamp < 250 && myHero.IsDashing()
                 && lastSpellEvadeCommand.evadeSpellData.evadeType == EvadeType.Dash)
             {
                 var dashInfo = myHero.GetDashInfo();
@@ -86,7 +86,7 @@ namespace ezEvade
             {
                 Spell spell = entry.Value;
 
-                if (!EvadeHelper.InSkillShot(spell, myHero.ServerPosition.To2D(), myHero.BoundingRadius))
+                if (!myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
                     continue;
                 
                 float rEvadeTime, rSpellHitTime = 0;
@@ -118,7 +118,7 @@ namespace ezEvade
             
             //int posDangerlevel = EvadeHelper.CheckPosDangerLevel(myHero.ServerPosition.To2D(), 0);
 
-            if (Evade.GetTickCount() - lastSpellEvadeCommand.timestamp < 1000)
+            if (Evade.TickCount - lastSpellEvadeCommand.timestamp < 1000)
             {
                 return;
             }
@@ -137,7 +137,9 @@ namespace ezEvade
 
         public static bool ActivateEvadeSpell(Spell spell)
         {
-            foreach (var evadeSpell in evadeSpells)
+            var sortedEvadeSpells = evadeSpells.OrderBy(s => s.dangerlevel);
+
+            foreach (var evadeSpell in sortedEvadeSpells)
             {
                 if (Evade.menu.SubMenu("EvadeSpells").SubMenu(evadeSpell.charName + evadeSpell.name + "EvadeSpellSettings")
                         .Item(evadeSpell.name + "UseEvadeSpell").GetValue<bool>() == false
@@ -204,6 +206,16 @@ namespace ezEvade
                         }
                     }
                 }
+                else if (evadeSpell.evadeType == EvadeType.WindWall)
+                {
+                    if (spell.hasProjectile())
+                    {
+                        var dir = (spell.startPos - myHero.ServerPosition.To2D()).Normalized();
+                        var pos = myHero.ServerPosition.To2D() + dir * 100;
+
+                        EvadeCommand.CastSpell(evadeSpell, pos);
+                    }
+                }
                 else if (evadeSpell.evadeType == EvadeType.SpellShield)
                 {
                     if (evadeSpell.isItem)
@@ -230,14 +242,14 @@ namespace ezEvade
             if (Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
             {
                 if (Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID)
-                && EvadeHelper.InSkillShot(spell, myHero.ServerPosition.To2D(), myHero.BoundingRadius))
+                && myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
                 {
                     return true;
                 }
             }
             else
             {
-                if (EvadeHelper.InSkillShot(spell, myHero.ServerPosition.To2D(), myHero.BoundingRadius))
+                if (myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
                 {
                     return true;
                 }

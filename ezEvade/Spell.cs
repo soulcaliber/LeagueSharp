@@ -83,6 +83,11 @@ namespace ezEvade
             }
         }
 
+        public static bool hasProjectile(this Spell spell)
+        {
+            return spell.info.projectileSpeed > 0 && spell.info.projectileSpeed != float.MaxValue;
+        }
+
         public static Vector2 GetSpellProjection(this Spell spell, Vector2 pos, bool predictPos = false)
         {
             if (spell.info.spellType == SpellType.Line)
@@ -133,7 +138,7 @@ namespace ezEvade
                     .Where(h => h.Team == Evade.myHero.Team && h.IsValidTarget(distanceToHero, false, spellPos.To3D())))
                 {
                     if (minion.BaseSkinName.ToLower() == "teemomushroom"
-                        || minion.BaseSkinName.ToLower() == "shacobox2")
+                        || minion.BaseSkinName.ToLower() == "shacobox")
                     {
                         continue;
                     }
@@ -146,7 +151,7 @@ namespace ezEvade
 
             foreach (var candidate in sortedCandidates)
             {
-                if (EvadeHelper.InSkillShot(spell, candidate.ServerPosition.To2D(), candidate.BoundingRadius, false))
+                if (candidate.ServerPosition.To2D().InSkillShot(spell, candidate.BoundingRadius, false))
                 {
                     return candidate;
                 }
@@ -162,7 +167,7 @@ namespace ezEvade
             {
                 if (spell.info.projectileSpeed == float.MaxValue)
                 {
-                    return Math.Max(0, spell.endTime - Evade.GetTickCount() - Game.Ping);
+                    return Math.Max(0, spell.endTime - Evade.TickCount - Game.Ping);
                 }
 
                 var spellPos = spell.GetCurrentSpellPosition(true, Game.Ping);
@@ -170,7 +175,7 @@ namespace ezEvade
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                return Math.Max(0, spell.endTime - Evade.GetTickCount() - Game.Ping);
+                return Math.Max(0, spell.endTime - Evade.TickCount - Game.Ping);
             }
 
             return float.MaxValue;
@@ -227,7 +232,7 @@ namespace ezEvade
 
             if (spell.info.spellType == SpellType.Line)
             {
-                float spellTime = Evade.GetTickCount() - spell.startTime - spell.info.spellDelay;
+                float spellTime = Evade.TickCount - spell.startTime - spell.info.spellDelay;
 
                 if (spell.info.projectileSpeed == float.MaxValue)
                     return spell.startPos;
@@ -257,6 +262,68 @@ namespace ezEvade
             }
 
             return spellPos;
+        }        
+
+        public static bool LineIntersectLinearSpell(this Spell spell, Vector2 a, Vector2 b)
+        {
+            var myBoundingRadius = ObjectManager.Player.BoundingRadius;
+            var spellDir = spell.direction;
+            var pSpellDir = spell.direction.Perpendicular();
+            var spellRadius = spell.GetSpellRadius();
+            var spellPos = spell.GetCurrentSpellPosition() - spellDir * myBoundingRadius; //leave some space at back of spell
+            var endPos = spell.GetSpellEndPosition() + spellDir * myBoundingRadius; //leave some space at the front of spell
+
+            var startRightPos = spellPos + pSpellDir * (spellRadius + myBoundingRadius);
+            var startLeftPos = spellPos - pSpellDir * (spellRadius + myBoundingRadius);
+            var endRightPos = endPos + pSpellDir * (spellRadius + myBoundingRadius);
+            var endLeftPos = endPos - pSpellDir * (spellRadius + myBoundingRadius);
+
+            bool int1 = MathUtils.CheckLineIntersection(a, b, startRightPos, startLeftPos);
+            bool int2 = MathUtils.CheckLineIntersection(a, b, endRightPos, endLeftPos);
+            bool int3 = MathUtils.CheckLineIntersection(a, b, startRightPos, endRightPos);
+            bool int4 = MathUtils.CheckLineIntersection(a, b, startLeftPos, endLeftPos);
+
+            if (int1 || int2 || int3 || int4)
+            {
+                return true;
+            }
+
+            return false;
         }
+
+        public static bool LineIntersectLinearSpellEx(this Spell spell, Vector2 a, Vector2 b, out Vector2 intersection) //edited
+        {
+            var myBoundingRadius = ObjectManager.Player.BoundingRadius;
+            var spellDir = spell.direction;
+            var pSpellDir = spell.direction.Perpendicular();
+            var spellRadius = spell.GetSpellRadius();
+            var spellPos = spell.GetCurrentSpellPosition() - spellDir * myBoundingRadius; //leave some space at back of spell
+            var endPos = spell.GetSpellEndPosition() + spellDir * myBoundingRadius; //leave some space at the front of spell
+
+            var startRightPos = spellPos + pSpellDir * (spellRadius + myBoundingRadius);
+            var startLeftPos = spellPos - pSpellDir * (spellRadius + myBoundingRadius);
+            var endRightPos = endPos + pSpellDir * (spellRadius + myBoundingRadius);
+            var endLeftPos = endPos - pSpellDir * (spellRadius + myBoundingRadius);
+
+            List<Geometry.IntersectionResult> intersects = new List<Geometry.IntersectionResult>();
+            Vector2 heroPos = ObjectManager.Player.ServerPosition.To2D();
+
+            intersects.Add(a.Intersection(b, startRightPos, startLeftPos));
+            intersects.Add(a.Intersection(b, endRightPos, endLeftPos));
+            intersects.Add(a.Intersection(b, startRightPos, endRightPos));
+            intersects.Add(a.Intersection(b, startLeftPos, endLeftPos));
+
+            var sortedIntersects = intersects.Where(i => i.Intersects).OrderBy(i => i.Point.Distance(heroPos)); //Get first intersection
+
+            if (sortedIntersects.Count() > 0)
+            {
+                intersection = sortedIntersects.First().Point;
+                return true;
+            }
+
+            intersection = Vector2.Zero;
+            return false;
+        }
+
     }
 }

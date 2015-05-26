@@ -189,9 +189,9 @@ namespace ezEvade
                 dangerlevel = 3,
                 missileName = "FlashFrostSpell",
                 name = "Flash Frost",
-                projectileSpeed = 600,
+                projectileSpeed = 850,
                 radius = 110,
-                range = 1100,
+                range = 1250,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "FlashFrostSpell",
@@ -252,8 +252,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "EnchantedCrystalArrow",
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
-
+                //collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
             });
             #endregion Ashe
 
@@ -460,6 +459,22 @@ namespace ezEvade
                 spellDelay = 625,
                 spellKey = SpellSlot.Q,
                 spellName = "CassiopeiaNoxiousBlast",
+                spellType = SpellType.Circular,
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Cassiopeia",
+                dangerlevel = 1,
+                name = "CassiopeiaMiasma",
+                radius = 150,
+                range = 850,
+                spellDelay = 250,
+                projectileSpeed = 2500,
+                spellKey = SpellSlot.W,
+                spellName = "CassiopeiaMiasma",
                 spellType = SpellType.Circular,
 
             });
@@ -1107,8 +1122,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "JinxR",
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
-
+                //collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
             });
 
             Spells.Add(
@@ -1116,10 +1130,10 @@ namespace ezEvade
             {
                 charName = "Jinx",
                 dangerlevel = 3,
-                missileName = "JinxWMissile",
+                //missileName = "JinxWMissile",
                 name = "Zap",
                 projectileSpeed = 3300,
-                radius = 70,
+                radius = 60,
                 range = 1500,
                 spellDelay = 600,
                 spellKey = SpellSlot.W,
@@ -1730,6 +1744,24 @@ namespace ezEvade
                 spellType = SpellType.Circular,
 
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Nami",
+                dangerlevel = 4,
+                missileName = "NamiRMissile",
+                name = "NamiR",
+                projectileSpeed = 850,
+                radius = 250,
+                range = 2750,
+                spellDelay = 500,
+                spellKey = SpellSlot.R,
+                spellName = "NamiR",
+                spellType = SpellType.Line,
+
+            });
+
             #endregion Nami
 
             #region Nautilus

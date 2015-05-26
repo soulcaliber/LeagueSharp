@@ -128,6 +128,17 @@ namespace ezEvade
             return true;
         }
 
+        public static bool isPointOnLineSegment(Vector2 point, Vector2 start, Vector2 end)
+        {
+            if (Math.Max(start.X, end.X) > point.X && point.X > Math.Min(start.X, end.X)
+                && Math.Max(start.Y, end.Y) > point.Y && point.Y > Math.Min(start.Y, end.Y) )
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         //https://code.google.com/p/xna-circle-collision-detection/downloads/detail?name=Circle%20Collision%20Example.zip&can=2&q=
 
         public static float GetCollisionTime(Vector2 Pa, Vector2 Pb, Vector2 Va, Vector2 Vb, float Ra, float Rb, out bool collision)
