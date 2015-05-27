@@ -63,97 +63,105 @@ namespace ezEvade
 
         private void Game_OnGameLoad(EventArgs args)
         {
-            Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
-            Spellbook.OnCastSpell += Game_OnCastSpell;
-            Game.OnUpdate += Game_OnGameUpdate;
-            //Game.OnSendPacket += Game_OnSendPacket;
-            Game.OnEnd += Game_OnGameEnd;
-            SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
-            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-
-            Game.PrintChat("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
-               "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
-
-            menu = new Menu("ezEvade", "ezEvade", true);
-
-            Menu mainMenu = new Menu("Main", "Main");
-            mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
-            mainMenu.AddItem(new MenuItem("ActivateEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
-            mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
-            mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
-            mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
-            //mainMenu.AddItem(new MenuItem("FastestEvadeMode", "Fastest Evade Mode").SetValue(false));
-            menu.AddSubMenu(mainMenu);
-
-            //var keyBind = mainMenu.Item("DodgeSkillShots").GetValue<KeyBind>();
-            //mainMenu.Item("DodgeSkillShots").SetValue(new KeyBind(keyBind.Key, KeyBindType.Toggle, true));
-
-            spellDetector = new SpellDetector(menu);
-            evadeSpell = new EvadeSpell(menu);
-
-            Menu keyMenu = new Menu("Key Settings", "KeySettings");
-            keyMenu.AddItem(new MenuItem("DodgeDangerousKeyEnabled", "Enable Dodge Only Dangerous Keys").SetValue(false));
-            keyMenu.AddItem(new MenuItem("DodgeDangerousKey", "Dodge Only Dangerous Key").SetValue(new KeyBind(32, KeyBindType.Press)));
-            keyMenu.AddItem(new MenuItem("DodgeDangerousKey2", "Dodge Only Dangerous Key 2").SetValue(new KeyBind('V', KeyBindType.Press)));
-            menu.AddSubMenu(keyMenu);
-
-            Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
-            miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(true));
-            miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
-            miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
-            miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
-            miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(true));
-            miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(true));
-            miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
-            //miscMenu.AddItem(new MenuItem("FasterCrossing", "Fast Crossing").SetValue(false));
-            miscMenu.AddItem(new MenuItem("LoadPingTester", "Load Ping Tester").SetValue(true));
-            //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
-
-            Menu limiterMenu = new Menu("Humanizer", "Limiter");
-            limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(50, 0, 200)));
-            limiterMenu.AddItem(new MenuItem("ReactionTime", "Reaction Time").SetValue(new Slider(0, 0, 1000)));
-            limiterMenu.AddItem(new MenuItem("DodgeInterval", "Dodge Interval").SetValue(new Slider(0, 0, 2000)));
-            miscMenu.AddSubMenu(limiterMenu);
-
-            Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
-            fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "FastEvade Activation Time").SetValue(new Slider(200, 0, 500)));
-            fastEvadeMenu.AddItem(new MenuItem("SpellActivationTime", "Spell Activation Time").SetValue(new Slider(200, 0, 500)));
-            fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(10, 0, 100)));
-
-            miscMenu.AddSubMenu(fastEvadeMenu);
-
-            /*Menu evadeSpellSettingsMenu = new Menu("Evade Spell", "EvadeSpellMisc");
-            evadeSpellSettingsMenu.AddItem(new MenuItem("EvadeSpellActivationTime", "Evade Spell Activation Time").SetValue(new Slider(150, 0, 500)));
-
-            miscMenu.AddSubMenu(evadeSpellSettingsMenu);*/
-
-            Menu bufferMenu = new Menu("Extra Buffers", "ExtraBuffers");
-            bufferMenu.AddItem(new MenuItem("ExtraPingBuffer", "Extra Ping Buffer").SetValue(new Slider(65, 0, 200)));
-            bufferMenu.AddItem(new MenuItem("ExtraCPADistance", "Extra Collision Distance").SetValue(new Slider(10, 0, 150)));
-            bufferMenu.AddItem(new MenuItem("ExtraSpellRadius", "Extra Spell Radius").SetValue(new Slider(0, 0, 100)));
-            bufferMenu.AddItem(new MenuItem("ExtraEvadeDistance", "Extra Evade Distance").SetValue(new Slider(100, 0, 300)));
-            bufferMenu.AddItem(new MenuItem("ExtraAvoidDistance", "Extra Avoid Distance").SetValue(new Slider(100, 0, 300)));
-
-            bufferMenu.AddItem(new MenuItem("MinComfortZone", "Min Distance to Champion").SetValue(new Slider(400, 0, 1000)));
-
-            miscMenu.AddSubMenu(bufferMenu);
-
-            Menu resetMenu = new Menu("Reset Config", "ResetConfig");
-            resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
-
-            miscMenu.AddSubMenu(resetMenu);
-
-            menu.AddSubMenu(miscMenu);
-            menu.AddToMainMenu();
-
-            spellDrawer = new SpellDrawer(menu);
-
-            if (menu.Item("LoadPingTester").GetValue<bool>())
+            try
             {
-                pingTester = new PingTester(menu);
-            }
+                Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
+                Spellbook.OnCastSpell += Game_OnCastSpell;
+                Game.OnUpdate += Game_OnGameUpdate;
+                //Game.OnSendPacket += Game_OnSendPacket;
+                Game.OnEnd += Game_OnGameEnd;
+                SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
+                Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
-            //evadeTester = new EvadeTester(menu);            
+                /*Game.PrintChat("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
+                   "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
+                */
+
+                menu = new Menu("ezEvade", "ezEvade", true);
+
+                Menu mainMenu = new Menu("Main", "Main");
+                mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
+                mainMenu.AddItem(new MenuItem("ActivateEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
+                mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
+                mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
+                mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
+                //mainMenu.AddItem(new MenuItem("FastestEvadeMode", "Fastest Evade Mode").SetValue(false));
+                menu.AddSubMenu(mainMenu);
+
+                //var keyBind = mainMenu.Item("DodgeSkillShots").GetValue<KeyBind>();
+                //mainMenu.Item("DodgeSkillShots").SetValue(new KeyBind(keyBind.Key, KeyBindType.Toggle, true));
+
+                spellDetector = new SpellDetector(menu);
+                evadeSpell = new EvadeSpell(menu);
+
+                Menu keyMenu = new Menu("Key Settings", "KeySettings");
+                keyMenu.AddItem(new MenuItem("DodgeDangerousKeyEnabled", "Enable Dodge Only Dangerous Keys").SetValue(false));
+                keyMenu.AddItem(new MenuItem("DodgeDangerousKey", "Dodge Only Dangerous Key").SetValue(new KeyBind(32, KeyBindType.Press)));
+                keyMenu.AddItem(new MenuItem("DodgeDangerousKey2", "Dodge Only Dangerous Key 2").SetValue(new KeyBind('V', KeyBindType.Press)));
+                menu.AddSubMenu(keyMenu);
+
+                Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
+                miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(true));
+                miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
+                miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
+                miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
+                miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(true));
+                miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(true));
+                miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
+                //miscMenu.AddItem(new MenuItem("FasterCrossing", "Fast Crossing").SetValue(false));
+                miscMenu.AddItem(new MenuItem("LoadPingTester", "Load Ping Tester").SetValue(true));
+                //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
+
+                Menu limiterMenu = new Menu("Humanizer", "Limiter");
+                limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(50, 0, 200)));
+                limiterMenu.AddItem(new MenuItem("ReactionTime", "Reaction Time").SetValue(new Slider(0, 0, 1000)));
+                limiterMenu.AddItem(new MenuItem("DodgeInterval", "Dodge Interval").SetValue(new Slider(0, 0, 2000)));
+                miscMenu.AddSubMenu(limiterMenu);
+
+                Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
+                fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "FastEvade Activation Time").SetValue(new Slider(200, 0, 500)));
+                fastEvadeMenu.AddItem(new MenuItem("SpellActivationTime", "Spell Activation Time").SetValue(new Slider(200, 0, 500)));
+                fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(10, 0, 100)));
+
+                miscMenu.AddSubMenu(fastEvadeMenu);
+
+                /*Menu evadeSpellSettingsMenu = new Menu("Evade Spell", "EvadeSpellMisc");
+                evadeSpellSettingsMenu.AddItem(new MenuItem("EvadeSpellActivationTime", "Evade Spell Activation Time").SetValue(new Slider(150, 0, 500)));
+
+                miscMenu.AddSubMenu(evadeSpellSettingsMenu);*/
+
+                Menu bufferMenu = new Menu("Extra Buffers", "ExtraBuffers");
+                bufferMenu.AddItem(new MenuItem("ExtraPingBuffer", "Extra Ping Buffer").SetValue(new Slider(65, 0, 200)));
+                bufferMenu.AddItem(new MenuItem("ExtraCPADistance", "Extra Collision Distance").SetValue(new Slider(10, 0, 150)));
+                bufferMenu.AddItem(new MenuItem("ExtraSpellRadius", "Extra Spell Radius").SetValue(new Slider(0, 0, 100)));
+                bufferMenu.AddItem(new MenuItem("ExtraEvadeDistance", "Extra Evade Distance").SetValue(new Slider(100, 0, 300)));
+                bufferMenu.AddItem(new MenuItem("ExtraAvoidDistance", "Extra Avoid Distance").SetValue(new Slider(100, 0, 300)));
+
+                bufferMenu.AddItem(new MenuItem("MinComfortZone", "Min Distance to Champion").SetValue(new Slider(400, 0, 1000)));
+
+                miscMenu.AddSubMenu(bufferMenu);
+
+                Menu resetMenu = new Menu("Reset Config", "ResetConfig");
+                resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
+
+                miscMenu.AddSubMenu(resetMenu);
+
+                menu.AddSubMenu(miscMenu);
+                menu.AddToMainMenu();
+
+                spellDrawer = new SpellDrawer(menu);
+
+                if (menu.Item("LoadPingTester").GetValue<bool>())
+                {
+                    pingTester = new PingTester(menu);
+                }
+
+                //evadeTester = new EvadeTester(menu);     
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }       
         }
 
         public static float TickCount
@@ -347,7 +355,7 @@ namespace ezEvade
             }
             catch (Exception e)
             {
-                Game.PrintChat(e.StackTrace);
+                Console.WriteLine(e);
             }
         }
 

@@ -184,7 +184,7 @@ namespace ezEvade
             }
             catch (Exception e)
             {
-                Game.PrintChat(e.StackTrace);
+                Console.WriteLine(e);
             }
         }
 
