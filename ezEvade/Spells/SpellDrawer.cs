@@ -112,9 +112,9 @@ namespace ezEvade
                 }
                 else
                 {
-                    if (menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<KeyBind>().Active)
+                    if (menu.Item("ActivateEvadeSpells").GetValue<KeyBind>().Active)
                     {
-                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: Spell");
+                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Purple, "Evade: Spell");
                     }
                     else
                     {

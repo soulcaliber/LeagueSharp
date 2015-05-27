@@ -108,7 +108,7 @@ namespace ezEvade
 
         public static bool ShouldUseEvadeSpell()
         {
-            if (Evade.menu.SubMenu("Main").Item("UseEvadeSpells").GetValue<KeyBind>().Active == false
+            if (Evade.menu.Item("ActivateEvadeSpells").GetValue<KeyBind>().Active == false
                 || CommonChecks()
                 || Evade.lastWindupTime - Evade.TickCount > 0
                 )

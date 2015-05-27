@@ -57,30 +57,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DelayAction.cs" />
-    <Compile Include="Evade.cs" />
-    <Compile Include="EvadeCommand.cs" />
-    <Compile Include="EvadeHelper.cs" />
-    <Compile Include="EvadeSpell.cs" />
-    <Compile Include="EvadeSpellData.cs" />
-    <Compile Include="EvadeSpellDatabase.cs" />
-    <Compile Include="EvadeTester.cs" />
-    <Compile Include="MathUtils.cs" />
-    <Compile Include="MathUtilsCPA.cs" />
-    <Compile Include="ObjectCache.cs" />
-    <Compile Include="PingTester.cs" />
-    <Compile Include="Position.cs" />
-    <Compile Include="PositionInfo.cs" />
+    <Compile Include="Utils\DelayAction.cs" />
+    <Compile Include="Core\Evade.cs" />
+    <Compile Include="Helpers\EvadeCommand.cs" />
+    <Compile Include="Core\EvadeHelper.cs" />
+    <Compile Include="EvadeSpells\EvadeSpell.cs" />
+    <Compile Include="EvadeSpells\EvadeSpellData.cs" />
+    <Compile Include="EvadeSpells\EvadeSpellDatabase.cs" />
+    <Compile Include="Tests\EvadeTester.cs" />
+    <Compile Include="Utils\MathUtils.cs" />
+    <Compile Include="Utils\MathUtilsCPA.cs" />
+    <Compile Include="Utils\ObjectCache.cs" />
+    <Compile Include="Tests\PingTester.cs" />
+    <Compile Include="Helpers\Position.cs" />
+    <Compile Include="Helpers\PositionInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Situation.cs" />
-    <Compile Include="SpecialSpells.cs" />
-    <Compile Include="Spell.cs" />
-    <Compile Include="SpellData.cs" />
-    <Compile Include="SpellDatabase.cs" />
-    <Compile Include="SpellDetector.cs" />
-    <Compile Include="SpellDrawer.cs" />
-    <Compile Include="SpellWindupDatabase.cs" />
+    <Compile Include="Helpers\Situation.cs" />
+    <Compile Include="Spells\SpecialSpells.cs" />
+    <Compile Include="Spells\Spell.cs" />
+    <Compile Include="Spells\SpellData.cs" />
+    <Compile Include="Spells\SpellDatabase.cs" />
+    <Compile Include="Spells\SpellDetector.cs" />
+    <Compile Include="Spells\SpellDrawer.cs" />
+    <Compile Include="Spells\SpellWindupDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -102,6 +102,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

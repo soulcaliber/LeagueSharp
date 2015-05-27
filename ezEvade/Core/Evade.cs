@@ -78,7 +78,7 @@ namespace ezEvade
 
             Menu mainMenu = new Menu("Main", "Main");
             mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
-            mainMenu.AddItem(new MenuItem("UseEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
+            mainMenu.AddItem(new MenuItem("ActivateEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
             mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
             mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
             mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
@@ -167,7 +167,7 @@ namespace ezEvade
         public static void ResetConfig()
         {
             menu.Item("DodgeSkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true));
-            menu.Item("UseEvadeSpells").SetValue(new KeyBind('K', KeyBindType.Toggle, true));
+            menu.Item("ActivateEvadeSpells").SetValue(new KeyBind('K', KeyBindType.Toggle, true));
             menu.Item("DodgeDangerous").SetValue(false);
             menu.Item("DodgeFOWSpells").SetValue(true);
             menu.Item("DodgeCircularSpells").SetValue(true);
