@@ -28,7 +28,7 @@ namespace ezEvade
 
         private void Game_OnGameLoad()
         {
-            //Game.PrintChat("SpellDrawer loaded");
+            //Console.WriteLine("SpellDrawer loaded");
 
             Menu drawMenu = new Menu("Draw", "Draw");
             drawMenu.AddItem(new MenuItem("DrawSkillShots", "Draw SkillShots").SetValue(true));

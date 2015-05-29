@@ -188,6 +188,7 @@ namespace ezEvade
             Console.WriteLine("LineWidth " + missile.SData.LineWidth);
             Console.WriteLine("Range " + missile.SData.CastRange);
             Console.WriteLine("Accel " + missile.SData.MissileAccel);
+            //Console.WriteLine("Angle " + missile.SData.CastConeAngle);
             /*Console.WriteLine("Offset: " + missile.SData.ParticleStartOffset);
             Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);
             Console.WriteLine("LineWidth " + missile.SData.LineWidth);
@@ -359,6 +360,11 @@ namespace ezEvade
                 Console.WriteLine(sth.Name);
 
             }*/
+
+            if (testMenu.Item("TestSpellEndTime").GetValue<bool>() == false)
+            {
+                return;
+            }
 
             if (obj.Name == "RobotBuddy")
             {

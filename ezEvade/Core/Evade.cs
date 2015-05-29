@@ -58,22 +58,25 @@ namespace ezEvade
 
         public Evade()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            if (LeagueSharp.Game.Mode == GameMode.Running)
+            {
+                //Otherwise the .ctor didn't return yet and no callback will occur
+                DelayAction.Add(250, () =>
+                {
+                    Game_OnGameLoad(new EventArgs());
+                });
+            }
+            else
+            {
+                LeagueSharp.Game.OnStart += Game_OnGameLoad;
+            }
         }
 
         private void Game_OnGameLoad(EventArgs args)
         {
             try
-            {
-                Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
-                Spellbook.OnCastSpell += Game_OnCastSpell;
-                Game.OnUpdate += Game_OnGameUpdate;
-                //Game.OnSendPacket += Game_OnSendPacket;
-                Game.OnEnd += Game_OnGameEnd;
-                SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
-                Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-
-                /*Game.PrintChat("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
+            {               
+                /*Console.WriteLine("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
                    "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
                 */
 
@@ -156,7 +159,16 @@ namespace ezEvade
                     pingTester = new PingTester(menu);
                 }
 
-                //evadeTester = new EvadeTester(menu);     
+                //evadeTester = new EvadeTester(menu);
+     
+                Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
+                Spellbook.OnCastSpell += Game_OnCastSpell;
+                Game.OnUpdate += Game_OnGameUpdate;
+                //Game.OnSendPacket += Game_OnSendPacket;
+                Game.OnEnd += Game_OnGameEnd;
+                SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
+                Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+
             }
             catch (Exception e)
             {
@@ -367,7 +379,7 @@ namespace ezEvade
                 {
                     if (lastBlockedUserMoveTo.isProcessed == false && TickCount - lastBlockedUserMoveTo.timestamp < 500)
                     {
-                        //Game.PrintChat("Continue Movement");
+                        //Console.WriteLine("Continue Movement");
                         myHero.IssueOrder(GameObjectOrder.MoveTo, lastBlockedUserMoveTo.targetPosition.To3D());
                         lastBlockedUserMoveTo.isProcessed = true;
                     }
@@ -423,7 +435,7 @@ namespace ezEvade
                     {
                         Spell spell = entry.Value;
 
-                        Game.PrintChat("" + (int)(GetTickCount-spell.startTime));
+                        Console.WriteLine("" + (int)(TickCount-spell.startTime));
                     }*/
 
 
@@ -562,7 +574,7 @@ namespace ezEvade
             }
 
 
-            //Game.PrintChat("SkillsDodged: " + lastPosInfo.dodgeableSpells.Count + " DangerLevel: " + lastPosInfo.undodgeableSpells.Count);            
+            //Console.WriteLine("SkillsDodged: " + lastPosInfo.dodgeableSpells.Count + " DangerLevel: " + lastPosInfo.undodgeableSpells.Count);            
         }
     }
 }

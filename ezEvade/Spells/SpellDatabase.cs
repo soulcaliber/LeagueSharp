@@ -254,6 +254,25 @@ namespace ezEvade
                 spellType = SpellType.Line,
                 //collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                angle = 5,
+                charName = "Ashe",
+                dangerlevel = 2,
+                //missileName = "VolleyAttack",
+                name = "Volley",
+                projectileSpeed = 1500,
+                radius = 20,
+                range = 1150,
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                spellName = "Volley",
+                spellType = SpellType.Line,
+                isSpecial = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+            });
             #endregion Ashe
 
             #region Azir
@@ -1486,7 +1505,7 @@ namespace ezEvade
                 missileName = "LeonaZenithBladeMissile",
                 name = "Zenith Blade",
                 projectileSpeed = 2000,
-                radius = 95,
+                radius = 70,
                 range = 975,
                 spellDelay = 200,
                 spellKey = SpellSlot.E,

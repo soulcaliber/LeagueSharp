@@ -45,7 +45,7 @@ namespace ezEvade
             {
                 var dashInfo = myHero.GetDashInfo();
 
-                //Game.PrintChat("" + dashInfo.EndPos.Distance(lastSpellEvadeCommand.targetPosition));
+                //Console.WriteLine("" + dashInfo.EndPos.Distance(lastSpellEvadeCommand.targetPosition));
                 lastSpellEvadeCommand.targetPosition = dashInfo.EndPos;
             }
         }

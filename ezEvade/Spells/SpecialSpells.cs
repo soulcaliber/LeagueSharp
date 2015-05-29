@@ -132,6 +132,28 @@ namespace ezEvade
 
                 pDict["ProcessSpell_JinxWMissile"] = true;
             }*/
+
+            if (spellData.spellName == "Volley" && !pDict.ContainsKey("ProcessSpell_AsheVolley"))
+            {
+                SpellDetector.OnProcessSpecialSpell += ProcessSpell_AsheVolley;
+                pDict["ProcessSpell_AsheVolley"] = true;
+            }
+        }
+
+        private static void ProcessSpell_AsheVolley(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
+            SpecialSpellEventArgs specialSpellArgs)
+        {
+            if (spellData.spellName == "Volley")
+            {
+                for (int i = -4; i < 5; i++)
+                {                    
+                    Vector3 endPos2 = MathUtils.RotateVector(args.Start.To2D(), args.End.To2D(), i*spellData.angle).To3D();
+                    if (i != 0)
+                    {
+                        SpellDetector.CreateSpellData(hero, args.Start, endPos2, spellData, null, 0, false);
+                    }
+                }
+            }
         }
 
         private static void OnCreateObj_JinxWMissile(GameObject obj, EventArgs args, Obj_AI_Hero hero, SpellData spellData)

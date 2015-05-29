@@ -54,7 +54,7 @@ namespace ezEvade
 
             menu = mainMenu;
 
-            //Game.PrintChat("SpellDetector loaded");
+            //Console.WriteLine("SpellDetector loaded");
             spellMenu = new Menu("Spells", "Spells");
             menu.AddSubMenu(spellMenu);
 
@@ -97,7 +97,7 @@ namespace ezEvade
                                 if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                 {
                                     spell.spellObject = obj;
-                                    //Game.PrintChat("aquired: " + (obj.Position.To2D().Distance(spell.startPos)));
+                                    //Console.WriteLine("aquired: " + (obj.Position.To2D().Distance(spell.startPos)));
                                 }
                             }
                         }
@@ -327,7 +327,7 @@ namespace ezEvade
 
             if (spell.info.spellType == SpellType.Line)
             {
-                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius;
+                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + 10;
                 var spellPos = spell.GetCurrentSpellPosition();
                 var spellEndPos = spell.GetSpellEndPosition();
 
@@ -337,7 +337,7 @@ namespace ezEvade
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius;
+                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + 10;
 
                 if (heroPos.Distance(spell.endPos) < walkRadius)
                 {
@@ -489,7 +489,7 @@ namespace ezEvade
 
                 if (spell.spellHitTime != float.MinValue)
                 {
-                    //Game.PrintChat("spellhittime: " + spell.spellHitTime);
+                    //Console.WriteLine("spellhittime: " + spell.spellHitTime);
                     lowest = Math.Min(lowest, (spell.spellHitTime - spell.evadeTime));
                     lowestSpell = spell;
                 }
@@ -565,7 +565,7 @@ namespace ezEvade
                     foreach (var spell in SpellDatabase.Spells.Where(
                         s => (s.charName == hero.ChampionName) || (s.charName == "AllChampions")))
                     {
-                        //Game.PrintChat(spell.spellName); 
+                        //Console.WriteLine(spell.spellName); 
 
                         if (!(spell.spellType == SpellType.Circular || spell.spellType == SpellType.Line))
                             continue;

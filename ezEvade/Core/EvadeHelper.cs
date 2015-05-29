@@ -203,7 +203,7 @@ namespace ezEvade
                         .ThenBy(p => p.posDangerCount);
 
                 fastEvadeMode = true;
-                //Game.PrintChat("fast evade: " + lowestEvadeTime);
+                //Console.WriteLine("fast evade: " + lowestEvadeTime);
             }
             else
             {
@@ -1013,7 +1013,7 @@ namespace ezEvade
                 if (Evade.GetTickCount - EvadeSpell.lastSpellEvadeCommand.timestamp < evadeTime)
                 {
 
-                    Game.PrintChat("in" + CheckMoveToDirection(EvadeSpell.lastSpellEvadeCommand.targetPosition, movePos));
+                    Console.WriteLine("in" + CheckMoveToDirection(EvadeSpell.lastSpellEvadeCommand.targetPosition, movePos));
                     return CheckMoveToDirection(EvadeSpell.lastSpellEvadeCommand.targetPosition, movePos);
                 }
             }*/
