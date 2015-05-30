@@ -686,6 +686,26 @@ namespace ezEvade
             });
             #endregion Draven
 
+            /*#region Ekko
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Ekko",
+                dangerlevel = 3,
+                name = "EkkoQ",
+                projectileSpeed = 1650,
+                radius = 60,
+                range = 950,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "EkkoQ",
+                spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions },
+
+            });
+            #endregion Ekko*/
+
             #region Elise
 
             Spells.Add(

@@ -58,24 +58,33 @@ namespace ezEvade
 
         public Evade()
         {
+            DelayAction.Add(1, () => LoadAssembly());
+        }
+
+        private void LoadAssembly()
+        {
             if (LeagueSharp.Game.Mode == GameMode.Running)
             {
-                //Otherwise the .ctor didn't return yet and no callback will occur
-                DelayAction.Add(250, () =>
-                {
-                    Game_OnGameLoad(new EventArgs());
-                });
+                DelayAction.Add(350, () => {Game_OnGameLoad(new EventArgs());});
             }
             else
             {
-                LeagueSharp.Game.OnStart += Game_OnGameLoad;
+                Game.OnStart += Game_OnGameLoad;
             }
         }
 
         private void Game_OnGameLoad(EventArgs args)
         {
             try
-            {               
+            {
+                Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
+                Spellbook.OnCastSpell += Game_OnCastSpell;
+                Game.OnUpdate += Game_OnGameUpdate;
+                //Game.OnSendPacket += Game_OnSendPacket;
+                Game.OnEnd += Game_OnGameEnd;
+                SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
+                Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+
                 /*Console.WriteLine("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
                    "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
                 */
@@ -108,8 +117,8 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
-                miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(true));
-                miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(true));
+                miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(false));
+                miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 //miscMenu.AddItem(new MenuItem("FasterCrossing", "Fast Crossing").SetValue(false));
                 miscMenu.AddItem(new MenuItem("LoadPingTester", "Load Ping Tester").SetValue(true));
@@ -146,6 +155,7 @@ namespace ezEvade
 
                 Menu resetMenu = new Menu("Reset Config", "ResetConfig");
                 resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
+                resetMenu.AddItem(new MenuItem("ResetConfig1934", "Set Patch Config").SetValue(true));
 
                 miscMenu.AddSubMenu(resetMenu);
 
@@ -160,14 +170,6 @@ namespace ezEvade
                 }
 
                 //evadeTester = new EvadeTester(menu);
-     
-                Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
-                Spellbook.OnCastSpell += Game_OnCastSpell;
-                Game.OnUpdate += Game_OnGameUpdate;
-                //Game.OnSendPacket += Game_OnSendPacket;
-                Game.OnEnd += Game_OnGameEnd;
-                SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
-                Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
             }
             catch (Exception e)
@@ -200,8 +202,8 @@ namespace ezEvade
             menu.Item("RecalculatePosition").SetValue(true);
             menu.Item("ContinueMovement").SetValue(true);
             menu.Item("CalculateWindupDelay").SetValue(true);
-            menu.Item("CheckSpellCollision").SetValue(true);
-            menu.Item("PreventDodgingUnderTower").SetValue(true);
+            menu.Item("CheckSpellCollision").SetValue(false);
+            menu.Item("PreventDodgingUnderTower").SetValue(false);
             menu.Item("PreventDodgingNearEnemy").SetValue(true);
             menu.Item("LoadPingTester").SetValue(true);
 
@@ -219,6 +221,12 @@ namespace ezEvade
             menu.Item("ExtraEvadeDistance").SetValue(new Slider(100, 0, 300));
             menu.Item("ExtraAvoidDistance").SetValue(new Slider(100, 0, 300));
             menu.Item("MinComfortZone").SetValue(new Slider(400, 0, 1000));
+        }
+
+        public static void SetPatchConfig()
+        {
+            menu.Item("CheckSpellCollision").SetValue(false);
+            menu.Item("PreventDodgingUnderTower").SetValue(false);
         }
 
         private void Game_OnGameEnd(GameEndEventArgs args)
@@ -351,7 +359,13 @@ namespace ezEvade
                 if (menu.Item("ResetConfig").GetValue<bool>())
                 {
                     ResetConfig();
-                    menu.Item("ResetConfig").SetValue(false);
+                    menu.Item("ResetConfig").SetValue(false);                    
+                }
+
+                if (menu.Item("ResetConfig1934").GetValue<bool>())
+                {
+                    SetPatchConfig();
+                    menu.Item("ResetConfig1934").SetValue(false);
                 }
 
                 var limitDelay = Evade.menu.Item("TickLimiter").GetValue<Slider>().Value; //Tick limiter                
