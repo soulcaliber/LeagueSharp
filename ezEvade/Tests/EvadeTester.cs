@@ -118,8 +118,11 @@ namespace ezEvade
             Console.WriteLine("EvadeTester loaded");
             menu.AddSubMenu(new Menu("Test", "Test"));
 
-            Console.WriteLine("Ping:" + Game.Ping);
-
+            //Console.WriteLine("Ping:" + Game.Ping);
+            if (testMenu.Item("ShowBuffs").GetValue<bool>())
+            {
+                //Console.WriteLine(myHero);
+            }
         }
 
         private void Game_OnGameInput(GameInputEventArgs args)
@@ -370,6 +373,8 @@ namespace ezEvade
             {
                 renderPositions.Add(new RenderPosition(obj.Position.To2D(), Evade.TickCount + 10));
             }
+
+            Console.WriteLine(obj.Name);
 
 
             if (args.Property == "mHP" && args.OldValue > args.NewValue)

@@ -58,19 +58,23 @@ namespace ezEvade
 
         public Evade()
         {
-            DelayAction.Add(1, () => LoadAssembly());
+            LoadAssembly();
+            //CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         private void LoadAssembly()
         {
-            if (LeagueSharp.Game.Mode == GameMode.Running)
+            DelayAction.Add(1, () =>
             {
-                DelayAction.Add(350, () => {Game_OnGameLoad(new EventArgs());});
-            }
-            else
-            {
-                Game.OnStart += Game_OnGameLoad;
-            }
+                if (LeagueSharp.Game.Mode == GameMode.Running)
+                {
+                    DelayAction.Add(350, () => { Game_OnGameLoad(new EventArgs()); });
+                }
+                else
+                {
+                    Game.OnStart += Game_OnGameLoad;
+                }
+            });
         }
 
         private void Game_OnGameLoad(EventArgs args)
@@ -175,7 +179,7 @@ namespace ezEvade
             catch (Exception e)
             {
                 Console.WriteLine(e);
-            }       
+            }
         }
 
         public static float TickCount
@@ -330,14 +334,14 @@ namespace ezEvade
             else //need more logic
             {
                 if (isDodging)
-                {                  
+                {
                     args.Process = false; //Block the command
                 }
             }
         }
 
         private void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
-        {           
+        {
             if (isDodging)
             {
                 args.Process = false; //Block orbwalking
@@ -359,7 +363,7 @@ namespace ezEvade
                 if (menu.Item("ResetConfig").GetValue<bool>())
                 {
                     ResetConfig();
-                    menu.Item("ResetConfig").SetValue(false);                    
+                    menu.Item("ResetConfig").SetValue(false);
                 }
 
                 if (menu.Item("ResetConfig1934").GetValue<bool>())
@@ -469,7 +473,7 @@ namespace ezEvade
                                 if (movePos.Distance(lastPosInfo.position) < 5) //more strict checking
                                 {
                                     var posInfo = EvadeHelper.CanHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0, false);
-                                    if (posInfo.isSamePosInfo(lastPosInfo) && 
+                                    if (posInfo.isSamePosInfo(lastPosInfo) &&
                                         posInfo.posDangerCount > lastPosInfo.posDangerCount)
                                     {
                                         var newPosInfo = EvadeHelper.GetBestPosition();
@@ -550,7 +554,7 @@ namespace ezEvade
         }
 
         private void SpellDetector_OnProcessDetectedSpells()
-        {           
+        {
             if (Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false)
             {
                 lastPosInfo = PositionInfo.SetAllUndodgeable();

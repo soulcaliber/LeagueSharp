@@ -69,27 +69,17 @@ namespace ezEvade
 
             if (spellData.spellName == "OrianaIzunaCommand" && !pDict.ContainsKey("ProcessSpell_OrianaIzunaCommand"))
             {
-                Obj_AI_Hero hero = null;
-                foreach (var tHero in HeroManager.Enemies)
-                {
-                    if (hero.ChampionName == "Orianna")
-                    {
-                        hero = tHero;
-
-                        ObjectTrackerInfo info = new ObjectTrackerInfo(hero);
-                        info.Name = "TheDoomBall";
-                        info.OwnerNetworkID = hero.NetworkId;
-
-                        objTracker.Add(hero.NetworkId, info);
-                        break;
-                    }
-                }
-
+                Obj_AI_Hero hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Orianna");
                 if (hero == null)
                 {
                     return;
                 }
 
+                ObjectTrackerInfo info = new ObjectTrackerInfo(hero);
+                info.Name = "TheDoomBall";
+                info.OwnerNetworkID = hero.NetworkId;
+
+                objTracker.Add(hero.NetworkId, info);
 
                 Obj_AI_Minion.OnCreate += (obj, args) => OnCreateObj_OrianaIzunaCommand(obj, args, hero);
                 Obj_AI_Minion.OnDelete += (obj, args) => OnDeleteObj_OrianaIzunaCommand(obj, args, hero);
@@ -113,7 +103,7 @@ namespace ezEvade
 
             if (spellData.spellName == "LuxMaliceCannon" && !pDict.ContainsKey("ProcessSpell_LuxMaliceCannon"))
             {
-                var hero = HeroManager.Enemies.Find(h => h.ChampionName == "Lux");
+                var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Lux");
                 if (hero != null)
                 {
                     GameObject.OnCreate += (obj, args) => OnCreateObj_LuxMaliceCannon(obj, args, hero, spellData);
@@ -146,8 +136,8 @@ namespace ezEvade
             if (spellData.spellName == "Volley")
             {
                 for (int i = -4; i < 5; i++)
-                {                    
-                    Vector3 endPos2 = MathUtils.RotateVector(args.Start.To2D(), args.End.To2D(), i*spellData.angle).To3D();
+                {
+                    Vector3 endPos2 = MathUtils.RotateVector(args.Start.To2D(), args.End.To2D(), i * spellData.angle).To3D();
                     if (i != 0)
                     {
                         SpellDetector.CreateSpellData(hero, args.Start, endPos2, spellData, null, 0, false);
@@ -171,7 +161,7 @@ namespace ezEvade
 
         private static void OnCreateObj_LuxMaliceCannon(GameObject obj, EventArgs args, Obj_AI_Hero hero, SpellData spellData)
         {
-            if (hero != null && !hero.IsVisible 
+            if (hero != null && !hero.IsVisible
                 && obj.Name == "hiu" && obj.IsEnemy)
             {
                 objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj));
@@ -183,7 +173,7 @@ namespace ezEvade
                     var pos1 = objList.First().obj.Position;
                     var pos2 = objList.Last().obj.Position;
                     SpellDetector.CreateSpellData(hero, pos1, pos2, spellData, null, 0);
-                    
+
                     foreach (ObjectTrackerInfo gameObj in objList)
                     {
                         DelayAction.Add(1, () => objTracker.Remove(gameObj.obj.NetworkId));
@@ -245,7 +235,7 @@ namespace ezEvade
 
                     if (entry.Value.Name == "TheDoomBall")
                     {
-                        info.usePosition = false;                        
+                        info.usePosition = false;
                         info.obj = hero;
                     }
                 }
