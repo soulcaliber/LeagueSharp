@@ -59,7 +59,6 @@ namespace ezEvade
         public Evade()
         {
             LoadAssembly();
-            //CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         private void LoadAssembly()

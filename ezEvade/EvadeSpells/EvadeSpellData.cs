@@ -9,6 +9,8 @@ using SharpDX;
 
 namespace ezEvade
 {
+    public delegate bool UseSpellFunc(EvadeSpellData evadeSpell);
+
     public enum CastType
     {
         Position,
@@ -38,7 +40,7 @@ namespace ezEvade
         WindWall,
     }
 
-    class EvadeSpellData
+    public class EvadeSpellData
     {
         public string charName;
         public SpellSlot spellKey = SpellSlot.Q;
@@ -53,11 +55,14 @@ namespace ezEvade
         public EvadeType evadeType;
         public bool isReversed = false;
         public bool behindTarget = false;
+        public bool infrontTarget = false;
         public bool isSummonerSpell = false;
         public bool isItem = false;
         public ItemId itemID = 0;
         public CastType castType = CastType.Position;
         public SpellTargets[] spellTargets = { };
+        public UseSpellFunc useSpellFunc = null;
+        public bool isSpecial = false;
 
         public EvadeSpellData()
         {

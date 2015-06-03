@@ -212,7 +212,7 @@ namespace ezEvade
                 {
                     endTick = spellData.spellDelay + (spellData.range / spellData.projectileSpeed) * 1000;
                     endPosition = startPosition + direction * spellData.range;
-
+                                
                     if (obj != null)
                         endTick -= spellData.spellDelay;
                 }

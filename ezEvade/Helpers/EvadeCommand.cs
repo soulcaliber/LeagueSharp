@@ -13,6 +13,7 @@ namespace ezEvade
     {
         None,
         MoveTo,
+        Attack,
         CastSpell
     }
 
@@ -43,6 +44,20 @@ namespace ezEvade
                 isProcessed = false
             };            
             myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);            
+        }
+
+        public static void Attack(EvadeSpellData spellData, Obj_AI_Base target)
+        {
+            EvadeSpell.lastSpellEvadeCommand = new EvadeCommand
+            {
+                order = EvadeOrderCommand.Attack,
+                target = target,
+                evadeSpellData = spellData,
+                timestamp = Evade.TickCount,
+                isProcessed = false
+            };
+
+            myHero.IssueOrder(GameObjectOrder.AttackUnit, target, false);
         }
 
         public static void CastSpell(EvadeSpellData spellData, Obj_AI_Base target)

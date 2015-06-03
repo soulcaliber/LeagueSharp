@@ -54,7 +54,59 @@ namespace ezEvade
             });
 
             #endregion
-            
+
+            #region Ekko
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Ekko",
+                dangerlevel = 3,
+                name = "PhaseDive",
+                spellName = "EkkoE",
+                range = 350,
+                fixedRange = true,
+                spellDelay = 0,
+                speed = 1150,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
+            });
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Ekko",
+                dangerlevel = 3,
+                name = "PhaseDive2",
+                spellName = "EkkoEAttack",
+                range = 490,
+                spellDelay = 250,
+                infrontTarget = true,
+                spellKey = SpellSlot.Recall,
+                evadeType = EvadeType.Blink,                
+                castType = CastType.Target,                
+                spellTargets = new[] { SpellTargets.EnemyChampions, SpellTargets.EnemyMinions },
+                isSpecial = true,
+            });
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Ekko",
+                dangerlevel = 4,
+                name = "Chronobreak",
+                spellName = "EkkoR",
+                range = 20000,
+                spellDelay = 0,
+                spellKey = SpellSlot.R,
+                evadeType = EvadeType.Blink,
+                castType = CastType.Self,
+                isSpecial = true,
+            });
+
+            #endregion
+
             #region Ezreal
 
             Spells.Add(
@@ -287,6 +339,43 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 evadeType = EvadeType.SpellShield,
                 castType = CastType.Self,
+            });
+
+            #endregion
+
+            #region Fizz
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Fizz",
+                dangerlevel = 3,
+                name = "FizzPiercingStrike",
+                spellName = "FizzPiercingStrike",
+                range = 550,
+                speed = 1400,
+                fixedRange = true,
+                spellDelay = 0,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Target,
+                spellTargets = new[] { SpellTargets.EnemyMinions, SpellTargets.EnemyChampions },
+            });
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Fizz",
+                dangerlevel = 3,
+                name = "FizzJump",
+                spellName = "FizzJump",
+                range = 400,
+                speed = 1400,
+                fixedRange = true,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion

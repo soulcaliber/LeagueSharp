@@ -719,7 +719,7 @@ namespace ezEvade
                 spellType = SpellType.Circular,
             });
 
-            /*Spells.Add(
+            Spells.Add(
             new SpellData
             {
                 charName = "Ekko",
@@ -731,7 +731,8 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "EkkoR",
                 spellType = SpellType.Circular,
-            });*/
+                isSpecial = true,
+            });
 
             #endregion Ekko
 
@@ -846,6 +847,23 @@ namespace ezEvade
             #endregion Ezreal
 
             #region Fizz
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Fizz",
+                dangerlevel = 2,
+                name = "FizzPiercingStrike",
+                projectileSpeed = 1400,
+                radius = 150,
+                range = 550,
+                spellDelay = 0,
+                spellKey = SpellSlot.Q,
+                spellName = "FizzPiercingStrike",
+                spellType = SpellType.Line,
+                isSpecial = true,
+
+            });
 
             Spells.Add(
             new SpellData
@@ -997,6 +1015,22 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "GragasQ",
                 spellType = SpellType.Circular,
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Gragas",
+                dangerlevel = 3,
+                name = "Barrel Roll",
+                projectileSpeed = 1200,
+                radius = 200,
+                range = 950,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                spellName = "GragasE",
+                spellType = SpellType.Line,
 
             });
 
@@ -2193,6 +2227,27 @@ namespace ezEvade
 
             });
             #endregion Shyvana
+
+            #region Sion
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Sion",
+                dangerlevel = 2,
+                //missileName = "SionEMissile",
+                name = "SionE",
+                projectileSpeed = 1800,
+                radius = 80,
+                range = 800,
+                spellDelay = 250,
+                spellKey = SpellSlot.E,
+                spellName = "SionE",
+                spellType = SpellType.Line,
+                isSpecial = true,
+
+            });
+            #endregion Sion
 
             #region Sivir
 

@@ -113,6 +113,28 @@ namespace ezEvade
 
             #endregion Alistar
 
+            #region Azir
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Azir",
+                name = "AzirQ",
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "AzirQ",
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Azir",
+                name = "AzirW",
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                spellName = "AzirW",
+            });
+            #endregion Azir
+
             #region Amumu
 
             Spells.Add(
@@ -201,6 +223,31 @@ namespace ezEvade
             });
 
             #endregion Ashe
+
+            #region Bard
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Bard",
+                name = "BardQ",
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "BardQ",
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Bard",
+                name = "BardW",
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                spellName = "BardW",
+
+            });
+            #endregion Bard
 
             #region Blitzcrank
 
@@ -442,6 +489,30 @@ namespace ezEvade
             });
             #endregion Draven
 
+            #region Ekko
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Ekko",
+                name = "EkkoQ",
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "EkkoQ",
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Ekko",
+                name = "EkkoW",
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                spellName = "EkkoW",
+
+            });
+            #endregion Ekko
+
             #region Elise
 
             Spells.Add(
@@ -632,6 +703,30 @@ namespace ezEvade
             });
             #endregion Gangplank
 
+            #region Gnar
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Gnar",
+                name = "GnarQ",
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "GnarQ",
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Gnar",
+                name = "GnarW",
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                spellName = "gnarbigw",
+
+            });
+            #endregion Gnar
+
             #region Gragas
 
             Spells.Add(
@@ -759,6 +854,42 @@ namespace ezEvade
 
             });
             #endregion Jinx
+
+            #region Kalista
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Kalista",
+                name = "KalistaMysticShot",
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "KalistaMysticShot",
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Kalista",
+                name = "KalistaW",
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                spellName = "KalistaW",
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Kalista",
+                name = "KalistaE",
+                spellDelay = 250,
+                spellKey = SpellSlot.E,
+                spellName = "KalistaE",
+
+            });
+            #endregion Kalista
 
             #region Karma
 

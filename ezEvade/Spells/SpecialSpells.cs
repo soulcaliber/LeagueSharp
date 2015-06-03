@@ -27,6 +27,12 @@ namespace ezEvade
             this.obj = obj;
             this.Name = obj.Name;
         }
+
+        public ObjectTrackerInfo(GameObject obj, string name)
+        {
+            this.obj = obj;
+            this.Name = name;
+        }
     }
 
     class SpecialSpells
@@ -114,7 +120,7 @@ namespace ezEvade
 
             /*if (spellData.spellName == "JinxWMissile" && !pDict.ContainsKey("ProcessSpell_JinxWMissile"))
             {
-                var hero = HeroManager.Enemies.Find(h => h.ChampionName == "Jinx");
+                var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Jinx");
                 if (hero != null)
                 {
                     GameObject.OnCreate += (obj, args) => OnCreateObj_JinxWMissile(obj, args, hero, spellData);
@@ -127,6 +133,66 @@ namespace ezEvade
             {
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_AsheVolley;
                 pDict["ProcessSpell_AsheVolley"] = true;
+            }
+
+            if (spellData.spellName == "FizzPiercingStrike" && !pDict.ContainsKey("ProcessSpell_FizzPiercingStrike"))
+            {
+                SpellDetector.OnProcessSpecialSpell += ProcessSpell_FizzPiercingStrike;
+                pDict["ProcessSpell_FizzPiercingStrike"] = true;
+            }
+
+            if (spellData.spellName == "SionE" && !pDict.ContainsKey("ProcessSpell_SionE"))
+            {
+                SpellDetector.OnProcessSpecialSpell += ProcessSpell_SionE;
+                pDict["ProcessSpell_SionE"] = true;
+            }
+
+            if (spellData.spellName == "EkkoR" && !pDict.ContainsKey("ProcessSpell_EkkoR"))
+            {
+                SpellDetector.OnProcessSpecialSpell += ProcessSpell_EkkoR;
+                pDict["ProcessSpell_EkkoR"] = true;
+            }
+        }
+
+        private static void ProcessSpell_EkkoR(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
+            SpecialSpellEventArgs specialSpellArgs)
+        {
+            if (spellData.spellName == "EkkoR")
+            {
+                foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
+                {
+                    if (obj != null && obj.IsValid && obj.Name == "Ekko" && obj.IsEnemy)
+                    {
+                        var blinkPos = obj.ServerPosition.To2D();
+
+                        SpellDetector.CreateSpellData(hero, args.Start, blinkPos.To3D(), spellData);
+                    }
+                }
+
+                specialSpellArgs.noProcess = true;
+            }
+        }
+
+        private static void ProcessSpell_SionE(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
+            SpecialSpellEventArgs specialSpellArgs)
+        {
+            if (spellData.spellName == "SionE")
+            {                
+                //specialSpellArgs.noProcess = true;
+            }
+        }
+
+        private static void ProcessSpell_FizzPiercingStrike(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
+            SpecialSpellEventArgs specialSpellArgs)
+        {
+            if (spellData.spellName == "FizzPiercingStrike")
+            {
+                if (args.Target != null && args.Target.IsMe)
+                {
+                    SpellDetector.CreateSpellData(hero, args.Start, args.End, spellData, null, 0);                    
+                }
+
+                specialSpellArgs.noProcess = true;
             }
         }
 
@@ -155,7 +221,6 @@ namespace ezEvade
                 var dir = (obj.Position - myHero.Position).Normalized();
                 var pos2 = pos1 + dir * 500;
                 SpellDetector.CreateSpellData(hero, pos1, pos2, spellData, null, 0);
-                Console.WriteLine("aaa");
             }
         }
 
@@ -306,13 +371,13 @@ namespace ezEvade
 
                             SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0);
                         }
-
-                        specialSpellArgs.noProcess = true;
-
+                                                
                         info.position = args.End;
                         info.usePosition = true;
                     }
                 }
+
+                specialSpellArgs.noProcess = true;
             }
 
             if (spellData.spellName == "OrianaDetonateCommand" || spellData.spellName == "OrianaDissonanceCommand")
@@ -335,11 +400,11 @@ namespace ezEvade
 
                             Vector3 endPos2 = info.obj.Position;
                             SpellDetector.CreateSpellData(hero, endPos2, endPos2, spellData, null, 0);
-                        }
-
-                        specialSpellArgs.noProcess = true;
+                        }                        
                     }
                 }
+
+                specialSpellArgs.noProcess = true;
             }
         }
 
@@ -349,12 +414,13 @@ namespace ezEvade
 
             foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (obj.Name == "RobotBuddy" && obj.IsEnemy)
+                if (obj != null && obj.IsValid && obj.BaseSkinName == "lulufaerie" && obj.IsEnemy)
                 {
                     gotObj = true;
 
-                    if (!objTracker.ContainsKey(obj.NetworkId))
-                        objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj));
+                    if (!objTracker.ContainsKey(obj.NetworkId)){         
+                        objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj, "RobotBuddy"));
+                    }
                 }
             }
 
@@ -375,7 +441,7 @@ namespace ezEvade
 
                     if (entry.Value.Name == "RobotBuddy")
                     {
-                        if (info.obj == null || info.obj.IsDead)
+                        if (info.obj == null || info.obj.IsValid || info.obj.IsDead || info.obj.IsVisible)
                         {
                             continue;
                         }
@@ -392,7 +458,7 @@ namespace ezEvade
         private static void OnCreateObj_ZedShuriken(GameObject obj, EventArgs args)
         {
             if (obj.Name == "Shadow" && obj.IsEnemy)
-            {
+            {                
                 if (!objTracker.ContainsKey(obj.NetworkId))
                 {
                     objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj));
@@ -413,7 +479,7 @@ namespace ezEvade
 
         private static void OnDeleteObj_ZedShuriken(GameObject obj, EventArgs args)
         {
-            if (obj.Name == "Shadow" && obj.IsEnemy)
+            if (obj != null && obj.IsValid && obj.Name == "Shadow" && obj.IsEnemy)
             {
                 objTracker.Remove(obj.NetworkId);
             }
@@ -430,7 +496,7 @@ namespace ezEvade
 
                     if (info.obj.Name == "Shadow" || info.Name == "Shadow")
                     {
-                        if (info.usePosition == false && (info.obj == null || info.obj.IsDead))
+                        if (info.usePosition == false && (info.obj == null || info.obj.IsValid || info.obj.IsDead))
                         {
                             DelayAction.Add(1, () => objTracker.Remove(info.obj.NetworkId));
                             continue;

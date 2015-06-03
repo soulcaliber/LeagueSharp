@@ -432,6 +432,14 @@ namespace ezEvade
 
         public static PositionInfo GetBestPositionTargetedDash(EvadeSpellData spell)
         {
+            /*if (spell.spellDelay > 0)
+            {
+                if (CheckWindupTime(spell.spellDelay))
+                {
+                    return null;
+                }
+            }*/
+
             var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
             var extraEvadeDistance = 100;// Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraEvadeDistance").GetValue<Slider>().Value;
             var extraDist = Evade.menu.Item("ExtraCPADistance").GetValue<Slider>().Value;
@@ -538,6 +546,12 @@ namespace ezEvade
                     pos = pos + dir * (candidate.BoundingRadius + myHero.BoundingRadius);
                 }
 
+                if (spell.infrontTarget)
+                {
+                    var dir = (pos - heroPoint).Normalized();
+                    pos = pos - dir * (candidate.BoundingRadius + myHero.BoundingRadius);
+                }
+
                 if (spell.fixedRange)
                 {
                     var dir = (pos - heroPoint).Normalized();
@@ -596,6 +610,22 @@ namespace ezEvade
 
             return null;
 
+        }
+
+        public static bool CheckWindupTime(float windupTime)
+        {
+            foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
+            {
+                Spell spell = entry.Value;
+
+                var hitTime = spell.GetSpellHitTime(myHero.ServerPosition.To2D());
+                if (hitTime < windupTime)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
                 
         public static float GetMovementBlockPositionValue(Vector2 pos, Vector2 movePos)

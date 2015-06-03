@@ -133,9 +133,16 @@ namespace ezEvade
 
         private static void ObjAiHeroOnOnNewPath(Obj_AI_Base unit, GameObjectNewPathEventArgs args)
         {
-            if (unit.IsMe)
+            if (unit.Type == GameObjectType.obj_AI_Hero)
             {
                 Console.WriteLine("Dash windup: " + (Evade.TickCount - EvadeSpell.lastSpellEvadeCommand.timestamp));
+
+                if (args.IsDash && testMenu.Item("ShowDashInfo").GetValue<bool>())
+                {
+                    var dist = args.Path.First().Distance(args.Path.Last());
+                    Console.WriteLine("Dash Speed: " + args.Speed + " Dash dist: " + dist);
+                }
+                
             }
         }
 
@@ -701,6 +708,17 @@ namespace ezEvade
 
                     Render.Circle.DrawCircle(new Vector3(endPos2.X, endPos2.Y, myHero.Position.Z), 50, Color.Green, 3);
                 }
+
+
+                /*foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
+                {
+                    Console.WriteLine("minion: " + obj.Name);
+                    if (obj.Name == "Ekko")
+                    {
+                        var pos = obj.Position;
+                        Render.Circle.DrawCircle(pos, 100, Color.Green, 3);
+                    }
+                }*/
             }
 
             if (testMenu.Item("TestWall").GetValue<bool>())

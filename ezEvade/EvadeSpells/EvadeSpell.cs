@@ -151,7 +151,19 @@ namespace ezEvade
                     continue; //can't use spell right now               
                 }
 
-                if (evadeSpell.evadeType == EvadeType.Blink)
+                if (evadeSpell.isSpecial == true)
+                {
+                    if (evadeSpell.useSpellFunc != null)
+                    {
+                        if (evadeSpell.useSpellFunc(evadeSpell))
+                        {
+                            return true;
+                        }
+                    }
+
+                    continue;
+                }
+                else if (evadeSpell.evadeType == EvadeType.Blink)
                 {
                     if (evadeSpell.castType == CastType.Position)
                     {
@@ -228,7 +240,7 @@ namespace ezEvade
                         EvadeCommand.CastSpell(evadeSpell);
                         return true;
                     }
-                }                
+                }               
             }
 
             return false;
@@ -331,6 +343,11 @@ namespace ezEvade
                 {
                     itemSpells.Add(spell);
                     continue;
+                }
+
+                if (spell.isSpecial)
+                {
+                    SpecialEvadeSpell.LoadSpecialSpell(spell);
                 }
 
                 evadeSpells.Add(spell);
