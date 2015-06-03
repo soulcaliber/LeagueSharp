@@ -13,13 +13,13 @@ namespace ezEvade
 {
     class EvadeHelper
     {
-        private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }        
+        private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
 
         public static bool PlayerInSkillShot(Spell spell)
         {
             return myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius);
         }
-                
+
         public static PositionInfo InitPositionInfo(Vector2 pos, float extraDelayBuffer, float extraEvadeDistance, Vector2 lastMovePos, Spell lowestEvadeTimeSpell) //clean this shit up
         {
             var extraDist = Evade.menu.Item("ExtraCPADistance").GetValue<Slider>().Value;
@@ -143,6 +143,8 @@ namespace ezEvade
                 }
             }
 
+            extraDelayBuffer += (int)(Evade.avgCalculationTime);
+
             if (Evade.menu.Item("HigherPrecision").GetValue<bool>())
             {
                 maxPosToCheck = 150;
@@ -214,11 +216,11 @@ namespace ezEvade
                     //.ThenBy(p => p.hasExtraDistance)
                         .ThenBy(p => p.distanceToMouse);
             }
-                        
+
             foreach (var posInfo in sortedPosTable)
             {
                 if (CheckPathCollision(myHero, posInfo.position) == false)
-                {                   
+                {
                     if (fastEvadeMode)
                     {
                         posInfo.position = GetExtendedSafePosition(myHero.ServerPosition.To2D(), posInfo.position, extraEvadeDistance);
@@ -334,7 +336,7 @@ namespace ezEvade
                     if (Evade.menu.Item("MinComfortZone").GetValue<Slider>().Value < posInfo.posDistToChamps)
                     {
                         posTable.Add(posInfo);
-                    }                    
+                    }
                 }
             }
 
@@ -627,7 +629,7 @@ namespace ezEvade
 
             return false;
         }
-                
+
         public static float GetMovementBlockPositionValue(Vector2 pos, Vector2 movePos)
         {
             float value = 0;// pos.Distance(movePos);
@@ -732,7 +734,7 @@ namespace ezEvade
                 spell.evadeTime = evadeTime;
             }
         }
-                
+
         public static Vector2 GetFastestPosition(Spell spell)
         {
             var heroPos = myHero.ServerPosition.To2D();
@@ -832,8 +834,8 @@ namespace ezEvade
             }
 
             return float.MaxValue;
-        }              
-                     
+        }
+
         public static PositionInfo CanHeroWalkToPos(Vector2 pos, float speed, float delay, float extraDist, bool useServerPosition = true)
         {
             int posDangerLevel = 0;
@@ -858,7 +860,7 @@ namespace ezEvade
                 closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist));
                 //GetIntersectTime(spell, myHero.ServerPosition.To2D(), pos);
                 //Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, myHero.MoveSpeed, delay, myHero.ServerPosition.To2D()));
-                                
+
                 if (pos.InSkillShot(spell, myHero.BoundingRadius + 6)
                     || PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist)
                     || pos.IsUnderTurret()
@@ -888,6 +890,8 @@ namespace ezEvade
         {
             var walkDir = (pos - heroPos).Normalized();
             var zVector = new Vector2(0, 0);
+
+            heroPos = heroPos - walkDir * speed * ((float)Game.Ping) / 1000;
 
             if (spell.info.spellType == SpellType.Line)
             {
@@ -996,7 +1000,7 @@ namespace ezEvade
             var realPos = heroPos + walkDir * myHero.MoveSpeed * (delay / 1000);
 
             return realPos;
-        }        
+        }
 
         public static bool CheckPathCollision(Obj_AI_Base unit, Vector2 movePos)
         {
@@ -1026,8 +1030,8 @@ namespace ezEvade
             }
 
             return false;
-        }                
-                    
+        }
+
         public static bool CheckMovePath(Vector2 movePos, float extraDelay = 0)
         {
             /*if (EvadeSpell.lastSpellEvadeCommand.evadeSpellData != null)

@@ -107,7 +107,7 @@ namespace ezEvade
                 pDict["ProcessSpell_LucianQ"] = true;
             }
 
-            if (spellData.spellName == "LuxMaliceCannon" && !pDict.ContainsKey("ProcessSpell_LuxMaliceCannon"))
+            /*if (spellData.spellName == "LuxMaliceCannon" && !pDict.ContainsKey("ProcessSpell_LuxMaliceCannon"))
             {
                 var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Lux");
                 if (hero != null)
@@ -116,7 +116,7 @@ namespace ezEvade
                 }
 
                 pDict["ProcessSpell_LuxMaliceCannon"] = true;
-            }
+            }*/
 
             /*if (spellData.spellName == "JinxWMissile" && !pDict.ContainsKey("ProcessSpell_JinxWMissile"))
             {

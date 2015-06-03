@@ -97,7 +97,9 @@ namespace ezEvade
                                 if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                 {
                                     spell.spellObject = obj;
-                                    //Console.WriteLine("aquired: " + (obj.Position.To2D().Distance(spell.startPos)));
+
+                                    //var acquisitionTime = Evade.TickCount - spell.startTime;
+                                    //Console.WriteLine("AcquiredTime: " + acquisitionTime);
                                 }
                             }
                         }

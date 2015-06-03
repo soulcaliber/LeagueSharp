@@ -55,6 +55,10 @@ namespace ezEvade
 
         public static int CastSpellPacketID = 83;
 
+        public static float sumCalculationTime = 0;
+        public static float numCalculationTime = 0;
+        public static float avgCalculationTime = 0;
+
 
         public Evade()
         {
@@ -569,7 +573,20 @@ namespace ezEvade
                 }
                 else
                 {
+                    var calculationTimer = TickCount;
+
                     var posInfo = EvadeHelper.GetBestPosition();
+
+                    var caculationTime = TickCount - calculationTimer;
+
+                    if (numCalculationTime > 0)
+                    {
+                        sumCalculationTime += caculationTime;
+                        avgCalculationTime = sumCalculationTime / numCalculationTime;
+                    }
+                    numCalculationTime += 1;
+
+                    //Console.WriteLine("CalculationTime: " + avgCalculationTime);
 
                     /*if (EvadeHelper.GetHighestDetectedSpellID() > EvadeHelper.GetHighestSpellID(posInfo))
                     {
