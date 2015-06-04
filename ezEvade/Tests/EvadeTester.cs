@@ -151,6 +151,11 @@ namespace ezEvade
             if (!spellbook.Owner.IsMe)
                 return;
 
+            if (testMenu.Item("TestPath").GetValue<bool>())
+            {
+                renderPositions.Add(new RenderPosition(args.EndPosition.To2D(), Evade.TickCount + 500));
+            }
+
             lastSpellCastTimeEx = Evade.TickCount;
         }
 
@@ -435,6 +440,18 @@ namespace ezEvade
                 }
             }
 
+            if (testMenu.Item("TestPath").GetValue<bool>())
+            {
+                var tPath = myHero.GetPath(args.TargetPosition);
+                Vector2 lastPoint = Vector2.Zero;
+
+                foreach (Vector3 point in tPath)
+                {
+                    var point2D = point.To2D();
+                    renderPositions.Add(new RenderPosition(point2D, Evade.TickCount + 500));
+                    //Render.Circle.DrawCircle(new Vector3(point.X, point.Y, point.Z), myHero.BoundingRadius, Color.Violet, 3);
+                }
+            }
 
             /*
             if (args.Order == GameObjectOrder.MoveTo)

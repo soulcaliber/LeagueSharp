@@ -127,6 +127,7 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
+                miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("FasterCrossing", "Fast Crossing").SetValue(false));
                 miscMenu.AddItem(new MenuItem("LoadPingTester", "Load Ping Tester").SetValue(true));
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
@@ -212,6 +213,7 @@ namespace ezEvade
             menu.Item("CheckSpellCollision").SetValue(false);
             menu.Item("PreventDodgingUnderTower").SetValue(false);
             menu.Item("PreventDodgingNearEnemy").SetValue(true);
+            menu.Item("AdvancedSpellDetection").SetValue(false);
             menu.Item("LoadPingTester").SetValue(true);
 
             menu.Item("TickLimiter").SetValue(new Slider(50, 0, 200));
@@ -260,7 +262,7 @@ namespace ezEvade
             {
                 args.Process = false;
             }
-
+            
             lastSpellCast = args.Slot;
             lastSpellCastTime = TickCount;
 
@@ -339,6 +341,28 @@ namespace ezEvade
                 if (isDodging)
                 {
                     args.Process = false; //Block the command
+                }
+                else
+                {
+                    if (args.Order == GameObjectOrder.AttackUnit)
+                    {
+                        var target = args.Target;
+                        if (target != null && target.IsValid<Obj_AI_Base>())
+                        {
+                            var baseTarget = target as Obj_AI_Base;
+                            if (myHero.ServerPosition.To2D().Distance(baseTarget.ServerPosition.To2D()) >
+                                myHero.AttackRange + myHero.BoundingRadius + baseTarget.BoundingRadius)
+                            {
+                                var movePos = args.TargetPosition.To2D();
+                                var extraDelay = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
+                                if (EvadeHelper.CheckMovePath(movePos, Game.Ping + extraDelay))
+                                {
+                                    args.Process = false; //Block the command
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

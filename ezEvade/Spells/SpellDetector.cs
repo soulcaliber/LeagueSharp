@@ -214,7 +214,7 @@ namespace ezEvade
                 {
                     endTick = spellData.spellDelay + (spellData.range / spellData.projectileSpeed) * 1000;
                     endPosition = startPosition + direction * spellData.range;
-                                
+
                     if (obj != null)
                         endTick -= spellData.spellDelay;
                 }
@@ -314,7 +314,7 @@ namespace ezEvade
                 {
                     spell.predictedEndPos = spell.GetSpellProjection(collisionObject.ServerPosition.To2D());
 
-                    if (spell.GetCurrentSpellPosition().Distance(collisionObject.ServerPosition) 
+                    if (spell.GetCurrentSpellPosition().Distance(collisionObject.ServerPosition)
                         < collisionObject.BoundingRadius + spell.GetSpellRadius())
                     {
                         DelayAction.Add(1, () => DeleteSpell(entry.Key));
@@ -325,30 +325,38 @@ namespace ezEvade
 
         public static bool CanHeroWalkIntoSpell(Spell spell)
         {
-            Vector2 heroPos = myHero.Position.To2D();
-
-            if (spell.info.spellType == SpellType.Line)
+            if (Evade.menu.Item("AdvancedSpellDetection").GetValue<bool>())
             {
-                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + 10;
-                var spellPos = spell.GetCurrentSpellPosition();
-                var spellEndPos = spell.GetSpellEndPosition();
+                Vector2 heroPos = myHero.Position.To2D();
+                var extraDist = myHero.Distance(myHero.ServerPosition.To2D());
 
-                var projection = heroPos.ProjectOn(spellPos, spellEndPos);
-
-                return projection.SegmentPoint.Distance(heroPos) <= walkRadius;
-            }
-            else if (spell.info.spellType == SpellType.Circular)
-            {
-                var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + 10;
-
-                if (heroPos.Distance(spell.endPos) < walkRadius)
+                if (spell.info.spellType == SpellType.Line)
                 {
-                    return true;
+                    var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + extraDist + 10;
+                    var spellPos = spell.GetCurrentSpellPosition();
+                    var spellEndPos = spell.GetSpellEndPosition();
+
+                    var projection = heroPos.ProjectOn(spellPos, spellEndPos);
+
+                    return projection.SegmentPoint.Distance(heroPos) <= walkRadius;
+                }
+                else if (spell.info.spellType == SpellType.Circular)
+                {
+                    var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + extraDist + 10;
+
+                    if (heroPos.Distance(spell.endPos) < walkRadius)
+                    {
+                        return true;
+                    }
+
                 }
 
+                return false;
             }
-
-            return false;
+            else
+            {
+                return true;
+            }
         }
 
         private static void AddDetectedSpells()
@@ -365,7 +373,9 @@ namespace ezEvade
                 spell.spellHitTime = spellHitTime;
                 spell.evadeTime = evadeTime;
 
-                if (spell.spellHitTime - spell.evadeTime < 1500 && CanHeroWalkIntoSpell(spell))
+                var extraDelay = Game.Ping + Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;;
+
+                if (spell.spellHitTime - spell.evadeTime - extraDelay < 1500 && CanHeroWalkIntoSpell(spell))
                 {
                     Spell newSpell = spell;
                     int spellID = spell.spellID;
@@ -393,7 +403,7 @@ namespace ezEvade
                             continue;
                         }
                     }
-                                        
+
                     if (!spells.ContainsKey(spell.spellID))
                     {
                         if (!(Evade.isDodgeDangerousEnabled() && newSpell.GetSpellDangerLevel() < 3)
