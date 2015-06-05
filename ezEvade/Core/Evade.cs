@@ -282,6 +282,15 @@ namespace ezEvade
                             return;
                         }
                     }
+
+                    foreach (var evadeSpell in EvadeSpell.evadeSpells)
+                    {
+                        if (evadeSpell.isItem == false && evadeSpell.spellKey == args.Slot)
+                        {
+                            lastPosInfo = PositionInfo.SetAllUndodgeable();
+                            return;
+                        }
+                    }
                 }
             }
         }
