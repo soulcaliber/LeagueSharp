@@ -45,7 +45,20 @@ namespace ezEvade
         {
             this.menu = menu;
 
-            foreach (var item in ReturnAllItems(menu))
+            AddMenuToCache(menu);
+        }
+
+        public void AddMenuToCache(Menu newMenu)
+        {
+            foreach (var item in ReturnAllItems(newMenu))
+            {
+                AddMenuItemToCache(item);
+            }
+        }
+
+        public void AddMenuItemToCache(MenuItem item)
+        {
+            if (!cache.ContainsKey(item.Name))
             {
                 cache.Add(item.Name, item);
             }

@@ -68,6 +68,7 @@ namespace ezEvade
                         .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
                     evadeSpellMenu.AddSubMenu(newSpellMenu);
+                    ObjectCache.menuCache.AddMenuToCache(newSpellMenu);
                 }
             }
 
