@@ -58,7 +58,7 @@ namespace ezEvade
 
         public void AddMenuItemToCache(MenuItem item)
         {
-            if (!cache.ContainsKey(item.Name))
+            if (item != null && !cache.ContainsKey(item.Name))
             {
                 cache.Add(item.Name, item);
             }

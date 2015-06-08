@@ -30,7 +30,7 @@ namespace ezEvade
             menu.AddSubMenu(evadeSpellMenu);
 
             LoadEvadeSpellList();
-            CheckForItems();
+            DelayAction.Add(100, () => CheckForItems());
         }
 
         private void Game_OnGameUpdate(EventArgs args)
