@@ -20,10 +20,10 @@ namespace ezEvade
         private static bool lastRandomMoveCoeff = false;
 
         private static float sumPingTime = 0;
-        private static float averagePingTime = Game.Ping;
+        private static float averagePingTime = ObjectCache.gamePing;
         private static int testCount = 0;
         private static int autoTestCount = 0;
-        private static float maxPingTime = Game.Ping;
+        private static float maxPingTime = ObjectCache.gamePing;
 
         private static bool autoTestPing = false;
 
@@ -48,7 +48,7 @@ namespace ezEvade
         private void IssueTestMove(int recursionCount)
         {
 
-            var movePos = myHero.ServerPosition.To2D();
+            var movePos = ObjectCache.myHeroCache.serverPos2D;
 
             Random rand = new Random();
 
@@ -181,7 +181,7 @@ namespace ezEvade
 
                         if (movePos.Distance(lastTestMoveToCommand.targetPosition) < 10)
                         {
-                            float moveTime = Evade.TickCount - lastTestMoveToCommand.timestamp - Game.Ping;
+                            float moveTime = Evade.TickCount - lastTestMoveToCommand.timestamp - ObjectCache.gamePing;
                             Console.WriteLine("Extra Delay: " + moveTime);
                             lastTestMoveToCommand.isProcessed = true;
 

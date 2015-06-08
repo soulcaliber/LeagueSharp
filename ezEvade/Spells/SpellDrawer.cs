@@ -91,12 +91,12 @@ namespace ezEvade
 
         private void DrawEvadeStatus()
         {
-            if (menu.SubMenu("Draw").Item("ShowStatus").GetValue<bool>())
+            if (ObjectCache.menuCache.cache["ShowStatus"].GetValue<bool>())
             {
                 var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
                 var dimension = Drawing.GetTextExtent("Evade: ON");
 
-                if (menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active)
+                if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active)
                 {
                     if (Evade.isDodging)
                     {
@@ -112,7 +112,7 @@ namespace ezEvade
                 }
                 else
                 {
-                    if (menu.Item("ActivateEvadeSpells").GetValue<KeyBind>().Active)
+                    if (ObjectCache.menuCache.cache["ActivateEvadeSpells"].GetValue<KeyBind>().Active)
                     {
                         Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Purple, "Evade: Spell");
                     }
@@ -129,12 +129,12 @@ namespace ezEvade
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            if (menu.SubMenu("Draw").Item("DrawSkillShots").GetValue<bool>() == false)
+            if (ObjectCache.menuCache.cache["DrawSkillShots"].GetValue<bool>() == false)
             {
                 return;
             }
 
-            if (menu.SubMenu("Draw").Item("DrawEvadePosition").GetValue<bool>())
+            if (ObjectCache.menuCache.cache["DrawEvadePosition"].GetValue<bool>())
             {
                 if (Evade.lastPosInfo != null)
                 {
@@ -150,44 +150,41 @@ namespace ezEvade
                 Spell spell = entry.Value;
 
                 var dangerStr = spell.GetSpellDangerString();
-                var spellDrawingConfig = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
-                    .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Color").GetValue<Circle>();
-                var spellDrawingWidth = Evade.menu.SubMenu("Draw").SubMenu("DangerLevelDrawings")
-                    .SubMenu(dangerStr + "Drawing").Item(dangerStr + "Width").GetValue<Slider>().Value;
+                var spellDrawingConfig = ObjectCache.menuCache.cache[dangerStr + "Color"].GetValue<Circle>();
+                var spellDrawingWidth = ObjectCache.menuCache.cache[dangerStr + "Width"].GetValue<Slider>().Value;
 
-                if (Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings")
-                    .Item(spell.info.spellName + "DrawSpell").GetValue<bool>()
+                if (ObjectCache.menuCache.cache[spell.info.spellName + "DrawSpell"].GetValue<bool>()
                     && spellDrawingConfig.Active)
                 {
                     if (spell.info.spellType == SpellType.Line)
                     {
-                        Vector2 spellPos = spell.GetCurrentSpellPosition();
+                        Vector2 spellPos = spell.currentSpellPosition;
                         Vector2 spellEndPos = spell.GetSpellEndPosition();
 
-                        DrawLineRectangle(spellPos, spellEndPos, (int)spell.GetSpellRadius(), spellDrawingWidth, spellDrawingConfig.Color);
+                        DrawLineRectangle(spellPos, spellEndPos, (int)spell.radius, spellDrawingWidth, spellDrawingConfig.Color);
 
                         /*foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
                         {
-                            Render.Circle.DrawCircle(new Vector3(hero.ServerPosition.X, hero.ServerPosition.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), Color.Red, 5);
+                            Render.Circle.DrawCircle(new Vector3(hero.ServerPosition.X, hero.ServerPosition.Y, myHero.Position.Z), (int)spell.radius, Color.Red, 5);
                         }*/
 
-                        if (menu.SubMenu("Draw").Item("DrawSpellPos").GetValue<bool>())// && spell.spellObject != null)
+                        if (ObjectCache.menuCache.cache["DrawSpellPos"].GetValue<bool>())// && spell.spellObject != null)
                         {
-                            //spellPos = SpellDetector.GetCurrentSpellPosition(spell, true, Game.Ping);
+                            //spellPos = SpellDetector.GetCurrentSpellPosition(spell, true, ObjectCache.gamePing);
 
                             /*if (true)
                             {
-                                var spellPos2 = spell.startPos + spell.direction * spell.info.projectileSpeed * (Evade.GetTickCount - spell.startTime - spell.info.spellDelay) / 1000 + spell.direction * spell.info.projectileSpeed * ((float)Game.Ping / 1000);
-                                Render.Circle.DrawCircle(new Vector3(spellPos2.X, spellPos2.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), Color.Red, 8);
+                                var spellPos2 = spell.startPos + spell.direction * spell.info.projectileSpeed * (Evade.GetTickCount - spell.startTime - spell.info.spellDelay) / 1000 + spell.direction * spell.info.projectileSpeed * ((float)ObjectCache.gamePing / 1000);
+                                Render.Circle.DrawCircle(new Vector3(spellPos2.X, spellPos2.Y, myHero.Position.Z), (int)spell.radius, Color.Red, 8);
                             }*/
 
-                            Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), spellDrawingConfig.Color, spellDrawingWidth);
+                            Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);
                         }
 
                     }
                     else if (spell.info.spellType == SpellType.Circular)
                     {
-                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)spell.GetSpellRadius(), spellDrawingConfig.Color, spellDrawingWidth);
+                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);
                     }
                     else if (spell.info.spellType == SpellType.Cone)
                     {

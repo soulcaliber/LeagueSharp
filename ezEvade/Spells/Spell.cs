@@ -21,7 +21,14 @@ namespace ezEvade
         public SpellData info;
         public int spellID;
         public GameObject spellObject = null;
+                
+        public Vector2 currentSpellPosition = Vector2.Zero;
+        public Vector2 currentNegativePosition = Vector2.Zero;
         public Vector2 predictedEndPos = Vector2.Zero;
+
+        public float radius = 0;
+        public int dangerlevel = 1;
+
         public float evadeTime = float.MinValue;
         public float spellHitTime = float.MinValue;
 
@@ -35,17 +42,15 @@ namespace ezEvade
     {
         public static float GetSpellRadius(this Spell spell)
         {
-            var radius = Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings")
-                .Item(spell.info.spellName + "SpellRadius").GetValue<Slider>().Value;
-            var extraRadius = Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraSpellRadius").GetValue<Slider>().Value;
+            var radius = ObjectCache.menuCache.cache[spell.info.spellName + "SpellRadius"].GetValue<Slider>().Value;
+            var extraRadius = ObjectCache.menuCache.cache["ExtraSpellRadius"].GetValue<Slider>().Value;
 
             return (float)(radius + extraRadius);
         }
 
         public static int GetSpellDangerLevel(this Spell spell)
         {
-            var dangerStr = Evade.menu.SubMenu("Spells").SubMenu(spell.info.charName + spell.info.spellName + "Settings")
-                .Item(spell.info.spellName + "DangerLevel").GetValue<StringList>().SelectedValue;
+            var dangerStr = ObjectCache.menuCache.cache[spell.info.spellName + "DangerLevel"].GetValue<StringList>().SelectedValue;
 
             var dangerlevel = 1;
 
@@ -94,7 +99,7 @@ namespace ezEvade
             {
                 if (predictPos)
                 {
-                    var spellPos = spell.GetCurrentSpellPosition();
+                    var spellPos = spell.currentSpellPosition;
                     var spellEndPos = spell.GetSpellEndPosition();
 
                     return pos.ProjectOn(spellPos, spellEndPos).SegmentPoint;
@@ -120,8 +125,8 @@ namespace ezEvade
             }
 
             List<Obj_AI_Base> collisionCandidates = new List<Obj_AI_Base>();
-            var spellPos = spell.GetCurrentSpellPosition();
-            var distanceToHero = spellPos.Distance(Evade.myHero.ServerPosition.To2D());
+            var spellPos = spell.currentSpellPosition;
+            var distanceToHero = spellPos.Distance(ObjectCache.myHeroCache.serverPos2D);
 
             if (spell.info.collisionObjects.Contains(CollisionObjectType.EnemyChampions))
             {
@@ -167,15 +172,15 @@ namespace ezEvade
             {
                 if (spell.info.projectileSpeed == float.MaxValue)
                 {
-                    return Math.Max(0, spell.endTime - Evade.TickCount - Game.Ping);
+                    return Math.Max(0, spell.endTime - Evade.TickCount - ObjectCache.gamePing);
                 }
 
-                var spellPos = spell.GetCurrentSpellPosition(true, Game.Ping);
+                var spellPos = spell.GetCurrentSpellPosition(true, ObjectCache.gamePing);
                 return 1000 * spellPos.Distance(pos) / spell.info.projectileSpeed;
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                return Math.Max(0, spell.endTime - Evade.TickCount - Game.Ping);
+                return Math.Max(0, spell.endTime - Evade.TickCount - ObjectCache.gamePing);
             }
 
             return float.MaxValue;
@@ -190,12 +195,12 @@ namespace ezEvade
             if (spell.info.spellType == SpellType.Line)
             {
                 var projection = heroPos.ProjectOn(spell.startPos, spell.endPos).SegmentPoint;
-                evadeTime = 1000 * (spell.GetSpellRadius() - heroPos.Distance(projection) + hero.BoundingRadius) / hero.MoveSpeed;
+                evadeTime = 1000 * (spell.radius - heroPos.Distance(projection) + hero.BoundingRadius) / hero.MoveSpeed;
                 spellHitTime = spell.GetSpellHitTime(projection);
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                evadeTime = 1000 * (spell.GetSpellRadius() - heroPos.Distance(spell.endPos) + hero.BoundingRadius) / hero.MoveSpeed;
+                evadeTime = 1000 * (spell.radius - heroPos.Distance(spell.endPos)) / hero.MoveSpeed;
                 spellHitTime = spell.GetSpellHitTime(heroPos);
             }
 
@@ -207,11 +212,11 @@ namespace ezEvade
 
         public static BoundingBox GetLinearSpellBoundingBox(this Spell spell)
         {
-            var myBoundingRadius = Evade.myHero.BoundingRadius;
+            var myBoundingRadius = ObjectCache.myHeroCache.boundingRadius;
             var spellDir = spell.direction;
             var pSpellDir = spell.direction.Perpendicular();
-            var spellRadius = spell.GetSpellRadius();
-            var spellPos = spell.GetCurrentSpellPosition() - spellDir * myBoundingRadius; //leave some space at back of spell
+            var spellRadius = spell.radius;
+            var spellPos = spell.currentSpellPosition - spellDir * myBoundingRadius; //leave some space at back of spell
             var endPos = spell.GetSpellEndPosition() + spellDir * myBoundingRadius; //leave some space at the front of spell
 
             var startRightPos = spellPos + pSpellDir * (spellRadius + myBoundingRadius);
@@ -224,6 +229,15 @@ namespace ezEvade
         public static Vector2 GetSpellEndPosition(this Spell spell)
         {
             return spell.predictedEndPos == Vector2.Zero ? spell.endPos : spell.predictedEndPos;
+        }
+
+        public static void UpdateSpellInfo(this Spell spell)
+        {
+            spell.currentSpellPosition = spell.GetCurrentSpellPosition();
+            spell.currentNegativePosition = spell.GetCurrentSpellPosition(true, 0);
+
+            spell.dangerlevel = spell.GetSpellDangerLevel();
+            spell.radius = spell.GetSpellRadius();
         }
 
         public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0)
@@ -269,8 +283,8 @@ namespace ezEvade
             var myBoundingRadius = ObjectManager.Player.BoundingRadius;
             var spellDir = spell.direction;
             var pSpellDir = spell.direction.Perpendicular();
-            var spellRadius = spell.GetSpellRadius();
-            var spellPos = spell.GetCurrentSpellPosition() - spellDir * myBoundingRadius; //leave some space at back of spell
+            var spellRadius = spell.radius;
+            var spellPos = spell.currentSpellPosition - spellDir * myBoundingRadius; //leave some space at back of spell
             var endPos = spell.GetSpellEndPosition() + spellDir * myBoundingRadius; //leave some space at the front of spell
 
             var startRightPos = spellPos + pSpellDir * (spellRadius + myBoundingRadius);
@@ -296,8 +310,8 @@ namespace ezEvade
             var myBoundingRadius = ObjectManager.Player.BoundingRadius;
             var spellDir = spell.direction;
             var pSpellDir = spell.direction.Perpendicular();
-            var spellRadius = spell.GetSpellRadius();
-            var spellPos = spell.GetCurrentSpellPosition() - spellDir * myBoundingRadius; //leave some space at back of spell
+            var spellRadius = spell.radius;
+            var spellPos = spell.currentSpellPosition - spellDir * myBoundingRadius; //leave some space at back of spell
             var endPos = spell.GetSpellEndPosition() + spellDir * myBoundingRadius; //leave some space at the front of spell
 
             var startRightPos = spellPos + pSpellDir * (spellRadius + myBoundingRadius);

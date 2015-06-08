@@ -57,7 +57,7 @@ namespace ezEvade
          * 
          * //from leaguesharp.commons
                 var spellPos = spell.GetCurrentSpellPosition(true);
-                var sol = Geometry.VectorMovementCollision(spellPos, spell.endPos, spell.info.projectileSpeed, heroPos, myHero.MoveSpeed);
+                var sol = Geometry.VectorMovementCollision(spellPos, spell.endPos, spell.info.projectileSpeed, heroPos, ObjectCache.myHeroCache.moveSpeed);
 
                 var startTime = 0f;
                 var endTime = spellPos.Distance(spell.endPos) / spell.info.projectileSpeed;

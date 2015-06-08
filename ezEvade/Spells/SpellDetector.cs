@@ -50,7 +50,7 @@ namespace ezEvade
             Obj_SpellMissile.OnDelete += SpellMissile_OnDelete;
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
 
-            Game.OnUpdate += Game_OnGameUpdate; //in case ongameupdate crashes
+            Game.OnUpdate += Game_OnGameUpdate;
 
             menu = mainMenu;
 
@@ -106,7 +106,7 @@ namespace ezEvade
                     }
                     else
                     {
-                        if (Evade.menu.SubMenu("Main").Item("DodgeFOWSpells").GetValue<bool>())
+                        if (ObjectCache.menuCache.cache["DodgeFOWSpells"].GetValue<bool>())
                         {
                             CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
                         }
@@ -149,16 +149,16 @@ namespace ezEvade
                     if (channeledSpells.TryGetValue(args.SData.Name, out name))
                     {
                         Evade.isChanneling = true;
-                        Evade.channelPosition = myHero.ServerPosition.To2D();
+                        Evade.channelPosition = ObjectCache.myHeroCache.serverPos2D;
                     }
 
-                    if (Evade.menu.Item("CalculateWindupDelay").GetValue<bool>())
+                    if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
                     {
                         var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
                         if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name))
                         {
-                            var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
-                            Evade.lastWindupTime = Evade.TickCount + castTime - Game.Ping - extraDelayBuffer;
+                            var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
+                            Evade.lastWindupTime = Evade.TickCount + castTime - ObjectCache.gamePing - extraDelayBuffer;
                         }
                     }
 
@@ -262,6 +262,8 @@ namespace ezEvade
 
         private void Game_OnGameUpdate(EventArgs args)
         {
+            UpdateSpells();
+
             if (Evade.TickCount - lastCheckSpellCollisionTime > 100)
             {
                 CheckSpellCollision();
@@ -274,6 +276,14 @@ namespace ezEvade
                 CheckSpellEndTime();
                 AddDetectedSpells();
                 lastCheckTime = Evade.TickCount;
+            }
+        }
+
+        public static void UpdateSpells()
+        {
+            foreach (var spell in detectedSpells.Values)
+            {
+                spell.UpdateSpellInfo();
             }
         }
 
@@ -299,7 +309,7 @@ namespace ezEvade
 
         private static void CheckSpellCollision()
         {
-            if (Evade.menu.Item("CheckSpellCollision").GetValue<bool>() == false)
+            if (ObjectCache.menuCache.cache["CheckSpellCollision"].GetValue<bool>() == false)
             {
                 return;
             }
@@ -314,8 +324,8 @@ namespace ezEvade
                 {
                     spell.predictedEndPos = spell.GetSpellProjection(collisionObject.ServerPosition.To2D());
 
-                    if (spell.GetCurrentSpellPosition().Distance(collisionObject.ServerPosition)
-                        < collisionObject.BoundingRadius + spell.GetSpellRadius())
+                    if (spell.currentSpellPosition.Distance(collisionObject.ServerPosition)
+                        < collisionObject.BoundingRadius + spell.radius)
                     {
                         DelayAction.Add(1, () => DeleteSpell(entry.Key));
                     }
@@ -325,15 +335,15 @@ namespace ezEvade
 
         public static bool CanHeroWalkIntoSpell(Spell spell)
         {
-            if (Evade.menu.Item("AdvancedSpellDetection").GetValue<bool>())
+            if (ObjectCache.menuCache.cache["AdvancedSpellDetection"].GetValue<bool>())
             {
                 Vector2 heroPos = myHero.Position.To2D();
-                var extraDist = myHero.Distance(myHero.ServerPosition.To2D());
+                var extraDist = myHero.Distance(ObjectCache.myHeroCache.serverPos2D);
 
                 if (spell.info.spellType == SpellType.Line)
                 {
-                    var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + extraDist + 10;
-                    var spellPos = spell.GetCurrentSpellPosition();
+                    var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - Evade.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
+                    var spellPos = spell.currentSpellPosition;
                     var spellEndPos = spell.GetSpellEndPosition();
 
                     var projection = heroPos.ProjectOn(spellPos, spellEndPos);
@@ -342,7 +352,7 @@ namespace ezEvade
                 }
                 else if (spell.info.spellType == SpellType.Circular)
                 {
-                    var walkRadius = myHero.MoveSpeed * (spell.endTime - Evade.TickCount) / 1000 + myHero.BoundingRadius + spell.info.radius + extraDist + 10;
+                    var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - Evade.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
 
                     if (heroPos.Distance(spell.endPos) < walkRadius)
                     {
@@ -373,7 +383,7 @@ namespace ezEvade
                 spell.spellHitTime = spellHitTime;
                 spell.evadeTime = evadeTime;
 
-                var extraDelay = Game.Ping + Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;;
+                var extraDelay = ObjectCache.gamePing + ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;;
 
                 if (spell.spellHitTime - spell.evadeTime - extraDelay < 1500 && CanHeroWalkIntoSpell(spell))
                 {
@@ -386,12 +396,12 @@ namespace ezEvade
                     }
 
                     //var spellFlyTime = Evade.GetTickCount - spell.startTime;
-                    if (spellHitTime < Evade.menu.Item("ReactionTime").GetValue<Slider>().Value)
+                    if (spellHitTime < ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
                     {
                         continue;
                     }
 
-                    var dodgeInterval = menu.Item("DodgeInterval").GetValue<Slider>().Value;
+                    var dodgeInterval = ObjectCache.menuCache.cache["DodgeInterval"].GetValue<Slider>().Value;
                     if (Evade.lastPosInfo != null && dodgeInterval > 0)
                     {
                         var timeElapsed = Evade.TickCount - Evade.lastPosInfo.timestamp;
@@ -407,11 +417,10 @@ namespace ezEvade
                     if (!spells.ContainsKey(spell.spellID))
                     {
                         if (!(Evade.isDodgeDangerousEnabled() && newSpell.GetSpellDangerLevel() < 3)
-                            && Evade.menu.SubMenu("Spells").SubMenu(newSpell.info.charName + newSpell.info.spellName + "Settings")
-                            .Item(newSpell.info.spellName + "DodgeSpell").GetValue<bool>())
+                            && ObjectCache.menuCache.cache[newSpell.info.spellName + "DodgeSpell"].GetValue<bool>())
                         {
                             if (newSpell.info.spellType == SpellType.Circular
-                                && Evade.menu.SubMenu("Main").Item("DodgeCircularSpells").GetValue<bool>() == false)
+                                && ObjectCache.menuCache.cache["DodgeCircularSpells"].GetValue<bool>() == false)
                             {
                                 //return spellID;
                                 continue;
@@ -423,7 +432,7 @@ namespace ezEvade
                         }
                     }
 
-                    if (Evade.menu.Item("CheckSpellCollision").GetValue<bool>()
+                    if (ObjectCache.menuCache.cache["CheckSpellCollision"].GetValue<bool>()
                         && spell.predictedEndPos != Vector2.Zero)
                     {
                         spellAdded = false;
@@ -442,6 +451,7 @@ namespace ezEvade
             int spellID = spellIDCount++;
             newSpell.spellID = spellID;
 
+            newSpell.UpdateSpellInfo();
             detectedSpells.Add(spellID, newSpell);
 
             if (processSpell)
@@ -519,7 +529,7 @@ namespace ezEvade
             {
                 if (!hasProjectile || (spell.info.projectileSpeed > 0 && spell.info.projectileSpeed != float.MaxValue))
                 {
-                    var dangerlevel = spell.GetSpellDangerLevel();
+                    var dangerlevel = spell.dangerlevel;
 
                     if (dangerlevel > maxDanger)
                     {

@@ -21,9 +21,9 @@ namespace ezEvade
 
         public static bool isNearEnemy(this Vector2 pos, float distance, bool alreadyNear = true)
         {
-            if (Evade.menu.Item("PreventDodgingNearEnemy").GetValue<bool>())
+            if (ObjectCache.menuCache.cache["PreventDodgingNearEnemy"].GetValue<bool>())
             {
-                var curDistToEnemies = myHero.ServerPosition.To2D().GetDistanceToChampions();
+                var curDistToEnemies = ObjectCache.myHeroCache.serverPos2D.GetDistanceToChampions();
                 var posDistToEnemies = pos.GetDistanceToChampions();
                 
                 if (curDistToEnemies < distance)
@@ -47,12 +47,12 @@ namespace ezEvade
 
         public static bool IsUnderTurret(this Vector2 pos, bool checkEnemy = true)
         {
-            if (!Evade.menu.Item("PreventDodgingUnderTower").GetValue<bool>())
+            if (!ObjectCache.menuCache.cache["PreventDodgingUnderTower"].GetValue<bool>())
             {
                 return false;
             }
 
-            var turretRange = 800 + myHero.BoundingRadius;
+            var turretRange = 800 + ObjectCache.myHeroCache.boundingRadius;
 
             foreach (var entry in ObjectCache.turrets)
             {
@@ -80,7 +80,7 @@ namespace ezEvade
 
         public static bool ShouldDodge()
         {
-            if (Evade.menu.SubMenu("Main").Item("DodgeSkillShots").GetValue<KeyBind>().Active == false
+            if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active == false
                 || CommonChecks()
                 || myHero.IsImmovable
                 )
@@ -108,7 +108,7 @@ namespace ezEvade
 
         public static bool ShouldUseEvadeSpell()
         {
-            if (Evade.menu.Item("ActivateEvadeSpells").GetValue<KeyBind>().Active == false
+            if (ObjectCache.menuCache.cache["ActivateEvadeSpells"].GetValue<KeyBind>().Active == false
                 || CommonChecks()
                 || Evade.lastWindupTime - Evade.TickCount > 0
                 )

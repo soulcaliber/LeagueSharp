@@ -68,7 +68,7 @@
     <Compile Include="Tests\EvadeTester.cs" />
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MathUtilsCPA.cs" />
-    <Compile Include="Utils\ObjectCache.cs" />
+    <Compile Include="Helpers\ObjectCache.cs" />
     <Compile Include="Tests\PingTester.cs" />
     <Compile Include="Helpers\Position.cs" />
     <Compile Include="Helpers\PositionInfo.cs" />

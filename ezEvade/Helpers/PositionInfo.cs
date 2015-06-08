@@ -96,7 +96,7 @@ namespace ezEvade
                 Spell spell = entry.Value;
                 undodgeableSpells.Add(entry.Key);
 
-                var spellDangerLevel = spell.GetSpellDangerLevel();
+                var spellDangerLevel = spell.dangerlevel;
 
                 posDangerLevel = Math.Max(posDangerLevel, spellDangerLevel);
                 posDangerCount += spellDangerLevel;
@@ -149,11 +149,11 @@ namespace ezEvade
             if (path.Length > 0)
             {
                 var movePos = path[path.Length - 1].To2D();
-                posInfo = EvadeHelper.CanHeroWalkToPos(movePos, myHero.MoveSpeed, 0, 0, false);
+                posInfo = EvadeHelper.CanHeroWalkToPos(movePos, ObjectCache.myHeroCache.moveSpeed, 0, 0, false);
             }
             else
             {
-                posInfo = EvadeHelper.CanHeroWalkToPos(myHero.ServerPosition.To2D(), myHero.MoveSpeed, 0, 0, false);
+                posInfo = EvadeHelper.CanHeroWalkToPos(ObjectCache.myHeroCache.serverPos2D, ObjectCache.myHeroCache.moveSpeed, 0, 0, false);
             }
 
             if (posInfo.posDangerCount < newPosInfo.posDangerCount)

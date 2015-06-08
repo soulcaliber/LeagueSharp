@@ -21,9 +21,9 @@ namespace ezEvade
             {
                 Spell spell = entry.Value;
 
-                if (pos.InSkillShot(spell, myHero.BoundingRadius + extraBuffer))
+                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius + extraBuffer))
                 {
-                    dangerlevel += spell.GetSpellDangerLevel();
+                    dangerlevel += spell.dangerlevel;
                 }
             }
             return dangerlevel;
@@ -33,7 +33,7 @@ namespace ezEvade
         {
             if (spell.info.spellType == SpellType.Line)
             {
-                Vector2 spellPos = spell.GetCurrentSpellPosition(); //leave little space at back of skillshot
+                Vector2 spellPos = spell.currentSpellPosition; //leave little space at back of skillshot
                 Vector2 spellEndPos = predictCollision ? spell.GetSpellEndPosition() : spell.endPos;
 
                 /*if (spell.info.projectileSpeed == float.MaxValue
@@ -49,11 +49,11 @@ namespace ezEvade
                     //unfinished
                 }*/
 
-                return projection.SegmentPoint.Distance(position) <= spell.GetSpellRadius() + radius;
+                return projection.SegmentPoint.Distance(position) <= spell.radius + radius;
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                return position.Distance(spell.endPos) <= spell.GetSpellRadius() + radius;
+                return position.Distance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;
             }
             else if (spell.info.spellType == SpellType.Cone)
             {
@@ -88,7 +88,7 @@ namespace ezEvade
 
                 if (spell.info.spellType == SpellType.Line)
                 {
-                    if (pos.InSkillShot(spell, myHero.BoundingRadius + extraBuffer))
+                    if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius + extraBuffer))
                     {
                         return true;
                     }
@@ -108,7 +108,7 @@ namespace ezEvade
                     return true;
                 }
 
-                if (pos.InSkillShot(spell, myHero.BoundingRadius + extraBuffer))
+                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius + extraBuffer))
                 {
                     return true;
                 }
@@ -123,7 +123,7 @@ namespace ezEvade
             int posChecked = 0;
             int radiusIndex = 0;
 
-            Vector2 heroPoint = myHero.ServerPosition.To2D();
+            Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2D;
             Vector2 lastMovePos = Game.CursorPos.To2D();
 
             List<PositionInfo> posTable = new List<PositionInfo>();
