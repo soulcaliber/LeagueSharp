@@ -241,8 +241,16 @@ namespace ezEvade
                     }
                     else
                     {
-                        EvadeCommand.CastSpell(evadeSpell);
-                        return true;
+                        if (evadeSpell.castType == CastType.Target)
+                        {
+                            EvadeCommand.CastSpell(evadeSpell, myHero);
+                            return true;
+                        }
+                        else if (evadeSpell.castType == CastType.Self)
+                        {
+                            EvadeCommand.CastSpell(evadeSpell);
+                            return true;
+                        }
                     }
                 }               
             }
