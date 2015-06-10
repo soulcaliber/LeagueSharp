@@ -255,6 +255,14 @@ namespace ezEvade
             if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
             {
                 Console.WriteLine(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
+                //Console.WriteLine(args.SData.CastRadiusArray);
+
+                /*foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(args.SData))
+                {
+                    string name = descriptor.Name;
+                    object value = descriptor.GetValue(args.SData);
+                    Console.WriteLine("{0}={1}", name, value);
+                }*/
             }
             //circleRenderPos = args.SData.ParticleStartOffset.To2D();
 
@@ -627,7 +635,8 @@ namespace ezEvade
                 var dir = (Game.CursorPos - myHero.Position).Normalized();
                 var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
 
-                DelayAction.Add(1, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
+                DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
+                
             }
 
             if (testMenu.Item("TestPath").GetValue<bool>())

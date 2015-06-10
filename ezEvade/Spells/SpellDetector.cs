@@ -396,7 +396,13 @@ namespace ezEvade
                     }
 
                     //var spellFlyTime = Evade.GetTickCount - spell.startTime;
-                    if (spellHitTime < ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
+                    if (spellHitTime < ObjectCache.menuCache.cache["SpellDetectionTime"].GetValue<Slider>().Value)
+                    {
+                        continue;
+                    }
+
+                    if (Evade.TickCount - spell.startTime < 
+                        ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
                     {
                         continue;
                     }

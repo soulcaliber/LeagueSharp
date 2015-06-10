@@ -220,6 +220,7 @@ namespace ezEvade
                 var pos1 = hero.Position;
                 var dir = (obj.Position - myHero.Position).Normalized();
                 var pos2 = pos1 + dir * 500;
+
                 SpellDetector.CreateSpellData(hero, pos1, pos2, spellData, null, 0);
             }
         }

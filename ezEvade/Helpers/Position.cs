@@ -95,7 +95,7 @@ namespace ezEvade
                 }
             }
             return false;
-        }  
+        }
 
         public static bool CheckDangerousPos(this Vector2 pos, float extraBuffer)
         {

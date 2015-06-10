@@ -138,7 +138,7 @@ namespace ezEvade
             {
                 if (Evade.lastPosInfo != null)
                 {
-                    var pos = Evade.lastPosInfo.position;
+                    var pos = Evade.lastPosInfo.position; //Evade.lastEvadeCommand.targetPosition;
                     Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), 65, Color.Red, 10);
                 }
             }

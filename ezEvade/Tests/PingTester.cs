@@ -80,14 +80,7 @@ namespace ezEvade
 
         private void SetPing(int ping)
         {
-            Evade.menu.Item("FastEvadeActivationTime").SetValue(new Slider(200, 0, 500));
-            Evade.menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
             Evade.menu.Item("ExtraPingBuffer").SetValue(new Slider(ping, 0, 200));
-            Evade.menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
-            Evade.menu.Item("ExtraSpellRadius").SetValue(new Slider(0, 0, 100));
-            Evade.menu.Item("ExtraEvadeDistance").SetValue(new Slider(100, 0, 300));
-            Evade.menu.Item("ExtraAvoidDistance").SetValue(new Slider(100, 0, 300));
-            Evade.menu.Item("MinComfortZone").SetValue(new Slider(400, 0, 1000));
         }
 
         private void Game_OnGameUpdate(EventArgs args)
