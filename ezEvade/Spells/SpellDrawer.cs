@@ -136,6 +136,12 @@ namespace ezEvade
 
             if (ObjectCache.menuCache.cache["DrawEvadePosition"].GetValue<bool>())
             {
+                /*Render.Circle.DrawCircle(myHero.Position, 35, Color.White, 10);
+                Render.Circle.DrawCircle(myHero.ServerPosition, 65, Color.Red, 10);
+                var dist = (int)myHero.Position.Distance(myHero.ServerPosition);
+                //Drawing.DrawText(0, 0, Color.White, "Evade: " + (int)dist);
+                //Console.WriteLine(dist);*/
+
                 if (Evade.lastPosInfo != null)
                 {
                     var pos = Evade.lastPosInfo.position; //Evade.lastEvadeCommand.targetPosition;

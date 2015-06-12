@@ -91,7 +91,7 @@ namespace ezEvade
                 Game.OnEnd += Game_OnGameEnd;
                 SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
                 Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-
+                                
                 /*Console.WriteLine("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
                    "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
                 */
@@ -104,7 +104,6 @@ namespace ezEvade
                 mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
                 mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
                 mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
-                //mainMenu.AddItem(new MenuItem("FastestEvadeMode", "Fastest Evade Mode").SetValue(false));
                 menu.AddSubMenu(mainMenu);
 
                 //var keyBind = mainMenu.Item("DodgeSkillShots").GetValue<KeyBind>();
@@ -134,8 +133,10 @@ namespace ezEvade
 
                 Menu evadeModeMenu = new Menu("Mode", "EvadeModeSettings");
                 evadeModeMenu.AddItem(new MenuItem("EvadeMode", "Evade Mode")
-                    .SetValue(new StringList(new[] { "Smooth", "Fastest" }, 0)));
+                    .SetValue(new StringList(new[] { "Smooth", "Fastest", "Very Smooth" }, 0)));
                 miscMenu.AddSubMenu(evadeModeMenu);
+
+                miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
 
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
                 limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(50, 0, 200)));
@@ -224,7 +225,7 @@ namespace ezEvade
             menu.Item("AdvancedSpellDetection").SetValue(false);
             menu.Item("LoadPingTester").SetValue(true);
 
-            menu.Item("EvadeMode").SetValue(new StringList(new[] { "Smooth", "Fast" }, 0));
+            menu.Item("EvadeMode").SetValue(new StringList(new[] { "Smooth", "Fastest", "Very Smooth" }, 0));
 
             menu.Item("TickLimiter").SetValue(new Slider(50, 0, 200));
             menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
@@ -247,6 +248,24 @@ namespace ezEvade
         {
             menu.Item("ReactionTime").SetValue(new Slider(0, 0, 1000));
             menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
+        }
+
+        private void OnEvadeModeChange(object sender, OnValueChangeEventArgs e)
+        {
+            var mode = e.GetNewValue<StringList>().SelectedValue;
+
+            if (mode == "Very Smooth")
+            {
+                menu.Item("FastEvadeActivationTime").SetValue(new Slider(0, 0, 500));
+                menu.Item("RejectMinDistance").SetValue(new Slider(0, 0, 100));
+                menu.Item("ExtraCPADistance").SetValue(new Slider(0, 0, 150));
+                menu.Item("ExtraPingBuffer").SetValue(new Slider(40, 0, 200));
+            }else if(mode == "Smooth"){
+                menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
+                menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
+                menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
+                menu.Item("ExtraPingBuffer").SetValue(new Slider(65, 0, 200));
+            }
         }
 
         private void Game_OnGameEnd(GameEndEventArgs args)
