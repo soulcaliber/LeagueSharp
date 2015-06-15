@@ -101,6 +101,22 @@ namespace ezEvade
                                 {
                                     spell.spellObject = obj;
 
+                                    /*if(spell.info.spellType == SpellType.Line)
+                                    {
+                                        if (missile.SData.LineWidth != spell.info.radius)
+                                        {
+                                            Console.WriteLine("Wrong radius " + spell.info.spellName + ": "
+                                            + spell.info.radius + " vs " + missile.SData.LineWidth);
+                                        }
+
+                                        if (missile.SData.MissileSpeed != spell.info.projectileSpeed)
+                                        {
+                                            Console.WriteLine("Wrong speed " + spell.info.spellName + ": "
+                                            + spell.info.projectileSpeed + " vs " + missile.SData.MissileSpeed);
+                                        }
+                                        
+                                    }*/
+
                                     //var acquisitionTime = Evade.TickCount - spell.startTime;
                                     //Console.WriteLine("AcquiredTime: " + acquisitionTime);
                                 }
@@ -156,12 +172,16 @@ namespace ezEvade
                     }
 
                     if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
-                    {
+                    {                       
                         var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
-                        if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name))
+
+                        
+                        if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name)
+                            && Math.Abs(castTime - myHero.AttackCastDelay * 1000) > 1)
                         {
-                            var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-                            Evade.lastWindupTime = Evade.TickCount + castTime - ObjectCache.gamePing - extraDelayBuffer;
+                            //Console.WriteLine(args.SData.Name + ": " + (castTime - myHero.AttackCastDelay * 1000));
+                            //var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
+                            Evade.lastWindupTime = Evade.TickCount + castTime - Game.Ping / 2;
                         }
                     }
 
@@ -183,6 +203,18 @@ namespace ezEvade
                         if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
                             CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
+
+                            /*if (spellData.spellType == SpellType.Line)
+                            {
+                                var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
+
+                                if (Math.Abs(castTime - spellData.spellDelay) > 5)
+                                {
+                                    Console.WriteLine("Wrong delay " + spellData.spellName + ": "
+                                        + spellData.spellDelay + " vs " + castTime);
+                                }
+                            }*/
+
                         }
                     }
                 }
@@ -407,7 +439,7 @@ namespace ezEvade
                     if (Evade.TickCount - spell.startTime < 
                         ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
                     {
-                        continue;
+                        //continue;
                     }
 
                     var dodgeInterval = ObjectCache.menuCache.cache["DodgeInterval"].GetValue<Slider>().Value;

@@ -769,25 +769,53 @@ namespace ezEvade
 
             if (testMenu.Item("TestWall").GetValue<bool>())
             {
-                foreach (var posInfo in sortedBestPos)
+                /*foreach (var posInfo in sortedBestPos)
                 {
                     var posOnScreen = Drawing.WorldToScreen(posInfo.position.To3D());
                     //Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + (int)posInfo.closestDistance);
 
-                    /*
+                    
                     if (!posInfo.rejectPosition)
                     {
                         Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + (int)posInfo.closestDistance);
-                    }*/
+                    }
 
                     Drawing.DrawText(posOnScreen.X, posOnScreen.Y, Color.Aqua, "" + (int)posInfo.closestDistance);
 
-                    /*if (posInfo.posDangerCount <= 0)
+                    if (posInfo.posDangerCount <= 0)
                     {
                         var pos = posInfo.position;
                         Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)25, Color.White, 3);
-                    }*/
+                    }                                      
+                }*/
 
+                int posChecked = 0;
+                int maxPosToCheck = 50;
+                int posRadius = 50;
+                int radiusIndex = 0;
+
+                Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2D;
+                List<PositionInfo> posTable = new List<PositionInfo>();
+
+                while (posChecked < maxPosToCheck)
+                {
+                    radiusIndex++;
+
+                    int curRadius = radiusIndex * (2 * posRadius);
+                    int curCircleChecks = (int)Math.Ceiling((2 * Math.PI * (double)curRadius) / (2 * (double)posRadius));
+
+                    for (int i = 1; i < curCircleChecks; i++)
+                    {
+                        posChecked++;
+                        var cRadians = (2 * Math.PI / (curCircleChecks - 1)) * i; //check decimals
+                        var pos = new Vector2((float)Math.Floor(heroPoint.X + curRadius * Math.Cos(cRadians)), (float)Math.Floor(heroPoint.Y + curRadius * Math.Sin(cRadians)));
+
+                        if (!EvadeHelper.CheckPathCollision(myHero, pos))
+                        {
+                            Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)25, Color.White, 3);
+                        }
+                        
+                    }
                 }
             }
 
