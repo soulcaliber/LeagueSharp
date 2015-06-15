@@ -66,7 +66,7 @@ namespace ezEvade
             {
                 order = EvadeOrderCommand.MoveTo,
                 targetPosition = movePos,
-                timestamp = Evade.TickCount,
+                timestamp = EvadeUtils.TickCount,
                 isProcessed = false
             };
             myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), true);
@@ -174,7 +174,7 @@ namespace ezEvade
 
                         if (movePos.Distance(lastTestMoveToCommand.targetPosition) < 10)
                         {
-                            float moveTime = Evade.TickCount - lastTestMoveToCommand.timestamp - ObjectCache.gamePing;
+                            float moveTime = EvadeUtils.TickCount - lastTestMoveToCommand.timestamp - ObjectCache.gamePing;
                             Console.WriteLine("Extra Delay: " + moveTime);
                             lastTestMoveToCommand.isProcessed = true;
 

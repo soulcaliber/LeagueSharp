@@ -15,7 +15,7 @@ namespace ezEvade
 
         public static List<EvadeSpellData> evadeSpells = new List<EvadeSpellData>();
         public static List<EvadeSpellData> itemSpells = new List<EvadeSpellData>();
-        public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = Evade.TickCount };
+        public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = EvadeUtils.TickCount };
 
         public static Menu menu;
         public static Menu evadeSpellMenu;
@@ -40,7 +40,7 @@ namespace ezEvade
 
         public static void CheckDashing()
         {
-            if (Evade.TickCount - lastSpellEvadeCommand.timestamp < 250 && myHero.IsDashing()
+            if (EvadeUtils.TickCount - lastSpellEvadeCommand.timestamp < 250 && myHero.IsDashing()
                 && lastSpellEvadeCommand.evadeSpellData.evadeType == EvadeType.Dash)
             {
                 var dashInfo = myHero.GetDashInfo();
@@ -119,7 +119,7 @@ namespace ezEvade
             
             //int posDangerlevel = EvadeHelper.CheckPosDangerLevel(ObjectCache.myHeroCache.serverPos2D, 0);
 
-            if (Evade.TickCount - lastSpellEvadeCommand.timestamp < 1000)
+            if (EvadeUtils.TickCount - lastSpellEvadeCommand.timestamp < 1000)
             {
                 return;
             }

@@ -110,7 +110,7 @@ namespace ezEvade
         {
             if (ObjectCache.menuCache.cache["ActivateEvadeSpells"].GetValue<KeyBind>().Active == false
                 || CommonChecks()
-                || Evade.lastWindupTime - Evade.TickCount > 0
+                || Evade.lastWindupTime - EvadeUtils.TickCount > 0
                 )
             {
                 return false;
@@ -160,19 +160,19 @@ namespace ezEvade
             }
 
             //Sivir E
-            if (unit.LastCastedSpellName() == "SivirE" && (Evade.TickCount - Evade.lastSpellCastTime) < 300)
+            if (unit.LastCastedSpellName() == "SivirE" && (EvadeUtils.TickCount - Evade.lastSpellCastTime) < 300)
             {
                 return true;
             }
 
             //Morganas E
-            if (unit.LastCastedSpellName() == "BlackShield" && (Evade.TickCount - Evade.lastSpellCastTime) < 300)
+            if (unit.LastCastedSpellName() == "BlackShield" && (EvadeUtils.TickCount - Evade.lastSpellCastTime) < 300)
             {
                 return true;
             }
 
             //Nocturnes E
-            if (unit.LastCastedSpellName() == "NocturneShit" && (Evade.TickCount - Evade.lastSpellCastTime) < 300)
+            if (unit.LastCastedSpellName() == "NocturneShit" && (EvadeUtils.TickCount - Evade.lastSpellCastTime) < 300)
             {
                 return true;
             }

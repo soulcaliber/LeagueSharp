@@ -4,15 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using System.Diagnostics;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
 namespace ezEvade
 {
-
     internal class Evade
     {
         public static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
@@ -22,8 +19,6 @@ namespace ezEvade
         private static EvadeTester evadeTester;
         private static PingTester pingTester;
         private static EvadeSpell evadeSpell;
-
-        private static Stopwatch stopWatch = Stopwatch.StartNew();
 
         public static SpellSlot lastSpellCast;
         public static float lastSpellCastTime = 0;
@@ -48,9 +43,9 @@ namespace ezEvade
         public static Vector2 channelPosition = Vector2.Zero;
 
         public static PositionInfo lastPosInfo;
-        public static EvadeCommand lastEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = TickCount };
+        public static EvadeCommand lastEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = EvadeUtils.TickCount };
 
-        public static EvadeCommand lastBlockedUserMoveTo = new EvadeCommand { isProcessed = true, timestamp = TickCount };
+        public static EvadeCommand lastBlockedUserMoveTo = new EvadeCommand { isProcessed = true, timestamp = EvadeUtils.TickCount };
         public static float lastDodgingEndTime = 0;
 
         public static Menu menu;
@@ -64,16 +59,16 @@ namespace ezEvade
 
         public Evade()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            LoadAssembly();
         }
 
         private void LoadAssembly()
         {
-            DelayAction.Add(1, () =>
+            DelayAction.Add(0, () =>
             {
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
-                    DelayAction.Add(350, () => { Game_OnGameLoad(new EventArgs()); });
+                    DelayAction.Add(0, () => { Game_OnGameLoad(new EventArgs()); });
                 }
                 else
                 {
@@ -197,14 +192,6 @@ namespace ezEvade
             }
         }
 
-        public static float TickCount
-        {
-            get
-            {
-                return stopWatch.ElapsedMilliseconds;
-            }
-        }
-
         public static void ResetConfig()
         {
             menu.Item("DodgeSkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true));
@@ -291,16 +278,16 @@ namespace ezEvade
             {
                 //Evade.isChanneling = true;
                 //Evade.channelPosition = ObjectCache.myHeroCache.serverPos2D;
-                lastStopEvadeTime = TickCount + ObjectCache.gamePing + 100;
+                lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
             }
 
-            if (EvadeSpell.lastSpellEvadeCommand != null && EvadeSpell.lastSpellEvadeCommand.timestamp + ObjectCache.gamePing + 150 > TickCount)
+            if (EvadeSpell.lastSpellEvadeCommand != null && EvadeSpell.lastSpellEvadeCommand.timestamp + ObjectCache.gamePing + 150 > EvadeUtils.TickCount)
             {
                 args.Process = false;
             }
 
             lastSpellCast = args.Slot;
-            lastSpellCastTime = TickCount;
+            lastSpellCastTime = EvadeUtils.TickCount;
 
             //moved from processPacket
 
@@ -350,7 +337,7 @@ namespace ezEvade
                     {
                         order = EvadeOrderCommand.MoveTo,
                         targetPosition = args.TargetPosition.To2D(),
-                        timestamp = TickCount,
+                        timestamp = EvadeUtils.TickCount,
                         isProcessed = false,
                     };
 
@@ -366,19 +353,19 @@ namespace ezEvade
                         {
                             order = EvadeOrderCommand.MoveTo,
                             targetPosition = args.TargetPosition.To2D(),
-                            timestamp = TickCount,
+                            timestamp = EvadeUtils.TickCount,
                             isProcessed = false,
                         };
 
                         args.Process = false; //Block the command
 
-                        if (TickCount - lastMovementBlockTime < 250 && lastMovementBlockPos.Distance(args.TargetPosition) < 100)
+                        if (EvadeUtils.TickCount - lastMovementBlockTime < 250 && lastMovementBlockPos.Distance(args.TargetPosition) < 100)
                         {
                             return;
                         }
 
                         lastMovementBlockPos = args.TargetPosition;
-                        lastMovementBlockTime = TickCount;
+                        lastMovementBlockTime = EvadeUtils.TickCount;
 
                         var posInfo = EvadeHelper.GetBestPositionMovementBlock(movePos);
                         if (posInfo != null)
@@ -461,13 +448,13 @@ namespace ezEvade
                 }
 
                 var limitDelay = ObjectCache.menuCache.cache["TickLimiter"].GetValue<Slider>().Value; //Tick limiter                
-                if (Evade.TickCount - lastTickCount > limitDelay
-                    && Evade.TickCount > lastStopEvadeTime)
+                if (EvadeUtils.TickCount - lastTickCount > limitDelay
+                    && EvadeUtils.TickCount > lastStopEvadeTime)
                 {
                     DodgeSkillShots(); //walking
                     EvadeSpell.UseEvadeSpell(); //using spells
                     ContinueLastBlockedCommand();
-                    lastTickCount = Evade.TickCount;
+                    lastTickCount = EvadeUtils.TickCount;
                 }
 
                 CheckDodgeOnlyDangerous();
@@ -486,8 +473,8 @@ namespace ezEvade
                 var extraDelay = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
 
                 if (isDodging == false && lastBlockedUserMoveTo.isProcessed == false
-                    && TickCount - lastEvadeCommand.timestamp > ObjectCache.gamePing + extraDelay
-                    && TickCount - lastBlockedUserMoveTo.timestamp < 1500)
+                    && EvadeUtils.TickCount - lastEvadeCommand.timestamp > ObjectCache.gamePing + extraDelay
+                    && EvadeUtils.TickCount - lastBlockedUserMoveTo.timestamp < 1500)
                 {
                     if (!EvadeHelper.CheckMovePath(movePos, ObjectCache.gamePing + extraDelay))
                     {
@@ -517,7 +504,7 @@ namespace ezEvade
 
             if (isDodging && !playerInDanger)
             {
-                lastDodgingEndTime = TickCount;
+                lastDodgingEndTime = EvadeUtils.TickCount;
             }
 
             if (isDodging == false && !Situation.ShouldDodge())
@@ -558,7 +545,7 @@ namespace ezEvade
                     {
                         var dodgeInterval = ObjectCache.menuCache.cache["DodgeInterval"].GetValue<Slider>().Value;
                         if (lastPosInfo != null && !lastPosInfo.recalculatedPath &&
-                            dodgeInterval <= TickCount - lastPosInfo.timestamp)
+                            dodgeInterval <= EvadeUtils.TickCount - lastPosInfo.timestamp)
                         {
                             var path = myHero.Path;
                             if (path.Length > 0)
@@ -680,11 +667,11 @@ namespace ezEvade
                 }
                 else
                 {
-                    var calculationTimer = TickCount;
+                    var calculationTimer = EvadeUtils.TickCount;
 
                     var posInfo = EvadeHelper.GetBestPosition();
 
-                    var caculationTime = TickCount - calculationTimer;
+                    var caculationTime = EvadeUtils.TickCount - calculationTimer;
 
                     if (numCalculationTime > 0)
                     {

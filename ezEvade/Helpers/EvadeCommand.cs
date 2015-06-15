@@ -30,7 +30,7 @@ namespace ezEvade
 
         public EvadeCommand()
         {
-            this.timestamp = Evade.TickCount;
+            this.timestamp = EvadeUtils.TickCount;
             this.isProcessed = false;
         }
 
@@ -40,7 +40,7 @@ namespace ezEvade
             {
                 order = EvadeOrderCommand.MoveTo,
                 targetPosition = movePos,
-                timestamp = Evade.TickCount,
+                timestamp = EvadeUtils.TickCount,
                 isProcessed = false
             };            
             myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);            
@@ -53,7 +53,7 @@ namespace ezEvade
                 order = EvadeOrderCommand.Attack,
                 target = target,
                 evadeSpellData = spellData,
-                timestamp = Evade.TickCount,
+                timestamp = EvadeUtils.TickCount,
                 isProcessed = false
             };
 
@@ -67,7 +67,7 @@ namespace ezEvade
                 order = EvadeOrderCommand.CastSpell,
                 target = target,
                 evadeSpellData = spellData,
-                timestamp = Evade.TickCount,
+                timestamp = EvadeUtils.TickCount,
                 isProcessed = false
             };
 
@@ -81,7 +81,7 @@ namespace ezEvade
                 order = EvadeOrderCommand.CastSpell,
                 targetPosition = movePos,
                 evadeSpellData = spellData,
-                timestamp = Evade.TickCount,
+                timestamp = EvadeUtils.TickCount,
                 isProcessed = false
             };
 
@@ -94,7 +94,7 @@ namespace ezEvade
             {
                 order = EvadeOrderCommand.CastSpell,
                 evadeSpellData = spellData,
-                timestamp = Evade.TickCount,
+                timestamp = EvadeUtils.TickCount,
                 isProcessed = false
             };
 

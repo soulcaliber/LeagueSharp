@@ -66,6 +66,7 @@
     <Compile Include="EvadeSpells\EvadeSpellData.cs" />
     <Compile Include="EvadeSpells\EvadeSpellDatabase.cs" />
     <Compile Include="Tests\EvadeTester.cs" />
+    <Compile Include="Utils\EvadeUtils.cs" />
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MathUtilsCPA.cs" />
     <Compile Include="Helpers\ObjectCache.cs" />

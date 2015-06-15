@@ -172,7 +172,7 @@ namespace ezEvade
             {
                 if (spell.info.projectileSpeed == float.MaxValue)
                 {
-                    return Math.Max(0, spell.endTime - Evade.TickCount - ObjectCache.gamePing);
+                    return Math.Max(0, spell.endTime - EvadeUtils.TickCount - ObjectCache.gamePing);
                 }
 
                 var spellPos = spell.GetCurrentSpellPosition(true, ObjectCache.gamePing);
@@ -180,7 +180,7 @@ namespace ezEvade
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                return Math.Max(0, spell.endTime - Evade.TickCount - ObjectCache.gamePing);
+                return Math.Max(0, spell.endTime - EvadeUtils.TickCount - ObjectCache.gamePing);
             }
 
             return float.MaxValue;
@@ -246,7 +246,7 @@ namespace ezEvade
 
             if (spell.info.spellType == SpellType.Line)
             {
-                float spellTime = Evade.TickCount - spell.startTime - spell.info.spellDelay;
+                float spellTime = EvadeUtils.TickCount - spell.startTime - spell.info.spellDelay;
 
                 if (spell.info.projectileSpeed == float.MaxValue)
                     return spell.startPos;

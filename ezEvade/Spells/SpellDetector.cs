@@ -117,7 +117,7 @@ namespace ezEvade
                                         
                                     }*/
 
-                                    //var acquisitionTime = Evade.TickCount - spell.startTime;
+                                    //var acquisitionTime = EvadeUtils.TickCount - spell.startTime;
                                     //Console.WriteLine("AcquiredTime: " + acquisitionTime);
                                 }
                             }
@@ -181,7 +181,7 @@ namespace ezEvade
                         {
                             //Console.WriteLine(args.SData.Name + ": " + (castTime - myHero.AttackCastDelay * 1000));
                             //var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-                            Evade.lastWindupTime = Evade.TickCount + castTime - Game.Ping / 2;
+                            Evade.lastWindupTime = EvadeUtils.TickCount + castTime - Game.Ping / 2;
                         }
                     }
 
@@ -275,8 +275,8 @@ namespace ezEvade
 
                 Spell newSpell = new Spell();
 
-                newSpell.startTime = Evade.TickCount;
-                newSpell.endTime = Evade.TickCount + endTick;
+                newSpell.startTime = EvadeUtils.TickCount;
+                newSpell.endTime = EvadeUtils.TickCount + endTick;
                 newSpell.startPos = startPosition;
                 newSpell.endPos = endPosition;
                 newSpell.direction = direction;
@@ -299,18 +299,18 @@ namespace ezEvade
         {
             UpdateSpells();
 
-            if (Evade.TickCount - lastCheckSpellCollisionTime > 100)
+            if (EvadeUtils.TickCount - lastCheckSpellCollisionTime > 100)
             {
                 CheckSpellCollision();
-                lastCheckSpellCollisionTime = Evade.TickCount;
+                lastCheckSpellCollisionTime = EvadeUtils.TickCount;
             }
 
-            if (Evade.TickCount - lastCheckTime > 1)
+            if (EvadeUtils.TickCount - lastCheckTime > 1)
             {
                 //CheckCasterDead();                
                 CheckSpellEndTime();
                 AddDetectedSpells();
-                lastCheckTime = Evade.TickCount;
+                lastCheckTime = EvadeUtils.TickCount;
             }
         }
 
@@ -337,7 +337,7 @@ namespace ezEvade
                     }
                 }
 
-                if (spell.endTime < Evade.TickCount || CanHeroWalkIntoSpell(spell) == false)
+                if (spell.endTime < EvadeUtils.TickCount || CanHeroWalkIntoSpell(spell) == false)
                     DelayAction.Add(1, () => DeleteSpell(entry.Key));
             }
         }
@@ -377,7 +377,7 @@ namespace ezEvade
 
                 if (spell.info.spellType == SpellType.Line)
                 {
-                    var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - Evade.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
+                    var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - EvadeUtils.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
                     var spellPos = spell.currentSpellPosition;
                     var spellEndPos = spell.GetSpellEndPosition();
 
@@ -387,7 +387,7 @@ namespace ezEvade
                 }
                 else if (spell.info.spellType == SpellType.Circular)
                 {
-                    var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - Evade.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
+                    var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - EvadeUtils.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
 
                     if (heroPos.Distance(spell.endPos) < walkRadius)
                     {
@@ -436,7 +436,7 @@ namespace ezEvade
                         continue;
                     }
 
-                    if (Evade.TickCount - spell.startTime < 
+                    if (EvadeUtils.TickCount - spell.startTime < 
                         ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
                     {
                         //continue;
@@ -445,7 +445,7 @@ namespace ezEvade
                     var dodgeInterval = ObjectCache.menuCache.cache["DodgeInterval"].GetValue<Slider>().Value;
                     if (Evade.lastPosInfo != null && dodgeInterval > 0)
                     {
-                        var timeElapsed = Evade.TickCount - Evade.lastPosInfo.timestamp;
+                        var timeElapsed = EvadeUtils.TickCount - Evade.lastPosInfo.timestamp;
 
                         if (dodgeInterval > timeElapsed)
                         {

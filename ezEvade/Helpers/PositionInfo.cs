@@ -48,7 +48,7 @@ namespace ezEvade
             this.distanceToMouse = distanceToMouse;
             this.dodgeableSpells = dodgeableSpells;
             this.undodgeableSpells = undodgeableSpells;
-            this.timestamp = Evade.TickCount;
+            this.timestamp = EvadeUtils.TickCount;
         }
 
         public PositionInfo(
@@ -59,7 +59,7 @@ namespace ezEvade
             this.position = position;
             this.isDangerousPos = isDangerousPos;
             this.distanceToMouse = distanceToMouse;
-            this.timestamp = Evade.TickCount;
+            this.timestamp = EvadeUtils.TickCount;
         }
 
         public static PositionInfo SetAllDodgeable()

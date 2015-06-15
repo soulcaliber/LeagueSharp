@@ -142,7 +142,7 @@ namespace ezEvade
 
             if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
             {
-                var extraWindupDelay = Evade.lastWindupTime - Evade.TickCount;
+                var extraWindupDelay = Evade.lastWindupTime - EvadeUtils.TickCount;
                 if (extraWindupDelay > 0)
                 {
                     extraDelayBuffer += (int)extraWindupDelay;
@@ -981,7 +981,7 @@ namespace ezEvade
             }
             else if (spell.info.spellType == SpellType.Line && spell.info.projectileSpeed == float.MaxValue)
             {
-                var spellHitTime = Math.Max(0, spell.endTime - Evade.TickCount - delay);  //extraDelay
+                var spellHitTime = Math.Max(0, spell.endTime - EvadeUtils.TickCount - delay);  //extraDelay
                 var walkRange = heroPos.Distance(pos);
                 var predictedRange = speed * (spellHitTime / 1000);
                 var tHeroPos = heroPos + walkDir * Math.Min(predictedRange, walkRange); //Hero predicted pos
@@ -993,7 +993,7 @@ namespace ezEvade
             }
             else if (spell.info.spellType == SpellType.Circular)
             {
-                var spellHitTime = Math.Max(0, spell.endTime - Evade.TickCount - delay);  //extraDelay
+                var spellHitTime = Math.Max(0, spell.endTime - EvadeUtils.TickCount - delay);  //extraDelay
                 var walkRange = heroPos.Distance(pos);
                 var predictedRange = speed * (spellHitTime / 1000);
                 var tHeroPos = heroPos + walkDir * Math.Min(predictedRange, walkRange); //Hero predicted pos
