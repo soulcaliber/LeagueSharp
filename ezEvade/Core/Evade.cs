@@ -68,7 +68,7 @@ namespace ezEvade
             {
                 if (LeagueSharp.Game.Mode == GameMode.Running)
                 {
-                    DelayAction.Add(0, () => { Game_OnGameLoad(new EventArgs()); });
+                    Game_OnGameLoad(new EventArgs());
                 }
                 else
                 {
@@ -184,6 +184,8 @@ namespace ezEvade
                 var initCache = ObjectCache.myHeroCache;
 
                 //evadeTester = new EvadeTester(menu);
+
+                Console.WriteLine("ezEvade Loaded");
 
             }
             catch (Exception e)
