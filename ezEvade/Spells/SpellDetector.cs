@@ -91,8 +91,11 @@ namespace ezEvade
                         {
                             Spell spell = entry.Value;
 
+                            var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
+
                             if (spell.info.missileName == missile.SData.Name
-                                && spell.heroID == missile.SpellCaster.NetworkId)
+                                && spell.heroID == missile.SpellCaster.NetworkId
+                                && dir.AngleBetween(spell.direction) < 10)
                             {
                                 if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                 {
@@ -179,7 +182,7 @@ namespace ezEvade
 
                         if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
-                            CreateSpellData(hero, args.Start, args.End, spellData, null);
+                            CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
                         }
                     }
                 }

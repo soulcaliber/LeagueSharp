@@ -64,6 +64,11 @@ namespace ezEvade
 
         public static PositionInfo SetAllDodgeable()
         {
+            return SetAllDodgeable(myHero.Position.To2D());
+        }
+
+        public static PositionInfo SetAllDodgeable(Vector2 position)
+        {
             List<int> dodgeableSpells = new List<int>();
             List<int> undodgeableSpells = new List<int>();
 
@@ -74,7 +79,7 @@ namespace ezEvade
             }
 
             return new PositionInfo(
-                myHero.Position.To2D(),
+                position,
                 0,
                 0,
                 true,

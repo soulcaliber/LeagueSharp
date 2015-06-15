@@ -85,6 +85,8 @@ namespace ezEvade
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
             Spellbook.OnCastSpell += Game_OnCastSpell;
             GameObject.OnFloatPropertyChange += GameObject_OnFloatPropertyChange;
+
+            Obj_AI_Base.OnDamage += Game_OnDamage;
             //GameObject.OnIntegerPropertyChange += GameObject_OnIntegerPropertyChange;
             //Game.OnGameNotifyEvent += Game_OnGameNotifyEvent;
 
@@ -112,7 +114,7 @@ namespace ezEvade
 
             Game_OnGameLoad();
         }
-
+               
         private void Game_OnGameLoad()
         {
             Console.WriteLine("EvadeTester loaded");
@@ -135,7 +137,10 @@ namespace ezEvade
         {
             if (unit.Type == GameObjectType.obj_AI_Hero)
             {
-                Console.WriteLine("Dash windup: " + (Evade.TickCount - EvadeSpell.lastSpellEvadeCommand.timestamp));
+                if (testMenu.Item("TestSpellEndTime").GetValue<bool>())
+                {
+                    Console.WriteLine("Dash windup: " + (Evade.TickCount - EvadeSpell.lastSpellEvadeCommand.timestamp));
+                }
 
                 if (args.IsDash && testMenu.Item("ShowDashInfo").GetValue<bool>())
                 {
@@ -255,7 +260,8 @@ namespace ezEvade
             if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
             {
                 Console.WriteLine(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
-                //Console.WriteLine(args.SData.CastRadiusArray);
+                
+                Console.WriteLine("CastRadius: " + args.SData.CastRadius);
 
                 /*foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(args.SData))
                 {
@@ -399,7 +405,7 @@ namespace ezEvade
 
             if (args.Property == "mHP" && args.OldValue > args.NewValue)
             {
-                Console.WriteLine("Damage taken time: " + (Evade.TickCount - lastSpellCastTime));
+                //Console.WriteLine("Damage taken time: " + (Evade.TickCount - lastSpellCastTime));
             }
 
             if (!obj.IsMe)
@@ -409,15 +415,29 @@ namespace ezEvade
 
 
 
-            if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal")
+            if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal" 
+                && args.Property != "mMP" && args.Property != "mPARRegenRate")
             {
                 //Console.WriteLine(args.Property + ": " + args.NewValue);
             }
         }
 
+        private void Game_OnDamage(AttackableUnit sender, AttackableUnitDamageEventArgs args)
+        {
+            if (testMenu.Item("TestSpellEndTime").GetValue<bool>() == false)
+            {
+                return;
+            }
+
+            if (!sender.IsMe)
+                return;
+
+            Console.WriteLine("Damage taken time: " + (Evade.TickCount - lastSpellCastTime));
+        }
+
         private void GameObject_OnIntegerPropertyChange(GameObject obj, GameObjectIntegerPropertyChangeEventArgs args)
         {
-            if (!obj.IsMe)
+            if (obj.IsMe)
             {
                 if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal")
                 {

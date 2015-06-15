@@ -162,7 +162,7 @@ namespace ezEvade
                 bufferMenu.AddItem(new MenuItem("ExtraCPADistance", "Extra Collision Distance").SetValue(new Slider(10, 0, 150)));
                 bufferMenu.AddItem(new MenuItem("ExtraSpellRadius", "Extra Spell Radius").SetValue(new Slider(0, 0, 100)));
                 bufferMenu.AddItem(new MenuItem("ExtraEvadeDistance", "Extra Evade Distance").SetValue(new Slider(100, 0, 300)));
-                bufferMenu.AddItem(new MenuItem("ExtraAvoidDistance", "Extra Avoid Distance").SetValue(new Slider(0, 0, 300)));
+                bufferMenu.AddItem(new MenuItem("ExtraAvoidDistance", "Extra Avoid Distance").SetValue(new Slider(50, 0, 300)));
 
                 bufferMenu.AddItem(new MenuItem("MinComfortZone", "Min Distance to Champion").SetValue(new Slider(400, 0, 1000)));
 
@@ -170,7 +170,7 @@ namespace ezEvade
 
                 Menu resetMenu = new Menu("Reset Config", "ResetConfig");
                 resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
-                resetMenu.AddItem(new MenuItem("ResetConfig197", "Set Patch Config").SetValue(true));
+                resetMenu.AddItem(new MenuItem("ResetConfig198", "Set Patch Config").SetValue(true));
 
                 miscMenu.AddSubMenu(resetMenu);
 
@@ -240,14 +240,16 @@ namespace ezEvade
             menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
             menu.Item("ExtraSpellRadius").SetValue(new Slider(0, 0, 100));
             menu.Item("ExtraEvadeDistance").SetValue(new Slider(100, 0, 300));
-            menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
+            menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
             menu.Item("MinComfortZone").SetValue(new Slider(400, 0, 1000));
         }
 
         public static void SetPatchConfig()
         {
             menu.Item("ReactionTime").SetValue(new Slider(0, 0, 1000));
-            menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
+            //menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
+
+            menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
         }
 
         private void OnEvadeModeChange(object sender, OnValueChangeEventArgs e)
@@ -443,10 +445,10 @@ namespace ezEvade
                     menu.Item("ResetConfig").SetValue(false);
                 }
 
-                if (ObjectCache.menuCache.cache["ResetConfig197"].GetValue<bool>())
+                if (ObjectCache.menuCache.cache["ResetConfig198"].GetValue<bool>())
                 {
                     SetPatchConfig();
-                    menu.Item("ResetConfig197").SetValue(false);
+                    menu.Item("ResetConfig198").SetValue(false);
                 }
 
                 var limitDelay = ObjectCache.menuCache.cache["TickLimiter"].GetValue<Slider>().Value; //Tick limiter                

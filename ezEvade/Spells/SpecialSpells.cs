@@ -152,6 +152,7 @@ namespace ezEvade
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_EkkoR;
                 pDict["ProcessSpell_EkkoR"] = true;
             }
+
         }
 
         private static void ProcessSpell_EkkoR(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,

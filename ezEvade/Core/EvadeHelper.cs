@@ -14,7 +14,7 @@ namespace ezEvade
     class EvadeHelper
     {
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        
+
         public static bool PlayerInSkillShot(Spell spell)
         {
             return ObjectCache.myHeroCache.serverPos2D.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius);
@@ -29,11 +29,11 @@ namespace ezEvade
             posInfo.hasExtraDistance = extraEvadeDistance > 0 ? pos.CheckDangerousPos(extraEvadeDistance) : false;// ? 1 : 0;            
             posInfo.closestDistance = posInfo.distanceToMouse; //GetMovementBlockPositionValue(pos, lastMovePos);
             posInfo.intersectionTime = GetMinCPADistance(pos);
-                //GetIntersectDistance(lowestEvadeTimeSpell, ObjectCache.myHeroCache.serverPos2D, pos);               
-                //GetClosestDistanceApproach(lowestEvadeTimeSpell, pos, ObjectCache.myHeroCache.moveSpeed, ObjectCache.gamePing, ObjectCache.myHeroCache.serverPos2D, 0);
+            //GetIntersectDistance(lowestEvadeTimeSpell, ObjectCache.myHeroCache.serverPos2D, pos);               
+            //GetClosestDistanceApproach(lowestEvadeTimeSpell, pos, ObjectCache.myHeroCache.moveSpeed, ObjectCache.gamePing, ObjectCache.myHeroCache.serverPos2D, 0);
             posInfo.distanceToMouse = pos.Distance(lastMovePos);
             posInfo.posDistToChamps = pos.GetDistanceToChampions();
-            
+
 
             if (ObjectCache.menuCache.cache["RejectMinDistance"].GetValue<Slider>().Value > 0
             && ObjectCache.menuCache.cache["RejectMinDistance"].GetValue<Slider>().Value >
@@ -126,7 +126,7 @@ namespace ezEvade
         }
 
         public static PositionInfo GetBestPosition()
-        {           
+        {
             int posChecked = 0;
             int maxPosToCheck = 50;
             int posRadius = 50;
@@ -161,7 +161,7 @@ namespace ezEvade
             Vector2 lastMovePos = Game.CursorPos.To2D();
 
             List<PositionInfo> posTable = new List<PositionInfo>();
-                        
+
             Spell lowestEvadeTimeSpell;
             var lowestEvadeTime = SpellDetector.GetLowestEvadeTime(out lowestEvadeTimeSpell);
 
@@ -214,10 +214,9 @@ namespace ezEvade
 
                 fastEvadeMode = true;
 
-            }else if (SpellDetector.spells.Count() == 1
-                && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value > 0
-                && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer >
-                lowestEvadeTime)
+            }
+            else if (ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value > 0
+               && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer > lowestEvadeTime)
             {
                 sortedPosTable =
                 posTable.OrderBy(p => p.isDangerousPos)
@@ -236,6 +235,17 @@ namespace ezEvade
                         .ThenBy(p => p.posDangerCount)
                     //.ThenBy(p => p.hasExtraDistance)
                         .ThenBy(p => p.distanceToMouse);
+
+                /*if (sortedPosTable.First().posDangerCount != 0)
+                {
+                    sortedPosTable =
+                    posTable.OrderBy(p => p.isDangerousPos)
+                        .ThenByDescending(p => p.intersectionTime)
+                        .ThenBy(p => p.posDangerLevel)
+                        .ThenBy(p => p.posDangerCount);
+
+                    fastEvadeMode = true;
+                }*/
             }
 
             foreach (var posInfo in sortedPosTable)
@@ -334,7 +344,7 @@ namespace ezEvade
             int minComfortZone = ObjectCache.menuCache.cache["MinComfortZone"].GetValue<Slider>().Value;
 
             List<PositionInfo> posTable = new List<PositionInfo>();
-            
+
             while (posChecked < maxPosToCheck)
             {
                 radiusIndex++;
@@ -735,8 +745,8 @@ namespace ezEvade
             for (float i = sectorDistance; i <= extendDistance; i += sectorDistance)
             {
                 Vector2 pos = to + direction * i;
-                
-                if (pos.CheckDangerousPos(6) 
+
+                if (pos.CheckDangerousPos(6)
                     || CheckPathCollision(myHero, pos)
                     || pos.isNearEnemy(minComfortDistance))
                 {
@@ -978,7 +988,7 @@ namespace ezEvade
 
                 var projection = tHeroPos.ProjectOn(spell.startPos, spell.endPos);
 
-                return Math.Max(0, tHeroPos.Distance(projection.SegmentPoint) 
+                return Math.Max(0, tHeroPos.Distance(projection.SegmentPoint)
                     - (spell.radius + ObjectCache.myHeroCache.boundingRadius + extraDist)); //+ dodgeBuffer
             }
             else if (spell.info.spellType == SpellType.Circular)
@@ -999,30 +1009,7 @@ namespace ezEvade
             var walkDir = (pos - heroPos).Normalized();
             var zVector = new Vector2(0, 0);
 
-            if (spell.info.spellType == SpellType.Line)
-            {
-                return GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist) == 0;
-            }
-            else if (spell.info.spellType == SpellType.Circular)
-            {
-                var spellHitTime = Math.Max(0, spell.endTime - Evade.TickCount);  //extraDelay
-                var walkRange = heroPos.Distance(pos);
-                var predictedRange = speed * (spellHitTime / 1000);
-                var tHeroPos = heroPos + walkDir * Math.Min(predictedRange, walkRange); //Hero predicted pos
-
-                return tHeroPos.Distance(spell.endPos) <= spell.radius; //+ dodgeBuffer
-            }
-            else if (spell.info.spellType == SpellType.Cone)
-            {
-                var spellHitTime = Math.Max(0, spell.endTime - Evade.TickCount);  //extraDelay
-                var walkRange = heroPos.Distance(pos);
-                var predictedRange = speed * (spellHitTime / 1000);
-                var tHeroPos = heroPos + walkDir * Math.Min(predictedRange, walkRange); //Hero predicted pos
-
-                return tHeroPos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius);
-            }
-
-            return false;
+            return GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist) == 0;
         }
 
         public static Vector2 GetRealHeroPos(float delay = 0)
@@ -1147,14 +1134,14 @@ namespace ezEvade
                     else if (spell.info.spellType == SpellType.Circular)
                     {
                         var cpa = MathUtilsCPA.CPAPointsEx(from, dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, new Vector2(0, 0), movePos, spell.endPos);
-                        if (cpa < spell.radius)
+                        if (cpa < spell.radius + 10)
                         {
                             return true;
                         }
                     }
                     else if (spell.info.spellType == SpellType.Cone)
                     {
-                        
+
                     }
                 }
             }
