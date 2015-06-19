@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EvadeSpells\SpecialEvadeSpell.cs" />
+    <Compile Include="Tests\SpellTester.cs" />
     <Compile Include="Utils\DelayAction.cs" />
     <Compile Include="Core\Evade.cs" />
     <Compile Include="Helpers\EvadeCommand.cs" />

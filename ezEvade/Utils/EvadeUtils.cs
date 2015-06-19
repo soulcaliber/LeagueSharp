@@ -11,6 +11,7 @@ namespace ezEvade
     public static class EvadeUtils
     {
         private static Stopwatch stopWatch = Stopwatch.StartNew();
+        public static Random random = new Random(DateTime.Now.Millisecond);
 
         static EvadeUtils()
         {

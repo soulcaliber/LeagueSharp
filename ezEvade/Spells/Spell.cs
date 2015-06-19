@@ -265,7 +265,8 @@ namespace ezEvade
                 spellPos = spell.endPos;
             }
 
-            if (spell.spellObject != null && spell.spellObject.IsValid)
+            if (spell.spellObject != null && spell.spellObject.IsValid && 
+                spell.spellObject.Position.To2D().Distance(ObjectCache.myHeroCache.serverPos2D) < spell.info.range + 1000)
             {
                 spellPos = spell.spellObject.Position.To2D();
             }

@@ -54,7 +54,6 @@ namespace ezEvade
 
             menu = mainMenu;
 
-            //Console.WriteLine("SpellDetector loaded");
             spellMenu = new Menu("Spells", "Spells");
             menu.AddSubMenu(spellMenu);
 
@@ -436,11 +435,11 @@ namespace ezEvade
                         continue;
                     }
 
-                    if (EvadeUtils.TickCount - spell.startTime < 
+                    /*if (EvadeUtils.TickCount - spell.startTime < 
                         ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
                     {
-                        //continue;
-                    }
+                        continue;
+                    }*/
 
                     var dodgeInterval = ObjectCache.menuCache.cache["DodgeInterval"].GetValue<Slider>().Value;
                     if (Evade.lastPosInfo != null && dodgeInterval > 0)
@@ -504,7 +503,7 @@ namespace ezEvade
             return spellID;
         }
 
-        private static void DeleteSpell(int spellID)
+        public static void DeleteSpell(int spellID)
         {
             spells.Remove(spellID);
             drawSpells.Remove(spellID);
@@ -605,6 +604,25 @@ namespace ezEvade
             channeledSpells["OdinRecall"] = "AllChampions";
             channeledSpells["Recall"] = "AllChampions";
 
+        }
+
+        public static void LoadDummySpell(SpellData spell)
+        {
+            string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
+
+            var enableSpell = !spell.defaultOff;
+
+            Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
+            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetValue(enableSpell));
+            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(enableSpell));
+            newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
+                .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
+            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
+                .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
+
+            spellMenu.AddSubMenu(newSpellMenu);
+
+            ObjectCache.menuCache.AddMenuToCache(newSpellMenu);
         }
 
         private void LoadSpellDictionary()

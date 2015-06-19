@@ -1117,7 +1117,7 @@ namespace ezEvade
                         var extraDelayBuffer = Evade.menu.Item("ExtraPingBuffer").GetValue<Slider>().Value;
                         var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
 
-                        if (PredictSpellCollision(spell, movePos, ObjectCache.myHeroCache.moveSpeed, 0, from, 0))
+                        if (PredictSpellCollision(spell, movePos, ObjectCache.myHeroCache.moveSpeed, extraDelayBuffer, from, extraDist))
                         {
                             return true;
                         }

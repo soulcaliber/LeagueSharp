@@ -18,10 +18,17 @@ namespace ezEvade
         public float renderEndTime = 0;
         public Vector2 renderPosition = new Vector2(0, 0);
 
-        public RenderPosition(Vector2 renderPosition, float renderEndTime)
+        public int radius = 65;
+        public int width = 5;
+
+        public RenderPosition(Vector2 renderPosition, float renderEndTime, 
+            int radius = 65, int width = 5)
         {
             this.renderEndTime = renderEndTime;
             this.renderPosition = renderPosition;
+
+            this.radius = radius;
+            this.width = width;
         }
     }
 
