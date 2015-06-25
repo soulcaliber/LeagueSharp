@@ -136,7 +136,7 @@ namespace ezEvade
                 miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
                                                 
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
-                limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(50, 0, 200)));
+                limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(100, 0, 500)));
                 limiterMenu.AddItem(new MenuItem("SpellDetectionTime", "Spell Detection Time").SetValue(new Slider(0, 0, 1000)));
                 //limiterMenu.AddItem(new MenuItem("ReactionTime", "Reaction Time").SetValue(new Slider(0, 0, 1000)));
                 limiterMenu.AddItem(new MenuItem("DodgeInterval", "Dodge Interval").SetValue(new Slider(0, 0, 2000)));
@@ -226,7 +226,7 @@ namespace ezEvade
 
             menu.Item("EvadeMode").SetValue(new StringList(new[] { "Smooth", "Fastest", "Very Smooth" }, 0));
 
-            menu.Item("TickLimiter").SetValue(new Slider(50, 0, 200));
+            menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
             menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
             //menu.Item("ReactionTime").SetValue(new Slider(0, 0, 1000));
             menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
@@ -248,7 +248,7 @@ namespace ezEvade
             //menu.Item("ReactionTime").SetValue(new Slider(0, 0, 1000));
             //menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
 
-            menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
+            menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
         }
 
         private void OnEvadeModeChange(object sender, OnValueChangeEventArgs e)

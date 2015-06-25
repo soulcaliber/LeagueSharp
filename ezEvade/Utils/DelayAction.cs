@@ -35,9 +35,9 @@ namespace ezEvade
                             //Will somehow result in calling ALL non-internal marked classes of the called assembly and causes NullReferenceExceptions.
                         }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        // ignored
+                        Console.WriteLine(e);
                     }
 
                     ActionList.RemoveAt(i);

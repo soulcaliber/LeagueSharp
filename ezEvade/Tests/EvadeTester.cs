@@ -87,7 +87,7 @@ namespace ezEvade
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnInput += Game_OnGameInput;
 
-            Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
+            MissileClient.OnCreate += SpellMissile_OnCreate;
 
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
             Spellbook.OnCastSpell += Game_OnCastSpell;
@@ -198,7 +198,10 @@ namespace ezEvade
                 }*/
             }
 
-            if (!obj.IsValid<Obj_SpellMissile>())
+
+            //Console.WriteLine(obj.Name + ": " + obj.Type);
+
+            if (!obj.IsValid<MissileClient>())
                 return;
 
             if (testMenu.Item("ShowMissileInfo").GetValue<bool>() == false)
@@ -206,9 +209,9 @@ namespace ezEvade
                 return;
             }
 
-            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
 
-
+            MissileClient missile = (MissileClient)obj;
+                        
             Console.WriteLine("Est.CastTime: " + (EvadeUtils.TickCount - lastHeroSpellCastTime));
             Console.WriteLine("Missile Name " + missile.SData.Name);
             Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);

@@ -60,7 +60,7 @@ namespace ezEvade
             if (spellData.spellName == "ZedShuriken" && !pDict.ContainsKey("ProcessSpell_ProcessZedShuriken"))
             {
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_ZedShuriken;
-                Obj_SpellMissile.OnCreate += SpellMissile_ZedShadowDash;
+                MissileClient.OnCreate += SpellMissile_ZedShadowDash;
                 Obj_AI_Minion.OnCreate += OnCreateObj_ZedShuriken;
                 Obj_AI_Minion.OnDelete += OnDeleteObj_ZedShuriken;
                 pDict["ProcessSpell_ProcessZedShuriken"] = true;
@@ -162,7 +162,7 @@ namespace ezEvade
             {
                 foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
                 {
-                    if (obj != null && obj.IsValid && obj.Name == "Ekko" && obj.IsEnemy)
+                    if (obj != null && obj.IsValid && !obj.IsDead && obj.Name == "Ekko" && obj.IsEnemy)
                     {
                         var blinkPos = obj.ServerPosition.To2D();
 
@@ -443,7 +443,7 @@ namespace ezEvade
 
                     if (entry.Value.Name == "RobotBuddy")
                     {
-                        if (info.obj == null || info.obj.IsValid || info.obj.IsDead || info.obj.IsVisible)
+                        if (info.obj == null || !info.obj.IsValid || info.obj.IsDead || info.obj.IsVisible)
                         {
                             continue;
                         }
@@ -498,7 +498,7 @@ namespace ezEvade
 
                     if (info.obj.Name == "Shadow" || info.Name == "Shadow")
                     {
-                        if (info.usePosition == false && (info.obj == null || info.obj.IsValid || info.obj.IsDead))
+                        if (info.usePosition == false && (info.obj == null || !info.obj.IsValid || info.obj.IsDead))
                         {
                             DelayAction.Add(1, () => objTracker.Remove(info.obj.NetworkId));
                             continue;
@@ -525,10 +525,10 @@ namespace ezEvade
 
         private static void SpellMissile_ZedShadowDash(GameObject obj, EventArgs args)
         {
-            if (!obj.IsValid<Obj_SpellMissile>())
+            if (!obj.IsValid<MissileClient>())
                 return;
 
-            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+            MissileClient missile = (MissileClient)obj;
 
             if (missile.SpellCaster.IsEnemy && missile.SData.Name == "ZedShadowDashMissile")
             {

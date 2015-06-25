@@ -47,7 +47,7 @@ namespace ezEvade
         {
             foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (obj != null && obj.IsValid && obj.Name == "Ekko" && obj.IsAlly)
+                if (obj != null && obj.IsValid && !obj.IsDead && obj.Name == "Ekko" && obj.IsAlly)
                 {
                     Vector2 blinkPos = obj.ServerPosition.To2D();
                     if (!blinkPos.CheckDangerousPos(10))

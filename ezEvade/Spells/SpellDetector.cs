@@ -46,8 +46,15 @@ namespace ezEvade
 
         public SpellDetector(Menu mainMenu)
         {
-            Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
-            Obj_SpellMissile.OnDelete += SpellMissile_OnDelete;
+            MissileClient.OnCreate += SpellMissile_OnCreate;
+            MissileClient.OnDelete += SpellMissile_OnDelete;
+
+            if (!Game.Version.StartsWith("5.12"))
+            {
+                Obj_SpellMissile.OnCreate += SpellMissile_OnCreateOld;
+                Obj_SpellMissile.OnDelete += SpellMissile_OnDeleteOld;
+            }
+            
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
 
             Game.OnUpdate += Game_OnGameUpdate;
@@ -63,10 +70,11 @@ namespace ezEvade
 
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
         {
-            if (!obj.IsValid<Obj_SpellMissile>())
+            if (!obj.IsValid<MissileClient>())
                 return;
+                        
+            MissileClient missile = (MissileClient)obj;
 
-            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
             SpellData spellData;
 
             if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
@@ -135,6 +143,76 @@ namespace ezEvade
 
         private void SpellMissile_OnDelete(GameObject obj, EventArgs args)
         {
+            if (!obj.IsValid<MissileClient>())
+                return;
+
+            MissileClient missile = (MissileClient)obj;
+            //SpellData spellData;
+
+            foreach (var spell in spells.Values.ToList().Where(
+                    s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
+            {
+                DelayAction.Add(1, () => DeleteSpell(spell.spellID));
+            }
+        }
+
+        private void SpellMissile_OnCreateOld(GameObject obj, EventArgs args)
+        {
+
+            if (!obj.IsValid<Obj_SpellMissile>())
+                return;
+
+            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+
+            SpellData spellData;
+
+            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
+                missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
+                && missile.StartPosition != null && missile.EndPosition != null)
+            {
+
+                if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
+                {
+                    var hero = missile.SpellCaster;
+
+                    if (hero.IsVisible)
+                    {
+                        if (spellData.usePackets)
+                        {
+                            CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
+                            return;
+                        }
+
+                        foreach (KeyValuePair<int, Spell> entry in spells)
+                        {
+                            Spell spell = entry.Value;
+
+                            var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
+
+                            if (spell.info.missileName == missile.SData.Name
+                                && spell.heroID == missile.SpellCaster.NetworkId
+                                && dir.AngleBetween(spell.direction) < 10)
+                            {
+                                if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
+                                {
+                                    spell.spellObject = obj;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (ObjectCache.menuCache.cache["DodgeFOWSpells"].GetValue<bool>())
+                        {
+                            CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SpellMissile_OnDeleteOld(GameObject obj, EventArgs args)
+        {
             if (!obj.IsValid<Obj_SpellMissile>())
                 return;
 
@@ -171,10 +249,10 @@ namespace ezEvade
                     }
 
                     if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
-                    {                       
+                    {
                         var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
 
-                        
+
                         if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name)
                             && Math.Abs(castTime - myHero.AttackCastDelay * 1000) > 1)
                         {
@@ -417,7 +495,7 @@ namespace ezEvade
                 spell.spellHitTime = spellHitTime;
                 spell.evadeTime = evadeTime;
 
-                var extraDelay = ObjectCache.gamePing + ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;;
+                var extraDelay = ObjectCache.gamePing + ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value; ;
 
                 if (spell.spellHitTime - spell.evadeTime - extraDelay < 1500 && CanHeroWalkIntoSpell(spell))
                 {

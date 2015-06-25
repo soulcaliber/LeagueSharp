@@ -323,7 +323,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Blitzcrank",
-                dangerlevel = 4,
+                dangerlevel = 3,
                 extraDelay = 75,
                 missileName = "RocketGrabMissile",
                 name = "Rocket Grab",
@@ -1835,12 +1835,10 @@ namespace ezEvade
             {
                 charName = "Nami",
                 dangerlevel = 3,
-                missileName = "NamiQMissile",
                 name = "NamiQ",
-                projectileSpeed = 1500,
                 radius = 200,
-                range = 1625,
-                spellDelay = 525,
+                range = 875,
+                spellDelay = 1000,
                 spellKey = SpellSlot.Q,
                 spellName = "NamiQ",
                 spellType = SpellType.Circular,
