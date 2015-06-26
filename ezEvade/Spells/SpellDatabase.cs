@@ -243,7 +243,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ashe",
-                dangerlevel = 4,
+                dangerlevel = 3,
                 name = "Enchanted Arrow",
                 projectileSpeed = 1600,
                 radius = 130,

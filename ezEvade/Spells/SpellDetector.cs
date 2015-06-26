@@ -49,11 +49,8 @@ namespace ezEvade
             MissileClient.OnCreate += SpellMissile_OnCreate;
             MissileClient.OnDelete += SpellMissile_OnDelete;
 
-            if (!Game.Version.StartsWith("5.12"))
-            {
-                Obj_SpellMissile.OnCreate += SpellMissile_OnCreateOld;
-                Obj_SpellMissile.OnDelete += SpellMissile_OnDeleteOld;
-            }
+            Obj_SpellMissile.OnCreate += SpellMissile_OnCreateOld;
+            Obj_SpellMissile.OnDelete += SpellMissile_OnDeleteOld;            
             
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
 
