@@ -48,7 +48,7 @@ namespace ezEvade
                 {
                     //unfinished
                 }*/
-
+                
                 return projection.SegmentPoint.Distance(position) <= spell.radius + radius;
             }
             else if (spell.info.spellType == SpellType.Circular)

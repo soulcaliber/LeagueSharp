@@ -27,14 +27,14 @@ namespace ezEvade
             }
         }
 
-        public static bool UseEkkoE2(EvadeSpellData evadeSpell)
+        public static bool UseEkkoE2(EvadeSpellData evadeSpell, bool process = true)
         {
             if (myHero.HasBuff("ekkoeattackbuff"))
             {
                 var posInfo = EvadeHelper.GetBestPositionTargetedDash(evadeSpell);
                 if (posInfo != null && posInfo.target != null)
                 {
-                    EvadeCommand.Attack(evadeSpell, posInfo.target);
+                    EvadeSpell.CastEvadeSpell(() => EvadeCommand.Attack(evadeSpell, posInfo.target), process);
                     //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                     return true;
                 }
@@ -43,7 +43,7 @@ namespace ezEvade
             return false;
         }
 
-        public static bool UseEkkoR(EvadeSpellData evadeSpell)
+        public static bool UseEkkoR(EvadeSpellData evadeSpell, bool process = true)
         {
             foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
             {
@@ -52,7 +52,7 @@ namespace ezEvade
                     Vector2 blinkPos = obj.ServerPosition.To2D();
                     if (!blinkPos.CheckDangerousPos(10))
                     {
-                        EvadeCommand.CastSpell(evadeSpell);
+                        EvadeSpell.CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), process);
                         //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                         return true;
                     }

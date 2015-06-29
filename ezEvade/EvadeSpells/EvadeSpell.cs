@@ -13,6 +13,8 @@ namespace ezEvade
     {
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
 
+        public delegate void Callback();
+
         public static List<EvadeSpellData> evadeSpells = new List<EvadeSpellData>();
         public static List<EvadeSpellData> itemSpells = new List<EvadeSpellData>();
         public static EvadeCommand lastSpellEvadeCommand = new EvadeCommand { isProcessed = true, timestamp = EvadeUtils.TickCount };
@@ -140,12 +142,14 @@ namespace ezEvade
 
         }
 
-        public static bool ActivateEvadeSpell(Spell spell, bool ignoreDelay = false)
+        public static bool ActivateEvadeSpell(Spell spell, bool checkSpell = false)
         {
             var sortedEvadeSpells = evadeSpells.OrderBy(s => s.dangerlevel);
 
             foreach (var evadeSpell in sortedEvadeSpells)
             {
+                var processSpell = true;
+
                 if (ObjectCache.menuCache.cache[evadeSpell.name + "UseEvadeSpell"].GetValue<bool>() == false
                     || GetSpellDangerLevel(evadeSpell) > spell.GetSpellDangerLevel()
                     || (evadeSpell.isItem == false && !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
@@ -159,19 +163,19 @@ namespace ezEvade
                 if (evadeSpell.evadeType != EvadeType.Dash && spellHitTime > evadeSpell.spellDelay + 100 + Game.Ping + 
                     ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value)
                 {
-                    if (ignoreDelay)
-                    {
-                        return true;
-                    }
+                    processSpell = false;
 
-                    continue;
+                    if (checkSpell == false)
+                    {
+                        continue;
+                    }
                 }
 
                 if (evadeSpell.isSpecial == true)
                 {
                     if (evadeSpell.useSpellFunc != null)
                     {
-                        if (evadeSpell.useSpellFunc(evadeSpell))
+                        if (evadeSpell.useSpellFunc(evadeSpell, processSpell))
                         {
                             return true;
                         }
@@ -186,7 +190,7 @@ namespace ezEvade
                         var posInfo = EvadeHelper.GetBestPositionBlink();
                         if (posInfo != null)
                         {
-                            EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.position), processSpell);
                             //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;   
                         }
@@ -195,8 +199,8 @@ namespace ezEvade
                     {
                         var posInfo = EvadeHelper.GetBestPositionTargetedDash(evadeSpell);
                         if (posInfo != null && posInfo.target != null)
-                        {
-                            EvadeCommand.CastSpell(evadeSpell, posInfo.target);
+                        {                            
+                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.target), processSpell);
                             //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;
                         }
@@ -218,7 +222,7 @@ namespace ezEvade
                                 posInfo.position = pos;
                             }
 
-                            EvadeCommand.CastSpell(evadeSpell, posInfo.position);
+                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.position), processSpell);
                             //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;
                         }
@@ -228,7 +232,7 @@ namespace ezEvade
                         var posInfo = EvadeHelper.GetBestPositionTargetedDash(evadeSpell);
                         if (posInfo != null && posInfo.target != null)
                         {
-                            EvadeCommand.CastSpell(evadeSpell, posInfo.target);
+                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.target), processSpell);
                             //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;
                         }
@@ -241,26 +245,27 @@ namespace ezEvade
                         var dir = (spell.startPos - ObjectCache.myHeroCache.serverPos2D).Normalized();
                         var pos = ObjectCache.myHeroCache.serverPos2D + dir * 100;
 
-                        EvadeCommand.CastSpell(evadeSpell, pos);
+                        CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, pos), processSpell);
+                        return true;
                     }
                 }
                 else if (evadeSpell.evadeType == EvadeType.SpellShield)
                 {
                     if (evadeSpell.isItem)
                     {
-                        Items.UseItem((int)evadeSpell.itemID);
+                        CastEvadeSpell(() => Items.UseItem((int)evadeSpell.itemID), processSpell);
                         return true;
                     }
                     else
                     {
                         if (evadeSpell.castType == CastType.Target)
                         {
-                            EvadeCommand.CastSpell(evadeSpell, myHero);
+                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, myHero), processSpell);
                             return true;
                         }
                         else if (evadeSpell.castType == CastType.Self)
                         {
-                            EvadeCommand.CastSpell(evadeSpell);
+                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), processSpell);
                             return true;
                         }
                     }
@@ -268,6 +273,14 @@ namespace ezEvade
             }
 
             return false;
+        }
+
+        public static void CastEvadeSpell(Callback func, bool process = true)
+        {
+            if (process)
+            {
+                func();
+            }
         }
 
         private static bool ShouldActivateEvadeSpell(Spell spell)

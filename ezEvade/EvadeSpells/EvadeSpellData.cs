@@ -9,7 +9,7 @@ using SharpDX;
 
 namespace ezEvade
 {
-    public delegate bool UseSpellFunc(EvadeSpellData evadeSpell);
+    public delegate bool UseSpellFunc(EvadeSpellData evadeSpell, bool process = true);
 
     public enum CastType
     {
