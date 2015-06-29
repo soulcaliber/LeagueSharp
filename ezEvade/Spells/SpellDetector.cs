@@ -254,6 +254,7 @@ namespace ezEvade
                             && Math.Abs(castTime - myHero.AttackCastDelay * 1000) > 1)
                         {
                             //Console.WriteLine(args.SData.Name + ": " + (castTime - myHero.AttackCastDelay * 1000));
+                            //Console.WriteLine(args.SData.Name + ": " + castTime);
                             //var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
                             Evade.lastWindupTime = EvadeUtils.TickCount + castTime - Game.Ping / 2;
                         }
@@ -510,11 +511,11 @@ namespace ezEvade
                         continue;
                     }
 
-                    /*if (EvadeUtils.TickCount - spell.startTime < 
+                    if (EvadeUtils.TickCount - spell.startTime < 
                         ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
                     {
                         continue;
-                    }*/
+                    }
 
                     var dodgeInterval = ObjectCache.menuCache.cache["DodgeInterval"].GetValue<Slider>().Value;
                     if (Evade.lastPosInfo != null && dodgeInterval > 0)

@@ -50,7 +50,7 @@ namespace ezEvade
         public bool checkSpellName = false;
         public float spellDelay = 250;
         public float range;
-        public float speed;
+        public float speed = 0;
         public bool fixedRange = false;
         public EvadeType evadeType;
         public bool isReversed = false;

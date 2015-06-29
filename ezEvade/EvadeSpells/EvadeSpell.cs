@@ -155,6 +155,13 @@ namespace ezEvade
                     continue; //can't use spell right now               
                 }
 
+                var spellHitTime = spell.GetSpellHitTime(ObjectCache.myHeroCache.serverPos2D);
+                if (evadeSpell.evadeType != EvadeType.Dash && spellHitTime > evadeSpell.spellDelay + 100 + Game.Ping + 
+                    ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value)
+                {
+                    continue;
+                }
+
                 if (evadeSpell.isSpecial == true)
                 {
                     if (evadeSpell.useSpellFunc != null)

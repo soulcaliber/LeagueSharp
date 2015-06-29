@@ -138,7 +138,7 @@ namespace ezEvade
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
                 limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(100, 0, 500)));
                 limiterMenu.AddItem(new MenuItem("SpellDetectionTime", "Spell Detection Time").SetValue(new Slider(0, 0, 1000)));
-                //limiterMenu.AddItem(new MenuItem("ReactionTime", "Reaction Time").SetValue(new Slider(0, 0, 1000)));
+                limiterMenu.AddItem(new MenuItem("ReactionTime", "Reaction Time").SetValue(new Slider(0, 0, 500)));
                 limiterMenu.AddItem(new MenuItem("DodgeInterval", "Dodge Interval").SetValue(new Slider(0, 0, 2000)));
                 miscMenu.AddSubMenu(limiterMenu);
 
@@ -167,7 +167,7 @@ namespace ezEvade
 
                 Menu resetMenu = new Menu("Reset Config", "ResetConfig");
                 resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
-                resetMenu.AddItem(new MenuItem("ResetConfig198", "Set Patch Config").SetValue(true));
+                resetMenu.AddItem(new MenuItem("ResetConfig200", "Set Patch Config").SetValue(true));
 
                 miscMenu.AddSubMenu(resetMenu);
 
@@ -228,7 +228,7 @@ namespace ezEvade
 
             menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
             menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
-            //menu.Item("ReactionTime").SetValue(new Slider(0, 0, 1000));
+            menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
             menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
 
             menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
@@ -245,10 +245,9 @@ namespace ezEvade
 
         public static void SetPatchConfig()
         {
-            //menu.Item("ReactionTime").SetValue(new Slider(0, 0, 1000));
+            menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
             //menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
-
-            menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
+            //menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
         }
 
         private void OnEvadeModeChange(object sender, OnValueChangeEventArgs e)
@@ -467,10 +466,10 @@ namespace ezEvade
                     menu.Item("ResetConfig").SetValue(false);
                 }
 
-                if (ObjectCache.menuCache.cache["ResetConfig198"].GetValue<bool>())
+                if (ObjectCache.menuCache.cache["ResetConfig200"].GetValue<bool>())
                 {
                     SetPatchConfig();
-                    menu.Item("ResetConfig198").SetValue(false);
+                    menu.Item("ResetConfig200").SetValue(false);
                 }
 
                 var limitDelay = ObjectCache.menuCache.cache["TickLimiter"].GetValue<Slider>().Value; //Tick limiter                
