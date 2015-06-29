@@ -476,11 +476,12 @@ namespace ezEvade
                 if (EvadeUtils.TickCount - lastTickCount > limitDelay
                     && EvadeUtils.TickCount > lastStopEvadeTime)
                 {
-                    DodgeSkillShots(); //walking
-                    EvadeSpell.UseEvadeSpell(); //using spells
+                    DodgeSkillShots(); //walking                    
                     ContinueLastBlockedCommand();
                     lastTickCount = EvadeUtils.TickCount;
                 }
+
+                EvadeSpell.UseEvadeSpell(); //using spells
 
                 CheckDodgeOnlyDangerous();
             }

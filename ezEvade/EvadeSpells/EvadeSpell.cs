@@ -99,7 +99,7 @@ namespace ezEvade
                 {
                     foreach (var evadeSpell in evadeSpells)
                     {
-                        if (ActivateEvadeSpell(spell))
+                        if (ActivateEvadeSpell(spell, true))
                         {
                             return true;
                         }
@@ -140,7 +140,7 @@ namespace ezEvade
 
         }
 
-        public static bool ActivateEvadeSpell(Spell spell)
+        public static bool ActivateEvadeSpell(Spell spell, bool ignoreDelay = false)
         {
             var sortedEvadeSpells = evadeSpells.OrderBy(s => s.dangerlevel);
 
@@ -159,6 +159,11 @@ namespace ezEvade
                 if (evadeSpell.evadeType != EvadeType.Dash && spellHitTime > evadeSpell.spellDelay + 100 + Game.Ping + 
                     ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value)
                 {
+                    if (ignoreDelay)
+                    {
+                        return true;
+                    }
+
                     continue;
                 }
 
