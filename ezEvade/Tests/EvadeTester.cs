@@ -21,7 +21,7 @@ namespace ezEvade
         public int radius = 65;
         public int width = 5;
 
-        public RenderPosition(Vector2 renderPosition, float renderEndTime, 
+        public RenderPosition(Vector2 renderPosition, float renderEndTime,
             int radius = 65, int width = 5)
         {
             this.renderEndTime = renderEndTime;
@@ -74,6 +74,8 @@ namespace ezEvade
         private static float lastSpellCastTime = 0;
         private static float lastHeroSpellCastTime = 0;
 
+        private static MissileClient testMissile = null;
+
         public EvadeTester(Menu mainMenu)
         {
             lastGameTimerStart = getGameTimer;
@@ -86,6 +88,8 @@ namespace ezEvade
             Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnInput += Game_OnGameInput;
+
+            MissileClient.OnDelete += Game_OnDelete;
 
             MissileClient.OnCreate += SpellMissile_OnCreate;
 
@@ -121,7 +125,7 @@ namespace ezEvade
 
             Game_OnGameLoad();
         }
-               
+
         private void Game_OnGameLoad()
         {
             Console.WriteLine("EvadeTester loaded");
@@ -154,7 +158,7 @@ namespace ezEvade
                     var dist = args.Path.First().Distance(args.Path.Last());
                     Console.WriteLine("Dash Speed: " + args.Speed + " Dash dist: " + dist);
                 }
-                
+
             }
         }
 
@@ -180,6 +184,18 @@ namespace ezEvade
             circleRenderPos = Evade.lastPosInfo.position;
 
             lastSpellCastTime = EvadeUtils.TickCount;
+        }
+
+        private void Game_OnDelete(GameObject sender, EventArgs args)
+        {
+            if (testMenu.Item("ShowMissileInfo").GetValue<bool>())
+            {
+                if (testMissile != null && testMissile.NetworkId == sender.NetworkId)
+                {
+                    Console.WriteLine("Est.Missile range: " +
+                        sender.Position.To2D().Distance(testMissile.StartPosition.To2D()));
+                }
+            }
         }
 
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
@@ -211,7 +227,9 @@ namespace ezEvade
 
 
             MissileClient missile = (MissileClient)obj;
-                        
+
+            testMissile = missile;
+
             Console.WriteLine("Est.CastTime: " + (EvadeUtils.TickCount - lastHeroSpellCastTime));
             Console.WriteLine("Missile Name " + missile.SData.Name);
             Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);
@@ -270,7 +288,7 @@ namespace ezEvade
             if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
             {
                 Console.WriteLine(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
-                
+
                 Console.WriteLine("CastRadius: " + args.SData.CastRadius);
 
                 /*foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(args.SData))
@@ -425,7 +443,7 @@ namespace ezEvade
 
 
 
-            if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal" 
+            if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal"
                 && args.Property != "mMP" && args.Property != "mPARRegenRate")
             {
                 //Console.WriteLine(args.Property + ": " + args.NewValue);
@@ -666,7 +684,7 @@ namespace ezEvade
                 var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
 
                 DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
-                
+
             }
 
             if (testMenu.Item("TestPath").GetValue<bool>())
@@ -824,7 +842,7 @@ namespace ezEvade
                         {
                             Render.Circle.DrawCircle(new Vector3(pos.X, pos.Y, myHero.Position.Z), (float)25, Color.White, 3);
                         }
-                        
+
                     }
                 }
             }

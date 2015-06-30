@@ -453,11 +453,7 @@ namespace ezEvade
                 {
                     if (PositionInfoStillValid(posInfo, spell.speed))
                     {
-                        if (posInfo != null && Evade.lastPosInfo != null
-                            && Evade.lastPosInfo.posDangerLevel > posInfo.posDangerLevel)
-                        {
-                            return posInfo;
-                        }
+                        return posInfo;
                     }
                 }
             }
@@ -636,11 +632,8 @@ namespace ezEvade
                         .ThenBy(p => p.distanceToMouse);
 
                 var first = sortedPosTable.FirstOrDefault();
-                if (first != null && Evade.lastPosInfo != null && first.isDangerousPos == false
-                    && Evade.lastPosInfo.posDangerLevel > first.posDangerLevel)
-                {
-                    return first;
-                }
+
+                return first;
             }
 
             return null;

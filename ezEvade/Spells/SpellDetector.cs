@@ -50,8 +50,8 @@ namespace ezEvade
             MissileClient.OnDelete += SpellMissile_OnDelete;
 
             Obj_SpellMissile.OnCreate += SpellMissile_OnCreateOld;
-            Obj_SpellMissile.OnDelete += SpellMissile_OnDeleteOld;            
-            
+            Obj_SpellMissile.OnDelete += SpellMissile_OnDeleteOld;
+
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
 
             Game.OnUpdate += Game_OnGameUpdate;
@@ -69,7 +69,7 @@ namespace ezEvade
         {
             if (!obj.IsValid<MissileClient>())
                 return;
-                        
+
             MissileClient missile = (MissileClient)obj;
 
             SpellData spellData;
@@ -101,6 +101,7 @@ namespace ezEvade
                                 && spell.heroID == missile.SpellCaster.NetworkId
                                 && dir.AngleBetween(spell.direction) < 10)
                             {
+
                                 if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                 {
                                     spell.spellObject = obj;
@@ -261,6 +262,13 @@ namespace ezEvade
                     }
 
                 }
+
+
+                /*var castTime2 = (hero.Spellbook.CastTime - Game.Time) * 1000;
+                if (castTime2 > 0)
+                {
+                    Console.WriteLine(args.SData.Name + ": " + castTime2);
+                }*/
 
 
                 SpellData spellData;
@@ -511,7 +519,7 @@ namespace ezEvade
                         continue;
                     }
 
-                    if (EvadeUtils.TickCount - spell.startTime < 
+                    if (EvadeUtils.TickCount - spell.startTime <
                         ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
                     {
                         continue;

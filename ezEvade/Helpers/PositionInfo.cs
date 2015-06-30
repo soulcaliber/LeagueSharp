@@ -147,6 +147,28 @@ namespace ezEvade
             return new HashSet<int>(posInfo1.spellList).SetEquals(posInfo2.spellList);
         }
 
+        public static bool isBetterMovePos(this PositionInfo newPosInfo)
+        {
+            PositionInfo posInfo = null;
+            var path = myHero.Path;
+            if (path.Length > 0)
+            {
+                var movePos = path[path.Length - 1].To2D();
+                posInfo = EvadeHelper.CanHeroWalkToPos(movePos, ObjectCache.myHeroCache.moveSpeed, 0, 0, false);
+            }
+            else
+            {
+                posInfo = EvadeHelper.CanHeroWalkToPos(ObjectCache.myHeroCache.serverPos2D, ObjectCache.myHeroCache.moveSpeed, 0, 0, false);
+            }
+
+            if (posInfo.posDangerCount < newPosInfo.posDangerCount)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public static PositionInfo CompareLastMovePos(this PositionInfo newPosInfo)
         {
             PositionInfo posInfo = null;
