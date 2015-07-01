@@ -454,9 +454,11 @@ namespace ezEvade
         {
             try
             {
+                ObjectCache.myHeroCache.UpdateInfo();
                 CheckHeroInDanger();
 
-                if (isChanneling && channelPosition.Distance(ObjectCache.myHeroCache.serverPos2D) > 50)
+                if (isChanneling && channelPosition.Distance(ObjectCache.myHeroCache.serverPos2D) > 50
+                    && !myHero.IsChannelingImportantSpell())
                 {
                     isChanneling = false;
                 }
@@ -503,7 +505,7 @@ namespace ezEvade
                     && EvadeUtils.TickCount - lastEvadeCommand.timestamp > ObjectCache.gamePing + extraDelay
                     && EvadeUtils.TickCount - lastBlockedUserMoveTo.timestamp < 1500)
                 {
-                    movePos = movePos + (movePos - myHero.ServerPosition.To2D()).Normalized() 
+                    movePos = movePos + (movePos - ObjectCache.myHeroCache.serverPos2D).Normalized() 
                         * EvadeUtils.random.NextFloat(1, 65);
 
                     if (!EvadeHelper.CheckMovePath(movePos, ObjectCache.gamePing + extraDelay))
@@ -682,6 +684,8 @@ namespace ezEvade
 
         private void SpellDetector_OnProcessDetectedSpells()
         {
+            ObjectCache.myHeroCache.UpdateInfo();
+
             if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active == false)
             {
                 lastPosInfo = PositionInfo.SetAllUndodgeable();

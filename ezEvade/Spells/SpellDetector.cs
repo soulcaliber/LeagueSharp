@@ -243,7 +243,7 @@ namespace ezEvade
                     if (channeledSpells.TryGetValue(args.SData.Name, out name))
                     {
                         Evade.isChanneling = true;
-                        Evade.channelPosition = ObjectCache.myHeroCache.serverPos2D;
+                        Evade.channelPosition = myHero.ServerPosition.To2D();
                     }
 
                     if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
@@ -481,10 +481,9 @@ namespace ezEvade
 
                 return false;
             }
-            else
-            {
-                return true;
-            }
+                
+            
+            return true;            
         }
 
         private static void AddDetectedSpells()
@@ -503,7 +502,7 @@ namespace ezEvade
 
                 var extraDelay = ObjectCache.gamePing + ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value; ;
 
-                if (spell.spellHitTime - spell.evadeTime - extraDelay < 1500 && CanHeroWalkIntoSpell(spell))
+                if (spell.spellHitTime - extraDelay < 1500 && CanHeroWalkIntoSpell(spell))
                 {
                     Spell newSpell = spell;
                     int spellID = spell.spellID;
