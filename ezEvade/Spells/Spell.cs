@@ -21,7 +21,7 @@ namespace ezEvade
         public SpellData info;
         public int spellID;
         public GameObject spellObject = null;
-                
+
         public Vector2 currentSpellPosition = Vector2.Zero;
         public Vector2 currentNegativePosition = Vector2.Zero;
         public Vector2 predictedEndPos = Vector2.Zero;
@@ -240,7 +240,8 @@ namespace ezEvade
             spell.radius = spell.GetSpellRadius();
         }
 
-        public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0)
+        public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0, 
+            float extraDistance = 0)
         {
             Vector2 spellPos = spell.startPos;
 
@@ -251,11 +252,7 @@ namespace ezEvade
                 if (spell.info.projectileSpeed == float.MaxValue)
                     return spell.startPos;
 
-                if (spellTime >= 0)
-                {
-                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * spellTime / 1000;
-                }
-                else if (allowNegative)
+                if (spellTime >= 0 || allowNegative)
                 {
                     spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
                 }
@@ -265,19 +262,26 @@ namespace ezEvade
                 spellPos = spell.endPos;
             }
 
-            if (spell.spellObject != null && spell.spellObject.IsValid && spell.spellObject.IsVisible && 
+            if (spell.spellObject != null && spell.spellObject.IsValid && spell.spellObject.IsVisible &&
                 spell.spellObject.Position.To2D().Distance(ObjectCache.myHeroCache.serverPos2D) < spell.info.range + 1000)
             {
                 spellPos = spell.spellObject.Position.To2D();
             }
 
-            if (delay > 0 && spell.info.projectileSpeed != float.MaxValue)
+            if (delay > 0 && spell.info.projectileSpeed != float.MaxValue
+                          && spell.info.spellType == SpellType.Line)
             {
                 spellPos = spellPos + spell.direction * spell.info.projectileSpeed * (delay / 1000);
             }
 
+            if (extraDistance > 0 && spell.info.projectileSpeed != float.MaxValue
+                          && spell.info.spellType == SpellType.Line)
+            {
+                spellPos = spellPos + spell.direction * extraDistance;
+            }
+
             return spellPos;
-        }        
+        }
 
         public static bool LineIntersectLinearSpell(this Spell spell, Vector2 a, Vector2 b)
         {
@@ -285,8 +289,8 @@ namespace ezEvade
             var spellDir = spell.direction;
             var pSpellDir = spell.direction.Perpendicular();
             var spellRadius = spell.radius;
-            var spellPos = spell.currentSpellPosition - spellDir * myBoundingRadius; //leave some space at back of spell
-            var endPos = spell.GetSpellEndPosition() + spellDir * myBoundingRadius; //leave some space at the front of spell
+            var spellPos = spell.currentSpellPosition;// -spellDir * myBoundingRadius; //leave some space at back of spell
+            var endPos = spell.GetSpellEndPosition();// +spellDir * myBoundingRadius; //leave some space at the front of spell
 
             var startRightPos = spellPos + pSpellDir * (spellRadius + myBoundingRadius);
             var startLeftPos = spellPos - pSpellDir * (spellRadius + myBoundingRadius);

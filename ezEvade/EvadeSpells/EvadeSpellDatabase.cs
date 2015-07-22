@@ -15,6 +15,25 @@ namespace ezEvade
 
         static EvadeSpellDatabase()
         {
+            #region Ahri
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Ahri",
+                dangerlevel = 4,
+                name = "AhriTumble",
+                spellName = "AhriTumble",
+                range = 500,
+                spellDelay = 50,
+                speed = 1575,
+                spellKey = SpellSlot.R,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
+            });
+
+            #endregion
+
             #region Caitlyn
 
             Spells.Add(
@@ -276,12 +295,12 @@ namespace ezEvade
             {
                 charName = "LeeSin",
                 dangerlevel = 3,
-                name = "LeeSinE",
-                spellName = "BlindMonkEOne",
+                name = "LeeSinW",
+                spellName = "BlindMonkWOne",
                 range = 700,
                 speed = 1400,
                 spellDelay = 50,
-                spellKey = SpellSlot.E,
+                spellKey = SpellSlot.W,
                 evadeType = EvadeType.Dash,
                 castType = CastType.Target,
                 spellTargets = new[] { SpellTargets.AllyChampions, SpellTargets.AllyMinions },

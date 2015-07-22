@@ -25,6 +25,7 @@ using System.Linq;
 using System.Text;
 
 using SharpDX;
+using LeagueSharp.Common;
 
 namespace ezEvade
 {
@@ -253,7 +254,7 @@ namespace ezEvade
             Track Tr2 = new Track(p2, v2);
 
             float ctime = cpa_time(Tr1, Tr2);
-
+                        
             Vector2 P1 = Tr1.P0 + (ctime * Tr1.v);
             Vector2 P2 = Tr2.P0 + (ctime * Tr2.v);
 
@@ -291,16 +292,27 @@ namespace ezEvade
             Track Tr1 = new Track(p1, v1);
             Track Tr2 = new Track(p2, v2);
 
-            float ctime = Math.Max(0, cpa_time(Tr1, Tr2));
+            float ctime = cpa_time(Tr1, Tr2);
+            
+            if (ctime == 0)
+            {
+                bool collision;
+                var collisionTime = MathUtils.GetCollisionTime(p1, p2, v1, v2, 10, 10, out collision);
+
+                if (collision)
+                {
+                    ctime = collisionTime;
+                }               
+            }
 
             Vector2 P1 = Tr1.P0 + (ctime * Tr1.v);
             Vector2 P2 = Tr2.P0 + (ctime * Tr2.v);
+                        
+            //P1 = d(p1, P1) > d(p1, p1end) ? p1end : P1;
+            //P2 = d(p2, P2) > d(p2, p2end) ? p2end : P2;
 
-            P1 = d(p1, P1) > d(p1, p1end) ? p1end : P1;
-            P2 = d(p2, P2) > d(p2, p2end) ? p2end : P2;
-
-            p1out = P1;
-            p2out = P2;
+            p1out = P1;//P1.ProjectOn(p1, p1end).SegmentPoint;//P1;
+            p2out = P2;//P2.ProjectOn(p2, p2end).SegmentPoint;
 
             return d(P1, P2);
         }

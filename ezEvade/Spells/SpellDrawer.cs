@@ -129,18 +129,10 @@ namespace ezEvade
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            if (ObjectCache.menuCache.cache["DrawSkillShots"].GetValue<bool>() == false)
-            {
-                return;
-            }
 
             if (ObjectCache.menuCache.cache["DrawEvadePosition"].GetValue<bool>())
             {
-                /*Render.Circle.DrawCircle(myHero.Position, 35, Color.White, 10);
-                Render.Circle.DrawCircle(myHero.ServerPosition, 65, Color.Red, 10);
-                var dist = (int)myHero.Position.Distance(myHero.ServerPosition);
-                //Drawing.DrawText(0, 0, Color.White, "Evade: " + (int)dist);
-                //Console.WriteLine(dist);*/
+                //Render.Circle.DrawCircle(myHero.Position.ExtendDir(dir, 500), 65, Color.Red, 10);
 
                 if (Evade.lastPosInfo != null)
                 {
@@ -150,6 +142,11 @@ namespace ezEvade
             }
 
             DrawEvadeStatus();
+            
+            if (ObjectCache.menuCache.cache["DrawSkillShots"].GetValue<bool>() == false)
+            {
+                return;
+            }
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
@@ -194,6 +191,11 @@ namespace ezEvade
                     else if (spell.info.spellType == SpellType.Circular)
                     {
                         Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);
+
+                        if (spell.info.spellName == "VeigarEventHorizon")
+                        {
+                            Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)spell.radius - 125, spellDrawingConfig.Color, spellDrawingWidth);
+                        }
                     }
                     else if (spell.info.spellType == SpellType.Cone)
                     {

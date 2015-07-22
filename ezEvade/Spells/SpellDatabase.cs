@@ -401,9 +401,10 @@ namespace ezEvade
                 missileName = "BraumQMissile",
                 name = "BraumQ",
                 projectileSpeed = 1200,
+                //spellDelay = 30000,
+                spellDelay = 250,   
                 radius = 100,
-                range = 1000,
-                spellDelay = 250,
+                range = 1000,             
                 spellKey = SpellSlot.Q,
                 spellName = "BraumQ",
                 spellType = SpellType.Line,
@@ -998,6 +999,39 @@ namespace ezEvade
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
+
+            /*Spells.Add(
+            new SpellData
+            {
+                charName = "Gnar",
+                dangerlevel = 2,
+                name = "GnarE",
+                spellName = "GnarE",
+                range = 475,
+                spellDelay = 0,
+                radius = 150,
+                fixedRange = true,
+                projectileSpeed = 900,
+                spellKey = SpellSlot.E,
+                spellType = SpellType.Circular,
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Gnar",
+                dangerlevel = 2,
+                name = "GnarBigE",
+                spellName = "gnarbige",
+                range = 475,
+                spellDelay = 0,
+                radius = 100,
+                fixedRange = true,
+                projectileSpeed = 800,
+                spellKey = SpellSlot.E,
+                spellType = SpellType.Circular,
+            });*/
+
             #endregion Gnar
 
             #region Gragas
@@ -1129,6 +1163,27 @@ namespace ezEvade
 
             });
             #endregion Heimerdinger
+
+            #region Irelia
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Irelia",
+                dangerlevel = 2,
+                missileName = "ireliatranscendentbladesspell",
+                name = "IreliaTranscendentBlades",
+                projectileSpeed = 1600,
+                radius = 120,
+                range = 1200,
+                spellKey = SpellSlot.R,
+                spellDelay = 0,
+                spellName = "IreliaTranscendentBlades",
+                spellType = SpellType.Line,
+                usePackets = true,
+                defaultOff = true,
+            });
+            #endregion Irelia
 
             #region Janna
 
@@ -2411,6 +2466,28 @@ namespace ezEvade
             });
             #endregion Syndra
 
+            #region TahmKench
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "TahmKench",
+                dangerlevel = 2,
+                missileName = "tahmkenchqmissile",
+                name = "TahmKenchQ",
+                projectileSpeed = 2000,
+                spellDelay = 250,
+                radius = 90,
+                range = 951,
+                spellKey = SpellSlot.Q,
+                spellName = "TahmKenchQ",
+                spellType = SpellType.Line,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+
+            });
+
+            #endregion TahmKench
+
             #region Talon
 
             Spells.Add(
@@ -2449,6 +2526,25 @@ namespace ezEvade
                 spellName = "ThreshQ",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Thresh",
+                dangerlevel = 3,
+                missileName = "ThreshEMissile1",
+                name = "ThreshE",
+                projectileSpeed = 2000,
+                radius = 110,
+                range = 1075,
+                spellDelay = 0,
+                defaultOff = true,
+                spellKey = SpellSlot.E,
+                spellName = "ThreshE",
+                spellType = SpellType.Line,
+                usePackets = true,
 
             });
             #endregion Thresh
@@ -2536,7 +2632,7 @@ namespace ezEvade
                 charName = "Varus",
                 dangerlevel = 2,
                 missileName = "VarusQMissile",
-                name = "Varus Q Missile",
+                name = "VarusQMissile",
                 projectileSpeed = 1900,
                 radius = 70,
                 range = 1600,
@@ -2599,6 +2695,23 @@ namespace ezEvade
                 spellType = SpellType.Circular,
 
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Veigar",
+                dangerlevel = 4,
+                name = "VeigarEventHorizon",
+                radius = 425,
+                range = 700,
+                spellDelay = 4000,
+                //extraDelay = 3500,
+                spellKey = SpellSlot.E,
+                spellName = "VeigarEventHorizon",
+                spellType = SpellType.Circular,
+
+            });
+
             #endregion Veigar
 
             #region Velkoz
@@ -2828,6 +2941,25 @@ namespace ezEvade
                 spellType = SpellType.Line,
 
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Yasuo",
+                dangerlevel = 2,
+                name = "Steel Tempest",
+                projectileSpeed = float.MaxValue,
+                radius = 35,
+                range = 500,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "YasuoQW",
+                extraSpellNames = new [] {"yasuoq2w"},
+                spellType = SpellType.Line,
+                defaultOff = true,
+
+            });
+
             #endregion Yasuo
 
             #region Zac

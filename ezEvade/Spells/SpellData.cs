@@ -13,7 +13,7 @@ namespace ezEvade
     {
         Line,
         Circular,
-        Cone
+        Cone,
     }
 
     public enum CollisionObjectType

@@ -36,6 +36,11 @@ namespace ezEvade
 
         public static void MoveTo(Vector2 movePos)
         {
+            if (!Situation.ShouldDodge())
+            {
+                return;
+            }
+
             Evade.lastEvadeCommand = new EvadeCommand
             {
                 order = EvadeOrderCommand.MoveTo,

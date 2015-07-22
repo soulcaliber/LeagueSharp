@@ -18,20 +18,24 @@ namespace ezEvade
     {
         public GameObject obj;
         public Vector3 position;
+        public Vector3 direction;
         public string Name;
         public int OwnerNetworkID;
         public bool usePosition = false;
+        public float timestamp = 0;
 
         public ObjectTrackerInfo(GameObject obj)
         {
             this.obj = obj;
             this.Name = obj.Name;
+            this.timestamp = Game.Time;
         }
 
         public ObjectTrackerInfo(GameObject obj, string name)
         {
             this.obj = obj;
             this.Name = name;
+            this.timestamp = Game.Time;
         }
     }
 
@@ -45,6 +49,9 @@ namespace ezEvade
 
         public static void LoadSpecialSpell(SpellData spellData)
         {
+            //Obj_AI_Minion.OnCreate += HiuCreate_ObjectTracker;
+            //Obj_AI_Minion.OnCreate += HiuDelete_ObjectTracker;
+
             if (spellData.isThreeWay && !pDict.ContainsKey("ProcessSpell_ProcessThreeWay"))
             {
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_ThreeWay;
@@ -141,11 +148,11 @@ namespace ezEvade
                 pDict["ProcessSpell_FizzPiercingStrike"] = true;
             }
 
-            if (spellData.spellName == "SionE" && !pDict.ContainsKey("ProcessSpell_SionE"))
+            /*if (spellData.spellName == "SionE" && !pDict.ContainsKey("ProcessSpell_SionE"))
             {
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_SionE;
                 pDict["ProcessSpell_SionE"] = true;
-            }
+            }*/
 
             if (spellData.spellName == "EkkoR" && !pDict.ContainsKey("ProcessSpell_EkkoR"))
             {
@@ -153,6 +160,96 @@ namespace ezEvade
                 pDict["ProcessSpell_EkkoR"] = true;
             }
 
+            if (spellData.spellName == "YasuoQW" && !pDict.ContainsKey("ProcessSpell_YasuoQW"))
+            {
+                Obj_AI_Hero hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Yasuo");
+                if (hero == null)
+                {
+                    return;
+                }
+                                
+                Obj_AI_Hero.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
+
+                pDict["ProcessSpell_YasuoQW"] = true;
+            }
+
+            /*if (spellData.spellName == "jayceshockblast" && !pDict.ContainsKey("ProcessSpell_jayceshockblast"))
+            {
+                Obj_AI_Minion.OnCreate += OnCreateObj_jayceshockblast;
+                Obj_AI_Hero.OnProcessSpellCast += OnProcessSpell_jayceshockblast;
+                SpellDetector.OnProcessSpecialSpell += ProcessSpell_jayceshockblast;
+                pDict["ProcessSpell_jayceshockblast"] = true;
+            }*/
+        }
+                
+        private static void HiuCreate_ObjectTracker(GameObject obj, EventArgs args)
+        {
+            if (obj.Name == "hiu" && obj.IsEnemy)
+            {
+                objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj));
+                DelayAction.Add(1000, () => objTracker.Remove(obj.NetworkId));
+            }
+        }
+
+        private static void HiuDelete_ObjectTracker(GameObject obj, EventArgs args)
+        {
+            if (obj.Name == "hiu")
+            {
+                objTracker.Remove(obj.NetworkId);
+            }
+        }
+
+        private static Vector2 GetLastHiuOrientation()
+        {
+            var objList = objTracker.Values.Where(o => o.Name == "hiu");
+            var sortedObjList = objList.OrderByDescending(o => o.timestamp);
+
+            if (sortedObjList.Count() >= 2)
+            {
+                var pos1 = sortedObjList.First().obj.Position;
+                var pos2 = sortedObjList.ElementAt(1).obj.Position;
+
+                return (pos1.To2D() - pos2.To2D()).Normalized();
+            }
+
+            return Vector2.Zero;
+        }
+
+        private static void OnCreateObj_jayceshockblast(GameObject sender, EventArgs args)
+        {
+            if (sender.Type == GameObjectType.obj_GeneralParticleEmitter)
+            {
+                var particle = sender as Obj_GeneralParticleEmitter;
+                Console.WriteLine(particle.Position);
+            }
+        }
+        
+        private static void OnProcessSpell_jayceshockblast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsEnemy && args.SData.Name == "jayceaccelerationgate")
+            {
+                //objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj, "RobotBuddy"));
+            }
+        }
+
+        private static void ProcessSpell_jayceshockblast(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData, SpecialSpellEventArgs specialSpellArgs)
+        {
+            if (spellData.spellName == "jayceshockblast")
+            {
+            }
+        }
+
+        private static void ProcessSpell_YasuoQW(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData)
+        {
+            if (hero.IsEnemy && args.SData.Name == "yasuoq")
+            {
+                var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
+
+                if (castTime > 0)
+                {
+                    spellData.spellDelay = castTime;
+                }
+            }
         }
 
         private static void ProcessSpell_EkkoR(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
@@ -178,7 +275,33 @@ namespace ezEvade
             SpecialSpellEventArgs specialSpellArgs)
         {
             if (spellData.spellName == "SionE")
-            {                
+            {
+                var objList = new List<Obj_AI_Minion>();
+                foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
+                {
+                    if (obj != null && obj.IsValid && !obj.IsDead && obj.IsAlly)
+                    {
+                        objList.Add(obj);
+                    }
+                }
+
+                objList.OrderBy(o => o.Distance(hero.ServerPosition));
+
+                var spellStart = args.Start.To2D();
+                var dir = (args.End.To2D() - spellStart).Normalized();
+                var spellEnd = spellStart + dir * spellData.range;
+
+                foreach (var obj in objList)
+                {
+                    var objProjection = obj.ServerPosition.To2D().ProjectOn(spellStart, spellEnd);
+
+                    if (objProjection.IsOnSegment && objProjection.SegmentPoint.Distance(obj.ServerPosition.To2D()) < obj.BoundingRadius + spellData.radius)
+                    {
+                        //sth happens
+                    }
+                }
+                
+
                 //specialSpellArgs.noProcess = true;
             }
         }

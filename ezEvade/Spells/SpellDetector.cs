@@ -51,7 +51,7 @@ namespace ezEvade
 
             Obj_SpellMissile.OnCreate += SpellMissile_OnCreateOld;
             Obj_SpellMissile.OnDelete += SpellMissile_OnDeleteOld;
-
+            
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
 
             Game.OnUpdate += Game_OnGameUpdate;
@@ -64,7 +64,7 @@ namespace ezEvade
             LoadSpellDictionary();
             InitChannelSpells();
         }
-
+                
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
         {
             if (!obj.IsValid<MissileClient>())
@@ -150,6 +150,8 @@ namespace ezEvade
             foreach (var spell in spells.Values.ToList().Where(
                     s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
             {
+                //Console.WriteLine("Distance: " + obj.Position.Distance(myHero.Position));
+
                 DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }
@@ -236,40 +238,12 @@ namespace ezEvade
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
             try
-            {
-                if (hero.IsMe)
-                {
-                    string name;
-                    if (channeledSpells.TryGetValue(args.SData.Name, out name))
-                    {
-                        Evade.isChanneling = true;
-                        Evade.channelPosition = myHero.ServerPosition.To2D();
-                    }
-
-                    if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
-                    {
-                        var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
-
-
-                        if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name)
-                            && Math.Abs(castTime - myHero.AttackCastDelay * 1000) > 1)
-                        {
-                            //Console.WriteLine(args.SData.Name + ": " + (castTime - myHero.AttackCastDelay * 1000));
-                            //Console.WriteLine(args.SData.Name + ": " + castTime);
-                            //var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-                            Evade.lastWindupTime = EvadeUtils.TickCount + castTime - Game.Ping / 2;
-                        }
-                    }
-
-                }
-
-
+            {               
                 /*var castTime2 = (hero.Spellbook.CastTime - Game.Time) * 1000;
                 if (castTime2 > 0)
                 {
                     Console.WriteLine(args.SData.Name + ": " + castTime2);
                 }*/
-
 
                 SpellData spellData;
 
@@ -500,9 +474,10 @@ namespace ezEvade
                 spell.spellHitTime = spellHitTime;
                 spell.evadeTime = evadeTime;
 
-                var extraDelay = ObjectCache.gamePing + ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value; ;
+                var extraDelay = ObjectCache.gamePing + ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
 
                 if (spell.spellHitTime - extraDelay < 1500 && CanHeroWalkIntoSpell(spell))
+                //if(true)
                 {
                     Spell newSpell = spell;
                     int spellID = spell.spellID;

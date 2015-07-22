@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using LeagueSharp.Common;
 using SharpDX;
 
 namespace ezEvade
 {
     class MathUtils
     {
-
         public static bool CheckLineIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+        {
+            return a.Intersection(b, c, d).Intersects;
+        }
+
+        public static bool CheckLineIntersectionEx(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
             Tuple<float, float> ret = LineToLineIntersection(a.X, a.Y, b.X, b.Y, c.X, c.Y, d.X, d.Y);
 
@@ -89,7 +94,7 @@ namespace ezEvade
             float a = velocityX * velocityX + velocityY * velocityY - projSpeed * projSpeed;
             float b = 2 * velocityX * relStartX + 2 * velocityY * relStartY;
             float c = Math.Max(0, relStartX * relStartX + relStartY * relStartY + extraDist * extraDist);
-            
+
             float disc = b * b - 4 * a * c;
 
             if (disc >= 0)
@@ -131,7 +136,7 @@ namespace ezEvade
         public static bool isPointOnLineSegment(Vector2 point, Vector2 start, Vector2 end)
         {
             if (Math.Max(start.X, end.X) > point.X && point.X > Math.Min(start.X, end.X)
-                && Math.Max(start.Y, end.Y) > point.Y && point.Y > Math.Min(start.Y, end.Y) )
+                && Math.Max(start.Y, end.Y) > point.Y && point.Y > Math.Min(start.Y, end.Y))
             {
                 return true;
             }
@@ -161,7 +166,11 @@ namespace ezEvade
             {
                 float t0 = (-b + (float)Math.Sqrt(discriminant)) / (2 * a);
                 float t1 = (-b - (float)Math.Sqrt(discriminant)) / (2 * a);
-                t = Math.Min(t0, t1);
+                
+                if(t0 >= 0 && t1 >= 0)
+                    t = Math.Min(t0, t1);
+                else
+                    t = Math.Max(t0, t1);
 
                 if (t < 0)
                     collision = false;
@@ -173,24 +182,67 @@ namespace ezEvade
                 t = 0;
 
             return t;
-        }        
+        }
+
+        public static float GetCollisionDistanceEx(Vector2 Pa, Vector2 Va, float Ra,
+                                                   Vector2 Pb, Vector2 Vb, float Rb,
+                                                   out Vector2 PA, out Vector2 PB)
+        {
+            bool collision;
+            var collisionTime = GetCollisionTime(Pa, Pb, Va, Vb, Ra, Rb, out collision);
+
+            if (collision)
+            {
+                PA = Pa + (collisionTime * Va);
+                PB = Pb + (collisionTime * Vb);
+
+                return PA.Distance(PB);
+            }
+
+            PA = Vector2.Zero;
+            PB = Vector2.Zero;
+
+            return float.MaxValue;
+        }
+
+        public static float GetCollisionDistance(Vector2 Pa, Vector2 PaEnd, Vector2 Va, float Ra,
+                                                 Vector2 Pb, Vector2 PbEnd, Vector2 Vb, float Rb)
+        {
+            bool collision;
+            var collisionTime = GetCollisionTime(Pa, Pb, Va, Vb, Ra, Rb, out collision);
+
+            if (collision)
+            {
+                Vector2 PA = Pa + (collisionTime * Va);
+                Vector2 PB = Pb + (collisionTime * Vb);
+
+                PA = PA.ProjectOn(Pa, PaEnd).SegmentPoint;
+                PB = PB.ProjectOn(Pb, PbEnd).SegmentPoint;
+
+                return PA.Distance(PB);
+            }
+
+            return float.MaxValue;
+        }
 
         //http://csharphelper.com/blog/2014/09/determine-where-a-line-intersects-a-circle-in-c/
         // Find the points of intersection.
         public static int FindLineCircleIntersections(
-            float cx, float cy, float radius,
-            Vector2 point1, Vector2 point2,
+            Vector2 center, float radius,
+            Vector2 from, Vector2 to,
             out Vector2 intersection1, out Vector2 intersection2)
         {
+            float cx = center.X;
+            float cy = center.Y;
             float dx, dy, A, B, C, det, t;
 
-            dx = point2.X - point1.X;
-            dy = point2.Y - point1.Y;
+            dx = to.X - from.X;
+            dy = to.Y - from.Y;
 
             A = dx * dx + dy * dy;
-            B = 2 * (dx * (point1.X - cx) + dy * (point1.Y - cy));
-            C = (point1.X - cx) * (point1.X - cx) +
-                (point1.Y - cy) * (point1.Y - cy) -
+            B = 2 * (dx * (from.X - cx) + dy * (from.Y - cy));
+            C = (from.X - cx) * (from.X - cx) +
+                (from.Y - cy) * (from.Y - cy) -
                 radius * radius;
 
             det = B * B - 4 * A * C;
@@ -206,22 +258,48 @@ namespace ezEvade
                 // One solution.
                 t = -B / (2 * A);
                 intersection1 =
-                    new Vector2(point1.X + t * dx, point1.Y + t * dy);               
+                    new Vector2(from.X + t * dx, from.Y + t * dy);
                 intersection2 = new Vector2(float.NaN, float.NaN);
 
-                return 1;
+                var projection1 = intersection1.ProjectOn(from, to);
+                if (projection1.IsOnSegment)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
             }
             else
             {
                 // Two solutions.
                 t = (float)((-B + Math.Sqrt(det)) / (2 * A));
                 intersection1 =
-                    new Vector2(point1.X + t * dx, point1.Y + t * dy);
+                    new Vector2(from.X + t * dx, from.Y + t * dy);
                 t = (float)((-B - Math.Sqrt(det)) / (2 * A));
                 intersection2 =
-                    new Vector2(point1.X + t * dx, point1.Y + t * dy);          
+                    new Vector2(from.X + t * dx, from.Y + t * dy);
 
-                return 2;
+                var numIntersections = 0;
+                var projection1 = intersection1.ProjectOn(from, to);
+                var projection2 = intersection2.ProjectOn(from, to);
+
+                if (projection1.IsOnSegment && projection2.IsOnSegment)
+                {
+                    return 2;
+                }
+                else if (projection1.IsOnSegment && !projection2.IsOnSegment)
+                {
+                    return 1;
+                }
+                else if (!projection1.IsOnSegment && projection2.IsOnSegment)
+                {
+                    intersection1 = intersection2;
+                    return 1;
+                }
+
+                return 0;
             }
         }
     }

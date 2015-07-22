@@ -61,6 +61,8 @@ namespace ezEvade
         private static float lastTickCountTimerTick = 0;
         private static float lastWatchTimerTick = 0;
 
+        public static float lastProcessPacketTime = 0;
+
         private static float getGameTimer { get { return Game.ClockTime * 1000; } }
         private static float getTickCountTimer { get { return Environment.TickCount & int.MaxValue; } }
         private static float getWatchTimer { get { return EvadeUtils.TickCount; } }
@@ -88,6 +90,9 @@ namespace ezEvade
             Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnInput += Game_OnGameInput;
+
+            //Game.OnSendPacket += Game_onSendPacket;
+            Game.OnProcessPacket += Game_onRecvPacket;
 
             MissileClient.OnDelete += Game_OnDelete;
 
@@ -124,6 +129,37 @@ namespace ezEvade
             menu.AddSubMenu(testMenu);
 
             Game_OnGameLoad();
+        }
+
+        private void Game_onRecvPacket(GamePacketEventArgs args)
+        {
+            if (args.GetPacketId() == 178)
+            {
+                /*
+                //Console.WriteLine(args.GetPacketId());
+
+                foreach (var data in args.PacketData)
+                {
+                    Console.Write(" " + data);
+                }
+                Console.WriteLine("");*/
+
+                lastProcessPacketTime = EvadeUtils.TickCount;
+            }   
+        }
+
+        private void Game_onSendPacket(GamePacketEventArgs args)
+        {            
+            if (args.GetPacketId() == 630)
+            {
+                //Console.WriteLine(args.GetPacketId());
+
+                foreach (var data in args.PacketData)
+                {
+                    Console.Write(" " + data);
+                }
+                Console.WriteLine("");
+            }            
         }
 
         private void Game_OnGameLoad()
@@ -242,6 +278,8 @@ namespace ezEvade
             Console.WriteLine("LineWidth " + missile.SData.LineWidth);
             circleRenderPos = missile.SData.ParticleStartOffset.To2D();*/
 
+            //Console.WriteLine("Acquired: " + (EvadeUtils.TickCount - lastSpellCastTime));
+
             renderPositions.Add(
                 new RenderPosition(missile.StartPosition.To2D(), EvadeUtils.TickCount + 500));
             renderPositions.Add(
@@ -298,6 +336,17 @@ namespace ezEvade
                     Console.WriteLine("{0}={1}", name, value);
                 }*/
             }
+
+            if (args.SData.Name == "YasuoQW")
+            {
+
+            renderPositions.Add(
+                new RenderPosition(args.Start.To2D(), EvadeUtils.TickCount + 500));
+            renderPositions.Add(
+                new RenderPosition(args.End.To2D(), EvadeUtils.TickCount + 500));
+            }
+
+            //Console.WriteLine(EvadeUtils.TickCount - lastProcessPacketTime);
             //circleRenderPos = args.SData.ParticleStartOffset.To2D();
 
             /*renderPositions.Add(
