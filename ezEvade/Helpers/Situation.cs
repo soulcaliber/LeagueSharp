@@ -82,7 +82,6 @@ namespace ezEvade
         {
             if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active == false
                 || CommonChecks()
-                || myHero.IsImmovable
                 )
             {
                 //has spellshield - sivir, noc, morgana
