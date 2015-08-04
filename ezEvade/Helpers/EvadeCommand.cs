@@ -47,8 +47,11 @@ namespace ezEvade
                 targetPosition = movePos,
                 timestamp = EvadeUtils.TickCount,
                 isProcessed = false
-            };            
-            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);            
+            };
+
+            Evade.lastMoveToPosition = movePos;
+
+            myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), false);
         }
 
         public static void Attack(EvadeSpellData spellData, Obj_AI_Base target)

@@ -14,6 +14,8 @@ namespace ezEvade
         Line,
         Circular,
         Cone,
+        Arc,
+        None,
     }
 
     public enum CollisionObjectType
@@ -31,11 +33,13 @@ namespace ezEvade
         public string name;
         public float range;
         public float radius;
+        public float secondaryRadius;
         public float projectileSpeed = float.MaxValue;
         public string missileName = "";
         public SpellType spellType;
         public float spellDelay = 250;
         public bool fixedRange = false;
+        public bool useEndPosition = false;
         public float angle;
         public float sideRadius;
         public int splits;
@@ -49,6 +53,7 @@ namespace ezEvade
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
         public bool isSpecial = false;
+        public float extraDrawHeight = 0;
         public string[] extraSpellNames;
         public string[] extraMissileNames;
         public CollisionObjectType[] collisionObjects = { };

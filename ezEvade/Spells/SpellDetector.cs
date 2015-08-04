@@ -102,11 +102,12 @@ namespace ezEvade
                                 && dir.AngleBetween(spell.direction) < 10)
                             {
 
-                                if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
+                                if (spell.info.isThreeWay == false 
+                                    && spell.info.isSpecial == false)
                                 {
                                     spell.spellObject = obj;
 
-                                    /*if(spell.info.spellType == SpellType.Line)
+                                    /*if(spell.spellType == SpellType.Line)
                                     {
                                         if (missile.SData.LineWidth != spell.info.radius)
                                         {
@@ -260,7 +261,7 @@ namespace ezEvade
                         if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
                             CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
-
+                                                        
                             /*if (spellData.spellType == SpellType.Line)
                             {
                                 var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
@@ -282,15 +283,34 @@ namespace ezEvade
             }
         }
 
-        public static void CreateSpellData(Obj_AI_Base hero, Vector3 startStartPos, Vector3 spellEndPos,
-            SpellData spellData, GameObject obj = null, float extraEndTick = 0.0f, bool processSpell = true)
+        public static void CreateSpellData(Obj_AI_Base hero, Vector3 spellStartPos, Vector3 spellEndPos,
+            SpellData spellData, GameObject obj = null, float extraEndTick = 0.0f, bool processSpell = true,
+            SpellType spellType = SpellType.None, bool checkEndExplosion = true, float spellRadius = 0)
         {
-            if (startStartPos.Distance(myHero.Position) < spellData.range + 1000)
+            if (checkEndExplosion && spellData.hasEndExplosion)
+            {                
+                CreateSpellData(hero, spellStartPos, spellEndPos,
+            spellData, obj, extraEndTick, false,
+            spellData.spellType, false);
+
+                CreateSpellData(hero, spellStartPos, spellEndPos,
+            spellData, obj, extraEndTick, true,
+            SpellType.Circular, false);
+
+                return;
+            }
+
+            if (spellStartPos.Distance(myHero.Position) < spellData.range + 1000)
             {
-                Vector2 startPosition = startStartPos.To2D();
+                Vector2 startPosition = spellStartPos.To2D();
                 Vector2 endPosition = spellEndPos.To2D();
                 Vector2 direction = (endPosition - startPosition).Normalized();
                 float endTick = 0;
+
+                if (spellType == SpellType.None)
+                {
+                    spellType = spellData.spellType;
+                }
 
                 if (spellData.fixedRange) //for diana q
                 {
@@ -302,16 +322,23 @@ namespace ezEvade
                     }
                 }
 
-                if (spellData.spellType == SpellType.Line)
+                if (spellType == SpellType.Line)
                 {
                     endTick = spellData.spellDelay + (spellData.range / spellData.projectileSpeed) * 1000;
                     endPosition = startPosition + direction * spellData.range;
 
+                    if (spellData.useEndPosition)
+                    {
+                        var range = spellEndPos.To2D().Distance(spellStartPos.To2D());
+                        endTick = spellData.spellDelay + (range / spellData.projectileSpeed) * 1000;
+                        endPosition = spellEndPos.To2D();
+                    }
+
                     if (obj != null)
                         endTick -= spellData.spellDelay;
                 }
-                else if (spellData.spellType == SpellType.Circular)
-                {
+                else if (spellType == SpellType.Circular)
+                {   
                     endTick = spellData.spellDelay;
 
                     if (spellData.projectileSpeed == 0)
@@ -320,10 +347,28 @@ namespace ezEvade
                     }
                     else if (spellData.projectileSpeed > 0)
                     {
+                        if (spellData.spellType == SpellType.Line &&
+                            spellData.hasEndExplosion && 
+                            spellData.useEndPosition == false)
+                        {
+                            endPosition = startPosition + direction * spellData.range;
+                        }
+
                         endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
                     }
                 }
-                else if (spellData.spellType == SpellType.Cone)
+                else if (spellType == SpellType.Arc)
+                {
+                    endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
+
+                    if (obj != null)
+                        endTick -= spellData.spellDelay;
+                }
+                else if (spellType == SpellType.Cone)
+                {
+                    return;
+                }
+                else
                 {
                     return;
                 }
@@ -336,9 +381,12 @@ namespace ezEvade
                 newSpell.endTime = EvadeUtils.TickCount + endTick;
                 newSpell.startPos = startPosition;
                 newSpell.endPos = endPosition;
+                newSpell.height = spellEndPos.Z + spellData.extraDrawHeight;
                 newSpell.direction = direction;
                 newSpell.heroID = hero.NetworkId;
                 newSpell.info = spellData;
+                newSpell.spellType = spellType;
+                newSpell.radius = spellRadius > 0 ? spellRadius : newSpell.GetSpellRadius();
 
                 if (obj != null)
                 {
@@ -348,7 +396,7 @@ namespace ezEvade
 
                 int spellID = CreateSpell(newSpell, processSpell);
 
-                DelayAction.Add((int)endTick, () => DeleteSpell(spellID));
+                DelayAction.Add((int)(endTick + spellData.extraEndTime), () => DeleteSpell(spellID));               
             }
         }
 
@@ -394,8 +442,11 @@ namespace ezEvade
                     }
                 }
 
-                if (spell.endTime < EvadeUtils.TickCount || CanHeroWalkIntoSpell(spell) == false)
+                if (spell.endTime + spell.info.extraEndTime < EvadeUtils.TickCount 
+                    || CanHeroWalkIntoSpell(spell) == false)
+                {
                     DelayAction.Add(1, () => DeleteSpell(entry.Key));
+                }
             }
         }
 
@@ -432,7 +483,7 @@ namespace ezEvade
                 Vector2 heroPos = myHero.Position.To2D();
                 var extraDist = myHero.Distance(ObjectCache.myHeroCache.serverPos2D);
 
-                if (spell.info.spellType == SpellType.Line)
+                if (spell.spellType == SpellType.Line)
                 {
                     var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - EvadeUtils.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
                     var spellPos = spell.currentSpellPosition;
@@ -442,11 +493,25 @@ namespace ezEvade
 
                     return projection.SegmentPoint.Distance(heroPos) <= walkRadius;
                 }
-                else if (spell.info.spellType == SpellType.Circular)
+                else if (spell.spellType == SpellType.Circular)
                 {
                     var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - EvadeUtils.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + spell.info.radius + extraDist + 10;
 
                     if (heroPos.Distance(spell.endPos) < walkRadius)
+                    {
+                        return true;
+                    }
+
+                }
+                else if (spell.spellType == SpellType.Arc)
+                {
+                    var spellRange = spell.startPos.Distance(spell.endPos);
+                    var midPoint = spell.startPos + spell.direction * (spellRange / 2);
+                    var arcRadius = spell.info.radius * (1 + spellRange / 100);
+
+                    var walkRadius = ObjectCache.myHeroCache.moveSpeed * (spell.endTime - EvadeUtils.TickCount) / 1000 + ObjectCache.myHeroCache.boundingRadius + arcRadius + extraDist + 10;
+
+                    if (heroPos.Distance(midPoint) < walkRadius)
                     {
                         return true;
                     }
@@ -517,7 +582,7 @@ namespace ezEvade
                         if (!(Evade.isDodgeDangerousEnabled() && newSpell.GetSpellDangerLevel() < 3)
                             && ObjectCache.menuCache.cache[newSpell.info.spellName + "DodgeSpell"].GetValue<bool>())
                         {
-                            if (newSpell.info.spellType == SpellType.Circular
+                            if (newSpell.spellType == SpellType.Circular
                                 && ObjectCache.menuCache.cache["DodgeCircularSpells"].GetValue<bool>() == false)
                             {
                                 //return spellID;
@@ -706,7 +771,9 @@ namespace ezEvade
                     {
                         //Console.WriteLine(spell.spellName); 
 
-                        if (!(spell.spellType == SpellType.Circular || spell.spellType == SpellType.Line))
+                        if (!(spell.spellType == SpellType.Circular 
+                            || spell.spellType == SpellType.Line
+                            || spell.spellType == SpellType.Arc))
                             continue;
 
                         if (spell.charName == "AllChampions")

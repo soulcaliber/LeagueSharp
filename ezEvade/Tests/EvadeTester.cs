@@ -70,6 +70,8 @@ namespace ezEvade
         private static float lastTimerCheck = 0;
         private static bool lastRandomMoveCoeff = false;
 
+        private static float lastRightMouseClickTime = 0;
+
         private static EvadeCommand lastTestMoveToCommand;
 
         private static float lastSpellCastTimeEx = 0;
@@ -77,6 +79,7 @@ namespace ezEvade
         private static float lastHeroSpellCastTime = 0;
 
         private static MissileClient testMissile = null;
+        private static float testMissileStartTime = 0;
 
         public EvadeTester(Menu mainMenu)
         {
@@ -91,8 +94,8 @@ namespace ezEvade
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnInput += Game_OnGameInput;
 
-            //Game.OnSendPacket += Game_onSendPacket;
-            Game.OnProcessPacket += Game_onRecvPacket;
+            Game.OnSendPacket += Game_onSendPacket;
+            //Game.OnProcessPacket += Game_onRecvPacket;
 
             MissileClient.OnDelete += Game_OnDelete;
 
@@ -106,6 +109,7 @@ namespace ezEvade
             //GameObject.OnIntegerPropertyChange += GameObject_OnIntegerPropertyChange;
             //Game.OnGameNotifyEvent += Game_OnGameNotifyEvent;
 
+            Game.OnWndProc += Game_OnWndProc;
 
             Obj_AI_Hero.OnNewPath += ObjAiHeroOnOnNewPath;
 
@@ -126,9 +130,18 @@ namespace ezEvade
             testMenu.AddItem(new MenuItem("ShowMissileInfo", "ShowMissileInfo").SetValue(true));
             testMenu.AddItem(new MenuItem("ShowWindupTime", "ShowWindupTime").SetValue(true));
             testMenu.AddItem(new MenuItem("TestMoveTo", "TestMoveTo").SetValue(new KeyBind('L', KeyBindType.Toggle, false)));
+            testMenu.AddItem(new MenuItem("EvadeTesterPing", "EvadeTesterPing").SetValue(false));
             menu.AddSubMenu(testMenu);
 
             Game_OnGameLoad();
+        }
+
+        private void Game_OnWndProc(WndEventArgs args)
+        {
+            if (args.Msg == (uint)WindowsMessages.WM_RBUTTONDOWN)
+            {
+                lastRightMouseClickTime = EvadeUtils.TickCount;
+            }
         }
 
         private void Game_onRecvPacket(GamePacketEventArgs args)
@@ -136,47 +149,44 @@ namespace ezEvade
             if (args.GetPacketId() == 178)
             {
                 /*
-                //Console.WriteLine(args.GetPacketId());
+                //ConsolePrinter.Print(args.GetPacketId());
 
                 foreach (var data in args.PacketData)
                 {
                     Console.Write(" " + data);
                 }
-                Console.WriteLine("");*/
+                ConsolePrinter.Print("");*/
 
                 lastProcessPacketTime = EvadeUtils.TickCount;
             }   
         }
 
         private void Game_onSendPacket(GamePacketEventArgs args)
-        {            
-            if (args.GetPacketId() == 630)
+        {
+            if (args.GetPacketId() == 160)
             {
-                //Console.WriteLine(args.GetPacketId());
-
-                foreach (var data in args.PacketData)
+                if (testMenu.Item("EvadeTesterPing").GetValue<bool>())
                 {
-                    Console.Write(" " + data);
+                    ConsolePrinter.Print("Send Path ClickTime: " + (EvadeUtils.TickCount - lastRightMouseClickTime));
                 }
-                Console.WriteLine("");
             }            
         }
 
         private void Game_OnGameLoad()
         {
-            Console.WriteLine("EvadeTester loaded");
+            ConsolePrinter.Print("EvadeTester loaded");
             menu.AddSubMenu(new Menu("Test", "Test"));
 
-            //Console.WriteLine("Ping:" + ObjectCache.gamePing);
+            //ConsolePrinter.Print("Ping:" + ObjectCache.gamePing);
             if (testMenu.Item("ShowBuffs").GetValue<bool>())
             {
-                //Console.WriteLine(myHero);
+                //ConsolePrinter.Print(myHero);
             }
         }
 
         private void Game_OnGameInput(GameInputEventArgs args)
         {
-            Console.WriteLine("" + args.Input);
+            ConsolePrinter.Print("" + args.Input);
 
         }
 
@@ -186,13 +196,24 @@ namespace ezEvade
             {
                 if (testMenu.Item("TestSpellEndTime").GetValue<bool>())
                 {
-                    Console.WriteLine("Dash windup: " + (EvadeUtils.TickCount - EvadeSpell.lastSpellEvadeCommand.timestamp));
+                    ConsolePrinter.Print("Dash windup: " + (EvadeUtils.TickCount - EvadeSpell.lastSpellEvadeCommand.timestamp));
                 }
 
                 if (args.IsDash && testMenu.Item("ShowDashInfo").GetValue<bool>())
                 {
                     var dist = args.Path.First().Distance(args.Path.Last());
-                    Console.WriteLine("Dash Speed: " + args.Speed + " Dash dist: " + dist);
+                    ConsolePrinter.Print("Dash Speed: " + args.Speed + " Dash dist: " + dist);
+                }
+
+                if (unit.IsMe && testMenu.Item("EvadeTesterPing").GetValue<bool>()
+                    && args.Path.Count() > 1)
+                {
+                    //ConsolePrinter.Print("Received Path ClickTime: " + (EvadeUtils.TickCount - lastRightMouseClickTime));
+                }
+
+                if (unit.IsMe)
+                {
+                    renderPositions.Add(new RenderPosition(args.Path.Last().To2D(), EvadeUtils.TickCount + 500));
                 }
 
             }
@@ -228,30 +249,32 @@ namespace ezEvade
             {
                 if (testMissile != null && testMissile.NetworkId == sender.NetworkId)
                 {
-                    Console.WriteLine("Est.Missile range: " +
-                        sender.Position.To2D().Distance(testMissile.StartPosition.To2D()));
+                    var range = sender.Position.To2D().Distance(testMissile.StartPosition.To2D());
+                    ConsolePrinter.Print("Est.Missile range: " + range);
+
+                    ConsolePrinter.Print("Est.Missile speed: " + range/(EvadeUtils.TickCount - testMissileStartTime));
                 }
             }
         }
 
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
-        {
+        {                        
             if (obj.IsValid<MissileClient>())
             {
                 MissileClient autoattack = (MissileClient)obj;
 
                 /*if (!autoattack.SpellCaster.IsMinion)
                 {
-                    Console.WriteLine("Missile Name " + autoattack.SData.Name);
-                    Console.WriteLine("Missile Speed " + autoattack.SData.MissileSpeed);
-                    Console.WriteLine("LineWidth " + autoattack.SData.LineWidth);
-                    Console.WriteLine("Range " + autoattack.SData.CastRange);
-                    Console.WriteLine("Accel " + autoattack.SData.MissileAccel);
+                    ConsolePrinter.Print("Missile Name " + autoattack.SData.Name);
+                    ConsolePrinter.Print("Missile Speed " + autoattack.SData.MissileSpeed);
+                    ConsolePrinter.Print("LineWidth " + autoattack.SData.LineWidth);
+                    ConsolePrinter.Print("Range " + autoattack.SData.CastRange);
+                    ConsolePrinter.Print("Accel " + autoattack.SData.MissileAccel);
                 }*/
             }
 
 
-            //Console.WriteLine(obj.Name + ": " + obj.Type);
+            //ConsolePrinter.Print(obj.Name + ": " + obj.Type);
 
             if (!obj.IsValid<MissileClient>())
                 return;
@@ -265,20 +288,21 @@ namespace ezEvade
             MissileClient missile = (MissileClient)obj;
 
             testMissile = missile;
+            testMissileStartTime = EvadeUtils.TickCount;
 
-            Console.WriteLine("Est.CastTime: " + (EvadeUtils.TickCount - lastHeroSpellCastTime));
-            Console.WriteLine("Missile Name " + missile.SData.Name);
-            Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);
-            Console.WriteLine("LineWidth " + missile.SData.LineWidth);
-            Console.WriteLine("Range " + missile.SData.CastRange);
-            Console.WriteLine("Accel " + missile.SData.MissileAccel);
-            //Console.WriteLine("Angle " + missile.SData.CastConeAngle);
-            /*Console.WriteLine("Offset: " + missile.SData.ParticleStartOffset);
-            Console.WriteLine("Missile Speed " + missile.SData.MissileSpeed);
-            Console.WriteLine("LineWidth " + missile.SData.LineWidth);
+            ConsolePrinter.Print("Est.CastTime: " + (EvadeUtils.TickCount - lastHeroSpellCastTime));
+            ConsolePrinter.Print("Missile Name " + missile.SData.Name);
+            ConsolePrinter.Print("Missile Speed " + missile.SData.MissileSpeed);
+            ConsolePrinter.Print("LineWidth " + missile.SData.LineWidth);
+            ConsolePrinter.Print("Range " + missile.SData.CastRange);
+            ConsolePrinter.Print("Accel " + missile.SData.MissileAccel);
+            //ConsolePrinter.Print("Angle " + missile.SData.CastConeAngle);
+            /*ConsolePrinter.Print("Offset: " + missile.SData.ParticleStartOffset);
+            ConsolePrinter.Print("Missile Speed " + missile.SData.MissileSpeed);
+            ConsolePrinter.Print("LineWidth " + missile.SData.LineWidth);
             circleRenderPos = missile.SData.ParticleStartOffset.To2D();*/
 
-            //Console.WriteLine("Acquired: " + (EvadeUtils.TickCount - lastSpellCastTime));
+            //ConsolePrinter.Print("Acquired: " + (EvadeUtils.TickCount - lastSpellCastTime));
 
             renderPositions.Add(
                 new RenderPosition(missile.StartPosition.To2D(), EvadeUtils.TickCount + 500));
@@ -308,7 +332,7 @@ namespace ezEvade
                                 if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                 {
                                     //spell.spellObject = obj;
-                                    Console.WriteLine("Acquired: " + (EvadeUtils.TickCount - spell.startTime));
+                                    ConsolePrinter.Print("Acquired: " + (EvadeUtils.TickCount - spell.startTime));
                                 }
                             }
                         }
@@ -325,15 +349,15 @@ namespace ezEvade
 
             if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
             {
-                Console.WriteLine(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
+                ConsolePrinter.Print(args.SData.Name + " CastTime: " + (hero.Spellbook.CastTime - Game.Time));
 
-                Console.WriteLine("CastRadius: " + args.SData.CastRadius);
+                ConsolePrinter.Print("CastRadius: " + args.SData.CastRadius);
 
                 /*foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(args.SData))
                 {
                     string name = descriptor.Name;
                     object value = descriptor.GetValue(args.SData);
-                    Console.WriteLine("{0}={1}", name, value);
+                    ConsolePrinter.Print("{0}={1}", name, value);
                 }*/
             }
 
@@ -346,7 +370,7 @@ namespace ezEvade
                 new RenderPosition(args.End.To2D(), EvadeUtils.TickCount + 500));
             }
 
-            //Console.WriteLine(EvadeUtils.TickCount - lastProcessPacketTime);
+            //ConsolePrinter.Print(EvadeUtils.TickCount - lastProcessPacketTime);
             //circleRenderPos = args.SData.ParticleStartOffset.To2D();
 
             /*renderPositions.Add(
@@ -362,7 +386,7 @@ namespace ezEvade
             {
                 var testVar = ObjectCache.myHeroCache.boundingRadius;
             }
-            Console.WriteLine("Test time1: " + (Evade.GetTickCount - testTime));
+            ConsolePrinter.Print("Test time1: " + (Evade.GetTickCount - testTime));
 
             testTime = Evade.GetTickCount;
             var cacheVar = ObjectCache.myHeroCache.boundingRadius;
@@ -370,7 +394,7 @@ namespace ezEvade
             {
                 var testVar = cacheVar;
             }
-            Console.WriteLine("Test time1: " + (Evade.GetTickCount - testTime));*/
+            ConsolePrinter.Print("Test time1: " + (Evade.GetTickCount - testTime));*/
 
             lastHeroSpellCastTime = EvadeUtils.TickCount;
 
@@ -383,7 +407,7 @@ namespace ezEvade
                 {
                     if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                     {
-                        Console.WriteLine("Time diff: " + (EvadeUtils.TickCount - spell.startTime));
+                        ConsolePrinter.Print("Time diff: " + (EvadeUtils.TickCount - spell.startTime));
                     }
                 }
             }
@@ -399,7 +423,7 @@ namespace ezEvade
             var pos2 = spell.currentSpellPosition;
             if (spell.spellObject != null)
             {
-                Console.WriteLine("Compare: " + (pos2.Distance(pos)) / (EvadeUtils.TickCount - time));
+                ConsolePrinter.Print("Compare: " + (pos2.Distance(pos)) / (EvadeUtils.TickCount - time));
             }
 
         }
@@ -411,7 +435,7 @@ namespace ezEvade
 
             if (spell.spellObject != null)
             {
-                Console.WriteLine("start distance: " + (spell.startPos.Distance(pos1)));
+                ConsolePrinter.Print("start distance: " + (spell.startPos.Distance(pos1)));
             }
 
             DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, timeNow));
@@ -423,7 +447,7 @@ namespace ezEvade
             {
                 if (EvadeUtils.TickCount - startWalkTime > 500 && myHero.IsMoving == false)
                 {
-                    //Console.WriteLine("walkspeed: " + startWalkPos.Distance(ObjectCache.myHeroCache.serverPos2D) / (Evade.GetTickCount - startWalkTime));
+                    //ConsolePrinter.Print("walkspeed: " + startWalkPos.Distance(ObjectCache.myHeroCache.serverPos2D) / (Evade.GetTickCount - startWalkTime));
                     startWalkTime = 0;
                 }
             }
@@ -432,7 +456,7 @@ namespace ezEvade
             {
                 if (myHero.IsMoving && lastStopingTime > 0)
                 {
-                    Console.WriteLine("WindupTime: " + (EvadeUtils.TickCount - lastStopingTime));
+                    ConsolePrinter.Print("WindupTime: " + (EvadeUtils.TickCount - lastStopingTime));
                     lastStopingTime = 0;
                 }
                 else if (!myHero.IsMoving && lastStopingTime == 0)
@@ -446,7 +470,7 @@ namespace ezEvade
                 if (myHero.IsDashing())
                 {
                     var dashInfo = myHero.GetDashInfo();
-                    Console.WriteLine("Dash Speed: " + dashInfo.Speed + " Dash dist: " + dashInfo.EndPos.Distance(dashInfo.StartPos));
+                    ConsolePrinter.Print("Dash Speed: " + dashInfo.Speed + " Dash dist: " + dashInfo.EndPos.Distance(dashInfo.StartPos));
                 }
             }
 
@@ -454,16 +478,16 @@ namespace ezEvade
 
         private void Game_OnGameNotifyEvent(GameNotifyEventArgs args)
         {
-            //Console.WriteLine("" + args.EventId);
+            //ConsolePrinter.Print("" + args.EventId);
         }
 
         private void GameObject_OnFloatPropertyChange(GameObject obj, GameObjectFloatPropertyChangeEventArgs args)
         {
-            //Console.WriteLine(obj.Name);
+            //ConsolePrinter.Print(obj.Name);
 
             /*foreach (var sth in ObjectManager.Get<Obj_AI_Base>())
             {
-                Console.WriteLine(sth.Name);
+                ConsolePrinter.Print(sth.Name);
 
             }*/
 
@@ -477,12 +501,12 @@ namespace ezEvade
                 renderPositions.Add(new RenderPosition(obj.Position.To2D(), EvadeUtils.TickCount + 10));
             }
 
-            //Console.WriteLine(obj.Name);
+            //ConsolePrinter.Print(obj.Name);
 
 
             if (args.Property == "mHP" && args.OldValue > args.NewValue)
             {
-                //Console.WriteLine("Damage taken time: " + (EvadeUtils.TickCount - lastSpellCastTime));
+                //ConsolePrinter.Print("Damage taken time: " + (EvadeUtils.TickCount - lastSpellCastTime));
             }
 
             if (!obj.IsMe)
@@ -495,7 +519,7 @@ namespace ezEvade
             if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal"
                 && args.Property != "mMP" && args.Property != "mPARRegenRate")
             {
-                //Console.WriteLine(args.Property + ": " + args.NewValue);
+                //ConsolePrinter.Print(args.Property + ": " + args.NewValue);
             }
         }
 
@@ -509,7 +533,7 @@ namespace ezEvade
             if (!sender.IsMe)
                 return;
 
-            Console.WriteLine("Damage taken time: " + (EvadeUtils.TickCount - lastSpellCastTime));
+            ConsolePrinter.Print("Damage taken time: " + (EvadeUtils.TickCount - lastSpellCastTime));
         }
 
         private void GameObject_OnIntegerPropertyChange(GameObject obj, GameObjectIntegerPropertyChangeEventArgs args)
@@ -518,7 +542,7 @@ namespace ezEvade
             {
                 if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal")
                 {
-                    Console.WriteLine("Int" + args.Property + ": " + args.NewValue);
+                    ConsolePrinter.Print("Int" + args.Property + ": " + args.NewValue);
                 }
 
             }
@@ -576,6 +600,11 @@ namespace ezEvade
             if (args.Order == GameObjectOrder.MoveTo)
             {
 
+                if (testMenu.Item("EvadeTesterPing").GetValue<bool>())
+                {
+                    ConsolePrinter.Print("Sending Path ClickTime: " + (EvadeUtils.TickCount - lastRightMouseClickTime));
+                }
+
                 Vector2 heroPos = ObjectCache.myHeroCache.serverPos2D;
                 Vector2 pos = args.TargetPosition.To2D();
                 float speed = ObjectCache.myHeroCache.moveSpeed;
@@ -592,17 +621,17 @@ namespace ezEvade
 
                     float spellTime = (EvadeUtils.TickCount - spell.startTime) - spell.info.spellDelay;
                     spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
-                    //Console.WriteLine("aaaa" + spellTime);
+                    //ConsolePrinter.Print("aaaa" + spellTime);
 
 
                     bool isCollision = false;
                     float movingCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * (speed - 25), spell.direction * (spell.info.projectileSpeed - 200), ObjectCache.myHeroCache.boundingRadius, spell.radius, out isCollision);
                     if (isCollision)
                     {
-                        //Console.WriteLine("aaaa" + spellPos.Distance(spell.endPos) / spell.info.projectileSpeed);
+                        //ConsolePrinter.Print("aaaa" + spellPos.Distance(spell.endPos) / spell.info.projectileSpeed);
                         if (true)//spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > movingCollisionTime)
                         {
-                            Console.WriteLine("movingCollisionTime: " + movingCollisionTime);
+                            ConsolePrinter.Print("movingCollisionTime: " + movingCollisionTime);
                             //circleRenderPos = heroPos + walkDir * speed * movingCollisionTime;
                         }
 
@@ -624,7 +653,7 @@ namespace ezEvade
 
             if (getTickCountTimer - lastTimerCheck > 1000)
             {
-                Console.WriteLine("" + ((getGameTimer - lastGameTimerStart) - (getTickCountTimer - lastTickCountTimerStart)));
+                ConsolePrinter.Print("" + ((getGameTimer - lastGameTimerStart) - (getTickCountTimer - lastTickCountTimerStart)));
                 lastTimerCheck = getTickCountTimer;
             }
 
@@ -678,12 +707,26 @@ namespace ezEvade
             //EvadeHelper.CheckMovePath(Game.CursorPos.To2D());            
 
             //TestUnderTurret();
+            
+            
+            /*if (EvadeHelper.CheckPathCollision(myHero, Game.CursorPos.To2D()))
+            {                
+                var paths = myHero.GetPath(ObjectCache.myHeroCache.serverPos2DExtra.To3D(), Game.CursorPos);
+                foreach (var path in paths)
+                {
+                    Render.Circle.DrawCircle(path, ObjectCache.myHeroCache.boundingRadius, Color.Red, 3);
+                }
+            }
+            else
+            {
+                Render.Circle.DrawCircle(Game.CursorPos, ObjectCache.myHeroCache.boundingRadius, Color.White, 3);
+            }*/
 
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.drawSpells)
             {
                 Spell spell = entry.Value;
 
-                if (spell.info.spellType == SpellType.Line)
+                if (spell.spellType == SpellType.Line)
                 {
                     Vector2 spellPos = spell.currentSpellPosition;
 
@@ -727,13 +770,21 @@ namespace ezEvade
                 var keyBind = testMenu.Item("TestMoveTo").GetValue<KeyBind>();
                 testMenu.Item("TestMoveTo").SetValue(new KeyBind(keyBind.Key, KeyBindType.Toggle, false));
 
+                /*lastRightMouseClickTime = EvadeUtils.TickCount;
+                myHero.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos,false);*/
+
                 myHero.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
                 var dir = (Game.CursorPos - myHero.Position).Normalized();
-                var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
+                //var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
 
-                DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2));
+                //var pos2 = myHero.Position.To2D() - dir.To2D() * 75;
+                var pos2 = Game.CursorPos.To2D() - dir.To2D() * 75;
 
+                //Console.WriteLine(myHero.BBox.Maximum.Distance(myHero.Position));
+
+                DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2.To3D(), false));
+                //myHero.IssueOrder(GameObjectOrder.MoveTo, pos2, false);
             }
 
             if (testMenu.Item("TestPath").GetValue<bool>())
@@ -774,7 +825,7 @@ namespace ezEvade
                     var cpa = MathUtilsCPA.CPAPointsEx(myHero.Position.To2D(), dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed, to, spell.endPos);
                     var cpaTime = MathUtilsCPA.CPATime(myHero.Position.To2D(), dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed);
 
-                    //Console.WriteLine("" + cpaTime);
+                    //ConsolePrinter.Print("" + cpaTime);
                     //Render.Circle.DrawCircle(cPos1.To3D(), ObjectCache.myHeroCache.boundingRadius, Color.Red, 3);
 
                     if (cpa < ObjectCache.myHeroCache.boundingRadius + spell.radius)
@@ -795,13 +846,13 @@ namespace ezEvade
 
                 var buffs = target.Buffs;
 
-                //Console.WriteLine(myHero.ChampionName);
+                //ConsolePrinter.Print(myHero.ChampionName);
 
                 //if(myHero.IsDead)
-                //    Console.WriteLine("dead");
+                //    ConsolePrinter.Print("dead");
 
                 if (!target.IsTargetable)
-                    Console.WriteLine("invul" + EvadeUtils.TickCount);
+                    ConsolePrinter.Print("invul" + EvadeUtils.TickCount);
 
                 int height = 20;
 
@@ -812,7 +863,7 @@ namespace ezEvade
                         Drawing.DrawText(10, height, Color.White, buff.Name);
                         height += 20;
 
-                        Console.WriteLine(buff.Name);
+                        ConsolePrinter.Print(buff.Name);
                     }
                 }
             }
@@ -835,13 +886,21 @@ namespace ezEvade
 
                 /*foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
                 {
-                    Console.WriteLine("minion: " + obj.Name);
+                    ConsolePrinter.Print("minion: " + obj.Name);
                     if (obj.Name == "Ekko")
                     {
                         var pos = obj.Position;
                         Render.Circle.DrawCircle(pos, 100, Color.Green, 3);
                     }
                 }*/
+            }
+
+            if (testMenu.Item("ShowMissileInfo").GetValue<bool>())
+            {
+                if (testMissile != null)
+                {
+                    //Render.Circle.DrawCircle(testMissile.Position, testMissile.BoundingRadius, Color.White, 3);
+                }
             }
 
             if (testMenu.Item("TestWall").GetValue<bool>())

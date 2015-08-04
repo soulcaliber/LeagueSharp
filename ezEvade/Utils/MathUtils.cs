@@ -281,7 +281,6 @@ namespace ezEvade
                 intersection2 =
                     new Vector2(from.X + t * dx, from.Y + t * dy);
 
-                var numIntersections = 0;
                 var projection1 = intersection1.ProjectOn(from, to);
                 var projection2 = intersection2.ProjectOn(from, to);
 

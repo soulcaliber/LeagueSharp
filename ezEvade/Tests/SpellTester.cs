@@ -100,7 +100,7 @@ namespace ezEvade
 
                 if (spell.heroID == myHero.NetworkId)
                 {
-                    if (spell.info.spellType == SpellType.Line)
+                    if (spell.spellType == SpellType.Line)
                     {
                         if (spellPos.Distance(myHero) <= myHero.BoundingRadius + spell.radius
                             && EvadeUtils.TickCount - spell.startTime > spell.info.spellDelay)
@@ -113,7 +113,7 @@ namespace ezEvade
                             Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int)spell.radius, Color.White, 5);
                         }
                     }
-                    else if (spell.info.spellType == SpellType.Circular)
+                    else if (spell.spellType == SpellType.Circular)
                     {
                         if (myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
                         {

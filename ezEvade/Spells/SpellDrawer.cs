@@ -142,7 +142,7 @@ namespace ezEvade
             }
 
             DrawEvadeStatus();
-            
+
             if (ObjectCache.menuCache.cache["DrawSkillShots"].GetValue<bool>() == false)
             {
                 return;
@@ -159,7 +159,7 @@ namespace ezEvade
                 if (ObjectCache.menuCache.cache[spell.info.spellName + "DrawSpell"].GetValue<bool>()
                     && spellDrawingConfig.Active)
                 {
-                    if (spell.info.spellType == SpellType.Line)
+                    if (spell.spellType == SpellType.Line)
                     {
                         Vector2 spellPos = spell.currentSpellPosition;
                         Vector2 spellEndPos = spell.GetSpellEndPosition();
@@ -188,16 +188,27 @@ namespace ezEvade
                         }
 
                     }
-                    else if (spell.info.spellType == SpellType.Circular)
+                    else if (spell.spellType == SpellType.Circular)
                     {
-                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);
+                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);
 
                         if (spell.info.spellName == "VeigarEventHorizon")
                         {
-                            Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, myHero.Position.Z), (int)spell.radius - 125, spellDrawingConfig.Color, spellDrawingWidth);
+                            Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int)spell.radius - 125, spellDrawingConfig.Color, spellDrawingWidth);
                         }
                     }
-                    else if (spell.info.spellType == SpellType.Cone)
+                    else if (spell.spellType == SpellType.Arc)
+                    {                      
+                        /*var spellRange = spell.startPos.Distance(spell.endPos);
+                        var midPoint = spell.startPos + spell.direction * (spellRange / 2);
+
+                        Render.Circle.DrawCircle(new Vector3(midPoint.X, midPoint.Y, myHero.Position.Z), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);
+                        
+                        Drawing.DrawLine(Drawing.WorldToScreen(spell.startPos.To3D()),
+                                         Drawing.WorldToScreen(spell.endPos.To3D()), 
+                                         spellDrawingWidth, spellDrawingConfig.Color);*/
+                    }
+                    else if (spell.spellType == SpellType.Cone)
                     {
 
                     }

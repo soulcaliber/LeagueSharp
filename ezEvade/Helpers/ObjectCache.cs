@@ -16,6 +16,7 @@ namespace ezEvade
         public Vector2 serverPos2D;
         public Vector2 serverPos2DExtra;
         public Vector2 currentPosition;
+        public bool isMoving;
         public float boundingRadius;
         public float moveSpeed;
 
@@ -40,6 +41,7 @@ namespace ezEvade
             currentPosition = hero.Position.To2D(); //CalculatedPosition.GetPosition(hero, 0); 
             boundingRadius = hero.BoundingRadius;
             moveSpeed = hero.MoveSpeed;
+            isMoving = hero.IsMoving;
         }
     }
 

@@ -44,7 +44,7 @@ namespace ezEvade
 
             return false;
         }
-
+                
         public static bool IsUnderTurret(this Vector2 pos, bool checkEnemy = true)
         {
             if (!ObjectCache.menuCache.cache["PreventDodgingUnderTower"].GetValue<bool>())
@@ -52,7 +52,7 @@ namespace ezEvade
                 return false;
             }
 
-            var turretRange = 800 + ObjectCache.myHeroCache.boundingRadius;
+            var turretRange = 875 + ObjectCache.myHeroCache.boundingRadius;
 
             foreach (var entry in ObjectCache.turrets)
             {
