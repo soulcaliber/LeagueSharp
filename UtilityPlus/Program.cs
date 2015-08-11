@@ -12,7 +12,8 @@ namespace UtilityPlus
 {
     class Program
     {
-        private static SpellTracker spellTracker;
+        private static SpellTracker.Tracker spellTracker;
+        private static WardTracker.Tracker wardTracker;
         private static Menu menu;
 
         static void Main(string[] args)
@@ -40,7 +41,8 @@ namespace UtilityPlus
             menu = new Menu("Utility+", "UtilityPlus", true);
             menu.AddToMainMenu();
 
-            spellTracker = new SpellTracker(menu);
+            spellTracker = new SpellTracker.Tracker(menu);
+            wardTracker = new WardTracker.Tracker(menu);
         }
     }
 }

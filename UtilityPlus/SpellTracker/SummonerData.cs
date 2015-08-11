@@ -10,7 +10,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-namespace UtilityPlus
+namespace UtilityPlus.SpellTracker
 {
     class SummonerData
     {
