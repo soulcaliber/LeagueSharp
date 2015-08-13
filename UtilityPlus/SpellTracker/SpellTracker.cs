@@ -62,7 +62,7 @@ namespace UtilityPlus.SpellTracker
 
         public static Dictionary<int, Dictionary<string, SpellTrackerInfo>> spellCooldowns =
             new Dictionary<int, Dictionary<string, SpellTrackerInfo>>();
-
+                
         public Tracker(Menu mainMenu)
         {
             menu = mainMenu;
@@ -158,8 +158,12 @@ namespace UtilityPlus.SpellTracker
 
                         info.position = sender.Position;
 
-                        Tests.TestDrawer.AddTestText(info.hero.ChampionName, sender.Position, 3500,
-                            (info.hero.IsAlly ? Color.SkyBlue : Color.Red));
+                        Draw.RenderObjects.Add(
+                            new Draw.RenderText(info.hero.ChampionName, sender.Position.To2D(), 3500,
+                            (info.hero.IsAlly ? Color.SkyBlue : Color.Red)));
+
+                        Draw.RenderObjects.Add(
+                            new Draw.CooldownBar(sender.Position.To2D(), 3500, 20));
                     }
                 }
             }
@@ -274,7 +278,7 @@ namespace UtilityPlus.SpellTracker
                     )
                 {
                     var hero = info.hero;
-
+                                        
                     var timeLeft = (HelperUtils.TickCount - info.startTime);
                     var totalRecallTime = 8000;
 

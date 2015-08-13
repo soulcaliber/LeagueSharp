@@ -20,6 +20,8 @@ namespace UtilityPlus.WardTracker
         public float timestamp;
         public float endTime;
         public bool unknownDuration;
+        public Vector2 startPos;
+        public Vector2 endPos;
 
         public WardTrackerInfo(
             WardData wardData,
@@ -161,6 +163,9 @@ namespace UtilityPlus.WardTracker
                             null
                             );
 
+                        newWard.startPos = args.Start.To2D();
+                        newWard.endPos = args.End.To2D();
+
                         wards.Add(newWard);
                     });
                 }
@@ -198,15 +203,61 @@ namespace UtilityPlus.WardTracker
             if (obj != null && obj.IsEnemy
                 && WardDatabase.wardObjNames.TryGetValue(obj.CharData.BaseSkinName.ToLower(), out wardData))
             {
+                var timestamp = HelperUtils.TickCount - (obj.MaxMana - obj.Mana) * 1000;
+
                 WardTrackerInfo newWard = new WardTrackerInfo(
                             wardData,
                             obj.Position,
                             obj,
-                            args == null,
-                            HelperUtils.TickCount - (obj.MaxMana - obj.Mana) * 1000
+                            !obj.IsVisible && args == null,
+                            timestamp
                             );
 
                 wards.Add(newWard);
+
+                DelayAction.Add(500, () =>
+                {
+                    timestamp = HelperUtils.TickCount - (obj.MaxMana - obj.Mana) * 1000;
+
+                    newWard.timestamp = timestamp;
+
+                    foreach (var ward in wards)
+                    {
+                        if (ward.wardObject == null)
+                        {
+                            //Check for Process Spell wards
+                            if (!ward.unknownDuration && Math.Abs(ward.timestamp - timestamp) < 2000)
+                            {
+                                if (ward.position.Distance(sender.Position) < 25)
+                                {
+                                    DelayAction.Add(0, () => wards.Remove(ward));
+                                    break;
+                                }
+                                else //ward hit a wall
+                                {
+                                    var projection = sender.Position.To2D().ProjectOn(ward.startPos, ward.endPos);
+                                    if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100)
+                                    {
+                                        DelayAction.Add(0, () => wards.Remove(ward));
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (ward.startPos != null) //check for FOW Wards
+                            {
+                                var projection = sender.Position.To2D().ProjectOn(ward.startPos, ward.endPos);
+
+                                if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100
+                                    && Math.Abs(ward.timestamp - timestamp) < 2000)
+                                {
+                                    DelayAction.Add(0, () => wards.Remove(ward));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });               
+
             }
 
             //FOW placement
@@ -243,9 +294,11 @@ namespace UtilityPlus.WardTracker
                             WardDatabase.missileWardData,
                             pos.To3D(),
                             null,
-                            true                            
+                            true
                             );
 
+                        newWard.startPos = missile.StartPosition.To2D();
+                        newWard.endPos = missile.EndPosition.To2D();
 
                         wards.Add(newWard);
                     });
@@ -278,7 +331,7 @@ namespace UtilityPlus.WardTracker
 
                     Drawing.DrawText(wardScreenPos.X - wardStrSize.Width / 2, wardScreenPos.Y, Color.White, "Ward");
                     Drawing.DrawText(wardScreenPos.X - tSize.Width / 2, wardScreenPos.Y + wardStrSize.Height, Color.White, timeStr);
-                    
+
                 }
             }
         }
