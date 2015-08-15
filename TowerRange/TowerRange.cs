@@ -16,6 +16,7 @@ namespace TowerRange
     {
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
         private static Dictionary<int, Obj_AI_Turret> turretCache = new Dictionary<int, Obj_AI_Turret>();
+        private static Dictionary<int, AttackableUnit> turretTarget = new Dictionary<int, AttackableUnit>();
 
         private static Menu menu;
 
@@ -31,25 +32,22 @@ namespace TowerRange
             menu.AddToMainMenu();
 
             Drawing.OnDraw += Drawing_OnDraw;
-            //Game.OnUpdate += Game_OnUpdate;
-            //Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnTarget += Turret_OnTarget;
 
             InitializeCache();
         }
 
-        private void Game_OnUpdate(EventArgs args)
+        private void Turret_OnTarget(Obj_AI_Base sender, Obj_AI_BaseTargetEventArgs args)
         {
-
-        }
-
-        private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
-        {
-
+            if (turretCache.ContainsKey(sender.NetworkId))
+            {
+                turretTarget[sender.NetworkId] = args.Target;
+            }
         }
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            var turretRange = 800 + myHero.BoundingRadius;
+            var turretRange = 875 + myHero.BoundingRadius;
             
             foreach (var entry in turretCache)
             {
@@ -72,7 +70,7 @@ namespace TowerRange
                 var distToTurret = myHero.ServerPosition.Distance(turret.Position);
                 if (distToTurret < turretRange + 500)
                 {
-                    var tTarget = turret.Target;
+                    var tTarget = turretTarget[turret.NetworkId];
                     if (tTarget.IsValidTarget(float.MaxValue, false))
                     {
                         if (tTarget is Obj_AI_Hero)
@@ -110,6 +108,7 @@ namespace TowerRange
                 if (!turretCache.ContainsKey(obj.NetworkId))
                 {
                     turretCache.Add(obj.NetworkId, obj);
+                    turretTarget.Add(obj.NetworkId, null);
                 }
             }
         }
