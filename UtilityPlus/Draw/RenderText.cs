@@ -44,10 +44,10 @@ namespace UtilityPlus.Draw
         {
             if (renderPosition.IsOnScreen())
             {
-                var textDimension = Drawing.GetTextExtent(text);
+                var textDimension = TextUtils.GetTextExtent(text);
                 var wardScreenPos = Drawing.WorldToScreen(renderPosition.To3D());
 
-                Drawing.DrawText(wardScreenPos.X - textDimension.Width / 2, wardScreenPos.Y, color, text);
+                TextUtils.DrawText(wardScreenPos.X - textDimension.Width / 2, wardScreenPos.Y, color, text);
             }
         }
     }

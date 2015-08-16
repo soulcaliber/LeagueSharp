@@ -302,8 +302,8 @@ namespace UtilityPlus.SpellTracker
                             recallBarDrawn = true;
                         }
 
-                        var textDimension = Drawing.GetTextExtent(hero.ChampionName);
-                        Drawing.DrawText(recallBarX + recalBarWidth * percent - textDimension.Width / 2,
+                        var textDimension = TextUtils.GetTextExtent(hero.ChampionName);
+                        TextUtils.DrawText(recallBarX + recalBarWidth * percent - textDimension.Width / 2,
                             recallBarY - 20, Color.White, hero.ChampionName);
 
                         Drawing.DrawLine(new Vector2(recallBarX, recallBarY),
@@ -359,7 +359,7 @@ namespace UtilityPlus.SpellTracker
                     if (percent != 1f)
                     {
                         Drawing.DrawLine(new Vector2(startX, startY), new Vector2(startX + 20, startY), 12, Color.Black);
-                        Drawing.DrawLine(new Vector2(startX + 1, startY + 1), new Vector2(startX + 19, startY + 1), 10, Color.Gray);
+                        Drawing.DrawLine(new Vector2(startX + 1, startY + 1), new Vector2(startX + 19, startY + 1), 10, Color.Gray);                       
                     }
                     else
                     {
@@ -379,7 +379,7 @@ namespace UtilityPlus.SpellTracker
                         {
                             color = SummonerData.heroS2Color[hero.NetworkId];
                         }
-
+                                                
                         Drawing.DrawLine(new Vector2(startX + 1, startY + 1),
                                         new Vector2(startX + 1 + 18 * percent, startY + 1),
                                         10, color);

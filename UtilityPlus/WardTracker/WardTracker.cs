@@ -46,9 +46,9 @@ namespace UtilityPlus.WardTracker
         public static List<WardTrackerInfo> wards = new List<WardTrackerInfo>();
         public static float lastCheckExpiredWards = 0;
 
-        public static System.Drawing.Size tStrSize = Drawing.GetTextExtent("00:00");
-        public static System.Drawing.Size utStrSize = Drawing.GetTextExtent("?? 00:00 ??");
-        public static System.Drawing.Size wardStrSize = Drawing.GetTextExtent("Ward");
+        public static System.Drawing.Size tStrSize = TextUtils.GetTextExtent("00:00");
+        public static System.Drawing.Size utStrSize = TextUtils.GetTextExtent("?? 00:00 ??");
+        public static System.Drawing.Size wardStrSize = TextUtils.GetTextExtent("Ward");
 
         public Tracker(Menu mainMenu)
         {
@@ -217,46 +217,49 @@ namespace UtilityPlus.WardTracker
 
                 DelayAction.Add(500, () =>
                 {
-                    timestamp = HelperUtils.TickCount - (obj.MaxMana - obj.Mana) * 1000;
-
-                    newWard.timestamp = timestamp;
-
-                    foreach (var ward in wards)
+                    if (newWard.wardObject != null && newWard.wardObject.IsValid && !newWard.wardObject.IsDead)
                     {
-                        if (ward.wardObject == null)
+                        timestamp = HelperUtils.TickCount - (obj.MaxMana - obj.Mana) * 1000;
+
+                        newWard.timestamp = timestamp;
+
+                        foreach (var ward in wards)
                         {
-                            //Check for Process Spell wards
-                            if (!ward.unknownDuration && Math.Abs(ward.timestamp - timestamp) < 2000)
+                            if (ward.wardObject == null)
                             {
-                                if (ward.position.Distance(sender.Position) < 25)
+                                //Check for Process Spell wards
+                                if (!ward.unknownDuration && Math.Abs(ward.timestamp - timestamp) < 2000)
                                 {
-                                    DelayAction.Add(0, () => wards.Remove(ward));
-                                    break;
+                                    if (ward.position.Distance(sender.Position) < 25)
+                                    {
+                                        DelayAction.Add(0, () => wards.Remove(ward));
+                                        break;
+                                    }
+                                    else //ward hit a wall
+                                    {
+                                        var projection = sender.Position.To2D().ProjectOn(ward.startPos, ward.endPos);
+                                        if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100)
+                                        {
+                                            DelayAction.Add(0, () => wards.Remove(ward));
+                                            break;
+                                        }
+                                    }
                                 }
-                                else //ward hit a wall
+                                else if (ward.startPos != null) //check for FOW Wards
                                 {
                                     var projection = sender.Position.To2D().ProjectOn(ward.startPos, ward.endPos);
-                                    if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100)
+
+                                    if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100
+                                        && Math.Abs(ward.timestamp - timestamp) < 2000)
                                     {
                                         DelayAction.Add(0, () => wards.Remove(ward));
                                         break;
                                     }
                                 }
                             }
-                            else if (ward.startPos != null) //check for FOW Wards
-                            {
-                                var projection = sender.Position.To2D().ProjectOn(ward.startPos, ward.endPos);
-
-                                if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100
-                                    && Math.Abs(ward.timestamp - timestamp) < 2000)
-                                {
-                                    DelayAction.Add(0, () => wards.Remove(ward));
-                                    break;
-                                }
-                            }
                         }
                     }
-                });               
+                });
 
             }
 
@@ -329,8 +332,12 @@ namespace UtilityPlus.WardTracker
                         tSize = utStrSize;
                     }
 
-                    Drawing.DrawText(wardScreenPos.X - wardStrSize.Width / 2, wardScreenPos.Y, Color.White, "Ward");
-                    Drawing.DrawText(wardScreenPos.X - tSize.Width / 2, wardScreenPos.Y + wardStrSize.Height, Color.White, timeStr);
+
+                    if (timeStr != null)
+                    {
+                        TextUtils.DrawText(wardScreenPos.X - wardStrSize.Width / 2, wardScreenPos.Y, Color.White, "Ward");
+                        TextUtils.DrawText(wardScreenPos.X - tSize.Width / 2, wardScreenPos.Y + wardStrSize.Height, Color.White, timeStr);
+                    }
 
                 }
             }

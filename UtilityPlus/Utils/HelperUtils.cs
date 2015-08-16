@@ -26,6 +26,6 @@ namespace UtilityPlus
             {
                 return (int)DateTime.Now.Subtract(assemblyLoadTime).TotalMilliseconds;
             }
-        }        
+        }
     }
 }

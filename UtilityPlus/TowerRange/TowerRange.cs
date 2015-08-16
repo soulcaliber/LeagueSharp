@@ -25,7 +25,8 @@ namespace UtilityPlus.TowerRange
             menu = mainMenu;
 
             Menu towerMenu = new Menu("TowerRange", "TowerRange");
-            towerMenu.AddItem(new MenuItem("DrawTowerRange", "Draw Tower Range").SetValue(true));
+            towerMenu.AddItem(new MenuItem("DrawEnemyTowerRange", "Draw Enemy Tower Range").SetValue(true));
+            towerMenu.AddItem(new MenuItem("DrawAllyTowerRange", "Draw Ally Tower Range").SetValue(true));
 
             menu.AddSubMenu(towerMenu);
 
@@ -45,11 +46,6 @@ namespace UtilityPlus.TowerRange
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            if (menu.Item("DrawTowerRange").GetValue<bool>() == false)
-            {
-                return;
-            }
-
             var turretRange = 800 + myHero.BoundingRadius;
 
             foreach (var entry in turretCache)
@@ -61,6 +57,16 @@ namespace UtilityPlus.TowerRange
                 if (turret == null || !turret.IsValid || turret.IsDead)
                 {
                     Utility.DelayAction.Add(1, () => turretCache.Remove(entry.Key));
+                    continue;
+                }
+
+                if (turret.IsEnemy && menu.Item("DrawEnemyTowerRange").GetValue<bool>() == false)
+                {
+                    continue;
+                }
+
+                if (turret.IsAlly && menu.Item("DrawAllyTowerRange").GetValue<bool>() == false)
+                {
                     continue;
                 }
 

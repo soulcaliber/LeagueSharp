@@ -58,6 +58,7 @@
     <Compile Include="Draw\RenderObject.cs" />
     <Compile Include="Draw\RenderPosition.cs" />
     <Compile Include="Draw\RenderText.cs" />
+    <Compile Include="Draw\TextUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellTracker\SpellCooldownDatabase.cs" />
