@@ -38,5 +38,17 @@ namespace UtilityPlus
                 return Drawing.GetTextExtent("A");
             }
         }
+
+        public static string FormatTime(double time)
+        {
+            if (time > 0)
+            {
+                return Utils.FormatTime(time);
+            }
+            else
+            {
+                return "00:00";
+            }
+        }
     }
 }

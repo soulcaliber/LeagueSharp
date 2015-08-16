@@ -133,7 +133,8 @@ namespace UtilityPlus.WardTracker
         }
 
         private void Game_OnProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
-        {
+        {          
+
             if (!menu.Item("TrackEnemyWards").GetValue<bool>())
             {
                 return;
@@ -190,7 +191,7 @@ namespace UtilityPlus.WardTracker
             }
 
             ConsolePrinter.Print(sender.Type + " : " + sender.Name);*/
-
+                        
             if (!menu.Item("TrackEnemyWards").GetValue<bool>())
             {
                 return;
@@ -320,10 +321,10 @@ namespace UtilityPlus.WardTracker
             {
                 var wardPos = ward.wardObject != null ? ward.wardObject.Position : ward.position;
 
-                if (wardPos.IsOnScreen())
+                if (wardPos.IsOnScreen() && ward.endTime > HelperUtils.TickCount)
                 {
                     var wardScreenPos = Drawing.WorldToScreen(wardPos);
-                    var timeStr = Utils.FormatTime((ward.endTime - HelperUtils.TickCount) / 1000f);
+                    var timeStr = TextUtils.FormatTime((ward.endTime - HelperUtils.TickCount) / 1000f);
                     var tSize = tStrSize;
 
                     if (ward.unknownDuration)
