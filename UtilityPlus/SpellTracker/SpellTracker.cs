@@ -62,7 +62,7 @@ namespace UtilityPlus.SpellTracker
 
         public static Dictionary<int, Dictionary<string, SpellTrackerInfo>> spellCooldowns =
             new Dictionary<int, Dictionary<string, SpellTrackerInfo>>();
-                
+
         public Tracker(Menu mainMenu)
         {
             menu = mainMenu;
@@ -160,7 +160,7 @@ namespace UtilityPlus.SpellTracker
 
                         Draw.RenderObjects.Add(
                             new Draw.RenderText(info.hero.ChampionName, sender.Position.To2D(), 3500,
-                            (info.hero.IsAlly ? Color.SkyBlue : Color.Red)));
+                            (sender.Name.Contains("blue") ? Color.SkyBlue : Color.Red)));
 
                         Draw.RenderObjects.Add(
                             new Draw.CooldownBar(sender.Position.To2D(), 3500, 20));
@@ -278,7 +278,7 @@ namespace UtilityPlus.SpellTracker
                     )
                 {
                     var hero = info.hero;
-                                        
+
                     var timeLeft = (HelperUtils.TickCount - info.startTime);
                     var totalRecallTime = 8000;
 
@@ -359,7 +359,7 @@ namespace UtilityPlus.SpellTracker
                     if (percent != 1f)
                     {
                         Drawing.DrawLine(new Vector2(startX, startY), new Vector2(startX + 20, startY), 12, Color.Black);
-                        Drawing.DrawLine(new Vector2(startX + 1, startY + 1), new Vector2(startX + 19, startY + 1), 10, Color.Gray);                       
+                        Drawing.DrawLine(new Vector2(startX + 1, startY + 1), new Vector2(startX + 19, startY + 1), 10, Color.Gray);
                     }
                     else
                     {
@@ -379,7 +379,7 @@ namespace UtilityPlus.SpellTracker
                         {
                             color = SummonerData.heroS2Color[hero.NetworkId];
                         }
-                                                
+
                         Drawing.DrawLine(new Vector2(startX + 1, startY + 1),
                                         new Vector2(startX + 1 + 18 * percent, startY + 1),
                                         10, color);

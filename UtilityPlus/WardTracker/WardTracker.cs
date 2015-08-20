@@ -229,33 +229,11 @@ namespace UtilityPlus.WardTracker
                             if (ward.wardObject == null)
                             {
                                 //Check for Process Spell wards
-                                if (!ward.unknownDuration && Math.Abs(ward.timestamp - timestamp) < 2000)
-                                {
-                                    if (ward.position.Distance(sender.Position) < 25)
-                                    {
-                                        DelayAction.Add(0, () => wards.Remove(ward));
-                                        break;
-                                    }
-                                    else //ward hit a wall
-                                    {
-                                        var projection = sender.Position.To2D().ProjectOn(ward.startPos, ward.endPos);
-                                        if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100)
-                                        {
-                                            DelayAction.Add(0, () => wards.Remove(ward));
-                                            break;
-                                        }
-                                    }
-                                }
-                                else if (ward.startPos != null) //check for FOW Wards
-                                {
-                                    var projection = sender.Position.To2D().ProjectOn(ward.startPos, ward.endPos);
-
-                                    if (projection.SegmentPoint.Distance(sender.Position.To2D()) < 100
+                                if (ward.position.Distance(sender.Position) < 550
                                         && Math.Abs(ward.timestamp - timestamp) < 2000)
-                                    {
-                                        DelayAction.Add(0, () => wards.Remove(ward));
-                                        break;
-                                    }
+                                {
+                                    DelayAction.Add(0, () => wards.Remove(ward));
+                                    break;
                                 }
                             }
                         }

@@ -38,7 +38,8 @@ namespace UtilityPlus.TowerRange
 
         private void Turret_OnTarget(Obj_AI_Base sender, Obj_AI_BaseTargetEventArgs args)
         {
-            if (turretCache.ContainsKey(sender.NetworkId))
+            var turret = sender as Obj_AI_Turret;
+            if (turret != null && turretCache.ContainsKey(sender.NetworkId))
             {
                 turretTarget[sender.NetworkId] = args.Target;
             }
