@@ -11,7 +11,6 @@ namespace ezEvade
 {
     class PingTester
     {
-        public static Menu menu;
         public static Menu testMenu;
 
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
@@ -29,20 +28,18 @@ namespace ezEvade
 
         private static EvadeCommand lastTestMoveToCommand;
 
-        public PingTester(Menu mainMenu)
+        public PingTester()
         {
             Game.OnUpdate += Game_OnGameUpdate;
-
-            menu = mainMenu;
-
-            testMenu = new Menu("Ping Tester", "PingTest");
+            
+            testMenu = new Menu("Ping Tester", "PingTest", true);
             testMenu.AddItem(new MenuItem("AutoSetPing", "Auto Set Ping").SetValue(false));
             testMenu.AddItem(new MenuItem("TestMoveTime", "Test Ping").SetValue(false));
             testMenu.AddItem(new MenuItem("SetMaxPing", "Set Max Ping").SetValue(false));
             testMenu.AddItem(new MenuItem("SetAvgPing", "Set Avg Ping").SetValue(false));
             testMenu.AddItem(new MenuItem("Test20MoveTime", "Test Ping x20").SetValue(false));
             testMenu.AddItem(new MenuItem("PrintResults", "Print Results").SetValue(false));
-            menu.AddSubMenu(testMenu);
+            testMenu.AddToMainMenu();
         }
 
         private void IssueTestMove(int recursionCount)

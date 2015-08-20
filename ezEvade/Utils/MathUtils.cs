@@ -32,6 +32,23 @@ namespace ezEvade
             }
         }
 
+        public static Vector2 CheckLineIntersectionEx2(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+        {
+            Tuple<float, float> ret = LineToLineIntersection(a.X, a.Y, b.X, b.Y, c.X, c.Y, d.X, d.Y);
+
+            var t1 = ret.Item1;
+            var t2 = ret.Item2;
+
+            if (t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1)
+            {
+                return new Vector2(t1, t2);
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+
         public static Vector2 RotateVector(Vector2 start, Vector2 end, float angle)
         {
             angle = angle * ((float)(Math.PI / 180));

@@ -850,6 +850,27 @@ namespace ezEvade
 
             #endregion Ezreal
 
+            #region Fiora
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Fiora",
+                dangerlevel = 1,
+                missileName = "FioraWMissile",
+                name = "FioraW",
+                projectileSpeed = 3200,
+                radius = 70,
+                range = 750,
+                spellDelay = 500,
+                spellKey = SpellSlot.W,
+                spellName = "FioraW",
+                spellType = SpellType.Line,
+
+            });
+
+            #endregion Fiora
+
             #region Fizz
 
             Spells.Add(
@@ -1996,7 +2017,7 @@ namespace ezEvade
                 projectileSpeed = 1300,
                 radius = 60,
                 range = 1500,
-                spellDelay = 125,
+                spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "JavelinToss",
                 spellType = SpellType.Line,

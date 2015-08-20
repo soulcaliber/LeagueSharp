@@ -134,6 +134,11 @@ namespace ezEvade
             {
                 //Render.Circle.DrawCircle(myHero.Position.ExtendDir(dir, 500), 65, Color.Red, 10);
 
+                /*foreach (var point in myHero.Path)
+                {
+                    Render.Circle.DrawCircle(point, 65, Color.Red, 10);
+                }*/
+
                 if (Evade.lastPosInfo != null)
                 {
                     var pos = Evade.lastPosInfo.position; //Evade.lastEvadeCommand.targetPosition;

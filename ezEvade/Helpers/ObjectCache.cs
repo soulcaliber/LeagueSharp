@@ -36,7 +36,7 @@ namespace ezEvade
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
 
             serverPos2D = hero.ServerPosition.To2D(); //CalculatedPosition.GetPosition(hero, Game.Ping);
-            serverPos2DExtra = EvadeUtils.GetGamePosition(hero, extraDelayBuffer); 
+            serverPos2DExtra = EvadeUtils.GetGamePosition(hero, Game.Ping + extraDelayBuffer); 
             //CalculatedPosition.GetPosition(hero, Game.Ping + extraDelayBuffer);            
             currentPosition = hero.Position.To2D(); //CalculatedPosition.GetPosition(hero, 0); 
             boundingRadius = hero.BoundingRadius;

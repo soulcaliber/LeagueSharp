@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Reflection;
+using System.Reflection.Emit;
+
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
 namespace ezEvade
 {
+    public class SpecialSpellEventArgs : EventArgs
+    {
+        public bool noProcess { get; set; }
+    }
+
     internal class SpellDetector
     {
         //public delegate void OnCreateSpellHandler(Spell spell);
@@ -26,6 +34,8 @@ namespace ezEvade
         public static Dictionary<int, Spell> spells = new Dictionary<int, Spell>();
         public static Dictionary<int, Spell> drawSpells = new Dictionary<int, Spell>();
         public static Dictionary<int, Spell> detectedSpells = new Dictionary<int, Spell>();
+
+        public static Dictionary<string, ChampionPlugin> championPlugins = new Dictionary<string, ChampionPlugin>();
 
         public static Dictionary<string, string> channeledSpells = new Dictionary<string, string>();
 
@@ -748,8 +758,61 @@ namespace ezEvade
             ObjectCache.menuCache.AddMenuToCache(newSpellMenu);
         }
 
+        //Credits to Kurisu
+        public static object NewInstance(Type type)
+        {
+            var target = type.GetConstructor(Type.EmptyTypes);
+            var dynamic = new DynamicMethod(string.Empty, type, new Type[0], target.DeclaringType);
+            var il = dynamic.GetILGenerator();
+
+            il.DeclareLocal(target.DeclaringType);
+            il.Emit(OpCodes.Newobj, target);
+            il.Emit(OpCodes.Stloc_0);
+            il.Emit(OpCodes.Ldloc_0);
+            il.Emit(OpCodes.Ret);
+
+            var method = (Func<object>)dynamic.CreateDelegate(typeof(Func<object>));
+            return method();
+        }
+
+        private void LoadSpecialSpell(SpellData spell)
+        {
+            if (championPlugins.ContainsKey(spell.charName))
+            {
+                championPlugins[spell.charName].LoadSpecialSpell(spell);
+            }
+
+            championPlugins["AllChampions"].LoadSpecialSpell(spell);
+        }
+
+        private void LoadSpecialSpellPlugins()
+        {
+            championPlugins.Add("AllChampions", new SpecialSpells.AllChampions());
+
+            foreach (var hero in HeroManager.Enemies)
+            {
+                var championPlugin = Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .FindAll(t => t.IsClass && t.Namespace == "ezEvade.SpecialSpells"
+                               && t.Name == hero.ChampionName
+                               )
+                    .FirstOrDefault();
+
+                if (championPlugin != null)
+                {
+                    if (!championPlugins.ContainsKey(hero.ChampionName))
+                    {
+                        championPlugins.Add(hero.ChampionName,
+                            (ChampionPlugin) NewInstance(championPlugin));
+                    }
+                }
+            }
+        }
+
         private void LoadSpellDictionary()
         {
+            LoadSpecialSpellPlugins();
+
             foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (hero.IsMe)
@@ -808,8 +871,8 @@ namespace ezEvade
                                     onMissileSpells.Add(spellName, spell);
                                 }
                             }
-
-                            SpecialSpells.LoadSpecialSpell(spell);
+                                                        
+                            LoadSpecialSpell(spell);
 
                             string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
 

@@ -57,7 +57,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Draw\RenderLine.cs" />
+    <Compile Include="Draw\RenderObject.cs" />
+    <Compile Include="Draw\RenderCircle.cs" />
+    <Compile Include="Draw\RenderText.cs" />
     <Compile Include="EvadeSpells\SpecialEvadeSpell.cs" />
+    <Compile Include="Helpers\AutoSetPing.cs" />
+    <Compile Include="SpecialSpells\Ashe.cs" />
+    <Compile Include="SpecialSpells\ChampionPlugin.cs" />
+    <Compile Include="SpecialSpells\Ekko.cs" />
+    <Compile Include="SpecialSpells\Fizz.cs" />
+    <Compile Include="SpecialSpells\JarvanIV.cs" />
+    <Compile Include="SpecialSpells\Jayce.cs" />
+    <Compile Include="SpecialSpells\Jinx.cs" />
+    <Compile Include="SpecialSpells\Lucian.cs" />
+    <Compile Include="SpecialSpells\Lulu.cs" />
+    <Compile Include="SpecialSpells\Lux.cs" />
+    <Compile Include="SpecialSpells\Malzahar.cs" />
+    <Compile Include="Spells\ObjectTracker.cs" />
+    <Compile Include="SpecialSpells\Orianna.cs" />
+    <Compile Include="SpecialSpells\Sion.cs" />
+    <Compile Include="SpecialSpells\Syndra.cs" />
+    <Compile Include="SpecialSpells\Viktor.cs" />
+    <Compile Include="SpecialSpells\Xerath.cs" />
+    <Compile Include="SpecialSpells\Yasuo.cs" />
+    <Compile Include="SpecialSpells\Zed.cs" />
+    <Compile Include="SpecialSpells\Ziggs.cs" />
     <Compile Include="Tests\SpellTester.cs" />
     <Compile Include="Utils\ConsolePrinter.cs" />
     <Compile Include="Utils\DelayAction.cs" />
@@ -78,7 +103,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\Situation.cs" />
-    <Compile Include="Spells\SpecialSpells.cs" />
+    <Compile Include="SpecialSpells\AllChampions.cs" />
     <Compile Include="Spells\Spell.cs" />
     <Compile Include="Spells\SpellData.cs" />
     <Compile Include="Spells\SpellDatabase.cs" />

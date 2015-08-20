@@ -12,38 +12,6 @@ using SharpDX;
 
 namespace ezEvade
 {
-    public static class RenderPositions
-    {
-        private static List<RenderPosition> renderPositions = new List<RenderPosition>();
-
-        static RenderPositions()
-        {
-
-        }
-
-        public static void Add(Vector2 pos, float time, int radius = 65, int width = 5)
-        {
-            renderPositions.Add(new RenderPosition(pos, EvadeUtils.TickCount + time, radius, width));
-        }
-
-        public static void DrawPositions()
-        {
-            foreach (var rendPos in renderPositions)
-            {
-                if (rendPos.renderEndTime - EvadeUtils.TickCount > 0)
-                {
-                    Render.Circle.DrawCircle(rendPos.renderPosition.To3D(), rendPos.radius, Color.Red, rendPos.width);
-                }
-                else
-                {
-                    DelayAction.Add(1, () => renderPositions.Remove(rendPos));
-                }
-            }
-        }
-    }
-
-
-
     class SpellTester
     {
         public static Menu menu;
@@ -92,8 +60,6 @@ namespace ezEvade
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            RenderPositions.DrawPositions();
-
             foreach (var spell in SpellDetector.drawSpells.Values)
             {
                 Vector2 spellPos = spell.currentSpellPosition;
@@ -103,9 +69,11 @@ namespace ezEvade
                     if (spell.spellType == SpellType.Line)
                     {
                         if (spellPos.Distance(myHero) <= myHero.BoundingRadius + spell.radius
-                            && EvadeUtils.TickCount - spell.startTime > spell.info.spellDelay)
+                            && EvadeUtils.TickCount - spell.startTime > spell.info.spellDelay
+                            && spell.startPos.Distance(myHero) < spell.info.range)
                         {
-                            RenderPositions.Add(spellPos, 1000, (int)spell.radius, 10);
+                            Draw.RenderObjects.Add(new Draw.RenderCircle(spellPos, 1000, Color.Red,
+                                (int)spell.radius, 10));
                             DelayAction.Add(1, () => SpellDetector.DeleteSpell(spell.spellID));
                         }
                         else
@@ -152,7 +120,7 @@ namespace ezEvade
             e.Process = false;
 
             spellEndPostion = myHero.ServerPosition;
-            RenderPositions.Add(spellEndPostion.To2D(), 1000, 100, 20);
+            Draw.RenderObjects.Add(new Draw.RenderCircle(spellEndPostion.To2D(), 1000, Color.Red, 100, 20));
         }
 
         private void OnSpellStartChange(object sender, OnValueChangeEventArgs e)
@@ -160,7 +128,7 @@ namespace ezEvade
             e.Process = false;
 
             spellStartPosition = myHero.ServerPosition;
-            RenderPositions.Add(spellStartPosition.To2D(), 1000, 100, 20);
+            Draw.RenderObjects.Add(new Draw.RenderCircle(spellStartPosition.To2D(), 1000, Color.Red, 100, 20));
         }
 
         private void LoadSpellDictionary()
@@ -185,6 +153,8 @@ namespace ezEvade
                     }
                 }
             }
+
+            selectSpellMenu.AddItem(new MenuItem("DummySpellDescription", "    -- Select A Dummy Spell To Fire --    "));
 
             var heroList = spellCache.Keys.ToArray();
             selectSpellMenu.AddItem(new MenuItem("DummySpellHero", "Hero")

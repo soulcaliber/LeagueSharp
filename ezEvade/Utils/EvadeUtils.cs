@@ -27,7 +27,7 @@ namespace ezEvade
         {
             get
             {
-                return stopWatch.ElapsedMilliseconds;
+                return (int)DateTime.Now.Subtract(assemblyLoadTime).TotalMilliseconds;
             }
         }
 

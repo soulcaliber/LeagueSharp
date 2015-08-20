@@ -13,25 +13,6 @@ using SharpDX;
 
 namespace ezEvade
 {
-    class RenderPosition
-    {
-        public float renderEndTime = 0;
-        public Vector2 renderPosition = new Vector2(0, 0);
-
-        public int radius = 65;
-        public int width = 5;
-
-        public RenderPosition(Vector2 renderPosition, float renderEndTime,
-            int radius = 65, int width = 5)
-        {
-            this.renderEndTime = renderEndTime;
-            this.renderPosition = renderPosition;
-
-            this.radius = radius;
-            this.width = width;
-        }
-    }
-
     class EvadeTester
     {
         public static Menu menu;
@@ -40,8 +21,6 @@ namespace ezEvade
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
 
         private static Vector2 circleRenderPos;
-
-        private static List<RenderPosition> renderPositions = new List<RenderPosition>();
 
         private static Vector2 startWalkPos;
         private static float startWalkTime = 0;
@@ -158,7 +137,7 @@ namespace ezEvade
                 ConsolePrinter.Print("");*/
 
                 lastProcessPacketTime = EvadeUtils.TickCount;
-            }   
+            }
         }
 
         private void Game_onSendPacket(GamePacketEventArgs args)
@@ -169,7 +148,7 @@ namespace ezEvade
                 {
                     ConsolePrinter.Print("Send Path ClickTime: " + (EvadeUtils.TickCount - lastRightMouseClickTime));
                 }
-            }            
+            }
         }
 
         private void Game_OnGameLoad()
@@ -213,7 +192,8 @@ namespace ezEvade
 
                 if (unit.IsMe)
                 {
-                    renderPositions.Add(new RenderPosition(args.Path.Last().To2D(), EvadeUtils.TickCount + 500));
+                    Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.Last().To2D(), 500));
+                    Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.First().To2D(), 500));
                 }
 
             }
@@ -226,7 +206,7 @@ namespace ezEvade
 
             if (testMenu.Item("TestPath").GetValue<bool>())
             {
-                renderPositions.Add(new RenderPosition(args.EndPosition.To2D(), EvadeUtils.TickCount + 500));
+                Draw.RenderObjects.Add(new Draw.RenderCircle(args.EndPosition.To2D(), 500));
             }
 
             lastSpellCastTimeEx = EvadeUtils.TickCount;
@@ -252,13 +232,31 @@ namespace ezEvade
                     var range = sender.Position.To2D().Distance(testMissile.StartPosition.To2D());
                     ConsolePrinter.Print("Est.Missile range: " + range);
 
-                    ConsolePrinter.Print("Est.Missile speed: " + range/(EvadeUtils.TickCount - testMissileStartTime));
+                    ConsolePrinter.Print("Est.Missile speed: " + range / (EvadeUtils.TickCount - testMissileStartTime));
                 }
             }
         }
 
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
-        {                        
+        {
+            /*if (sender.Name.ToLower().Contains("minion")
+                || sender.Name.ToLower().Contains("turret")
+                || sender.Type == GameObjectType.obj_GeneralParticleEmitter)
+            {
+                return;
+            }
+
+            if (sender.IsValid<MissileClient>())
+            {
+                var tMissile = sender as MissileClient;
+                if (tMissile.SpellCaster.Type != GameObjectType.obj_AI_Hero)
+                {
+                    return;
+                }
+            }
+
+            ConsolePrinter.Print(sender.Type + " : " + sender.Name);*/
+
             if (obj.IsValid<MissileClient>())
             {
                 MissileClient autoattack = (MissileClient)obj;
@@ -287,6 +285,11 @@ namespace ezEvade
 
             MissileClient missile = (MissileClient)obj;
 
+            if (!missile.SpellCaster.IsValid<Obj_AI_Hero>())
+            {
+                //return;
+            }
+
             testMissile = missile;
             testMissileStartTime = EvadeUtils.TickCount;
 
@@ -304,10 +307,10 @@ namespace ezEvade
 
             //ConsolePrinter.Print("Acquired: " + (EvadeUtils.TickCount - lastSpellCastTime));
 
-            renderPositions.Add(
-                new RenderPosition(missile.StartPosition.To2D(), EvadeUtils.TickCount + 500));
-            renderPositions.Add(
-                new RenderPosition(missile.EndPosition.To2D(), EvadeUtils.TickCount + 500));
+            Draw.RenderObjects.Add(
+                new Draw.RenderCircle(missile.StartPosition.To2D(), 500));
+            Draw.RenderObjects.Add(
+                new Draw.RenderCircle(missile.EndPosition.To2D(), 500));
 
             SpellData spellData;
 
@@ -364,19 +367,19 @@ namespace ezEvade
             if (args.SData.Name == "YasuoQW")
             {
 
-            renderPositions.Add(
-                new RenderPosition(args.Start.To2D(), EvadeUtils.TickCount + 500));
-            renderPositions.Add(
-                new RenderPosition(args.End.To2D(), EvadeUtils.TickCount + 500));
+                Draw.RenderObjects.Add(
+                    new Draw.RenderCircle(args.Start.To2D(), 500));
+                Draw.RenderObjects.Add(
+                    new Draw.RenderCircle(args.End.To2D(), 500));
             }
 
             //ConsolePrinter.Print(EvadeUtils.TickCount - lastProcessPacketTime);
             //circleRenderPos = args.SData.ParticleStartOffset.To2D();
 
-            /*renderPositions.Add(
-                new RenderPosition(args.Start.To2D(), Evade.GetTickCount + 500));
-            renderPositions.Add(
-                new RenderPosition(args.End.To2D(), Evade.GetTickCount + 500));*/
+            /*Draw.RenderObjects.Add(
+                new Draw.RenderPosition(args.Start.To2D(), Evade.GetTickCount + 500));
+            Draw.RenderObjects.Add(
+                new Draw.RenderPosition(args.End.To2D(), Evade.GetTickCount + 500));*/
 
             /*float testTime;
             
@@ -498,7 +501,7 @@ namespace ezEvade
 
             if (obj.Name == "RobotBuddy")
             {
-                renderPositions.Add(new RenderPosition(obj.Position.To2D(), EvadeUtils.TickCount + 10));
+                //Draw.RenderObjects.Add(new Draw.RenderPosition(obj.Position.To2D(), EvadeUtils.TickCount + 10));
             }
 
             //ConsolePrinter.Print(obj.Name);
@@ -577,7 +580,7 @@ namespace ezEvade
                 foreach (Vector3 point in tPath)
                 {
                     var point2D = point.To2D();
-                    renderPositions.Add(new RenderPosition(point2D, EvadeUtils.TickCount + 500));
+                    Draw.RenderObjects.Add(new Draw.RenderCircle(point2D, 500));
                     //Render.Circle.DrawCircle(new Vector3(point.X, point.Y, point.Z), ObjectCache.myHeroCache.boundingRadius, Color.Violet, 3);
                 }
             }
@@ -599,6 +602,8 @@ namespace ezEvade
 
             if (args.Order == GameObjectOrder.MoveTo)
             {
+
+                Draw.RenderObjects.Add(new Draw.RenderCircle(myHero.ServerPosition.To2D(), 500, Color.Red));
 
                 if (testMenu.Item("EvadeTesterPing").GetValue<bool>())
                 {
@@ -673,21 +678,6 @@ namespace ezEvade
             lastWatchTimerTick = getWatchTimer;
         }
 
-        private static void RenderTestCircles()
-        {
-            foreach (RenderPosition rendPos in renderPositions)
-            {
-                if (rendPos.renderEndTime - EvadeUtils.TickCount > 0)
-                {
-                    Render.Circle.DrawCircle(rendPos.renderPosition.To3D(), 50, Color.White, 3);
-                }
-                else
-                {
-                    DelayAction.Add(1, () => renderPositions.Remove(rendPos));
-                }
-            }
-        }
-
         private void TestUnderTurret()
         {
             if (Game.CursorPos.To2D().IsUnderTurret())
@@ -707,8 +697,8 @@ namespace ezEvade
             //EvadeHelper.CheckMovePath(Game.CursorPos.To2D());            
 
             //TestUnderTurret();
-            
-            
+
+
             /*if (EvadeHelper.CheckPathCollision(myHero, Game.CursorPos.To2D()))
             {                
                 var paths = myHero.GetPath(ObjectCache.myHeroCache.serverPos2DExtra.To3D(), Game.CursorPos);
@@ -738,9 +728,7 @@ namespace ezEvade
                     Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);*/
                 }
             }
-
-            RenderTestCircles();
-
+            
             if (testMenu.Item("TestHeroPos").GetValue<bool>())
             {
                 var path = myHero.Path;
@@ -783,7 +771,7 @@ namespace ezEvade
 
                 //Console.WriteLine(myHero.BBox.Maximum.Distance(myHero.Position));
 
-                DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2.To3D(), false));
+                DelayAction.Add(20, () => myHero.IssueOrder(GameObjectOrder.MoveTo, pos2.To3D(), false));
                 //myHero.IssueOrder(GameObjectOrder.MoveTo, pos2, false);
             }
 
@@ -870,7 +858,7 @@ namespace ezEvade
 
             if (testMenu.Item("TestTracker").GetValue<bool>())
             {
-                foreach (KeyValuePair<int, ObjectTrackerInfo> entry in SpecialSpells.objTracker)
+                foreach (KeyValuePair<int, ObjectTrackerInfo> entry in ObjectTracker.objTracker)
                 {
                     var info = entry.Value;
 

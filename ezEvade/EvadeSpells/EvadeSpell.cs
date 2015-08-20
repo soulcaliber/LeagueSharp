@@ -331,6 +331,10 @@ namespace ezEvade
                         }
                     }
                 }
+                else if (evadeSpell.evadeType == EvadeType.MovementSpeedBuff)
+                {
+                    
+                }
             }
 
             return false;

@@ -362,6 +362,24 @@ namespace ezEvade
 
             #endregion
 
+            #region Fiora
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Fiora",
+                dangerlevel = 3,
+                name = "FioraW",
+                spellName = "FioraW",
+                range = 750,
+                spellDelay = 100,
+                spellKey = SpellSlot.W,
+                evadeType = EvadeType.WindWall,
+                castType = CastType.Position,
+            });
+
+            #endregion
+
             #region Fizz
 
             Spells.Add(

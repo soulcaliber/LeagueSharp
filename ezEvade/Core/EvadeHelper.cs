@@ -22,12 +22,12 @@ namespace ezEvade
 
         public static PositionInfo InitPositionInfo(Vector2 pos, float extraDelayBuffer, float extraEvadeDistance, Vector2 lastMovePos, Spell lowestEvadeTimeSpell) //clean this shit up
         {
-            if (!ObjectCache.myHeroCache.isMoving && 
+            if (!ObjectCache.myHeroCache.isMoving &&
                  ObjectCache.myHeroCache.serverPos2D.Distance(pos) <= 75)
             {
                 pos = ObjectCache.myHeroCache.serverPos2D;
             }
-            
+
             var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
 
             var posInfo = CanHeroWalkToPos(pos, ObjectCache.myHeroCache.moveSpeed, extraDelayBuffer + ObjectCache.gamePing, extraDist);
@@ -909,7 +909,7 @@ namespace ezEvade
                 var spellPos = spell.GetCurrentSpellPosition(true, delay);
                 var spellStartPos = spell.currentSpellPosition;
                 var spellEndPos = spell.GetSpellEndPosition();
-                var extendedPos = pos.ExtendDir(walkDir, ObjectCache.myHeroCache.boundingRadius);
+                var extendedPos = pos.ExtendDir(walkDir, ObjectCache.myHeroCache.boundingRadius + speed * delay / 1000);
 
                 Vector2 cHeroPos;
                 Vector2 cSpellPos;
@@ -1041,13 +1041,15 @@ namespace ezEvade
 
         public static bool PredictSpellCollision(Spell spell, Vector2 pos, float speed, float delay, Vector2 heroPos, float extraDist)
         {
+            extraDist = extraDist + 10;
+
             return  //pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius, true)
                  GetClosestDistanceApproach(spell, pos, speed, delay,
-                    ObjectCache.myHeroCache.serverPos2DExtra, extraDist) == 0
+                    ObjectCache.myHeroCache.serverPos2DExtra, extraDist) == 0 //Game.Ping + Extra Buffer
                  || GetClosestDistanceApproach(spell, pos, speed, ObjectCache.gamePing,
-                    ObjectCache.myHeroCache.serverPos2D, extraDist) == 0
-                 || GetClosestDistanceApproach(spell, pos, speed, delay + 30,
-                    ObjectCache.myHeroCache.serverPos2D, extraDist) == 0;
+                    ObjectCache.myHeroCache.serverPos2D, extraDist) == 0 //Game.Ping
+                 || GetClosestDistanceApproach(spell, pos, speed, delay,
+                    ObjectCache.myHeroCache.serverPos2D, extraDist) == 0; //Game.Ping + Extra Buffer
         }
 
         public static Vector2 GetRealHeroPos(float delay = 0)
@@ -1167,7 +1169,7 @@ namespace ezEvade
                     else if (spell.spellType == SpellType.Circular)
                     {
                         if (spell.info.spellName == "VeigarEventHorizon")
-                        {                            
+                        {
                             var cpa2 = MathUtilsCPA.CPAPointsEx(from, dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, new Vector2(0, 0), movePos, spell.endPos);
 
                             if (from.Distance(spell.endPos) < spell.radius &&
