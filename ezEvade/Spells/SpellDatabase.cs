@@ -1996,7 +1996,7 @@ namespace ezEvade
                 name = "Dredge Line",
                 projectileSpeed = 2000,
                 radius = 90,
-                range = 1080,
+                range = 1250,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "NautilusAnchorDrag",
