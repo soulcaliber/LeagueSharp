@@ -59,6 +59,7 @@ namespace ezEvade
 
         private static MissileClient testMissile = null;
         private static float testMissileStartTime = 0;
+        private static float testMissileStartSpeed = 0;
 
         public EvadeTester(Menu mainMenu)
         {
@@ -192,8 +193,8 @@ namespace ezEvade
 
                 if (unit.IsMe)
                 {
-                    Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.Last().To2D(), 500));
-                    Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.First().To2D(), 500));
+                    //Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.Last().To2D(), 500));
+                    //Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.First().To2D(), 500));
                 }
 
             }
@@ -290,15 +291,28 @@ namespace ezEvade
                 //return;
             }
 
+
+            var testMissileSpeedStartTime = EvadeUtils.TickCount;
+            var testMissileSpeedStartPos = missile.Position.To2D();
+
+            DelayAction.Add(250, () =>
+            {
+                if (missile != null && missile.IsValid && !missile.IsDead)
+                {
+                    testMissileSpeedStartTime = EvadeUtils.TickCount;
+                    testMissileSpeedStartPos = missile.Position.To2D();
+                }
+            });
+
             testMissile = missile;
             testMissileStartTime = EvadeUtils.TickCount;
 
             ConsolePrinter.Print("Est.CastTime: " + (EvadeUtils.TickCount - lastHeroSpellCastTime));
             ConsolePrinter.Print("Missile Name " + missile.SData.Name);
             ConsolePrinter.Print("Missile Speed " + missile.SData.MissileSpeed);
+            ConsolePrinter.Print("Max Speed " + missile.SData.MissileMaxSpeed);
             ConsolePrinter.Print("LineWidth " + missile.SData.LineWidth);
             ConsolePrinter.Print("Range " + missile.SData.CastRange);
-            ConsolePrinter.Print("Accel " + missile.SData.MissileAccel);
             //ConsolePrinter.Print("Angle " + missile.SData.CastConeAngle);
             /*ConsolePrinter.Print("Offset: " + missile.SData.ParticleStartOffset);
             ConsolePrinter.Print("Missile Speed " + missile.SData.MissileSpeed);
@@ -311,6 +325,15 @@ namespace ezEvade
                 new Draw.RenderCircle(missile.StartPosition.To2D(), 500));
             Draw.RenderObjects.Add(
                 new Draw.RenderCircle(missile.EndPosition.To2D(), 500));
+
+            DelayAction.Add(750, () =>
+            {
+                if (missile != null && missile.IsValid && !missile.IsDead)
+                {
+                    var dist = missile.Position.To2D().Distance(testMissileSpeedStartPos);
+                    ConsolePrinter.Print("Est.Missile speed: " + dist / (EvadeUtils.TickCount - testMissileSpeedStartTime));
+                }
+            });
 
             SpellData spellData;
 
@@ -602,9 +625,6 @@ namespace ezEvade
 
             if (args.Order == GameObjectOrder.MoveTo)
             {
-
-                Draw.RenderObjects.Add(new Draw.RenderCircle(myHero.ServerPosition.To2D(), 500, Color.Red));
-
                 if (testMenu.Item("EvadeTesterPing").GetValue<bool>())
                 {
                     ConsolePrinter.Print("Sending Path ClickTime: " + (EvadeUtils.TickCount - lastRightMouseClickTime));
@@ -728,7 +748,7 @@ namespace ezEvade
                     Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), spell.info.radius, Color.White, 3);*/
                 }
             }
-            
+
             if (testMenu.Item("TestHeroPos").GetValue<bool>())
             {
                 var path = myHero.Path;
@@ -888,6 +908,7 @@ namespace ezEvade
                 if (testMissile != null)
                 {
                     //Render.Circle.DrawCircle(testMissile.Position, testMissile.BoundingRadius, Color.White, 3);
+                    
                 }
             }
 

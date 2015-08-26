@@ -167,6 +167,15 @@ namespace ezEvade
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
             float spellActivationTime = ObjectCache.menuCache.cache["SpellActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer;
 
+            if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
+            {
+                var extraWindupDelay = Evade.lastWindupTime - EvadeUtils.TickCount;
+                if (extraWindupDelay > 0)
+                {
+                    return false;
+                }
+            }
+
             foreach (var evadeSpell in sortedEvadeSpells)
             {
                 var processSpell = true;
@@ -176,6 +185,7 @@ namespace ezEvade
                     || (evadeSpell.isItem == false && !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
                     || (evadeSpell.isItem == true && !(Items.CanUseItem((int)evadeSpell.itemID)))
                     || (evadeSpell.checkSpellName == true && myHero.Spellbook.GetSpell(evadeSpell.spellKey).Name != evadeSpell.spellName))
+           
                 {
                     continue; //can't use spell right now               
                 }

@@ -31,6 +31,7 @@ namespace ezEvade
         public bool hasComfortZone = true;
         public Obj_AI_Base target = null;
         public bool recalculatedPath = false;
+        public float speed = 0;
 
         public PositionInfo(
             Vector2 position,

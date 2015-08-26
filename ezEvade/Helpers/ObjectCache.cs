@@ -15,6 +15,7 @@ namespace ezEvade
         public Obj_AI_Hero hero;
         public Vector2 serverPos2D;
         public Vector2 serverPos2DExtra;
+        public Vector2 serverPos2DPing;
         public Vector2 currentPosition;
         public bool isMoving;
         public float boundingRadius;
@@ -36,7 +37,8 @@ namespace ezEvade
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
 
             serverPos2D = hero.ServerPosition.To2D(); //CalculatedPosition.GetPosition(hero, Game.Ping);
-            serverPos2DExtra = EvadeUtils.GetGamePosition(hero, Game.Ping + extraDelayBuffer); 
+            serverPos2DExtra = EvadeUtils.GetGamePosition(hero, Game.Ping + extraDelayBuffer);
+            serverPos2DPing = EvadeUtils.GetGamePosition(hero, Game.Ping);
             //CalculatedPosition.GetPosition(hero, Game.Ping + extraDelayBuffer);            
             currentPosition = hero.Position.To2D(); //CalculatedPosition.GetPosition(hero, 0); 
             boundingRadius = hero.BoundingRadius;

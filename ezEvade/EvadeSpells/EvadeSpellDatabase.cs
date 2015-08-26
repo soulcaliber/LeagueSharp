@@ -665,6 +665,7 @@ namespace ezEvade
                 name = "Flash",
                 spellName = "summonerflash",
                 range = 400,
+                fixedRange = true, //test
                 spellDelay = 50,
                 isSummonerSpell = true,
                 spellKey = SpellSlot.R,
