@@ -2071,11 +2071,11 @@ namespace ezEvade
             {
                 charName = "Orianna",
                 dangerlevel = 2,
-                hasEndExplosion = true,
+                //hasEndExplosion = true,
                 name = "OrianaIzunaCommand",
                 projectileSpeed = 1200,
                 radius = 80,
-                secondaryRadius = 165,
+                secondaryRadius = 170,
                 range = 2000,
                 spellDelay = 0,
                 spellKey = SpellSlot.Q,
@@ -3073,13 +3073,13 @@ namespace ezEvade
             {
                 charName = "Zed",
                 dangerlevel = 2,
-                name = "ZedShuriken",
+                name = "ZedShuriken",                
                 projectileSpeed = 1700,
                 radius = 50,
                 range = 925,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                spellName = "ZedShuriken",
+                spellName = "ZedQ",
                 spellType = SpellType.Line,
             });
 

@@ -19,7 +19,7 @@ namespace ezEvade.SpecialSpells
 
         public void LoadSpecialSpell(SpellData spellData)
         {
-            if (spellData.spellName == "ZedShuriken")
+            if (spellData.spellName == "ZedQ")
             {
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_ZedShuriken;
                 MissileClient.OnCreate += SpellMissile_ZedShadowDash;
@@ -61,7 +61,7 @@ namespace ezEvade.SpecialSpells
         private static void ProcessSpell_ZedShuriken(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
             SpecialSpellEventArgs specialSpellArgs)
         {
-            if (spellData.spellName == "ZedShuriken")
+            if (spellData.spellName == "ZedQ")
             {
                 foreach (KeyValuePair<int, ObjectTrackerInfo> entry in ObjectTracker.objTracker)
                 {
@@ -101,7 +101,7 @@ namespace ezEvade.SpecialSpells
 
             MissileClient missile = (MissileClient)obj;
 
-            if (missile.SpellCaster.IsEnemy && missile.SData.Name == "ZedShadowDashMissile")
+            if (missile.SpellCaster.IsEnemy && missile.SData.Name == "ZedWMissile")
             {
                 if (!ObjectTracker.objTracker.ContainsKey(obj.NetworkId))
                 {

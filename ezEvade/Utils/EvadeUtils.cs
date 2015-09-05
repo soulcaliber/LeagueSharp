@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Diagnostics;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -14,7 +12,6 @@ namespace ezEvade
 {
     public static class EvadeUtils
     {
-        private static Stopwatch stopWatch = Stopwatch.StartNew();
         public static Random random = new Random(DateTime.Now.Millisecond);
         private static DateTime assemblyLoadTime = DateTime.Now;
 

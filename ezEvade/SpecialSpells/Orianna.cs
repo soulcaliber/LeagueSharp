@@ -34,15 +34,15 @@ namespace ezEvade.SpecialSpells
                 ObjectTracker.objTracker.Add(hero.NetworkId, info);
 
                 Obj_AI_Minion.OnCreate += (obj, args) => OnCreateObj_OrianaIzunaCommand(obj, args, hero);
-                Obj_AI_Minion.OnDelete += (obj, args) => OnDeleteObj_OrianaIzunaCommand(obj, args, hero);
+                //Obj_AI_Minion.OnDelete += (obj, args) => OnDeleteObj_OrianaIzunaCommand(obj, args, hero);
                 Obj_AI_Hero.OnProcessSpellCast += ProcessSpell_OrianaRedactCommand;
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_OrianaIzunaCommand;
             }
         }
 
         private static void OnCreateObj_OrianaIzunaCommand(GameObject obj, EventArgs args, Obj_AI_Hero hero)
-        {
-            if (obj.Name == "Orianna_Ball_Flash_Reverse.troy" && obj.IsEnemy)
+        {                        
+            if (obj.Name.Contains("Orianna") && obj.Name.Contains("Ball_Flash_Reverse") && obj.IsEnemy)
             {
                 foreach (KeyValuePair<int, ObjectTrackerInfo> entry in ObjectTracker.objTracker)
                 {
@@ -59,7 +59,7 @@ namespace ezEvade.SpecialSpells
 
         private static void OnDeleteObj_OrianaIzunaCommand(GameObject obj, EventArgs args, Obj_AI_Hero hero)
         {
-            if (obj.Name == "oriana_ball_glow_red.troy" && obj.IsEnemy)
+            if (obj.Name.Contains("Orianna") && obj.Name.Contains("ball_glow_red") && obj.IsEnemy)
             {
                 foreach (KeyValuePair<int, ObjectTrackerInfo> entry in ObjectTracker.objTracker)
                 {
@@ -112,14 +112,20 @@ namespace ezEvade.SpecialSpells
                     {
                         if (info.usePosition)
                         {
-                            SpellDetector.CreateSpellData(hero, info.position, args.End, spellData, null, 0);
+                            SpellDetector.CreateSpellData(hero, info.position, args.End, spellData, null, 0, false);
+                            SpellDetector.CreateSpellData(hero, info.position, args.End,
+                spellData, null, 150, true, SpellType.Circular, false, spellData.secondaryRadius);
+
                         }
                         else
                         {
                             if (info.obj == null)
                                 return;
 
-                            SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0);
+                            SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0, false);
+                            SpellDetector.CreateSpellData(hero, info.obj.Position, args.End,
+                spellData, null, 150, true, SpellType.Circular, false, spellData.secondaryRadius);
+
                         }
 
                         info.position = args.End;

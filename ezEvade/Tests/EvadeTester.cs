@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using System.Diagnostics;
-
 using Color = System.Drawing.Color;
 
 using LeagueSharp;
@@ -176,7 +174,7 @@ namespace ezEvade
             {
                 if (testMenu.Item("TestSpellEndTime").GetValue<bool>())
                 {
-                    ConsolePrinter.Print("Dash windup: " + (EvadeUtils.TickCount - EvadeSpell.lastSpellEvadeCommand.timestamp));
+                    //ConsolePrinter.Print("Dash windup: " + (EvadeUtils.TickCount - EvadeSpell.lastSpellEvadeCommand.timestamp));
                 }
 
                 if (args.IsDash && testMenu.Item("ShowDashInfo").GetValue<bool>())
