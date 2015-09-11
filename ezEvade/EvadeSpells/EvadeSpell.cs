@@ -311,7 +311,7 @@ namespace ezEvade
                 }
                 else if (evadeSpell.evadeType == EvadeType.WindWall)
                 {
-                    if (spell.hasProjectile())
+                    if (spell.hasProjectile() || evadeSpell.spellName == "FioraW") //temp fix, don't have fiora :'(
                     {
                         var dir = (spell.startPos - ObjectCache.myHeroCache.serverPos2D).Normalized();
                         var pos = ObjectCache.myHeroCache.serverPos2D + dir * 100;

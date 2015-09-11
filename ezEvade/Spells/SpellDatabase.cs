@@ -3032,8 +3032,9 @@ namespace ezEvade
             {
                 charName = "Yasuo",
                 dangerlevel = 3,
+                missileName = "yasuoq3mis",
                 name = "Steel Tempest3",
-                projectileSpeed = 1500,
+                projectileSpeed = 1200,
                 radius = 90,
                 range = 1025,
                 spellDelay = 250,
@@ -3083,7 +3084,7 @@ namespace ezEvade
                 spellType = SpellType.Line,
             });
 
-            Spells.Add(
+            /*Spells.Add(
             new SpellData
             {
                 charName = "Zed",
@@ -3092,11 +3093,11 @@ namespace ezEvade
                 radius = 290,
                 range = 290,
                 spellKey = SpellSlot.E,
-                spellName = "ZedPBAOEDummy",
+                spellName = "ZedE",
                 spellType = SpellType.Circular,
                 isSpecial = true,
                 defaultOff = true,
-            });
+            });*/
 
             #endregion Zed
 

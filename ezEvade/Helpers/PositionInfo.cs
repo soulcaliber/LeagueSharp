@@ -23,6 +23,7 @@ namespace ezEvade
         public List<int> spellList = new List<int>();
         public Vector2 position;
         public float timestamp;
+        public float endTime = 0;
         public bool hasExtraDistance = false;
         public float closestDistance = float.MaxValue;
         public float intersectionTime = float.MaxValue;

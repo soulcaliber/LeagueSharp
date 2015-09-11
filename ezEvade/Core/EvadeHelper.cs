@@ -271,7 +271,7 @@ namespace ezEvade
                     if (PositionInfoStillValid(posInfo))
                     {
 
-                        if (posInfo.position.CheckDangerousPos(extraEvadeDistance))
+                        if (posInfo.position.CheckDangerousPos(extraEvadeDistance)) //extra evade distance, no multiple skillshots
                         {
                             posInfo.position = GetExtendedSafePosition(ObjectCache.myHeroCache.serverPos2D, posInfo.position, extraEvadeDistance);
                         }

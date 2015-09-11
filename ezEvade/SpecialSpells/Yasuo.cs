@@ -28,7 +28,18 @@ namespace ezEvade.SpecialSpells
                 }
 
                 Obj_AI_Hero.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
-            }  
+            }
+
+            if (spellData.spellName == "yasuoq3w")
+            {
+                Obj_AI_Hero hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Yasuo");
+                if (hero == null)
+                {
+                    return;
+                }
+
+                Obj_AI_Hero.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
+            } 
         }
 
         private static void ProcessSpell_YasuoQW(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData)
