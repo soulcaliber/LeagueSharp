@@ -63,6 +63,7 @@ namespace ezEvade
         public SpellTargets[] spellTargets = { };
         public UseSpellFunc useSpellFunc = null;
         public bool isSpecial = false;
+        public bool untargetable = false;
 
         public EvadeSpellData()
         {

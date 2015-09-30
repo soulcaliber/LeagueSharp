@@ -256,6 +256,12 @@ namespace ezEvade
 
             ConsolePrinter.Print(sender.Type + " : " + sender.Name);*/
 
+            var minion = obj as Obj_AI_Minion;
+            if(minion != null){
+
+                ConsolePrinter.Print(minion.BaseSkinName);
+            }
+
             if (obj.IsValid<MissileClient>())
             {
                 MissileClient autoattack = (MissileClient)obj;

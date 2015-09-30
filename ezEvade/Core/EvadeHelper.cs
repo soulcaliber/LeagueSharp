@@ -1129,9 +1129,15 @@ namespace ezEvade
                     return CheckMoveToDirection(EvadeSpell.lastSpellEvadeCommand.targetPosition, movePos);
                 }
             }*/
-
-
-            var path = myHero.GetPath(movePos.To3D());
+            var startPoint = myHero.Position;
+            
+            if (myHero.IsDashing())
+            {
+                var dashItem = myHero.GetDashInfo();
+                startPoint = dashItem.EndPos.To3D();                
+            }
+            
+            var path = myHero.GetPath(startPoint, movePos.To3D()); //from serverpos
             Vector2 lastPoint = Vector2.Zero;
 
             foreach (Vector3 point in path)

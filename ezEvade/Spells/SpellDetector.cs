@@ -58,11 +58,10 @@ namespace ezEvade
         {
             MissileClient.OnCreate += SpellMissile_OnCreate;
             MissileClient.OnDelete += SpellMissile_OnDelete;
-
-            Obj_SpellMissile.OnCreate += SpellMissile_OnCreateOld;
-            Obj_SpellMissile.OnDelete += SpellMissile_OnDeleteOld;
-            
+                        
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
+
+            //Obj_AI_Hero.OnEnterVisiblityClient += Game_OnEnterVisiblity;
 
             Game.OnUpdate += Game_OnGameUpdate;
 
@@ -73,6 +72,11 @@ namespace ezEvade
 
             LoadSpellDictionary();
             InitChannelSpells();
+        }
+
+        private void Game_OnEnterVisiblity(AttackableUnit sender, EventArgs args)
+        {
+            Console.WriteLine(sender.Name);
         }
                 
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
@@ -101,6 +105,8 @@ namespace ezEvade
                             return;
                         }
 
+                        var objectAssigned = false;
+
                         foreach (KeyValuePair<int, Spell> entry in spells)
                         {
                             Spell spell = entry.Value;
@@ -116,6 +122,8 @@ namespace ezEvade
                                     && spell.info.isSpecial == false)
                                 {
                                     spell.spellObject = obj;
+                                    objectAssigned = true;
+                                    break;
 
                                     /*if(spell.spellType == SpellType.Line)
                                     {
@@ -137,6 +145,11 @@ namespace ezEvade
                                     //Console.WriteLine("AcquiredTime: " + acquisitionTime);
                                 }
                             }
+                        }
+
+                        if (objectAssigned == false)
+                        {
+                            CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
                         }
                     }
                     else

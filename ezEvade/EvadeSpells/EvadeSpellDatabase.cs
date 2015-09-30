@@ -413,6 +413,7 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.Dash,
                 castType = CastType.Position,
+                untargetable = true,
             });
 
             #endregion
@@ -512,7 +513,7 @@ namespace ezEvade
                 name = "RocketJump",
                 spellName = "RocketJump",
                 range = 900,
-                spellDelay = 250,
+                spellDelay = 500,
                 speed = 1100,
                 spellKey = SpellSlot.W,
                 evadeType = EvadeType.Dash,
@@ -611,6 +612,7 @@ namespace ezEvade
                 evadeType = EvadeType.Blink,
                 castType = CastType.Target,
                 spellTargets = new[] { SpellTargets.EnemyChampions, SpellTargets.EnemyMinions },
+                untargetable = true,
             });
 
             #endregion

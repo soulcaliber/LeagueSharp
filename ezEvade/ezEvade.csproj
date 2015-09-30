@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ezEvade</RootNamespace>
     <AssemblyName>ezEvade</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PreBuildEvent />
     <PostBuildEvent />
     <OutputPath>bin\Release</OutputPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -67,6 +68,7 @@
     <Compile Include="SpecialSpells\ChampionPlugin.cs" />
     <Compile Include="SpecialSpells\Ekko.cs" />
     <Compile Include="SpecialSpells\Fizz.cs" />
+    <Compile Include="SpecialSpells\Heimerdinger.cs" />
     <Compile Include="SpecialSpells\JarvanIV.cs" />
     <Compile Include="SpecialSpells\Jayce.cs" />
     <Compile Include="SpecialSpells\Jinx.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="SpecialSpells\Lulu.cs" />
     <Compile Include="SpecialSpells\Lux.cs" />
     <Compile Include="SpecialSpells\Malzahar.cs" />
+    <Compile Include="SpecialSpells\Twitch.cs" />
     <Compile Include="Spells\ObjectTracker.cs" />
     <Compile Include="SpecialSpells\Orianna.cs" />
     <Compile Include="SpecialSpells\Sion.cs" />

@@ -119,7 +119,7 @@ namespace ezEvade.SpecialSpells
                         }
                         else
                         {
-                            if (info.obj == null)
+                            if (info.obj == null || !info.obj.IsValid || info.obj.IsDead)
                                 return;
 
                             SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0, false);
@@ -151,7 +151,7 @@ namespace ezEvade.SpecialSpells
                         }
                         else
                         {
-                            if (info.obj == null)
+                            if (info.obj == null || !info.obj.IsValid || info.obj.IsDead)
                                 return;
 
                             Vector3 endPos2 = info.obj.Position;

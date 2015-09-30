@@ -320,6 +320,7 @@ namespace ezEvade
                 lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
             }
 
+            //block spell commmands if evade spell just used
             if (EvadeSpell.lastSpellEvadeCommand != null && EvadeSpell.lastSpellEvadeCommand.timestamp + ObjectCache.gamePing + 150 > EvadeUtils.TickCount)
             {
                 args.Process = false;
@@ -354,35 +355,42 @@ namespace ezEvade
 
             foreach (var evadeSpell in EvadeSpell.evadeSpells)
             {
-                if (evadeSpell.isItem == false && evadeSpell.spellKey == args.Slot)
+                if (evadeSpell.isItem == false && evadeSpell.spellKey == args.Slot 
+                    && evadeSpell.untargetable == false)
                 {
-                    if (evadeSpell.evadeType == EvadeType.Blink
-                        || evadeSpell.evadeType == EvadeType.Dash)
+                    if (//evadeSpell.evadeType == EvadeType.Blink || 
+                        evadeSpell.evadeType == EvadeType.Dash)
                     {
                         //Block spell cast if flashing/blinking into spells
-                        if (args.EndPosition.To2D().CheckDangerousPos(6, true)) //for blink + dash
+                        /*if (args.EndPosition.To2D().CheckDangerousPos(6, true)) //for blink + dash
                         {
                             args.Process = false;
                             return;
-                        }
+                        }*/
 
                         if (evadeSpell.evadeType == EvadeType.Dash)
                         {
-                            var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-                            var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
+                            //var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
+                            //var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
 
-                            var dashPos = Game.CursorPos.To2D(); //real pos?
+                            var dashPos = args.StartPosition.To2D(); //real pos?
 
-                            if (evadeSpell.fixedRange)
+                            if (args.Target != null)
+                            {
+                                dashPos = args.Target.Position.To2D();
+                            }
+
+                            if (evadeSpell.fixedRange
+                                || dashPos.Distance(myHero.ServerPosition.To2D()) > evadeSpell.range)
                             {
                                 var dir = (dashPos - myHero.ServerPosition.To2D()).Normalized();
                                 dashPos = myHero.ServerPosition.To2D() + dir * evadeSpell.range;
                             }
 
-                            //Draw.RenderObjects.Add(new Draw.RenderPosition(dashPos, 1000));
+                            //Draw.RenderObjects.Add(new Draw.RenderCircle(dashPos, 1000));
 
                             var posInfo = EvadeHelper.CanHeroWalkToPos(dashPos, evadeSpell.speed,
-                                extraDelayBuffer + ObjectCache.gamePing, extraDist);
+                                ObjectCache.gamePing, 0);
 
                             if (posInfo.posDangerLevel > 0)
                             {
@@ -873,18 +881,19 @@ namespace ezEvade
                 }
                 else
                 {
-                    var calculationTimer = EvadeUtils.TickCount;
 
                     var posInfo = EvadeHelper.GetBestPosition();
 
+                    var calculationTimer = EvadeUtils.TickCount;
                     var caculationTime = EvadeUtils.TickCount - calculationTimer;
 
-                    if (numCalculationTime > 0)
+                    //computing time
+                    /*if (numCalculationTime > 0)
                     {
                         sumCalculationTime += caculationTime;
                         avgCalculationTime = sumCalculationTime / numCalculationTime;
                     }
-                    numCalculationTime += 1;
+                    numCalculationTime += 1;*/
 
                     //Console.WriteLine("CalculationTime: " + caculationTime);
 

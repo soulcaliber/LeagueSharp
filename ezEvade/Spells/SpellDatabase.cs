@@ -1190,6 +1190,57 @@ namespace ezEvade
                 spellType = SpellType.Circular,
 
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Heimerdinger",
+                dangerlevel = 2,
+                name = "HeimerdingerW",
+                projectileSpeed = 2500,
+                radius = 50,
+                range = 1350,
+                spellDelay = 250,
+                spellKey = SpellSlot.W,
+                spellName = "HeimerdingerW",
+                spellType = SpellType.Line,
+                isSpecial = true,
+                defaultOff = true,
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Heimerdinger",
+                dangerlevel = 2,
+                name = "Turret Energy Blast",
+                projectileSpeed = 1650,
+                radius = 50,
+                range = 1000,
+                spellDelay = 435,
+                spellKey = SpellSlot.Q,
+                spellName = "HeimerdingerTurretEnergyBlast",
+                spellType = SpellType.Line,
+                isSpecial = true,
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Heimerdinger",
+                dangerlevel = 3,
+                name = "Turret Energy Blast",
+                projectileSpeed = 1650,
+                radius = 75,
+                range = 1000,
+                spellDelay = 350,
+                spellKey = SpellSlot.Q,
+                spellName = "HeimerdingerTurretBigEnergyBlast",
+                spellType = SpellType.Line,
+
+            });
             #endregion Heimerdinger
 
             #region Irelia
@@ -1292,23 +1343,22 @@ namespace ezEvade
             {
                 charName = "Jayce",
                 dangerlevel = 3,
-                missileName = "JayceShockBlastWallMis",
+                missileName = "JayceShockBlastMis",
                 name = "JayceShockBlastCharged",
                 projectileSpeed = 2350,
                 radius = 70,
-                range = 1170,
+                range = 1570,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                spellName = "JayceShockBlastWall",
+                spellName = "jayceshockblast",
                 spellType = SpellType.Line,
-                usePackets = true,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 hasEndExplosion = true,
                 secondaryRadius = 250,
 
             });
 
-            Spells.Add(
+            /*Spells.Add(
             new SpellData
             {
                 charName = "Jayce",
@@ -1326,7 +1376,7 @@ namespace ezEvade
                 hasEndExplosion = true,
                 secondaryRadius = 175,
 
-            });
+            });*/
             #endregion Jayce
 
             #region Jinx
@@ -2639,6 +2689,26 @@ namespace ezEvade
             });
             #endregion TwistedFate
 
+            #region Twitch
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Twitch",
+                dangerlevel = 2,
+                name = "Loaded Dice",
+                projectileSpeed = 4000,
+                radius = 60,
+                range = 1100,
+                spellDelay = 250,
+                spellKey = SpellSlot.R,
+                spellName = "TwitchSprayandPrayAttack",
+                spellType = SpellType.Line,
+                defaultOff = true,
+            });
+
+            #endregion Twitch
+
             #region Urgot
 
             Spells.Add(
@@ -2768,7 +2838,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Veigar",
-                dangerlevel = 4,
+                dangerlevel = 3,
                 name = "VeigarEventHorizon",
                 radius = 425,
                 range = 700,
@@ -3210,9 +3280,9 @@ namespace ezEvade
             {
                 charName = "Zyra",
                 dangerlevel = 2,
-                missileName = "ZyraPassiveDeathMissile",
+                missileName = "zyrapassivedeathmanager",
                 name = "Zyra Passive",
-                projectileSpeed = 2200,
+                projectileSpeed = 1900,
                 radius = 70,
                 range = 1474,
                 spellDelay = 500,
