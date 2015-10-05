@@ -367,7 +367,7 @@ namespace UtilityPlus.SpellTracker
                     }
 
 
-                    if (spellState != (SpellState)12)
+                    if (spellState != SpellState.NotLearned)
                     {
                         var color = Color.Orange;
 
@@ -417,7 +417,7 @@ namespace UtilityPlus.SpellTracker
                         Drawing.DrawLine(new Vector2(startX, startY), new Vector2(startX + 20, startY), 5, Color.Gray);
                     }
 
-                    if (spellState != (SpellState)12)
+                    if (spellState != SpellState.NotLearned)
                     {
                         var color = Color.Yellow;
 

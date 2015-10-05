@@ -48,10 +48,6 @@ namespace UtilityPlus
             pluginMenu.AddItem(new MenuItem("LoadTowerRange", "Load TowerRange Plugin").SetValue(true));
             pluginMenu.AddItem(new MenuItem("LoadPluginDescription", "    -- Reload to take effect --"));
 
-            /*pluginMenu.Item("LoadSpellTracker").ValueChanged += OnLoadSpellTrackerChange;
-            pluginMenu.Item("LoadWardTracker").ValueChanged += OnLoadWardTrackerChange;
-            pluginMenu.Item("LoadTowerRange").ValueChanged += OnLoadTowerRangeChange;*/
-
             menu.AddSubMenu(pluginMenu);
             menu.AddToMainMenu();
 
