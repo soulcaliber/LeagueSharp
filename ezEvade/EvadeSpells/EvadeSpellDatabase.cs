@@ -378,6 +378,22 @@ namespace ezEvade
                 castType = CastType.Position,
             });
 
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Fiora",
+                dangerlevel = 3,
+                name = "FioraQ",
+                spellName = "FioraQ",
+                range = 340,
+                fixedRange = true,
+                speed = 1100,
+                spellDelay = 50,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
+            });
+
             #endregion
 
             #region Fizz

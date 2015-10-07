@@ -262,7 +262,7 @@ namespace ezEvade
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
             try
-            {               
+            {             
                 /*var castTime2 = (hero.Spellbook.CastTime - Game.Time) * 1000;
                 if (castTime2 > 0)
                 {

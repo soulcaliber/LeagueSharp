@@ -149,21 +149,36 @@ namespace ezEvade
             return false;
         }
 
-        public static float GetPositionValue(this Vector2 pos)
+        public static float GetEnemyPositionValue(this Vector2 pos)
         {
-            float posValue = pos.Distance(Game.CursorPos.To2D());
+            float posValue = 0;
 
             if (ObjectCache.menuCache.cache["PreventDodgingNearEnemy"].GetValue<bool>())
             {
                 var minComfortDistance = ObjectCache.menuCache.cache["MinComfortZone"].GetValue<Slider>().Value;
-                var distanceToChampions = pos.GetDistanceToChampions();
 
-                if (minComfortDistance > distanceToChampions)
+                foreach (var hero in HeroManager.Enemies)
                 {
-                    posValue += 2 * (minComfortDistance - distanceToChampions);
-                }
+                    if (hero != null && hero.IsValid && !hero.IsDead && hero.IsVisible)
+                    {
+                        var heroPos = hero.ServerPosition.To2D();
+                        var dist = heroPos.Distance(pos);
+
+                        if (minComfortDistance > dist)
+                        {
+                            posValue += 2 * (minComfortDistance - dist);
+                        }
+                    }
+                }                
             }
 
+            return posValue;
+        }
+
+        public static float GetPositionValue(this Vector2 pos)
+        {
+            float posValue = pos.Distance(Game.CursorPos.To2D());
+                        
             if (ObjectCache.menuCache.cache["PreventDodgingUnderTower"].GetValue<bool>())
             {
                 var turretRange = 875 + ObjectCache.myHeroCache.boundingRadius;

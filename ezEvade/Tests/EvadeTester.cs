@@ -89,6 +89,8 @@ namespace ezEvade
 
             Game.OnWndProc += Game_OnWndProc;
 
+            Obj_AI_Base.OnDoCast += Game_OnDoCast;
+
             Obj_AI_Hero.OnNewPath += ObjAiHeroOnOnNewPath;
 
             SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
@@ -105,6 +107,7 @@ namespace ezEvade
             testMenu.AddItem(new MenuItem("ShowBuffs", "ShowBuffs").SetValue(true));
             testMenu.AddItem(new MenuItem("ShowDashInfo", "ShowDashInfo").SetValue(true));
             testMenu.AddItem(new MenuItem("ShowProcessSpell", "ShowProcessSpell").SetValue(true));
+            testMenu.AddItem(new MenuItem("ShowDoCastInfo", "ShowDoCastInfo").SetValue(true));
             testMenu.AddItem(new MenuItem("ShowMissileInfo", "ShowMissileInfo").SetValue(true));
             testMenu.AddItem(new MenuItem("ShowWindupTime", "ShowWindupTime").SetValue(true));
             testMenu.AddItem(new MenuItem("TestMoveTo", "TestMoveTo").SetValue(new KeyBind('L', KeyBindType.Toggle, false)));
@@ -112,6 +115,16 @@ namespace ezEvade
             menu.AddSubMenu(testMenu);
 
             Game_OnGameLoad();
+        }
+
+        private void Game_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!testMenu.Item("ShowDoCastInfo").GetValue<bool>())
+            {
+                return;
+            }
+
+            ConsolePrinter.Print("DoCast " + sender.Name + ": " + args.SData.Name);
         }
 
         private void Game_OnWndProc(WndEventArgs args)
@@ -425,6 +438,8 @@ namespace ezEvade
                 var testVar = cacheVar;
             }
             ConsolePrinter.Print("Test time1: " + (Evade.GetTickCount - testTime));*/
+
+            ConsolePrinter.Print("NetworkID: " + args.MissileNetworkId);
 
             lastHeroSpellCastTime = EvadeUtils.TickCount;
 

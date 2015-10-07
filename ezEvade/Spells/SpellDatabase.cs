@@ -2847,6 +2847,7 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "VeigarEventHorizon",
                 spellType = SpellType.Circular,
+                defaultOff = true,
             });
 
             #endregion Veigar
@@ -3055,7 +3056,7 @@ namespace ezEvade
                 spellDelay = 500,
                 spellKey = SpellSlot.Q,
                 spellName = "xeratharcanopulse2",
-                extraSpellNames = new [] {"XerathArcanopulseChargeUp"},
+                //extraSpellNames = new [] {"XerathArcanopulseChargeUp"},
                 useEndPosition = true,
                 spellType = SpellType.Line,
                 //isSpecial = true,
@@ -3106,7 +3107,7 @@ namespace ezEvade
                 name = "Steel Tempest3",
                 projectileSpeed = 1200,
                 radius = 90,
-                range = 1025,
+                range = 1100,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "yasuoq3w",

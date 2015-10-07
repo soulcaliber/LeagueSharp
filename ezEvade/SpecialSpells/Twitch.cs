@@ -30,7 +30,6 @@ namespace ezEvade.SpecialSpells
             if (spellData.spellName == "TwitchSprayandPrayAttack")
             {
                 spellData.spellDelay = hero.AttackCastDelay * 1000;
-                Console.WriteLine(spellData.spellDelay);
             }
         }
     }

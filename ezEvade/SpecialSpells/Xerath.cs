@@ -21,7 +21,7 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "xeratharcanopulse2")
             {
-                SpellDetector.OnProcessSpecialSpell += ProcessSpell_XerathArcanopulse2;
+                //SpellDetector.OnProcessSpecialSpell += ProcessSpell_XerathArcanopulse2;
             }
         }
 

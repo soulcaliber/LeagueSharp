@@ -97,17 +97,25 @@ namespace ezEvade
                 var dimension = Drawing.GetTextExtent("Evade: ON");
 
                 if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active)
-                {
+                {                    
                     if (Evade.isDodging)
                     {
                         Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "Evade: ON");
                     }
                     else
                     {
-                        if (Evade.isDodgeDangerousEnabled())
-                            Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Yellow, "Evade: ON");
+                        if (ObjectCache.menuCache.cache["DodgeOnlyOnComboKeyEnabled"].GetValue<bool>() == true
+                         && ObjectCache.menuCache.cache["DodgeComboKey"].GetValue<KeyBind>().Active == false)
+                        {
+                            Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: OFF");
+                        }
                         else
-                            Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.White, "Evade: ON");
+                        {
+                            if (Evade.isDodgeDangerousEnabled())
+                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Yellow, "Evade: ON");
+                            else
+                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.White, "Evade: ON");
+                        }                        
                     }
                 }
                 else

@@ -123,6 +123,8 @@ namespace ezEvade
             return
 
                 Evade.isChanneling
+                || (ObjectCache.menuCache.cache["DodgeOnlyOnComboKeyEnabled"].GetValue<bool>() == true &&
+                    ObjectCache.menuCache.cache["DodgeComboKey"].GetValue<KeyBind>().Active == false)
                 || myHero.IsDead
                 || myHero.IsInvulnerable
                 || myHero.IsTargetable == false
