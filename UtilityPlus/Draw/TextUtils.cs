@@ -43,7 +43,7 @@ namespace UtilityPlus
         {
             if (time > 0)
             {
-                return Utils.FormatTime(time);
+                return LeagueSharp.Common.Utils.FormatTime(time);
             }
             else
             {

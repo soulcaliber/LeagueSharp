@@ -44,6 +44,9 @@
     <Reference Include="SharpDX">
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -61,14 +64,21 @@
     <Compile Include="Draw\TextUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SpellTracker\SpellCooldownDatabase.cs" />
     <Compile Include="SpellTracker\SpellDurationDatabase.cs" />
     <Compile Include="SpellTracker\SpellTracker.cs" />
     <Compile Include="SpellTracker\SummonerData.cs" />
+    <Compile Include="SpellTracker\SummonerSpellTracker.cs" />
     <Compile Include="TowerRange\TowerRange.cs" />
     <Compile Include="Utils\ConsolePrinter.cs" />
     <Compile Include="Utils\DelayAction.cs" />
     <Compile Include="Utils\HelperUtils.cs" />
+    <Compile Include="SpellTracker\ImageLoader.cs" />
     <Compile Include="WardTracker\WardData.cs" />
     <Compile Include="WardTracker\WardTracker.cs" />
   </ItemGroup>
@@ -77,6 +87,72 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerBarrier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerBoost.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerClairvoyance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerDot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerExhaust.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerFlash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerHaste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerHeal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerMana.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerOdinGarrison.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerPoroRecall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerPoroThrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerSmite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerSnowball.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerTeleport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\itemsmiteaoe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\s5_summonersmiteduel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\s5_summonersmiteplayerganker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\s5_summonersmitequick.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

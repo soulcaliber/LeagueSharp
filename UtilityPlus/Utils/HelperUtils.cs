@@ -27,5 +27,26 @@ namespace UtilityPlus
                 return (int)DateTime.Now.Subtract(assemblyLoadTime).TotalMilliseconds;
             }
         }
+
+        public static string FormatSpellTime(float time)
+        {
+            int seconds = (int)Math.Ceiling(time / 1000);
+
+            if (seconds > 60)
+            {
+                int minutes = (int)Math.Ceiling(seconds / 60.0f);
+
+                if (minutes > 60)
+                {
+                    return "N/A";
+                }
+                else
+                {
+                    return minutes + "m";
+                }
+            }else{
+                return seconds.ToString();
+            }
+        }
     }
 }

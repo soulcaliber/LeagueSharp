@@ -17,12 +17,15 @@ namespace UtilityPlus.SpellTracker
         public static Dictionary<int, Color> heroS1Color = new Dictionary<int, Color>();
         public static Dictionary<int, Color> heroS2Color = new Dictionary<int, Color>();
 
+        public static Dictionary<int, SummonerSpellTracker> heroS1Tracker = new Dictionary<int, SummonerSpellTracker>();
+        public static Dictionary<int, SummonerSpellTracker> heroS2Tracker = new Dictionary<int, SummonerSpellTracker>();
+
         static SummonerData()
         {
-            LoadSummonerColor();
+            //LoadSummonerSpell();
         }
 
-        private static void LoadSummonerColor()
+        public static void LoadSummonerSpell()
         {
             foreach (var hero in HeroManager.AllHeroes)
             {
@@ -31,14 +34,20 @@ namespace UtilityPlus.SpellTracker
 
                 heroS1Color.Add(hero.NetworkId, GetSummonerColor(spell1.Name));
                 heroS2Color.Add(hero.NetworkId, GetSummonerColor(spell2.Name));
+
+                if (Tracker.useSummonerIcons && !hero.IsMe)
+                {
+                    heroS1Tracker.Add(hero.NetworkId, new SummonerSpellTracker(hero, spell1.Name));
+                    heroS2Tracker.Add(hero.NetworkId, new SummonerSpellTracker(hero, spell2.Name, false));
+                }                
             }
         }
 
         public static Color GetSummonerColor(string name)
         {
             Color color;
-
-            //Console.WriteLine(name);
+                        
+            //Game.PrintChat(name);
 
             switch (name.ToLower())
             {

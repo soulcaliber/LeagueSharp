@@ -45,11 +45,13 @@ namespace UtilityPlus.SpellTracker
 
     class Tracker
     {
-        private static Menu menu;
+        public static Menu menu;
         public static SpellSlot[] summonerSpellSlots = { SpellSlot.Summoner1, SpellSlot.Summoner2 };
         public static SpellSlot[] spellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
 
         public static Color backgroundColor = Color.FromArgb(255, 15, 130, 0);
+
+        public static bool useSummonerIcons = false;
 
         public static float allyOffsetY = 14;
         public static float enemyOffsetY = 16;
@@ -73,19 +75,32 @@ namespace UtilityPlus.SpellTracker
             spellTrackerMenu.AddItem(new MenuItem("TrackAllyCooldown", "Track Allies").SetValue(true));
             spellTrackerMenu.AddItem(new MenuItem("TrackNoMana", "Track Mana Cost").SetValue(true));
             spellTrackerMenu.AddItem(new MenuItem("TrackEnemyRecalls", "Track Recalls").SetValue(true));
+            spellTrackerMenu.AddItem(new MenuItem("TrackerShowTextCooldown", "Show Text Cooldowns").SetValue(false));
+
+            spellTrackerMenu.AddItem(new MenuItem("TrackerIconDescription", "    -- Reload to take effect --"));
+            spellTrackerMenu.AddItem(new MenuItem("TrackSummonerIcons", "Use Summoner Icons").SetValue(false));
 
             menu.AddSubMenu(spellTrackerMenu);
 
+            useSummonerIcons = menu.Item("TrackSummonerIcons").GetValue<bool>();
+
             Obj_AI_Hero.OnProcessSpellCast += Game_OnProcessSpell;
 
-            SummonerData.GetSummonerColor("test");
+            SummonerData.LoadSummonerSpell();
 
+            CustomEvents.Game.OnGameLoad += OnCommonsLoaded;
             Drawing.OnDraw += Drawing_OnDraw;
+
             Obj_AI_Base.OnTeleport += Game_OnTeleport;
 
             Obj_AI_Base.OnCreate += Game_OnCreateObject;
 
             LoadSpecialSpells();
+        }
+
+        private void OnCommonsLoaded(EventArgs args)
+        {
+            Drawing.OnEndScene += Drawing_OnEndScene;
         }
 
         private static void LoadSpecialSpells()
@@ -314,6 +329,80 @@ namespace UtilityPlus.SpellTracker
             }
         }
 
+        private void Drawing_OnEndScene(EventArgs args)
+        {
+            if (!Tracker.useSummonerIcons)
+            {
+                return;
+            }
+
+            foreach (var hero in HeroManager.AllHeroes)
+            {
+                if (hero.IsMe ||
+                    !hero.IsHPBarRendered
+                    || (hero.IsAlly && !menu.Item("TrackAllyCooldown").GetValue<bool>())
+                    || (hero.IsEnemy && !menu.Item("TrackEnemyCooldown").GetValue<bool>())
+                    )
+                {
+                    continue;
+                }
+
+                var startX = hero.HPBarPosition.X - 9;
+                var startY = hero.HPBarPosition.Y +
+                    (hero.IsAlly ? allyOffsetY : enemyOffsetY);
+
+                foreach (var slot in summonerSpellSlots)
+                {
+                    var spell = hero.Spellbook.GetSpell(slot);
+                    var time = spell.CooldownExpires - Game.Time;
+                    var totalCooldown = spell.Cooldown;
+
+                    SpellTrackerInfo spellInfo;
+                    if (spellCooldowns[hero.NetworkId].TryGetValue(spell.Name.ToLower(), out spellInfo))
+                    {
+                        time = (spellInfo.cooldownExpires - HelperUtils.TickCount) / 1000;
+                        totalCooldown = spellInfo.totalCooldown > 0 ? spellInfo.totalCooldown : totalCooldown;
+                    }
+
+                    var percent = (time > 0 && Math.Abs(totalCooldown) > float.Epsilon)
+                            ? 1f - (time / totalCooldown)
+                            : 1f;
+
+                    var spellState = hero.Spellbook.CanUseSpell(slot);
+
+                    if (spellState != SpellState.NotLearned)
+                    {
+                        var color = Color.Green;
+
+                        var summonerTracker = (slot.ToString() == "Summoner1") ?
+                            SummonerData.heroS1Tracker[hero.NetworkId] : SummonerData.heroS2Tracker[hero.NetworkId];
+
+                        if (percent != 1f)
+                        {
+                            /*Drawing.DrawLine(new Vector2(startX + ImageLoader.imageWidth * percent, startY - 1),
+                                            new Vector2(startX + ImageLoader.imageWidth, startY - 1),
+                                            ImageLoader.imageHeight + 1, color);*/
+                            /*Drawing.DrawLine(new Vector2(startX, startY),
+                                            new Vector2(startX + ImageLoader.imageWidth, startY),
+                                            ImageLoader.imageHeight, color2);*/
+
+                            Drawing.DrawLine(new Vector2(startX, startY),
+                                            new Vector2(startX + ImageLoader.imageWidth * percent, startY),
+                                            3, color);
+
+                            summonerTracker.SetGreyScale();
+                        }
+                        else
+                        {
+                            summonerTracker.SetNormalScale();
+                        }
+                    }
+
+                    startY += ImageLoader.imageHeight;
+                }
+            }
+        }
+
         private void Drawing_OnDraw(EventArgs args)
         {
             DrawRecallBars();
@@ -356,6 +445,26 @@ namespace UtilityPlus.SpellTracker
 
                     var spellState = hero.Spellbook.CanUseSpell(slot);
 
+                    if (menu.Item("TrackerShowTextCooldown").GetValue<bool>() && percent != 1f)
+                    {
+                        if (Tracker.useSummonerIcons)
+                        {
+                            TextUtils.DrawText(startX - 20, startY,
+                            Color.White, HelperUtils.FormatSpellTime(time * 1000));
+                        }
+                        else
+                        {
+                            TextUtils.DrawText(startX - 25, startY - 3,
+                            Color.White, HelperUtils.FormatSpellTime(time * 1000));
+                        }                        
+                    }
+
+                    if (Tracker.useSummonerIcons)
+                    {
+                        startY += 12;
+                        continue;
+                    }
+
                     if (percent != 1f)
                     {
                         Drawing.DrawLine(new Vector2(startX, startY), new Vector2(startX + 20, startY), 12, Color.Black);
@@ -367,9 +476,11 @@ namespace UtilityPlus.SpellTracker
                     }
 
 
+
                     if (spellState != SpellState.NotLearned)
                     {
                         var color = Color.Orange;
+
 
                         if (slot == SpellSlot.Summoner1)
                         {
@@ -445,6 +556,12 @@ namespace UtilityPlus.SpellTracker
                             spell.ManaCost > hero.Mana)
                         {
                             color = Color.Pink;
+                        }
+
+                        if (menu.Item("TrackerShowTextCooldown").GetValue<bool>() && percent != 1f)
+                        {
+                            TextUtils.DrawText(startX, startY + 5,
+                                Color.White, HelperUtils.FormatSpellTime(time * 1000));
                         }
 
                         Drawing.DrawLine(new Vector2(startX, startY), new Vector2(startX + 20 * percent, startY), 5, color);
