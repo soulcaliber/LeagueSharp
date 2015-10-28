@@ -42,6 +42,7 @@ namespace ezEvade.SpecialSpells
 
                         if (info.Name == "Shadow" && info.usePosition && info.position.Distance(obj.Position) < 5)
                         {
+                            info.Name = "Shadow";
                             info.usePosition = false;
                             info.obj = obj;
                         }
@@ -52,7 +53,7 @@ namespace ezEvade.SpecialSpells
 
         private static void OnDeleteObj_ZedShuriken(GameObject obj, EventArgs args)
         {
-            if (obj != null && obj.IsValid && obj.Name == "Shadow" && obj.IsEnemy)
+            if (obj != null && obj.Name == "Shadow")
             {
                 ObjectTracker.objTracker.Remove(obj.NetworkId);
             }
@@ -67,7 +68,7 @@ namespace ezEvade.SpecialSpells
                 {
                     var info = entry.Value;
 
-                    if (info.obj.Name == "Shadow" || info.Name == "Shadow")
+                    if (info.Name == "Shadow")
                     {
                         if (info.usePosition == false && (info.obj == null || !info.obj.IsValid || info.obj.IsDead))
                         {

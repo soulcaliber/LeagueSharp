@@ -58,7 +58,7 @@ namespace ezEvade
         {
             MissileClient.OnCreate += SpellMissile_OnCreate;
             MissileClient.OnDelete += SpellMissile_OnDelete;
-                        
+
             Obj_AI_Hero.OnProcessSpellCast += Game_ProcessSpell;
 
             //Obj_AI_Hero.OnEnterVisiblityClient += Game_OnEnterVisiblity;
@@ -78,7 +78,7 @@ namespace ezEvade
         {
             Console.WriteLine(sender.Name);
         }
-                
+
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
         {
             if (!obj.IsValid<MissileClient>())
@@ -118,7 +118,7 @@ namespace ezEvade
                                 && dir.AngleBetween(spell.direction) < 10)
                             {
 
-                                if (spell.info.isThreeWay == false 
+                                if (spell.info.isThreeWay == false
                                     && spell.info.isSpecial == false)
                                 {
                                     spell.spellObject = obj;
@@ -262,7 +262,7 @@ namespace ezEvade
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
             try
-            {             
+            {
                 /*var castTime2 = (hero.Spellbook.CastTime - Game.Time) * 1000;
                 if (castTime2 > 0)
                 {
@@ -283,8 +283,33 @@ namespace ezEvade
 
                         if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
-                            CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
-                                                        
+
+                            bool foundMissile = false;
+
+                            if (spellData.isThreeWay == false && spellData.isSpecial == false)
+                            {
+                                foreach (KeyValuePair<int, Spell> entry in spells)
+                                {
+                                    Spell spell = entry.Value;
+
+                                    var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
+
+                                    if (spell.spellObject != null
+                                        && spell.info.spellName == args.SData.Name
+                                        && spell.heroID == hero.NetworkId
+                                        && dir.AngleBetween(spell.direction) < 10)
+                                    {
+                                        foundMissile = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (foundMissile == false)
+                            {
+                                CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
+                            }
+
                             /*if (spellData.spellType == SpellType.Line)
                             {
                                 var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
@@ -311,7 +336,7 @@ namespace ezEvade
             SpellType spellType = SpellType.None, bool checkEndExplosion = true, float spellRadius = 0)
         {
             if (checkEndExplosion && spellData.hasEndExplosion)
-            {                
+            {
                 CreateSpellData(hero, spellStartPos, spellEndPos,
             spellData, obj, extraEndTick, false,
             spellData.spellType, false);
@@ -361,7 +386,7 @@ namespace ezEvade
                         endTick -= spellData.spellDelay;
                 }
                 else if (spellType == SpellType.Circular)
-                {   
+                {
                     endTick = spellData.spellDelay;
 
                     if (spellData.projectileSpeed == 0)
@@ -371,7 +396,7 @@ namespace ezEvade
                     else if (spellData.projectileSpeed > 0)
                     {
                         if (spellData.spellType == SpellType.Line &&
-                            spellData.hasEndExplosion && 
+                            spellData.hasEndExplosion &&
                             spellData.useEndPosition == false)
                         {
                             endPosition = startPosition + direction * spellData.range;
@@ -419,7 +444,7 @@ namespace ezEvade
 
                 int spellID = CreateSpell(newSpell, processSpell);
 
-                DelayAction.Add((int)(endTick + spellData.extraEndTime), () => DeleteSpell(spellID));               
+                DelayAction.Add((int)(endTick + spellData.extraEndTime), () => DeleteSpell(spellID));
             }
         }
 
@@ -465,7 +490,7 @@ namespace ezEvade
                     }
                 }
 
-                if (spell.endTime + spell.info.extraEndTime < EvadeUtils.TickCount 
+                if (spell.endTime + spell.info.extraEndTime < EvadeUtils.TickCount
                     || CanHeroWalkIntoSpell(spell) == false)
                 {
                     DelayAction.Add(1, () => DeleteSpell(entry.Key));
@@ -543,9 +568,9 @@ namespace ezEvade
 
                 return false;
             }
-                
-            
-            return true;            
+
+
+            return true;
         }
 
         private static void AddDetectedSpells()
@@ -816,7 +841,7 @@ namespace ezEvade
                     if (!championPlugins.ContainsKey(hero.ChampionName))
                     {
                         championPlugins.Add(hero.ChampionName,
-                            (ChampionPlugin) NewInstance(championPlugin));
+                            (ChampionPlugin)NewInstance(championPlugin));
                     }
                 }
             }
@@ -847,7 +872,7 @@ namespace ezEvade
                     {
                         //Console.WriteLine(spell.spellName); 
 
-                        if (!(spell.spellType == SpellType.Circular 
+                        if (!(spell.spellType == SpellType.Circular
                             || spell.spellType == SpellType.Line
                             || spell.spellType == SpellType.Arc))
                             continue;
@@ -884,7 +909,7 @@ namespace ezEvade
                                     onMissileSpells.Add(spellName, spell);
                                 }
                             }
-                                                        
+
                             LoadSpecialSpell(spell);
 
                             string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";

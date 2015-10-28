@@ -186,7 +186,7 @@ namespace ezEvade
             {
                 charName = "Gnar",
                 dangerlevel = 4,
-                name = "GnarE",
+                name = "GnarBigE",
                 spellName = "gnarbige",
                 range = 475,
                 spellDelay = 50,
@@ -649,6 +649,26 @@ namespace ezEvade
                 evadeType = EvadeType.Blink, //behind target
                 castType = CastType.Target,
                 spellTargets = new[] { SpellTargets.Targetables },
+            });
+
+            #endregion
+
+            #region Kindred
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Kindred",
+                dangerlevel = 1,
+                name = "KindredQ",
+                spellName = "KindredQ",
+                range = 300,
+                fixedRange = true,
+                speed = 733,
+                spellDelay = 50,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
             });
 
             #endregion
