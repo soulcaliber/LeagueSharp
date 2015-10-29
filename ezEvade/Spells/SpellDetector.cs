@@ -107,7 +107,7 @@ namespace ezEvade
 
                         var objectAssigned = false;
 
-                        foreach (KeyValuePair<int, Spell> entry in spells)
+                        foreach (KeyValuePair<int, Spell> entry in detectedSpells)
                         {
                             Spell spell = entry.Value;
 
@@ -288,7 +288,7 @@ namespace ezEvade
 
                             if (spellData.isThreeWay == false && spellData.isSpecial == false)
                             {
-                                foreach (KeyValuePair<int, Spell> entry in spells)
+                                foreach (KeyValuePair<int, Spell> entry in detectedSpells)
                                 {
                                     Spell spell = entry.Value;
 

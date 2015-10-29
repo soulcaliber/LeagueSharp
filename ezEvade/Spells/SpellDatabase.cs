@@ -2216,7 +2216,7 @@ namespace ezEvade
                 radius = 65,
                 range = 1500,
                 spellDelay = 125,
-                spellKey = SpellSlot.E,
+                spellKey = SpellSlot.Q,
                 spellName = "reksaiqburrowed",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
