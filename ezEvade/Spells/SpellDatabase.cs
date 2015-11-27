@@ -1243,6 +1243,57 @@ namespace ezEvade
             });
             #endregion Heimerdinger
 
+            #region Illaoi
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Illaoi",
+                dangerlevel = 3,
+                missileName = "Illaoiemis",
+                name = "IllaoiQ",
+                projectileSpeed = int.MaxValue,
+                radius = 100,
+                range = 850,
+                spellDelay = 750,
+                spellKey = SpellSlot.Q,
+                spellName = "IllaoiQ",
+                spellType = SpellType.Line,
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Illaoi",
+                dangerlevel = 3,
+                missileName = "Illaoiemis",
+                name = "IllaoiE",
+                projectileSpeed = 1900,
+                radius = 50,
+                range = 950,
+                spellDelay = 250,
+                spellKey = SpellSlot.E,
+                spellName = "IllaoiE",
+                spellType = SpellType.Line,
+
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Illaoi",
+                dangerlevel = 3,
+                name = "IllaoiR",
+                projectileSpeed = int.MaxValue,
+                range = 0,
+                radius = 450,
+                spellDelay = 500,
+                spellKey = SpellSlot.R,
+                spellName = "IllaoiR",
+                spellType = SpellType.Circular,
+            });
+            #endregion Illaoi
+            
             #region Irelia
 
             Spells.Add(
