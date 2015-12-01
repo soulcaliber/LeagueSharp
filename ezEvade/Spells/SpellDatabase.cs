@@ -1250,9 +1250,7 @@ namespace ezEvade
             {
                 charName = "Illaoi",
                 dangerlevel = 3,
-                missileName = "Illaoiemis",
                 name = "IllaoiQ",
-                projectileSpeed = int.MaxValue,
                 radius = 100,
                 range = 850,
                 spellDelay = 750,
@@ -1284,7 +1282,6 @@ namespace ezEvade
                 charName = "Illaoi",
                 dangerlevel = 3,
                 name = "IllaoiR",
-                projectileSpeed = int.MaxValue,
                 range = 0,
                 radius = 450,
                 spellDelay = 500,
