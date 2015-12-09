@@ -2230,6 +2230,53 @@ namespace ezEvade
             });
             #endregion Pantheon
 
+            #region Poppy
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Poppy",
+                dangerlevel = 2,
+                name = "Hammer Shock",
+                radius = 100,
+                range = 450,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "PoppyQ",
+                spellType = SpellType.Line,
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Poppy",
+                dangerlevel = 3,
+                name = "Keeper's Verdict",
+                radius = 110,
+                range = 450,
+                spellDelay = 350,
+                spellKey = SpellSlot.R,
+                spellName = "PoppyRSpellInstant",
+                spellType = SpellType.Line,
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Poppy",
+                dangerlevel = 3,
+                name = "Keeper's Verdict",
+                radius = 100,
+                range = 1150,
+                projectileSpeed = 1750,
+                spellDelay = 350,
+                spellKey = SpellSlot.R,
+                spellName = "PoppyRSpell",
+                missileName = "PoppyRMissile",
+                spellType = SpellType.Line,
+            });
+            #endregion
+
             #region Quinn
 
             Spells.Add(
@@ -2288,9 +2335,11 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "RengarE",
                 spellType = SpellType.Line,
+                extraMissileNames = new []{ "RengarEFinalMAX"},
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
+
             #endregion Rengar
 
             #region Riven

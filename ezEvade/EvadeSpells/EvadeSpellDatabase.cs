@@ -362,6 +362,25 @@ namespace ezEvade
 
             #endregion
 
+            #region Nidalee
+
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Nidalee",
+                dangerlevel = 4,
+                name = "Pounce",
+                spellName = "Pounce",
+                range = 375,
+                spellDelay = 150,
+                speed = 1750,
+                spellKey = SpellSlot.W,
+                evadeType = EvadeType.Dash,
+                castType = CastType.Position,
+            });
+
+            #endregion
+
             #region Fiora
 
             Spells.Add(
