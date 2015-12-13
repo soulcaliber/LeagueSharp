@@ -183,10 +183,10 @@ namespace ezEvade
         private void SpellMissile_OnCreateOld(GameObject obj, EventArgs args)
         {
 
-            if (!obj.IsValid<Obj_SpellMissile>())
+            if (!obj.IsValid<MissileClient>())
                 return;
 
-            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+            MissileClient missile = (MissileClient)obj;
 
             SpellData spellData;
 
@@ -237,10 +237,10 @@ namespace ezEvade
 
         private void SpellMissile_OnDeleteOld(GameObject obj, EventArgs args)
         {
-            if (!obj.IsValid<Obj_SpellMissile>())
+            if (!obj.IsValid<MissileClient>())
                 return;
 
-            Obj_SpellMissile missile = (Obj_SpellMissile)obj;
+            MissileClient missile = (MissileClient)obj;
             //SpellData spellData;
 
             foreach (var spell in spells.Values.ToList().Where(
@@ -831,10 +831,9 @@ namespace ezEvade
             {
                 var championPlugin = Assembly.GetExecutingAssembly()
                     .GetTypes()
-                    .FindAll(t => t.IsClass && t.Namespace == "ezEvade.SpecialSpells"
+                    .Where(t => t.IsClass && t.Namespace == "ezEvade.SpecialSpells"
                                && t.Name == hero.ChampionName
-                               )
-                    .FirstOrDefault();
+                               ).ToList().FirstOrDefault();
 
                 if (championPlugin != null)
                 {

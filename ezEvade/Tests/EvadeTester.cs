@@ -272,7 +272,7 @@ namespace ezEvade
             var minion = obj as Obj_AI_Minion;
             if(minion != null){
 
-                ConsolePrinter.Print(minion.BaseSkinName);
+                ConsolePrinter.Print(minion.CharData.BaseSkinName);
             }
 
             if (obj.IsValid<MissileClient>())

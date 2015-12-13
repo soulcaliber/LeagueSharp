@@ -158,8 +158,8 @@ namespace ezEvade
                 foreach (var minion in ObjectManager.Get<Obj_AI_Minion>()
                     .Where(h => h.Team == Evade.myHero.Team && h.IsValidTarget(distanceToHero, false, spellPos.To3D())))
                 {
-                    if (minion.BaseSkinName.ToLower() == "teemomushroom"
-                        || minion.BaseSkinName.ToLower() == "shacobox")
+                    if (minion.CharData.BaseSkinName.ToLower() == "teemomushroom"
+                        || minion.CharData.BaseSkinName.ToLower() == "shacobox")
                     {
                         continue;
                     }
