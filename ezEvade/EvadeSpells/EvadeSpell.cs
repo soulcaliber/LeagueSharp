@@ -182,15 +182,15 @@ namespace ezEvade
 
                 if (ObjectCache.menuCache.cache[evadeSpell.name + "UseEvadeSpell"].GetValue<bool>() == false
                     || GetSpellDangerLevel(evadeSpell) > spell.GetSpellDangerLevel()
-                    || (evadeSpell.isItem == false && !(myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) == SpellState.Ready))
-                    || (evadeSpell.isItem == true && !(Items.CanUseItem((int)evadeSpell.itemID)))
-                    || (evadeSpell.checkSpellName == true && myHero.Spellbook.GetSpell(evadeSpell.spellKey).Name != evadeSpell.spellName))
+                    || (evadeSpell.isItem == false && myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) != SpellState.Ready)
+                    || (evadeSpell.isItem && !Items.CanUseItem((int)evadeSpell.itemID))
+                    || (evadeSpell.checkSpellName && myHero.Spellbook.GetSpell(evadeSpell.spellKey).Name != evadeSpell.spellName))
            
                 {
                     continue; //can't use spell right now               
                 }
 
-                float evadeTime, spellHitTime = 0;
+                float evadeTime, spellHitTime;
                 spell.CanHeroEvade(myHero, out evadeTime, out spellHitTime);
 
                 float finalEvadeTime = (spellHitTime - evadeTime);
@@ -242,7 +242,7 @@ namespace ezEvade
                     }
                 }
 
-                if (evadeSpell.isSpecial == true)
+                if (evadeSpell.isSpecial)
                 {
                     if (evadeSpell.useSpellFunc != null)
                     {

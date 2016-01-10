@@ -14,6 +14,7 @@ namespace ezEvade
     class EvadeHelper
     {
         private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
+        public static bool fastEvadeMode;
 
         public static bool PlayerInSkillShot(Spell spell)
         {
@@ -137,8 +138,6 @@ namespace ezEvade
             int maxPosToCheck = 50;
             int posRadius = 50;
             int radiusIndex = 0;
-
-            bool fastEvadeMode = false;
 
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
             var extraEvadeDistance = ObjectCache.menuCache.cache["ExtraEvadeDistance"].GetValue<Slider>().Value;

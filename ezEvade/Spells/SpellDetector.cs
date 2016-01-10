@@ -580,6 +580,7 @@ namespace ezEvade
             foreach (KeyValuePair<int, Spell> entry in detectedSpells)
             {
                 Spell spell = entry.Value;
+                EvadeHelper.fastEvadeMode = ObjectCache.menuCache.cache[spell.info.spellName + "FastEvade"].GetValue<bool>();
 
                 float evadeTime, spellHitTime;
                 spell.CanHeroEvade(myHero, out evadeTime, out spellHitTime);
@@ -601,13 +602,14 @@ namespace ezEvade
                     }
 
                     //var spellFlyTime = Evade.GetTickCount - spell.startTime;
-                    if (spellHitTime < ObjectCache.menuCache.cache["SpellDetectionTime"].GetValue<Slider>().Value)
+                    if (spellHitTime < ObjectCache.menuCache.cache["SpellDetectionTime"].GetValue<Slider>().Value
+                        && !ObjectCache.menuCache.cache[spell.info.spellName + "FastEvade"].GetValue<bool>())
                     {
                         continue;
                     }
 
-                    if (EvadeUtils.TickCount - spell.startTime <
-                        ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value)
+                    if (EvadeUtils.TickCount - spell.startTime < ObjectCache.menuCache.cache["ReactionTime"].GetValue<Slider>().Value
+                        && !ObjectCache.menuCache.cache[spell.info.spellName + "FastEvade"].GetValue<bool>())
                     {
                         continue;
                     }
@@ -617,7 +619,7 @@ namespace ezEvade
                     {
                         var timeElapsed = EvadeUtils.TickCount - Evade.lastPosInfo.timestamp;
 
-                        if (dodgeInterval > timeElapsed)
+                        if (dodgeInterval > timeElapsed && !ObjectCache.menuCache.cache[spell.info.spellName + "FastEvade"].GetValue<bool>())
                         {
                             //var delay = dodgeInterval - timeElapsed;
                             //DelayAction.Add((int)delay, () => SpellDetector_OnProcessDetectedSpells());
@@ -637,9 +639,13 @@ namespace ezEvade
                                 continue;
                             }
 
-                            spells.Add(spellID, newSpell);
-
-                            spellAdded = true;
+                            if (myHero.HealthPercent <=
+                                ObjectCache.menuCache.cache[spell.info.spellName + "DodgeIgnoreHP"].GetValue<Slider>()
+                                    .Value)
+                            {
+                                spells.Add(spellID, newSpell);
+                                spellAdded = true;
+                            }
                         }
                     }
 
@@ -788,6 +794,10 @@ namespace ezEvade
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(enableSpell));
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
+            newSpellMenu.AddItem(new MenuItem(spell.spellName+ "FastEvade", "Force Fast Evade"))
+                .SetValue(spell.dangerlevel == 4);
+            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
+                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100));
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
@@ -920,6 +930,10 @@ namespace ezEvade
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(enableSpell));
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "FastEvade", "Force Fast Evade"))
+                                .SetValue(spell.dangerlevel == 4);
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
+                                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100));
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 

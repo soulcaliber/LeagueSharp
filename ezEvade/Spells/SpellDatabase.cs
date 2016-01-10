@@ -114,7 +114,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ahri",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Orb of Deception Back",
                 projectileSpeed = 915,
                 radius = 100,
@@ -1118,19 +1118,17 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                angle = 18,
                 charName = "Graves",
                 dangerlevel = 2,
-                isThreeWay = true,
-                isSpecial = true,
-                missileName = "GravesClusterShotAttack",
+                missileName = "GravesQLineMis",
+                extraMissileNames = new [] { "GravesQReturn" },
                 name = "Buckshot",
-                projectileSpeed = 2000,
-                radius = 60,
-                range = 1025,
+                projectileSpeed = 3000,
+                radius = 40,
+                range = 825,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                spellName = "GravesClusterShot",
+                spellName = "GravesQLineSpell",
                 spellType = SpellType.Line,
 
             });
@@ -2423,8 +2421,22 @@ namespace ezEvade
 
             #endregion Ryze
 
-
             #region Sejuani
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Sejuani",
+                dangerlevel = 3,
+                name = "Arctic Assault",
+                projectileSpeed = 1600,
+                radius = 70,
+                range = 900,
+                spellDelay = 0,
+                spellKey = SpellSlot.Q,
+                spellName = "SejuaniArcticAssault",
+                spellType = SpellType.Line,
+
+            });
 
             Spells.Add(
             new SpellData
