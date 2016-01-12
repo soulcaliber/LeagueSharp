@@ -158,6 +158,7 @@ namespace ezEvade
                 miscMenu.AddSubMenu(limiterMenu);
 
                 Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
+                fastEvadeMenu.AddItem(new MenuItem("FastMovementBlock", "Fast Movement Block")).SetValue(false);
                 fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "FastEvade Activation Time").SetValue(new Slider(65, 0, 500)));
                 fastEvadeMenu.AddItem(new MenuItem("SpellActivationTime", "Spell Activation Time").SetValue(new Slider(200, 0, 1000)));
                 fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(10, 0, 100)));
@@ -818,7 +819,7 @@ namespace ezEvade
 
         public void CheckLastMoveTo()
         {
-            if (EvadeHelper.fastEvadeMode)
+            if (EvadeHelper.fastEvadeMode || ObjectCache.menuCache.cache["FastMovementBlock"].GetValue<bool>())
             {
                 if (isDodging == false && lastIssueOrderArgs != null
                 && lastIssueOrderArgs.Order == GameObjectOrder.MoveTo
