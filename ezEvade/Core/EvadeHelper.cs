@@ -879,7 +879,7 @@ namespace ezEvade
                 //GetIntersectTime(spell, ObjectCache.myHeroCache.serverPos2D, pos);
                 //Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, ObjectCache.myHeroCache.moveSpeed, delay, ObjectCache.myHeroCache.serverPos2D));
 
-                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius + 6)
+                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 6)
                     || PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist, useServerPosition)
                     || (spell.info.spellType != SpellType.Line && pos.isNearEnemy(minComfortDistance)))
                 {

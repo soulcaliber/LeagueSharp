@@ -84,7 +84,7 @@ namespace ezEvade
             if (!obj.IsValid<MissileClient>())
                 return;
 
-            MissileClient missile = (MissileClient)obj;
+            MissileClient missile = (MissileClient) obj;
 
             SpellData spellData;
 
@@ -761,7 +761,6 @@ namespace ezEvade
 
         public static void InitChannelSpells()
         {
-
             channeledSpells["Drain"] = "FiddleSticks";
             channeledSpells["Crowstorm"] = "FiddleSticks";
             channeledSpells["KatarinaR"] = "Katarina";
@@ -777,10 +776,9 @@ namespace ezEvade
             channeledSpells["XerathLocusOfPower2"] = "Xerath";
             channeledSpells["ZacE"] = "Zac";
             channeledSpells["Pantheon_Heartseeker"] = "Pantheon";
-
+            channeledSpells["JhinR"] = "Jhin";
             channeledSpells["OdinRecall"] = "AllChampions";
             channeledSpells["Recall"] = "AllChampions";
-
         }
 
         public static void LoadDummySpell(SpellData spell)

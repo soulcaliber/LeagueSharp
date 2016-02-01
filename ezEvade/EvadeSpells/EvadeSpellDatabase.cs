@@ -377,6 +377,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 evadeType = EvadeType.Dash,
                 castType = CastType.Position,
+                isSpecial = true
             });
 
             #endregion

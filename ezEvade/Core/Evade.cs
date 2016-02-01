@@ -206,6 +206,7 @@ namespace ezEvade
                 var initCache = ObjectCache.myHeroCache;
 
                 //evadeTester = new EvadeTester(menu);
+                //Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
 
                 Console.WriteLine("ezEvade Loaded");
 

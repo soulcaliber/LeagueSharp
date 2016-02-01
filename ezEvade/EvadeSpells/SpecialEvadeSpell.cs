@@ -25,6 +25,26 @@ namespace ezEvade
             {
                 spellData.useSpellFunc = UseEkkoR;
             }
+
+            if (spellData.spellName == "Pounce")
+            {
+                spellData.useSpellFunc = UsePounce;
+            }
+        }
+
+        public static bool UsePounce(EvadeSpellData evadeSpell, bool proecess = true)
+        {
+            if (myHero.CharData.BaseSkinName != "Nidalee")
+            {
+                var posInfo = EvadeHelper.GetBestPositionDash(evadeSpell);
+                if (posInfo != null)
+                {
+                    EvadeSpell.CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), proecess);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool UseEkkoE2(EvadeSpellData evadeSpell, bool process = true)

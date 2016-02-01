@@ -1124,7 +1124,7 @@ namespace ezEvade
                 extraMissileNames = new [] { "GravesQReturn" },
                 name = "Buckshot",
                 projectileSpeed = 3000,
-                radius = 40,
+                radius = 60,
                 range = 825,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
@@ -1461,6 +1461,47 @@ namespace ezEvade
 
             });
             #endregion Jinx
+
+            #region Jhin   
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Jhin",
+                dangerlevel = 3,
+                missileName = "JhinWMissile",
+                name = "JhinW",
+                projectileSpeed = 5000,
+                radius = 40,
+                range = 2250,
+                spellDelay = 750,
+                spellKey = SpellSlot.W,
+                spellName = "JhinW",
+                spellType = SpellType.Line,
+                fixedRange = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions }
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Jhin",
+                dangerlevel = 3,
+                missileName = "JhinRShotMis",
+                name = "JhinR",
+                projectileSpeed = 5000,
+                radius = 80,
+                range = 3500,
+                spellDelay = 250,
+                spellKey = SpellSlot.R,
+                spellName = "JhinRShot",
+                spellType = SpellType.Line,
+                fixedRange = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+                extraMissileNames = new[] { "jhinRMissile" } // myo
+            });
+
+            #endregion
 
             #region Kalista
 
@@ -2463,16 +2504,18 @@ namespace ezEvade
             {
                 charName = "Shen",
                 dangerlevel = 3,
+                missileName = "ShenE",
                 name = "ShadowDash",
-                projectileSpeed = 1250,
-                radius = 75,
-                range = 700,
+                projectileSpeed = 1600,
+                radius = 60,
+                range = 675,
                 spellDelay = 0,
                 spellKey = SpellSlot.E,
-                spellName = "ShenShadowDash",
+                spellName = "ShenE",
                 spellType = SpellType.Line,
 
             });
+
             #endregion Shen
 
             #region Shyvana
@@ -2545,9 +2588,10 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "SivirQ",
+                extraMissileNames = new[] { "SivirQMissileReturn" },
                 spellType = SpellType.Line,
-
             });
+
             #endregion Sivir
 
             #region Skarner
@@ -3254,7 +3298,8 @@ namespace ezEvade
             {
                 charName = "Zed",
                 dangerlevel = 2,
-                name = "ZedShuriken",                
+                missileName = "ZedQMissile",
+                name = "ZedQ",                
                 projectileSpeed = 1700,
                 radius = 50,
                 range = 925,
