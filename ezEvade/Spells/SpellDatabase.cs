@@ -215,11 +215,8 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "Incinerate",
                 spellType = SpellType.Cone,
-
             });
 
-            //RIP tibbers flash dodge
-            /*
             Spells.Add(
             new SpellData
             {
@@ -232,8 +229,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "InfernalGuardian",
                 spellType = SpellType.Circular,
-
-            });*/
+            });
 
             #endregion Annie
 
