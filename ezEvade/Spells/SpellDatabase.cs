@@ -217,19 +217,19 @@ namespace ezEvade
                 spellType = SpellType.Cone,
             });
 
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Annie",
-                dangerlevel = 4,
-                name = "InfernalGuardian",
-                radius = 290,
-                range = 600,
-                spellDelay = 250,
-                spellKey = SpellSlot.R,
-                spellName = "InfernalGuardian",
-                spellType = SpellType.Circular,
-            });
+            //Spells.Add(
+            //new SpellData
+            //{
+            //    charName = "Annie",
+            //    dangerlevel = 4,
+            //    name = "InfernalGuardian",
+            //    radius = 290,
+            //    range = 600,
+            //    spellDelay = 250,
+            //    spellKey = SpellSlot.R,
+            //    spellName = "InfernalGuardian",
+            //    spellType = SpellType.Circular,
+            //});
 
             #endregion Annie
 
@@ -273,23 +273,23 @@ namespace ezEvade
 
             #region Azir
 
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Azir",
-                dangerlevel = 2,
-                name = "AzirQ",
-                projectileSpeed = 1000,
-                radius = 80,
-                range = 800,
-                spellDelay = 250,
-                spellKey = SpellSlot.Q,
-                spellName = "AzirQ",
-                spellType = SpellType.Line,
-                usePackets = true,
-                isSpecial = true,
+            //Spells.Add(
+            //new SpellData
+            //{
+            //    charName = "Azir",
+            //    dangerlevel = 2,
+            //    name = "AzirQ",
+            //    projectileSpeed = 1000,
+            //    radius = 80,
+            //    range = 800,
+            //    spellDelay = 250,
+            //    spellKey = SpellSlot.Q,
+            //    spellName = "AzirQ",
+            //    spellType = SpellType.Line,
+            //    usePackets = true,
+            //    isSpecial = true,
 
-            });
+            //});
             #endregion Azir
 
             #region Bard
@@ -309,8 +309,24 @@ namespace ezEvade
                 spellName = "BardQ",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Bard",
+                dangerlevel = 2,
+                name = "BardR",
+                missileName = "BardR",
+                projectileSpeed = 2100,
+                radius = 350,
+                range = 3400,
+                spellDelay = 250,
+                spellKey = SpellSlot.R,
+                spellName = "BardR",
+                spellType = SpellType.Circular,
+            });
+
             #endregion Bard
 
             #region Blitzcrank
@@ -397,7 +413,6 @@ namespace ezEvade
                 missileName = "BraumQMissile",
                 name = "BraumQ",
                 projectileSpeed = 1200,
-                //spellDelay = 30000,
                 spellDelay = 250,   
                 radius = 100,
                 range = 1000,             
@@ -1153,15 +1168,16 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Hecarim",
-                dangerlevel = 3,
-                name = "HecarimUlt",
+                dangerlevel = 4,
+                name = "HecarimR",
+                missileName = "hecarimultmissile",
                 projectileSpeed = 1100,
                 radius = 300,
                 range = 1500,
                 spellDelay = 10,
                 spellKey = SpellSlot.R,
                 spellName = "HecarimUlt",
-                spellType = SpellType.Circular,
+                spellType = SpellType.Line,
 
             });
             #endregion Hecarim
@@ -1482,7 +1498,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Jhin",
-                dangerlevel = 3,
+                dangerlevel = 2,
                 missileName = "JhinRShotMis",
                 name = "JhinR",
                 projectileSpeed = 5000,
@@ -1491,10 +1507,11 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.R,
                 spellName = "JhinRShot",
+                extraSpellNames = new [] { "JhinRShotFinal" },
                 spellType = SpellType.Line,
                 fixedRange = true,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                extraMissileNames = new[] { "jhinRMissile" } // myo
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions },
+                extraMissileNames = new[] { "JhinRShotMis4" }
             });
 
             #endregion

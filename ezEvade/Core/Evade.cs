@@ -110,6 +110,7 @@ namespace ezEvade
                 mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
                 mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
                 mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
+                mainMenu.AddItem(new MenuItem("Dodging", "Dodging")).SetValue(false).Show(false);
                 menu.AddSubMenu(mainMenu);
 
                 //var keyBind = mainMenu.Item("DodgeSkillShots").GetValue<KeyBind>();
@@ -605,6 +606,7 @@ namespace ezEvade
             try
             {
                 ObjectCache.myHeroCache.UpdateInfo();
+                ObjectCache.menuCache.cache["Dodging"].SetValue(isDodging);
                 CheckHeroInDanger();
 
                 if (isChanneling && channelPosition.Distance(ObjectCache.myHeroCache.serverPos2D) > 50
