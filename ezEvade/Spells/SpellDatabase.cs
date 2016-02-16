@@ -217,19 +217,19 @@ namespace ezEvade
                 spellType = SpellType.Cone,
             });
 
-            //Spells.Add(
-            //new SpellData
-            //{
-            //    charName = "Annie",
-            //    dangerlevel = 4,
-            //    name = "InfernalGuardian",
-            //    radius = 290,
-            //    range = 600,
-            //    spellDelay = 250,
-            //    spellKey = SpellSlot.R,
-            //    spellName = "InfernalGuardian",
-            //    spellType = SpellType.Circular,
-            //});
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Annie",
+                dangerlevel = 4,
+                name = "InfernalGuardian",
+                radius = 290,
+                range = 600,
+                spellDelay = 250,
+                spellKey = SpellSlot.R,
+                spellName = "InfernalGuardian",
+                spellType = SpellType.Circular,
+            });
 
             #endregion Annie
 
