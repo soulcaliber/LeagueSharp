@@ -721,7 +721,7 @@ namespace ezEvade
                 charName = "AllChampions",
                 dangerlevel = 4,
                 name = "Flash",
-                spellName = "summonerflash",
+                spellName = "SummonerFlash",
                 range = 400,
                 fixedRange = true, //test
                 spellDelay = 50,

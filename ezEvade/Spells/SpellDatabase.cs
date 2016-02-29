@@ -133,6 +133,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Alistar",
+                defaultOff = true,
                 dangerlevel = 3,
                 name = "Pulverize",
                 radius = 365,

@@ -641,7 +641,7 @@ namespace ezEvade
 
                             if (myHero.HealthPercent <=
                                 ObjectCache.menuCache.cache[spell.info.spellName + "DodgeIgnoreHP"].GetValue<Slider>()
-                                    .Value)
+                                    .Value || !ObjectCache.menuCache.cache["DodgeCheckHP"].GetValue<bool>())
                             {
                                 spells.Add(spellID, newSpell);
                                 spellAdded = true;
@@ -795,7 +795,7 @@ namespace ezEvade
             newSpellMenu.AddItem(new MenuItem(spell.spellName+ "FastEvade", "Force Fast Evade"))
                 .SetValue(spell.dangerlevel == 4);
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
-                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100));
+                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check Ignored HP% must be enabled.");
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
@@ -929,9 +929,9 @@ namespace ezEvade
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "FastEvade", "Force Fast Evade"))
-                                .SetValue(spell.dangerlevel == 4);
+                                .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
-                                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100));
+                                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check Ignored HP% must be enabled.");
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 

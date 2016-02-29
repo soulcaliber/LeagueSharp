@@ -109,7 +109,7 @@ namespace ezEvade
                 mainMenu.AddItem(new MenuItem("ActivateEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
                 mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
                 mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
-                mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
+                mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));                
                 menu.AddSubMenu(mainMenu);
 
                 //var keyBind = mainMenu.Item("DodgeSkillShots").GetValue<KeyBind>();
@@ -134,6 +134,8 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(false));
+                miscMenu.AddItem(new MenuItem("DodgeCheckHP", "Check Ignored HP %")
+                    .SetValue(false)).SetTooltip("Enabling this will check if above X HP % before dodging.");
                 miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
