@@ -13,7 +13,7 @@ namespace ezEvade.SpecialSpells
     class Viktor : ChampionPlugin
     {
         static Viktor()
-        {E
+        {
 
         }
 
