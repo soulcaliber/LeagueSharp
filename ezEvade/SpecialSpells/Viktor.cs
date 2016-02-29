@@ -13,7 +13,7 @@ namespace ezEvade.SpecialSpells
     class Viktor : ChampionPlugin
     {
         static Viktor()
-        {
+        {E
 
         }
 
@@ -35,7 +35,7 @@ namespace ezEvade.SpecialSpells
             SpellData spellData;
 
             if (missile.SpellCaster != null && missile.SpellCaster.Team != ObjectManager.Player.Team &&
-                missile.SData.Name != null && missile.SData.Name == "viktoreaugmissile"
+                missile.SData.Name != null && missile.SData.Name == "ViktorEAugMissile"
                 && SpellDetector.onMissileSpells.TryGetValue("ViktorDeathRay3", out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {

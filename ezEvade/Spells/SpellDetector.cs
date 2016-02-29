@@ -86,6 +86,10 @@ namespace ezEvade
 
             MissileClient missile = (MissileClient) obj;
 
+            // todo: keepo
+            //if (missile.SpellCaster.IsMe)
+            //    Console.WriteLine("Missile: " + missile.SData.Name);
+
             SpellData spellData;
 
             if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
@@ -268,6 +272,10 @@ namespace ezEvade
                 {
                     Console.WriteLine(args.SData.Name + ": " + castTime2);
                 }*/
+
+                // todo: keepo
+                //if (hero.IsMe)
+                //    Console.WriteLine("Spell: " + args.SData.Name);
 
                 SpellData spellData;
 
@@ -793,7 +801,7 @@ namespace ezEvade
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
             newSpellMenu.AddItem(new MenuItem(spell.spellName+ "FastEvade", "Force Fast Evade"))
-                .SetValue(spell.dangerlevel == 4);
+                .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
                 .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check Ignored HP% must be enabled.");
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")

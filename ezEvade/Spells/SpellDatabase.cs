@@ -346,6 +346,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "RocketGrab",
+                extraSpellNames = new [] { "RocketGrabMissile" },
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
@@ -3121,10 +3122,9 @@ namespace ezEvade
                 range = 800,
                 spellKey = SpellSlot.E,
                 spellName = "ViktorDeathRay",
-                extraMissileNames = new[] { "viktoreaugmissile", },
+                extraMissileNames = new[] { "ViktorEAugMissile", },
                 spellType = SpellType.Line,
                 usePackets = true,
-
             });
 
             Spells.Add(
@@ -3270,14 +3270,15 @@ namespace ezEvade
             {
                 charName = "Yasuo",
                 dangerlevel = 3,
-                missileName = "yasuoq3mis",
+                missileName = "YasuoQ3Mis",
                 name = "Steel Tempest3",
                 projectileSpeed = 1200,
                 radius = 90,
                 range = 1100,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                spellName = "yasuoq3w",
+                spellName = "YasuoQ3W",
+                extraSpellNames = new []{ "YasuoQ3" },
                 spellType = SpellType.Line,
 
             });
@@ -3293,8 +3294,8 @@ namespace ezEvade
                 range = 500,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                spellName = "YasuoQW",
-                extraSpellNames = new [] {"yasuoq2w"},
+                spellName = "YasuoQ",
+                extraSpellNames = new [] {"YasuoQ2", "YasuoQ2W" },
                 spellType = SpellType.Line,
                 defaultOff = true,
 
