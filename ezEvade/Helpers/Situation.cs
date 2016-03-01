@@ -80,6 +80,12 @@ namespace ezEvade
 
         public static bool ShouldDodge()
         {
+            if (ObjectCache.menuCache.cache["DontDodgeKeyEnabled"].GetValue<bool>() &&
+                ObjectCache.menuCache.cache["DontDodgeKey"].GetValue<KeyBind>().Active)
+            {
+                return false;
+            }
+
             if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active == false
                 || CommonChecks()
                 )
@@ -100,13 +106,17 @@ namespace ezEvade
                 return false;
             }
 
-
-
             return true;
         }
 
         public static bool ShouldUseEvadeSpell()
         {
+            if (ObjectCache.menuCache.cache["DontDodgeKeyEnabled"].GetValue<bool>() &&
+                ObjectCache.menuCache.cache["DontDodgeKey"].GetValue<KeyBind>().Active)
+            {
+                return false;
+            }
+
             if (ObjectCache.menuCache.cache["ActivateEvadeSpells"].GetValue<KeyBind>().Active == false
                 || CommonChecks()
                 || Evade.lastWindupTime - EvadeUtils.TickCount > 0

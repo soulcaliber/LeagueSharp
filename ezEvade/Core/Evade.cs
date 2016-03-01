@@ -122,10 +122,10 @@ namespace ezEvade
                 keyMenu.AddItem(new MenuItem("DodgeDangerousKeyEnabled", "Enable Dodge Only Dangerous Keys").SetValue(false));
                 keyMenu.AddItem(new MenuItem("DodgeDangerousKey", "Dodge Only Dangerous Key").SetValue(new KeyBind(32, KeyBindType.Press)));
                 keyMenu.AddItem(new MenuItem("DodgeDangerousKey2", "Dodge Only Dangerous Key 2").SetValue(new KeyBind('V', KeyBindType.Press)));
-
-                keyMenu.AddItem(new MenuItem("DodgeOnlyOnComboKeyDesc", "--    Dodge Only On Combo Key    --"));
                 keyMenu.AddItem(new MenuItem("DodgeOnlyOnComboKeyEnabled", "Enable Dodge Only On Combo Key").SetValue(false));
-                keyMenu.AddItem(new MenuItem("DodgeComboKey", "Combo Key").SetValue(new KeyBind(32, KeyBindType.Press)));
+                keyMenu.AddItem(new MenuItem("DodgeComboKey", "Dodge Only Combo Key").SetValue(new KeyBind(32, KeyBindType.Press)));
+                keyMenu.AddItem(new MenuItem("DontDodgeKeyEnabled", "Enable Don't Dodge Key").SetValue(false));
+                keyMenu.AddItem(new MenuItem("DontDodgeKey", "Don't Dodge Key").SetValue(new KeyBind('Z', KeyBindType.Press)));
                 menu.AddSubMenu(keyMenu);
 
                 Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
