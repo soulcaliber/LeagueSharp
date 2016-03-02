@@ -74,7 +74,7 @@ namespace ezEvade.SpecialSpells
                 {
                     var spell = entry.Value;
 
-                    if (spell.info.spellName == "jayceshockblast")
+                    if (spell.info.spellName == "JayceShockBlast")
                     {
                         var tHero = spell.heroID;
 
