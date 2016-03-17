@@ -117,7 +117,7 @@ namespace ezEvade
 
                             var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
 
-                            if (spell.info.missileName == missile.SData.Name
+                            if (spell.info.missileName.ToLower() == missile.SData.Name.ToLower()
                                 && spell.heroID == missile.SpellCaster.NetworkId
                                 && dir.AngleBetween(spell.direction) < 10)
                             {
@@ -303,7 +303,7 @@ namespace ezEvade
                                     var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
 
                                     if (spell.spellObject != null
-                                        && spell.info.spellName == args.SData.Name
+                                        && spell.info.spellName.ToLower() == args.SData.Name.ToLower()
                                         && spell.heroID == hero.NetworkId
                                         && dir.AngleBetween(spell.direction) < 10)
                                     {
@@ -796,7 +796,7 @@ namespace ezEvade
             var enableSpell = !spell.defaultOff;
 
             Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
-            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetValue(enableSpell));
+            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetValue(enableSpell)).SetTooltip(spell.name);
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(enableSpell));
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
@@ -932,7 +932,7 @@ namespace ezEvade
                             var enableSpell = !spell.defaultOff;
 
                             Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
-                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetValue(enableSpell));
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetValue(enableSpell)).SetTooltip(spell.name);
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(enableSpell));
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
