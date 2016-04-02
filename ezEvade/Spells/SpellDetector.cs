@@ -429,6 +429,12 @@ namespace ezEvade
                     return;
                 }
 
+                if (spellData.invert)
+                {
+                    var reverse = (endPosition - startPosition).Normalized();
+                    endPosition = startPosition + reverse * startPosition.Distance(endPosition);
+                }
+
                 endTick += extraEndTick;
 
                 Spell newSpell = new Spell();

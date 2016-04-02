@@ -218,19 +218,20 @@ namespace ezEvade
                 spellType = SpellType.Cone,
             });
 
-            //Spells.Add(
-            //new SpellData
-            //{
-            //    charName = "Annie",
-            //    dangerlevel = 4,
-            //    name = "InfernalGuardian",
-            //    radius = 290,
-            //    range = 600,
-            //    spellDelay = 250,
-            //    spellKey = SpellSlot.R,
-            //    spellName = "InfernalGuardian",
-            //    spellType = SpellType.Circular,
-            //});
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Annie",
+                dangerlevel = 4,
+                name = "NOT DODGEABLE",
+                radius = 290,
+                range = 600,
+                spellDelay = 250,
+                spellKey = SpellSlot.R,
+                spellName = "InfernalGuardian",
+                spellType = SpellType.Circular,
+                defaultOff = true
+            });
 
             #endregion Annie
 
@@ -271,6 +272,44 @@ namespace ezEvade
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
             });
             #endregion Ashe
+
+            #region Aurelion Sol
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "AurelionSol",
+                dangerlevel = 2,
+                missileName = "AurelionSolQMissile",
+                name = "AurelionSolQ",
+                projectileSpeed = 850,
+                radius = 1800,
+                range = 1500,
+                fixedRange = true,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "AurelionSolQ",
+                spellType = SpellType.Line,
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "AurelionSol",
+                dangerlevel = 3,
+                missileName = "AurelionSolRBeamMissile",
+                name = "AurelionSolR",
+                projectileSpeed = 4600,
+                radius = 120,
+                range = 1420,
+                fixedRange = true,
+                spellDelay = 300,
+                spellKey = SpellSlot.R,
+                spellName = "AurelionSolR",
+                spellType = SpellType.Line
+            });
+
+            #endregion
 
             #region Azir
 
@@ -3294,31 +3333,17 @@ namespace ezEvade
             {
                 charName = "Yasuo",
                 dangerlevel = 2,
-                name = "Steel Tempest 2",
+                name = "Steel Tempest",
+                missileName = "YasuoQ2",
                 projectileSpeed = float.MaxValue,
                 radius = 35,
                 range = 525,
                 fixedRange = true,
                 spellDelay = 350,
                 spellKey = SpellSlot.Q,
-                spellName = "YasuoQ2",
-                spellType = SpellType.Line
-            });
-
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Yasuo",
-                dangerlevel = 2,
-                name = "Steel Tempest 1",
-                projectileSpeed = float.MaxValue,
-                radius = 35,
-                range = 525,
-                fixedRange = true,
-                spellDelay = 350,
-                spellKey = SpellSlot.Q,
-                spellName = "YasuoQ2",
-                spellType = SpellType.Line
+                spellName = "YasuoQ",
+                spellType = SpellType.Line,
+                invert = true
             });
 
             #endregion Yasuo

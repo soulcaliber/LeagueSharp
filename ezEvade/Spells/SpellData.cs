@@ -44,6 +44,7 @@ namespace ezEvade
         public float sideRadius;
         public int splits;
         public bool usePackets = false;
+        public bool invert = false;
         public float extraDelay = 0;
         public float extraDistance = 0;
         public bool isThreeWay = false;

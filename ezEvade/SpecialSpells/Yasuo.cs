@@ -19,21 +19,19 @@ namespace ezEvade.SpecialSpells
 
         public void LoadSpecialSpell(SpellData spellData)
         {
-            if (spellData.spellName == "YasuoQW" || spellData.spellName == "yasuoq3w")
+            if (spellData.spellName == "YasuoQW" || spellData.spellName == "YasuoQ3W")
             {
-                Obj_AI_Hero hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Yasuo");
-                if (hero == null)
+                var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Yasuo");
+                if (hero != null)
                 {
-                    return;
+                    Obj_AI_Hero.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
                 }
-
-                Obj_AI_Hero.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
             }
         }
 
         private static void ProcessSpell_YasuoQW(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData)
         {
-            if (hero.IsEnemy && args.SData.Name == "yasuoq")
+            if (hero.IsEnemy && args.SData.Name == "YasuoQ")
             {
                 var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
 
