@@ -283,7 +283,7 @@ namespace ezEvade
                 missileName = "AurelionSolQMissile",
                 name = "AurelionSolQ",
                 projectileSpeed = 850,
-                radius = 1800,
+                radius = 180,
                 range = 1500,
                 fixedRange = true,
                 spellDelay = 250,
