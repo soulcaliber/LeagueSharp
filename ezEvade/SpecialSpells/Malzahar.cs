@@ -19,7 +19,7 @@ namespace ezEvade.SpecialSpells
 
         public void LoadSpecialSpell(SpellData spellData)
         {
-            if (spellData.spellName == "AlZaharCalloftheVoid")
+            if (spellData.spellName == "MalzaharQ")
             {
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_AlZaharCalloftheVoid;
             }
@@ -28,7 +28,7 @@ namespace ezEvade.SpecialSpells
         private static void ProcessSpell_AlZaharCalloftheVoid(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
             SpecialSpellEventArgs specialSpellArgs)
         {
-            if (spellData.spellName == "AlZaharCalloftheVoid")
+            if (spellData.spellName == "MalzaharQ")
             {
                 var direction = (args.End.To2D() - args.Start.To2D()).Normalized();
                 var pDirection = direction.Perpendicular();

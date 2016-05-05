@@ -40,7 +40,7 @@ namespace ezEvade.SpecialSpells
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
                 var missileDist = missile.EndPosition.To2D().Distance(missile.StartPosition.To2D());
-                var delay = missileDist / 1.5f + 600;
+                var delay = missileDist / 1.5f + 1000;
 
                 spellData.spellDelay = delay;
 
