@@ -251,9 +251,27 @@ namespace ezEvade
         {
             spell.currentSpellPosition = spell.GetCurrentSpellPosition();
             spell.currentNegativePosition = spell.GetCurrentSpellPosition(true, 0);
-
             spell.dangerlevel = spell.GetSpellDangerLevel();
-            //spell.radius = spell.GetSpellRadius();
+
+            if (spell.info.name == "TaricE")
+            {
+                var taric = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taric");
+                if (taric != null)
+                {
+                    spell.currentSpellPosition = taric.ServerPosition.To2D();
+                    spell.endPos = taric.ServerPosition.To2D() + spell.direction * spell.info.range;
+                }
+            }
+
+            if (spell.info.name == "TaricE2")
+            {
+                var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive") && x.ChampionName != "Taric");
+                if (partner != null)
+                {
+                    spell.currentSpellPosition = partner.ServerPosition.To2D();
+                    spell.endPos = partner.ServerPosition.To2D() + spell.direction * spell.info.range;
+                }
+            }
         }
 
         public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0, 
@@ -261,8 +279,7 @@ namespace ezEvade
         {
             Vector2 spellPos = spell.startPos;
 
-            if (spell.spellType == SpellType.Line
-                || spell.spellType == SpellType.Arc)
+            if (spell.spellType == SpellType.Line || spell.spellType == SpellType.Arc)
             {
                 float spellTime = EvadeUtils.TickCount - spell.startTime - spell.info.spellDelay;
 

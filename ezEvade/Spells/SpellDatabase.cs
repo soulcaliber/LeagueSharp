@@ -22,7 +22,7 @@ namespace ezEvade
             {
                 charName = "AllChampions",
                 dangerlevel = 1,
-                missileName = "SummonerSnowball",
+                missileName = "summonersnowball",
                 name = "Poro Throw",
                 projectileSpeed = 1300,
                 radius = 60,
@@ -2650,7 +2650,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "SivirQ",
                 extraMissileNames = new[] { "SivirQMissileReturn" },
-                spellType = SpellType.Line,
+                spellType = SpellType.Line
             });
 
             #endregion Sivir
@@ -2842,6 +2842,28 @@ namespace ezEvade
             });
             #endregion Talon
 
+            #region Taric
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Taric",
+                dangerlevel = 3,
+                missileName = "TaricEMissile",
+                name = "TaricE",
+                radius = 100,
+                range = 750,
+                fixedRange = true,
+                spellDelay = 1000,
+                spellKey = SpellSlot.E,
+                spellName = "TaricE",
+                spellType = SpellType.Line,
+                isSpecial = true
+            });
+
+
+            #endregion
+
             #region Thresh
 
             Spells.Add(
@@ -2881,6 +2903,27 @@ namespace ezEvade
 
             });
             #endregion Thresh
+
+            #region Tryndamere
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Tryndamere",
+                dangerlevel = 3,
+                missileName = "slashCast",
+                name = "TryndamereE",
+                projectileSpeed = 1300,
+                radius = 95,
+                range = 660,
+                fixedRange = false,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                spellName = "slashCast",
+                spellType = SpellType.Line
+            });
+
+            #endregion
 
             #region TwistedFate
 

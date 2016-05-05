@@ -76,6 +76,7 @@
     <Compile Include="SpecialSpells\Lulu.cs" />
     <Compile Include="SpecialSpells\Lux.cs" />
     <Compile Include="SpecialSpells\Malzahar.cs" />
+    <Compile Include="SpecialSpells\Taric.cs" />
     <Compile Include="SpecialSpells\Twitch.cs" />
     <Compile Include="Spells\ObjectTracker.cs" />
     <Compile Include="SpecialSpells\Orianna.cs" />
