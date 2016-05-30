@@ -263,6 +263,16 @@ namespace ezEvade
                 }
             }
 
+            if (spell.info.name == "TaliyahQ")
+            {
+                var taliyah = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taliyah");
+                if (taliyah != null)
+                {
+                    spell.currentSpellPosition = taliyah.ServerPosition.To2D();
+                    spell.endPos = taliyah.ServerPosition.To2D() + spell.direction * spell.info.range;
+                }
+            }
+
             if (spell.info.name == "TaricE2")
             {
                 var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive") && x.ChampionName != "Taric");

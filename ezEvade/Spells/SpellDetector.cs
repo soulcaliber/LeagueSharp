@@ -117,8 +117,8 @@ namespace ezEvade
 
                             var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
 
-                            if ((spell.info.missileName.ToLower() == missile.SData.Name.ToLower() ||
-                                 spell.info.missileName + "_urf" == missile.SData.Name.ToLower())
+                            if (spell.info.missileName.Equals(missile.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
+                               (spell.info.missileName + "_urf").Equals(missile.SData.Name, StringComparison.InvariantCultureIgnoreCase)
                                 && spell.heroID == missile.SpellCaster.NetworkId
                                 && dir.AngleBetween(spell.direction) < 10)
                             {
@@ -303,8 +303,8 @@ namespace ezEvade
                                     var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
 
                                     if (spell.spellObject != null
-                                        && (spell.info.spellName.ToLower() == args.SData.Name.ToLower() ||
-                                            spell.info.spellName.ToLower() + "_urf" == args.SData.Name.ToLower())
+                                        && (spell.info.spellName.Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
+                                           (spell.info.spellName.ToLower() + "_urf").Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase))
                                         && spell.heroID == hero.NetworkId
                                         && dir.AngleBetween(spell.direction) < 10)
                                     {

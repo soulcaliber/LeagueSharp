@@ -2842,6 +2842,41 @@ namespace ezEvade
             });
             #endregion Talon
 
+            #region Taliyah
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Taliyah",
+                dangerlevel = 2,
+                missileName = "TaliyahQMis",
+                projectileSpeed = 1350,
+                name = "TaliyahQ",
+                radius = 100,
+                range = 1000,
+                fixedRange = true,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "TaliyahQ",
+                spellType = SpellType.Line,
+                //isSpecial = true
+}           );
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Taliyah",
+                dangerlevel = 3,
+                missileName = "TaliyahW",
+                name = "TaliyahW",
+                radius = 150,
+                range = 900,
+                spellDelay = 500,
+                spellKey = SpellSlot.W,
+                spellName = "TaliyahW",
+                spellType = SpellType.Circular              
+            });
+            #endregion
+
             #region Taric
 
             Spells.Add(
@@ -2860,7 +2895,6 @@ namespace ezEvade
                 spellType = SpellType.Line,
                 isSpecial = true
             });
-
 
             #endregion
 
