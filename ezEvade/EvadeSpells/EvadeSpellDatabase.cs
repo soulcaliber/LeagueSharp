@@ -470,6 +470,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 evadeType = EvadeType.Dash,
                 castType = CastType.Position,
+                isSpecial = true,
             });
 
             Spells.Add(

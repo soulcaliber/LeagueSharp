@@ -73,7 +73,7 @@ namespace ezEvade
         {
             DelayAction.Add(0, () =>
             {
-                if (LeagueSharp.Game.Mode == GameMode.Running)
+                if (Game.Mode == GameMode.Running)
                 {
                     Game_OnGameLoad(new EventArgs());
                 }
@@ -431,8 +431,7 @@ namespace ezEvade
 
             if (args.Order == GameObjectOrder.MoveTo)
             {
-                //movement block code goes in here
-                if (isDodging && SpellDetector.spells.Count() > 0)
+                if (isDodging && SpellDetector.spells.Any())
                 {
                     CheckHeroInDanger();
 
@@ -444,7 +443,7 @@ namespace ezEvade
                         isProcessed = false,
                     };
 
-                    args.Process = false; //Block the command
+                    args.Process = false;
                 }
                 else
                 {
