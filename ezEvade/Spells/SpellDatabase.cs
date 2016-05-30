@@ -845,9 +845,9 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "EzrealMysticShot",
                 extraSpellNames = new[] { "ezrealmysticshotwrapper", },
+                extraMissileNames = new []{ "EzrealMysticShotPulseMissile" },
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-
             });
 
             Spells.Add(
