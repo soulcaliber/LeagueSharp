@@ -347,8 +347,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "BardQ",
-                spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+                spellType = SpellType.Line,         
             });
 
             Spells.Add(
@@ -1533,8 +1532,8 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "JhinW",
                 spellType = SpellType.Line,
-                fixedRange = true,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions }
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions },
+                fixedRange = true
             });
 
             Spells.Add(
@@ -1614,8 +1613,10 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "KarmaQMissileMantra",
                 spellType = SpellType.Line,
-                usePackets = true,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+                hasEndExplosion = true,
+                secondaryRadius = 250,
+                usePackets = true
 
             });
             #endregion Karma
@@ -2059,8 +2060,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "LuxLightBinding",
-                spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+                spellType = SpellType.Line
 
             });
             #endregion Lux
@@ -2858,7 +2858,6 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "TaliyahQ",
                 spellType = SpellType.Line,
-                //isSpecial = true
 }           );
 
             Spells.Add(
