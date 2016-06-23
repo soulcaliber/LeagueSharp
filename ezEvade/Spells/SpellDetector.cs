@@ -436,6 +436,12 @@ namespace ezEvade
                     endPosition = startPosition + dir * startPosition.Distance(endPosition);
                 }
 
+                if (spellData.isPerpendicular)
+                {
+                    startPosition = spellEndPos.To2D() - direction.Perpendicular() * spellData.secondaryRadius;
+                    endPosition = spellEndPos.To2D() + direction.Perpendicular() * spellData.secondaryRadius;
+                }
+
                 endTick += extraEndTick;
 
                 Spell newSpell = new Spell();
@@ -810,7 +816,7 @@ namespace ezEvade
             newSpellMenu.AddItem(new MenuItem(spell.spellName+ "FastEvade", "Force Fast Evade"))
                 .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
-                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check Ignored HP% must be enabled.");
+                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check My Hero HP% must be enabled.");
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
@@ -946,7 +952,7 @@ namespace ezEvade
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "FastEvade", "Force Fast Evade"))
                                 .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
-                                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check Ignored HP% must be enabled.");
+                                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check My Hero HP% must be enabled.");
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 

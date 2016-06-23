@@ -51,6 +51,7 @@ namespace ezEvade
         public bool defaultOff = false;
         public bool noProcess = false;
         public bool isWall = false;
+        public bool isPerpendicular = false;
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
         public bool isSpecial = false;
