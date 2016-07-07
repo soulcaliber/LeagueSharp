@@ -185,7 +185,6 @@ namespace ezEvade
                     || (evadeSpell.isItem == false && myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) != SpellState.Ready)
                     || (evadeSpell.isItem && !Items.CanUseItem((int)evadeSpell.itemID))
                     || (evadeSpell.checkSpellName && myHero.Spellbook.GetSpell(evadeSpell.spellKey).Name != evadeSpell.spellName))
-           
                 {
                     continue; //can't use spell right now               
                 }
