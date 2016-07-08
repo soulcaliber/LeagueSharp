@@ -3224,7 +3224,6 @@ namespace ezEvade
                 spellName = "ViQMissile",
                 spellType = SpellType.Line,
                 usePackets = true,
-                defaultOff = true,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
 
             });

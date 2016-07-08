@@ -334,9 +334,9 @@ namespace ezEvade
                 menu.Item("ClickOnlyOnce").SetValue(true);
                 menu.Item("EnableEvadeDistance").SetValue(false);
                 menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
-                menu.Item("SpellDetectionTime").SetValue(new Slider(150, 0, 1000));
-                menu.Item("ReactionTime").SetValue(new Slider(50, 0, 500));
-                menu.Item("DodgeInterval").SetValue(new Slider(500, 0, 2000));
+                menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
+                menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
+                menu.Item("DodgeInterval").SetValue(new Slider(250, 0, 2000));
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(45, 0, 500));
                 menu.Item("SpellActivationTime").SetValue(new Slider(200, 0, 1000));
                 menu.Item("RejectMinDistance").SetValue(new Slider(0, 0, 100));
@@ -390,7 +390,8 @@ namespace ezEvade
             }
 
             //block spell commmands if evade spell just used
-            if (EvadeSpell.lastSpellEvadeCommand != null && EvadeSpell.lastSpellEvadeCommand.timestamp + ObjectCache.gamePing + 150 > EvadeUtils.TickCount)
+            if (EvadeSpell.lastSpellEvadeCommand != null && 
+                EvadeSpell.lastSpellEvadeCommand.timestamp + ObjectCache.gamePing + 150 > EvadeUtils.TickCount)
             {
                 args.Process = false;
             }
