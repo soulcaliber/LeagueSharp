@@ -380,7 +380,7 @@ namespace ezEvade
                             var posInfo = EvadeHelper.GetBestPosition(evadeSpell);
                             if (posInfo != null)
                             {
-                                CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, ObjectCache.myHeroCache.currentPosition), processSpell);
+                                CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.position), processSpell);
                                 EvadeCommand.MoveTo(posInfo.position);
                                 return true;
                             }
