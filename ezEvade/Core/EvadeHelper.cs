@@ -124,7 +124,7 @@ namespace ezEvade
             return sortedPosTable;
         }
 
-        public static PositionInfo GetBestPosition(EvadeSpellData movementBuff = null)
+        public static PositionInfo GetBestPosition(EvadeSpellData evadeSpell = null)
         {
             int posChecked = 0;
             int maxPosToCheck = 50;
@@ -251,10 +251,10 @@ namespace ezEvade
                 if (CheckPathCollision(myHero, posInfo.position) == false)
                 {
                     var moveSpeed = ObjectCache.myHeroCache.moveSpeed;
-                    if (movementBuff != null)
+                    if (evadeSpell != null && evadeSpell.evadeType == EvadeType.MovementSpeedBuff)
                     {
                         moveSpeed = moveSpeed + moveSpeed *
-                                    movementBuff.speedArray[myHero.GetSpell(movementBuff.spellKey).Level - 1] / 100;
+                                    evadeSpell.speedArray[myHero.GetSpell(evadeSpell.spellKey).Level - 1] / 100;
                     }
 
                     if (fastEvadeMode)

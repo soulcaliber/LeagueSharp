@@ -51,7 +51,7 @@ namespace ezEvade
         public float spellDelay = 250;
         public float range;
         public float speed = 0;
-        public float[] speedArray = { 0f };
+        public float[] speedArray = { 0f, 0f, 0f, 0f, 0f };
         public bool fixedRange = false;
         public EvadeType evadeType;
         public bool isReversed = false;
