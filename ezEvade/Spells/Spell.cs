@@ -207,16 +207,23 @@ namespace ezEvade
             var heroPos = hero.ServerPosition.To2D();
             float evadeTime = 0;
             float spellHitTime = 0;
+            float speed = hero.MoveSpeed;
+
+            var moveBuff = EvadeSpell.evadeSpells.OrderBy(s => s.dangerlevel).FirstOrDefault(s => s.evadeType == EvadeType.MovementSpeedBuff);
+            if (moveBuff != null && EvadeSpell.ShouldUseMovementBuff(spell))
+            {
+                speed += speed * moveBuff.speedArray[ObjectManager.Player.GetSpell(moveBuff.spellKey).Level - 1] / 100;
+            }
 
             if (spell.spellType == SpellType.Line)
             {
                 var projection = heroPos.ProjectOn(spell.startPos, spell.endPos).SegmentPoint;
-                evadeTime = 1000 * (spell.radius - heroPos.Distance(projection) + hero.BoundingRadius) / hero.MoveSpeed;
+                evadeTime = 1000 * (spell.radius - heroPos.Distance(projection) + hero.BoundingRadius) / speed;
                 spellHitTime = spell.GetSpellHitTime(projection);
             }
             else if (spell.spellType == SpellType.Circular)
             {
-                evadeTime = 1000 * (spell.radius - heroPos.Distance(spell.endPos)) / hero.MoveSpeed;
+                evadeTime = 1000 * (spell.radius - heroPos.Distance(spell.endPos)) / speed;
                 spellHitTime = spell.GetSpellHitTime(heroPos);
             }
 

@@ -344,10 +344,10 @@ namespace ezEvade
                 {
                     if (evadeSpell.isItem)
                     {
-                        var posInfo = EvadeHelper.GetBestPosition(evadeSpell);
+                        var posInfo = EvadeHelper.GetBestPosition();
                         if (posInfo != null)
                         {
-                            CastEvadeSpell(() => Items.UseItem((int) evadeSpell.itemID), processSpell);
+                            CastEvadeSpell(() => Items.UseItem((int)evadeSpell.itemID), processSpell);
                             EvadeCommand.MoveTo(posInfo.position);
                             return true;
                         }
@@ -356,7 +356,7 @@ namespace ezEvade
                     {
                         if (evadeSpell.castType == CastType.Target)
                         {
-                            var posInfo = EvadeHelper.GetBestPosition(evadeSpell);
+                            var posInfo = EvadeHelper.GetBestPosition();
                             if (posInfo != null)
                             {
                                 CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, myHero), processSpell);
@@ -366,18 +366,19 @@ namespace ezEvade
                         }
                         else if (evadeSpell.castType == CastType.Self)
                         {
-                            var posInfo = EvadeHelper.GetBestPosition(evadeSpell);
+                            var posInfo = EvadeHelper.GetBestPosition();
                             if (posInfo != null)
                             {
                                 CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), processSpell);
                                 EvadeCommand.MoveTo(posInfo.position);
                                 return true;
                             }
+
                         }
 
                         else if (evadeSpell.castType == CastType.Position)
                         {
-                            var posInfo = EvadeHelper.GetBestPosition(evadeSpell);
+                            var posInfo = EvadeHelper.GetBestPosition();
                             if (posInfo != null)
                             {
                                 CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.position), processSpell);
@@ -444,6 +445,25 @@ namespace ezEvade
             }*/
 
             return false;
+        }
+
+        public static bool ShouldUseMovementBuff(Spell spell)
+        {
+            var sortedEvadeSpells = evadeSpells.Where(s => s.evadeType == EvadeType.MovementSpeedBuff).OrderBy(s => s.dangerlevel);
+
+            foreach (var evadeSpell in sortedEvadeSpells)
+            {
+                if (ObjectCache.menuCache.cache[evadeSpell.name + "UseEvadeSpell"].GetValue<bool>() == false
+                    || GetSpellDangerLevel(evadeSpell) > spell.GetSpellDangerLevel()
+                    || (evadeSpell.isItem == false && myHero.Spellbook.CanUseSpell(evadeSpell.spellKey) != SpellState.Ready)
+                    || (evadeSpell.isItem && !Items.CanUseItem((int)evadeSpell.itemID))
+                    || (evadeSpell.checkSpellName && myHero.Spellbook.GetSpell(evadeSpell.spellKey).Name != evadeSpell.spellName))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public static int GetSpellDangerLevel(EvadeSpellData spell)

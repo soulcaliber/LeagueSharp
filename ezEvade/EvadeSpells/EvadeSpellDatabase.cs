@@ -1100,37 +1100,37 @@ namespace ezEvade
 
             #region AllChampions
 
-            //Spells.Add(
-            //new EvadeSpellData
-            //{
-            //    charName = "AllChampions",
-            //    dangerlevel = 4,
-            //    name = "Talisman of Ascension",
-            //    spellName = "TalismanOfAscension",
-            //    spellDelay = 250,
-            //    spellKey = SpellSlot.Q,
-            //    evadeType = EvadeType.MovementSpeedBuff,
-            //    speedArray = new[] { 40f, 40f, 40f, 40f, 40f },
-            //    castType = CastType.Self,
-            //    isItem = true,
-            //    itemID = ItemId.Talisman_of_Ascension
-            //});
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "AllChampions",
+                dangerlevel = 4,
+                name = "Talisman of Ascension",
+                spellName = "TalismanOfAscension",
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.MovementSpeedBuff,
+                speedArray = new[] { 40f, 40f, 40f, 40f, 40f },
+                castType = CastType.Self,
+                isItem = true,
+                itemID = ItemId.Talisman_of_Ascension
+            });
 
-            //Spells.Add(
-            //new EvadeSpellData
-            //{
-            //    charName = "AllChampions",
-            //    dangerlevel = 4,
-            //    name = "Youmuu's Ghostblade",
-            //    spellName = "YoumuusGhostblade",
-            //    spellDelay = 250,
-            //    spellKey = SpellSlot.Q,
-            //    evadeType = EvadeType.MovementSpeedBuff,
-            //    speedArray = new[] { 20f, 20f, 20f, 20f, 20f },
-            //    castType = CastType.Self,
-            //    isItem = true,
-            //    itemID = ItemId.Youmuus_Ghostblade
-            //});
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "AllChampions",
+                dangerlevel = 4,
+                name = "Youmuu's Ghostblade",
+                spellName = "YoumuusGhostblade",
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                evadeType = EvadeType.MovementSpeedBuff,
+                speedArray = new[] { 20f, 20f, 20f, 20f, 20f },
+                castType = CastType.Self,
+                isItem = true,
+                itemID = ItemId.Youmuus_Ghostblade
+            });
 
             Spells.Add(
             new EvadeSpellData

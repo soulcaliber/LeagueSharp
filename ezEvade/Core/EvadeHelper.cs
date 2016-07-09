@@ -124,7 +124,7 @@ namespace ezEvade
             return sortedPosTable;
         }
 
-        public static PositionInfo GetBestPosition(EvadeSpellData evadeSpell = null)
+        public static PositionInfo GetBestPosition()
         {
             int posChecked = 0;
             int maxPosToCheck = 50;
@@ -250,17 +250,10 @@ namespace ezEvade
             {
                 if (CheckPathCollision(myHero, posInfo.position) == false)
                 {
-                    var moveSpeed = ObjectCache.myHeroCache.moveSpeed;
-                    if (evadeSpell != null && evadeSpell.evadeType == EvadeType.MovementSpeedBuff)
-                    {
-                        moveSpeed = moveSpeed + moveSpeed *
-                                    evadeSpell.speedArray[myHero.GetSpell(evadeSpell.spellKey).Level - 1] / 100;
-                    }
-
                     if (fastEvadeMode)
                     {
                         posInfo.position = GetExtendedSafePosition(ObjectCache.myHeroCache.serverPos2D, posInfo.position, extraEvadeDistance);
-                        return CanHeroWalkToPos(posInfo.position, moveSpeed, ObjectCache.gamePing, 0);
+                        return CanHeroWalkToPos(posInfo.position, ObjectCache.myHeroCache.moveSpeed, ObjectCache.gamePing, 0);
                     }
 
                     if (PositionInfoStillValid(posInfo))
@@ -324,7 +317,9 @@ namespace ezEvade
             foreach (var posInfo in sortedPosTable)
             {
                 if (CheckPathCollision(myHero, posInfo.position) == false)
+                {
                     return posInfo;
+                }
             }
 
             return null;
@@ -864,9 +859,13 @@ namespace ezEvade
             {
                 Spell spell = entry.Value;
 
+                var moveBuff = EvadeSpell.evadeSpells.OrderBy(s => s.dangerlevel).FirstOrDefault(s => s.evadeType == EvadeType.MovementSpeedBuff);
+                if (moveBuff != null && EvadeSpell.ShouldUseMovementBuff(spell))
+                {
+                    speed += speed * moveBuff.speedArray[myHero.GetSpell(moveBuff.spellKey).Level - 1] / 100;
+                }
+
                 closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist));
-                //GetIntersectTime(spell, ObjectCache.myHeroCache.serverPos2D, pos);
-                //Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, ObjectCache.myHeroCache.moveSpeed, delay, ObjectCache.myHeroCache.serverPos2D));
 
                 if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 6)
                     || PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist, useServerPosition)
