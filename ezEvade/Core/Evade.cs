@@ -445,7 +445,7 @@ namespace ezEvade
                         }
                         else
                         {
-                            lastPosInfo.position = end;
+                            // lastPosInfo.position = end;
                             lastDodgingEndTime = EvadeUtils.TickCount;
 
                             if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 500)
@@ -480,7 +480,7 @@ namespace ezEvade
                         }
                         else
                         {
-                            lastPosInfo.position = dashPos;
+                            // lastPosInfo.position = dashPos;
                             lastDodgingEndTime = EvadeUtils.TickCount;
 
                             if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 500)
