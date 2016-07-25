@@ -441,7 +441,7 @@ namespace ezEvade
                         var posInfo = EvadeHelper.CanHeroWalkToPos(end, evadeSpell.speed, ObjectCache.gamePing, 0);
                         if (posInfo.posDangerCount > 0)
                         {
-                            args.Process = false;
+                            // args.Process = false;
                         }
                         else
                         {
