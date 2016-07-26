@@ -425,8 +425,7 @@ namespace ezEvade
 
             foreach (var evadeSpell in EvadeSpell.evadeSpells)
             {
-                if (evadeSpell.isItem == false && 
-                    evadeSpell.spellKey == args.Slot && evadeSpell.untargetable == false)
+                if (evadeSpell.isItem == false &&  evadeSpell.spellKey == args.Slot && evadeSpell.untargetable == false)
                 {
                     if (evadeSpell.evadeType == EvadeType.Blink)
                     {
@@ -439,21 +438,19 @@ namespace ezEvade
                         }
 
                         var posInfo = EvadeHelper.CanHeroWalkToPos(end, evadeSpell.speed, ObjectCache.gamePing, 0);
-                        if (posInfo.posDangerCount > 0)
+                        if (posInfo.posDangerCount < 1)
                         {
-                            // args.Process = false;
-                        }
-                        else
-                        {
-                            // lastPosInfo.position = end;
-                            lastDodgingEndTime = EvadeUtils.TickCount;
+                            if (lastPosInfo != null)                              
+                                lastPosInfo = posInfo;
 
-                            if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 500)
+                            if (lastPosInfo == null)
+                                lastPosInfo = posInfo;
+
+                            if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 250)
                             {
-                                EvadeCommand.MoveTo(Game.CursorPos.To2D()); //block moveto
+                                EvadeCommand.MoveTo(Game.CursorPos.To2D());
                                 lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
                             }
-
                             return;
                         }
                     }
@@ -480,12 +477,9 @@ namespace ezEvade
                         }
                         else
                         {
-                            // lastPosInfo.position = dashPos;
-                            lastDodgingEndTime = EvadeUtils.TickCount;
-
                             if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 500)
                             {
-                                EvadeCommand.MoveTo(Game.CursorPos.To2D()); //block moveto
+                                EvadeCommand.MoveTo(Game.CursorPos.To2D());
                                 lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
                             }
 
