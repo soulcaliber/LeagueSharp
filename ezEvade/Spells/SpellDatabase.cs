@@ -313,22 +313,22 @@ namespace ezEvade
 
             #region Azir
 
-            //Spells.Add(
-            //new SpellData
-            //{
-            //    charName = "Azir",
-            //    dangerlevel = 2,
-            //    name = "AzirQ",
-            //    projectileSpeed = 1000,
-            //    radius = 80,
-            //    range = 800,
-            //    spellDelay = 250,
-            //    spellKey = SpellSlot.Q,
-            //    spellName = "AzirQ",
-            //    spellType = SpellType.Line,
-            //    usePackets = true,
-            //    isSpecial = true,
-            //});
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Azir",
+                dangerlevel = 3,
+                name = "AzirQ",
+                projectileSpeed = 1750,
+                radius = 80,
+                range = 1000,
+                spellDelay = 375,
+                spellKey = SpellSlot.Q,
+                spellName = "AzirQWrapper",
+                noProcess = true,
+                spellType = SpellType.Line,
+                isSpecial = true,
+            });
             #endregion Azir
 
             #region Bard
@@ -397,7 +397,7 @@ namespace ezEvade
             {
                 charName = "Brand",
                 dangerlevel = 3,
-                missileName = "BrandQissile",
+                missileName = "BrandQMissile",
                 name = "BrandQ",
                 projectileSpeed = 2000, //1600
                 radius = 60,

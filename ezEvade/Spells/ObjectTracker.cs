@@ -19,6 +19,7 @@ namespace ezEvade
         public int OwnerNetworkID;
         public bool usePosition = false;
         public float timestamp = 0;
+        public Dictionary<int, GameObject> objList = new Dictionary<int, GameObject>(); 
 
         public ObjectTrackerInfo(GameObject obj)
         {

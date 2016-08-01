@@ -62,6 +62,7 @@
     <Compile Include="EvadeSpells\SpecialEvadeSpell.cs" />
     <Compile Include="Helpers\AutoSetPing.cs" />
     <Compile Include="SpecialSpells\Ashe.cs" />
+    <Compile Include="SpecialSpells\Azir.cs" />
     <Compile Include="SpecialSpells\ChampionPlugin.cs" />
     <Compile Include="SpecialSpells\Ekko.cs" />
     <Compile Include="SpecialSpells\Fizz.cs" />
