@@ -2050,7 +2050,7 @@ namespace ezEvade
                 spellName = "LucianR",
                 extraSpellNames = new [] { "lucianrmissileoffhand" },
                 spellType = SpellType.Line,
-
+                defaultOff = true
             });
             #endregion Lucian
 
@@ -2993,6 +2993,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "TaliyahQ",
                 spellType = SpellType.Line,
+                defaultOff = true,
 }           );
 
             Spells.Add(
@@ -3023,6 +3024,7 @@ namespace ezEvade
                 radius = 100,
                 range = 750,
                 fixedRange = true,
+                defaultOff = true,
                 spellDelay = 1000,
                 spellKey = SpellSlot.E,
                 spellName = "TaricE",
@@ -3799,7 +3801,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "ZyraR",
                 spellType = SpellType.Circular,
-
+                defaultOff = true
             });
             #endregion Zyra
         }
