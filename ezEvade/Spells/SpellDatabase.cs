@@ -3001,13 +3001,13 @@ namespace ezEvade
             {
                 charName = "Taliyah",
                 dangerlevel = 3,
-                missileName = "TaliyahW",
-                name = "TaliyahW",
+                missileName = "TaliyahWVC",
+                name = "TaliyahWVC",
                 radius = 150,
                 range = 900,
                 spellDelay = 1000,
                 spellKey = SpellSlot.W,
-                spellName = "TaliyahW",
+                spellName = "TaliyahWVC",
                 spellType = SpellType.Circular              
             });
             #endregion
