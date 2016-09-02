@@ -1095,18 +1095,19 @@ namespace ezEvade
 
             });
 
-            /*Spells.Add(
+            Spells.Add(
             new SpellData
             {
                 charName = "Gnar",
                 dangerlevel = 2,
                 name = "GnarE",
+                missileName = "GnarE",
                 spellName = "GnarE",
-                range = 475,
+                range = 473,
                 spellDelay = 0,
                 radius = 150,
                 fixedRange = true,
-                projectileSpeed = 900,
+                projectileSpeed = 903,
                 spellKey = SpellSlot.E,
                 spellType = SpellType.Circular,
             });
@@ -1117,15 +1118,16 @@ namespace ezEvade
                 charName = "Gnar",
                 dangerlevel = 2,
                 name = "GnarBigE",
-                spellName = "gnarbige",
+                missileName = "GnarBigE",
+                spellName = "GnarBigE",
                 range = 475,
-                spellDelay = 0,
-                radius = 100,
+                spellDelay = 250,
+                radius = 200,
                 fixedRange = true,
-                projectileSpeed = 800,
+                projectileSpeed = 1000,
                 spellKey = SpellSlot.E,
                 spellType = SpellType.Circular,
-            });*/
+            });
 
             #endregion Gnar
 
