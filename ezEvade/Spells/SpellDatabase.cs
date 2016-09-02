@@ -2152,6 +2152,21 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Maokai",
+                dangerlevel = 3,
+                name = "MaokaiKnockBack",
+                radius = 100,
+                range = 100,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "MaokaiTrunkLine",
+                spellType = SpellType.Circular,
+
+            });
+            
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Maokai",
                 dangerlevel = 2,
                 name = "MaokaiSapling2",
                 projectileSpeed = 1000,
