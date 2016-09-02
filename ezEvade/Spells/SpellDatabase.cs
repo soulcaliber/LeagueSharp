@@ -2047,8 +2047,8 @@ namespace ezEvade
                 range = 1400,
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
-                spellName = "LucianR",
-                extraSpellNames = new [] { "lucianrmissileoffhand" },
+                spellName = "LucianRMis",
+                extraSpellNames = new [] { "lucianrmissile" },
                 spellType = SpellType.Line,
                 defaultOff = true
             });
