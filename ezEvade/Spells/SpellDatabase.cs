@@ -1968,6 +1968,7 @@ namespace ezEvade
                 charName = "Lissandra",
                 dangerlevel = 2,
                 name = "Ice Shard",
+                missileName = "LissandraQMissile",
                 projectileSpeed = 2250,
                 radius = 75,
                 range = 825,
