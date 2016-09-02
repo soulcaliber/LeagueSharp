@@ -2886,18 +2886,36 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                angle = 30,
+                angle = 45,
                 charName = "Syndra",
                 dangerlevel = 3,
                 name = "SyndraE",
                 missileName = "SyndraE",
                 usePackets = true,
-                projectileSpeed = 1500,
-                radius = 140,
-                range = 800,
-                spellDelay = 250,
+                projectileSpeed = 2000,
+                radius = 100,
+                range = 950,
+                spellDelay = 0,
                 spellKey = SpellSlot.E,
                 spellName = "SyndraE",
+                spellType = SpellType.Line,
+            });
+            
+            Spells.Add(
+            new SpellData
+            {
+                angle = 45,
+                charName = "Syndra",
+                dangerlevel = 3,
+                name = "syndrae5",
+                missileName = "syndrae5",
+                usePackets = true,
+                projectileSpeed = 2000,
+                radius = 100,
+                range = 950,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                spellName = "syndrae5",
                 spellType = SpellType.Line,
             });
 
