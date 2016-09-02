@@ -1764,6 +1764,42 @@ namespace ezEvade
 
             });
             #endregion Khazix
+            
+            #region Kled
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Kled",
+                dangerlevel = 3,
+                missileName = "KledQMissile",
+                name = "KledQ",
+                projectileSpeed = 1600,
+                radius = 45,
+                range = 800,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "KledQ",
+                spellType = SpellType.Line,
+
+            });
+            
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Kled",
+                dangerlevel = 2,
+                name = "KledE",
+                projectileSpeed = 945,
+                radius = 125,
+                range = 750,
+                spellDelay = 0,
+                spellKey = SpellSlot.E,
+                spellName = "KledE",
+                spellType = SpellType.Line,
+
+            });
+            #endregion Kled
 
             #region KogMaw
 
