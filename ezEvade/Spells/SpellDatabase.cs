@@ -1763,6 +1763,22 @@ namespace ezEvade
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
+            
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Khazix",
+                dangerlevel = 2,
+                missileName = "KhazixE",
+                name = "KhazixE",
+                projectileSpeed = 1500,
+                radius = 300,
+                range = 600,
+                spellDelay = 250,
+                spellKey = SpellSlot.E,
+                spellName = "KhazixE",
+                spellType = SpellType.Circular,
+            });
             #endregion Khazix
 
             #region KogMaw
