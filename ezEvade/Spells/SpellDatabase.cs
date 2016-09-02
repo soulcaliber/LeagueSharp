@@ -1967,13 +1967,30 @@ namespace ezEvade
             {
                 charName = "Lissandra",
                 dangerlevel = 2,
-                name = "Ice Shard",
-                projectileSpeed = 2250,
+                name = "LissandraQ",
+                projectileSpeed = 2200,
                 radius = 75,
                 range = 825,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "LissandraQ",
+                spellType = SpellType.Line,
+                
+            });
+            
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Lissandra",
+                dangerlevel = 2,
+                name = "Lissandra Ice Shards",
+                missileName = "lissandraqshards",
+                projectileSpeed = 2200,
+                radius = 90,
+                range = 825,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "LissandraQShards",
                 spellType = SpellType.Line,
                 
             });
