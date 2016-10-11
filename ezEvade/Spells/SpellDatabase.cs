@@ -1725,6 +1725,7 @@ namespace ezEvade
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 hasEndExplosion = true,
+                endExplosionDelay = 1000,
                 secondaryRadius = 250,
                 usePackets = true
 
@@ -2222,7 +2223,6 @@ namespace ezEvade
 
             });
 
-            //TODO: Fix extra shots detection
             Spells.Add(
             new SpellData
             {
@@ -2236,12 +2236,13 @@ namespace ezEvade
                 range = 1400,
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
-                spellName = "LucianR",
+                spellName = "LucianRMis",
                 spellType = SpellType.Line,
-                extraSpellNames = new[] { "LucianRMis" },
+                extraSpellNames = new[] { "LucianR" },
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 defaultOff = true
             });
+
             #endregion Lucian
 
             #region Lulu

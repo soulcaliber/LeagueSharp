@@ -86,10 +86,6 @@ namespace ezEvade
 
             MissileClient missile = (MissileClient) obj;
 
-            // todo: keepo
-            //if (missile.SpellCaster.IsMe)
-            //    Console.WriteLine("Missile: " + missile.SData.Name);
-
             SpellData spellData;
 
             if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
@@ -268,16 +264,6 @@ namespace ezEvade
         {
             try
             {
-                /*var castTime2 = (hero.Spellbook.CastTime - Game.Time) * 1000;
-                if (castTime2 > 0)
-                {
-                    Console.WriteLine(args.SData.Name + ": " + castTime2);
-                }*/
-
-                // todo: keepo
-                //if (hero.IsMe)
-                //    Console.WriteLine("Spell: " + args.SData.Name);
-
                 SpellData spellData;
 
                 if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
@@ -285,10 +271,7 @@ namespace ezEvade
                     if (spellData.usePackets == false)
                     {
                         var specialSpellArgs = new SpecialSpellEventArgs();
-                        if (OnProcessSpecialSpell != null)
-                        {
-                            OnProcessSpecialSpell(hero, args, spellData, specialSpellArgs);
-                        }
+                        OnProcessSpecialSpell?.Invoke(hero, args, spellData, specialSpellArgs);
 
                         if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
@@ -298,18 +281,22 @@ namespace ezEvade
                             {
                                 foreach (KeyValuePair<int, Spell> entry in detectedSpells)
                                 {
-                                    Spell spell = entry.Value;
-
-                                    var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
-
-                                    if (spell.spellObject != null
-                                        && (spell.info.spellName.Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                                           (spell.info.spellName.ToLower() + "_urf").Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase))
-                                        && spell.heroID == hero.NetworkId
-                                        && dir.AngleBetween(spell.direction) < 10)
+                                    if (!spellData.dontcheckDuplicates)
                                     {
-                                        foundMissile = true;
-                                        break;
+                                        Spell spell = entry.Value;
+
+                                        var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
+
+                                        if (spell.spellObject != null)
+                                        {
+                                            if ((spell.info.spellName.Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
+                                                (spell.info.spellName.ToLower() + "_urf").Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase)) && 
+                                                 spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
+                                            {
+                                                foundMissile = true;
+                                                break;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -318,18 +305,6 @@ namespace ezEvade
                             {
                                 CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
                             }
-
-                            /*if (spellData.spellType == SpellType.Line)
-                            {
-                                var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
-
-                                if (Math.Abs(castTime - spellData.spellDelay) > 5)
-                                {
-                                    Console.WriteLine("Wrong delay " + spellData.spellName + ": "
-                                        + spellData.spellDelay + " vs " + castTime);
-                                }
-                            }*/
-
                         }
                     }
                 }
@@ -346,13 +321,11 @@ namespace ezEvade
         {
             if (checkEndExplosion && spellData.hasEndExplosion)
             {
-                CreateSpellData(hero, spellStartPos, spellEndPos,
-            spellData, obj, extraEndTick, false,
-            spellData.spellType, false);
+                CreateSpellData(hero, spellStartPos, spellEndPos, spellData, 
+                    obj, extraEndTick, false, spellData.spellType, false);
 
-                CreateSpellData(hero, spellStartPos, spellEndPos,
-            spellData, obj, extraEndTick, true,
-            SpellType.Circular, false);
+                CreateSpellData(hero, spellStartPos, spellEndPos, spellData, 
+                    obj, extraEndTick, true, SpellType.Circular, false);
 
                 return;
             }
@@ -396,6 +369,7 @@ namespace ezEvade
                 }
                 else if (spellType == SpellType.Circular)
                 {
+
                     endTick = spellData.spellDelay;
 
                     if (spellData.projectileSpeed == 0)
@@ -404,14 +378,19 @@ namespace ezEvade
                     }
                     else if (spellData.projectileSpeed > 0)
                     {
-                        if (spellData.spellType == SpellType.Line &&
-                            spellData.hasEndExplosion &&
-                            spellData.useEndPosition == false)
+                        if (spellData.spellType == SpellType.Line && 
+                            spellData.hasEndExplosion && !spellData.useEndPosition)
                         {
                             endPosition = startPosition + direction * spellData.range;
                         }
 
                         endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
+                    }
+
+                    if (spellData.hasEndExplosion && spellData.endExplosionDelay > 0 
+                        && !spellData.useEndPosition)
+                    {
+                        endTick += spellData.endExplosionDelay;
                     }
                 }
                 else if (spellType == SpellType.Arc)
