@@ -45,9 +45,6 @@
     <Reference Include="SharpDX">
       <HintPath>C:\L33T\References\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct3D9">
-      <HintPath>C:\L33T\References\SharpDX.Direct3D9.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

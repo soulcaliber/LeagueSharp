@@ -109,37 +109,27 @@ namespace ezEvade
 
                             var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
 
-                            if (spell.info.missileName.Equals(missile.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                               (spell.info.missileName + "_urf").Equals(missile.SData.Name, StringComparison.InvariantCultureIgnoreCase)
-                                && spell.heroID == missile.SpellCaster.NetworkId
-                                && dir.AngleBetween(spell.direction) < 10)
+                            if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                             {
-
-                                if (spell.info.isThreeWay == false
-                                    && spell.info.isSpecial == false)
+                                if (spell.info.missileName == missile.SData.Name.ToLower() ||
+                                   (spell.info.missileName + "urf").ToLower() == missile.SData.Name.ToLower())
                                 {
-                                    spell.spellObject = obj;
-                                    objectAssigned = true;
-                                    break;
-
-                                    /*if(spell.spellType == SpellType.Line)
+                                    if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
                                     {
-                                        if (missile.SData.LineWidth != spell.info.radius)
-                                        {
-                                            Console.WriteLine("Wrong radius " + spell.info.spellName + ": "
-                                            + spell.info.radius + " vs " + missile.SData.LineWidth);
-                                        }
+                                        spell.spellObject = obj;
+                                        objectAssigned = true;
+                                        break;
+                                    }
+                                }
 
-                                        if (missile.SData.MissileSpeed != spell.info.projectileSpeed)
-                                        {
-                                            Console.WriteLine("Wrong speed " + spell.info.spellName + ": "
-                                            + spell.info.projectileSpeed + " vs " + missile.SData.MissileSpeed);
-                                        }
-                                        
-                                    }*/
-
-                                    //var acquisitionTime = EvadeUtils.TickCount - spell.startTime;
-                                    //Console.WriteLine("AcquiredTime: " + acquisitionTime);
+                                if (spell.info.extraMissileNames.Any(x => missile.SData.Name.ToLower() == x.ToLower()))
+                                {
+                                    if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
+                                    {
+                                        spell.spellObject = obj;
+                                        objectAssigned = true;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -282,12 +272,23 @@ namespace ezEvade
 
                                     if (spell.spellObject != null)
                                     {
-                                        if ((spell.info.spellName.Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                                            (spell.info.spellName.ToLower() + "_urf").Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase)) && 
-                                                spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
+                                        if (spell.info.spellName.ToLower() == args.SData.Name.ToLower() ||
+                                           (spell.info.spellName + "_urf").ToLower() == args.SData.Name.ToLower())
                                         {
-                                            foundMissile = true;
-                                            break;
+                                            if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
+                                            {
+                                                foundMissile = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (spell.info.extraMissileNames.Any(x => args.SData.Name.ToLower() == x.ToLower()))
+                                        {
+                                            if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
+                                            {
+                                                foundMissile = true;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
