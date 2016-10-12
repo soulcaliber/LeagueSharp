@@ -2243,7 +2243,7 @@ namespace ezEvade
                 dontcheckDuplicates = true,
                 defaultOff = true
             });
-
+            
             #endregion Lucian
 
             #region Lulu
@@ -2440,7 +2440,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "MonkeyKing",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 name = "Cyclone",
                 radius = 225,
                 range = 300,
@@ -2480,7 +2480,7 @@ namespace ezEvade
             {
                 charName = "Nami",
                 dangerlevel = 3,
-                missileName = "NamiQ",
+                missileName = "namiqmissile",
                 name = "Aqua Prison",
                 projectileSpeed = float.MaxValue,
                 radius = 200,
@@ -3012,7 +3012,7 @@ namespace ezEvade
                 projectileSpeed = float.MaxValue,
                 radius = 250,
                 range = 800,
-                spellDelay = 2000,
+                spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "SionQ",
                 spellType = SpellType.Line,
@@ -3126,7 +3126,7 @@ namespace ezEvade
                 dangerlevel = 2,
                 name = "Starcall",
                 missileName = "SorakaQ",
-                projectileSpeed = 5,
+                projectileSpeed = 1750,
                 radius = 260,
                 range = 970,
                 spellDelay = 500,
@@ -3204,9 +3204,9 @@ namespace ezEvade
                 projectileSpeed = 1450,
                 radius = 220,
                 range = 925,
-                spellDelay = 0,
+                spellDelay = 250,
                 spellKey = SpellSlot.W,
-                spellName = "syndrawcast",
+                spellName = "SyndraWCast",
                 spellType = SpellType.Circular,
 
             });
@@ -3833,7 +3833,7 @@ namespace ezEvade
                 projectileSpeed = float.MaxValue,
                 radius = 80,
                 range = 1525,
-                spellDelay = 0,
+                spellDelay = 500,
                 spellKey = SpellSlot.Q,
                 spellName = "xeratharcanopulse2",
                 useEndPosition = true,
@@ -3885,13 +3885,13 @@ namespace ezEvade
                 dangerlevel = 3,
                 missileName = "YasuoQ3",
                 extraMissileNames = new[] { "YasuoQ3Mis" },
-                name = "Steel Tempest (tornado)",
+                name = "Steel Tempest (Tornado)",
                 projectileSpeed = 1500,
                 radius = 90,
                 range = 1150,
                 spellDelay = 100,
                 spellKey = SpellSlot.Q,
-                spellName = "YasuoQ3",
+                spellName = "YasuoQ3W",
                 spellType = SpellType.Line,
             });
 
@@ -3900,9 +3900,8 @@ namespace ezEvade
             {
                 charName = "Yasuo",
                 dangerlevel = 2,
+                missileName = "YasuoQ2",
                 name = "Steel Tempest",
-                missileName = "yasuoq",
-                extraMissileNames = new[] { "yasuoq2" },
                 projectileSpeed = float.MaxValue,
                 radius = 40,
                 range = 550,
@@ -3910,7 +3909,7 @@ namespace ezEvade
                 spellDelay = 400,
                 spellKey = SpellSlot.Q,
                 spellName = "YasuoQ",
-                extraSpellNames = new[] { "YasuoQ2", },
+                extraSpellNames = new[] { "YasuoQ2" },
                 spellType = SpellType.Line,
                 invert = true
             });
