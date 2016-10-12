@@ -37,13 +37,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>C:\Program Files (x86)\PlaySharp\References\LeagueSharp.dll</HintPath>
+      <HintPath>C:\L33T\References\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\Program Files (x86)\PlaySharp\References\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\L33T\References\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\Program Files (x86)\PlaySharp\References\SharpDX.dll</HintPath>
+      <HintPath>C:\L33T\References\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>C:\L33T\References\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -61,6 +64,7 @@
     <Compile Include="Draw\RenderText.cs" />
     <Compile Include="EvadeSpells\SpecialEvadeSpell.cs" />
     <Compile Include="Helpers\AutoSetPing.cs" />
+    <Compile Include="Helpers\CollisionCandidate.cs" />
     <Compile Include="SpecialSpells\Ashe.cs" />
     <Compile Include="SpecialSpells\Azir.cs" />
     <Compile Include="SpecialSpells\ChampionPlugin.cs" />

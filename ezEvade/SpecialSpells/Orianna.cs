@@ -114,7 +114,7 @@ namespace ezEvade.SpecialSpells
                         {
                             SpellDetector.CreateSpellData(hero, info.position, args.End, spellData, null, 0, false);
                             SpellDetector.CreateSpellData(hero, info.position, args.End,
-                spellData, null, 150, true, SpellType.Circular, false, spellData.secondaryRadius);
+                spellData, null, 150, true, SpellType.Circular, false, false, spellData.secondaryRadius);
 
                         }
                         else
@@ -124,7 +124,7 @@ namespace ezEvade.SpecialSpells
 
                             SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0, false);
                             SpellDetector.CreateSpellData(hero, info.obj.Position, args.End,
-                spellData, null, 150, true, SpellType.Circular, false, spellData.secondaryRadius);
+                spellData, null, 150, true, SpellType.Circular, false, false, spellData.secondaryRadius);
 
                         }
 

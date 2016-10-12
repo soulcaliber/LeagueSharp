@@ -2240,6 +2240,7 @@ namespace ezEvade
                 spellType = SpellType.Line,
                 extraSpellNames = new[] { "LucianR" },
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+                dontcheckDuplicates = true,
                 defaultOff = true
             });
 
