@@ -58,8 +58,8 @@ namespace ezEvade
         public bool dontcheckDuplicates = false;
         public bool isSpecial = false;
         public float extraDrawHeight = 0;
-        public string[] extraSpellNames;
-        public string[] extraMissileNames;
+        public string[] extraSpellNames = { };
+        public string[] extraMissileNames = { };
         public CollisionObjectType[] collisionObjects = { };
 
         public SpellData()
