@@ -3893,7 +3893,7 @@ namespace ezEvade
                 spellDelay = 100,
                 spellKey = SpellSlot.Q,
                 spellName = "YasuoQ3",
-                extraSpellNames = new[] { "YasuoQ3W},
+                extraSpellNames = new[] { "YasuoQ3W" },
                 spellType = SpellType.Line,
             });
 
