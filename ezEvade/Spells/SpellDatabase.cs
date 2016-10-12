@@ -2480,7 +2480,8 @@ namespace ezEvade
             {
                 charName = "Nami",
                 dangerlevel = 3,
-                missileName = "namiqmissile",
+                missileName = "NamiQ",
+                extraMissileNames = new[] { "namiqmissile" },
                 name = "Aqua Prison",
                 projectileSpeed = float.MaxValue,
                 radius = 200,
@@ -3891,7 +3892,8 @@ namespace ezEvade
                 range = 1150,
                 spellDelay = 100,
                 spellKey = SpellSlot.Q,
-                spellName = "YasuoQ3W",
+                spellName = "YasuoQ3",
+                extraSpellNames = new[] { "YasuoQ3W" },
                 spellType = SpellType.Line,
             });
 
@@ -3900,7 +3902,8 @@ namespace ezEvade
             {
                 charName = "Yasuo",
                 dangerlevel = 2,
-                missileName = "YasuoQ2",
+                missileName = "yasuoq",
+                extraMissileNames = new[] { "yasuoq2" },
                 name = "Steel Tempest",
                 projectileSpeed = float.MaxValue,
                 radius = 40,
