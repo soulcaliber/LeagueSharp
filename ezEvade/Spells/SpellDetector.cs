@@ -293,7 +293,7 @@ namespace ezEvade
                                 }
                             }
 
-                            if (foundMissile == false || !spellData.dontcheckDuplicates)
+                            if (foundMissile == false || spellData.dontcheckDuplicates)
                             {
                                 CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
                             }
