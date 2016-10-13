@@ -2280,7 +2280,6 @@ namespace ezEvade
                 projectileSpeed = 1400,
                 radius = 340,
                 range = 1100,
-                extraEndTime = 5500,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
                 spellName = "LuxLightStrikeKugel",
