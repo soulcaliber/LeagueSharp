@@ -3842,15 +3842,15 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Xerath",
-                dangerlevel = 3,
-                missileName = "xeratharcanopulse2",
+                dangerlevel = 2,
+                missileName = "XerathArcanopulse2",
                 name = "Arcanopulse",
                 projectileSpeed = float.MaxValue,
                 radius = 80,
                 range = 1525,
                 spellDelay = 500,
                 spellKey = SpellSlot.Q,
-                spellName = "xeratharcanopulse2",
+                spellName = "XerathArcanopulse2",
                 useEndPosition = true,
                 spellType = SpellType.Line,
             });
@@ -3859,7 +3859,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Xerath",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 name = "Rite of the Arcane",
                 missileName = "xerathrmissilewrapper",
                 extraMissileNames = new[] { "XerathLocusPulse" },
