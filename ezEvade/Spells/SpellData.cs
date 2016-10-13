@@ -54,7 +54,6 @@ namespace ezEvade
         public bool isPerpendicular = false;
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
-        public float endExplosionDelay = 0;
         public bool dontcheckDuplicates = false;
         public bool isSpecial = false;
         public float extraDrawHeight = 0;

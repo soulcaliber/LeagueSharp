@@ -184,7 +184,7 @@ namespace ezEvade
             return null;
         }
 
-        public static Obj_AI_Base CheckSpellCollision(this Spell spell)
+        public static Obj_AI_Base CheckSpellCollision(this Spell spell, bool ignoreSelf = true)
         {
             if (spell.info.collisionObjects.Count() < 1)
             {
@@ -198,8 +198,13 @@ namespace ezEvade
             if (spell.info.collisionObjects.Contains(CollisionObjectType.EnemyChampions))
             {
                 foreach (var hero in HeroManager.Allies
-                    .Where(h => !h.IsMe && h.IsValidTarget(distanceToHero, false, spellPos.To3D())))
+                    .Where(h => h.IsValidTarget(distanceToHero, false, spellPos.To3D())))
                 {
+                    if (ignoreSelf && hero.IsMe)
+                    {
+                        continue;
+                    }
+
                     collisionCandidates.Add(hero);
                 }
             }

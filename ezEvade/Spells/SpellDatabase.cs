@@ -1725,7 +1725,6 @@ namespace ezEvade
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 hasEndExplosion = true,
-                endExplosionDelay = 1000,
                 secondaryRadius = 250,
                 usePackets = true
 
@@ -2680,7 +2679,6 @@ namespace ezEvade
                 dangerlevel = 2,
                 missileName = "PoppyQ",
                 name = "Hammer Shock",
-                projectileSpeed = float.MaxValue,
                 radius = 100,
                 range = 450,
                 extraEndTime = 1000,
@@ -2694,14 +2692,14 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Poppy",
-                dangerlevel = 3,
-                name = "Keeper's Verdict",
+                dangerlevel = 4,
+                name = "Keeper's Verdict (Knockup)",
                 radius = 110,
                 range = 450,
-                spellDelay = 300,
+                spellDelay = 250,
                 spellKey = SpellSlot.R,
                 spellName = "PoppyRSpellInstant",
-                spellType = SpellType.Line,
+                spellType = SpellType.Circular,
             });
 
             Spells.Add(
@@ -2709,7 +2707,7 @@ namespace ezEvade
             {
                 charName = "Poppy",
                 dangerlevel = 3,
-                name = "Keeper's Verdict",
+                name = "Keeper's Verdict (Line)",
                 radius = 100,
                 range = 1150,
                 projectileSpeed = 1750,
@@ -2761,6 +2759,23 @@ namespace ezEvade
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "RekSai",
+                dangerlevel = 3,
+                missileName = "",
+                name = "Unburrow",
+                projectileSpeed = 1500,
+                radius = 115,
+                range = 120,
+                spellDelay = 250f,
+                spellKey = SpellSlot.W,
+                spellName = "ReksaiWBurrowed",
+                spellType = SpellType.Circular
+            });
+
             #endregion RekSai
 
             #region Rengar
@@ -4060,14 +4075,13 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Zilean",
-                dangerlevel = 2,
-                missileName = "ZileanQ",
+                dangerlevel = 3,
+                missileName = "ZileanQMissile",
                 name = "Time Bomb",
-                projectileSpeed = 2000,
-                radius = 250,
+                radius = 140,
                 range = 900,
                 extraEndTime = 400,
-                spellDelay = 300,
+                spellDelay = 650,
                 spellKey = SpellSlot.Q,
                 spellName = "ZileanQ",
                 spellType = SpellType.Circular,

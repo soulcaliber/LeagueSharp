@@ -135,8 +135,7 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(false));
-                miscMenu.AddItem(new MenuItem("DodgeCheckHP", "Check My Hero HP%")
-                    .SetValue(false)).SetTooltip("Enabling this will check if above X HP % and ignore spells.");
+                miscMenu.AddItem(new MenuItem("DodgeCheckHP", "Check My Hero HP%").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
