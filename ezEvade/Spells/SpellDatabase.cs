@@ -482,7 +482,7 @@ namespace ezEvade
                 missileName = "braumrmissile",
                 name = "Glacial Fissure",
                 projectileSpeed = 1125,
-                radius = 100,
+                radius = 115,
                 range = 1250,
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
