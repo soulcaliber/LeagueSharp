@@ -358,6 +358,7 @@ namespace ezEvade
             {
                 ResetConfig(false);
                 menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
+                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('109', KeyBindType.Press));
                 menu.Item("HigherPrecision").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
             }
