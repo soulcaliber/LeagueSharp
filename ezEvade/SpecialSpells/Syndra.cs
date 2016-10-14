@@ -14,7 +14,8 @@ namespace ezEvade.SpecialSpells
     {
         private const string _sphereName = "syndrasphere";
         private static readonly List<Obj_AI_Minion> _spheres = new List<Obj_AI_Minion>();
-   
+        private static readonly Dictionary<float, Vector3> _qSpots = new Dictionary<float, Vector3>(); 
+
         static Syndra()
         {
             var syndra = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Syndra");
@@ -38,6 +39,15 @@ namespace ezEvade.SpecialSpells
         private static void Game_OnUpdate(EventArgs args)
         {
             _spheres.RemoveAll(i => !i.IsValid || i.IsDead);
+
+            foreach (var spot in _qSpots.ToArray())
+            {
+                var timestamp = spot.Key;
+                if (Game.Time - timestamp >= 1.2f * 0.6f)
+                {
+                    _qSpots.Remove(timestamp);
+                }
+            }
         }
 
         private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
@@ -61,6 +71,7 @@ namespace ezEvade.SpecialSpells
             {
                 if (!_spheres.Contains(sphere))
                 {
+                    RemovePairsNear(sphere.Position);
                     _spheres.Add(sphere);
                 }
             }
@@ -91,9 +102,44 @@ namespace ezEvade.SpecialSpells
                     {
                         var start = sphere.Position;
                         var end = hero.ServerPosition + (sphere.Position - hero.ServerPosition).Normalized() * spellData.range;
-                        SpellDetector.CreateSpellData(hero, start, end, spellData, sphere);
+                        var data = spellData.CloneData();
+                        data.spellDelay = sphere.Distance(hero.ServerPosition) / spellData.projectileSpeed * 1000;
+                        SpellDetector.CreateSpellData(hero, start, end, data, sphere);
                     }
                 }
+
+                foreach (var entry in _qSpots)
+                {
+                    var spherePosition = entry.Value;
+
+                    // check if e whill hit the sphere
+                    var proj = spherePosition.To2D().ProjectOn(estart.To2D(), eend.To2D());
+                    if (spherePosition.To2D().Distance(proj.SegmentPoint) <= 155)
+                    {
+                        var start = spherePosition;
+                        var end = hero.ServerPosition + (spherePosition - hero.ServerPosition).Normalized() * spellData.range;
+                        var data = spellData.CloneData();
+                        data.spellDelay = spherePosition.Distance(hero.ServerPosition) / spellData.projectileSpeed * 1000;
+                        SpellDetector.CreateSpellData(hero, start, end, data, null);
+                    }
+                }
+            }
+
+            if (spellData.spellName == "syndraq")
+            {
+                var end = args.End;
+                if (args.Start.Distance(end) > 800)
+                    end = args.Start + (args.End - args.Start).Normalized() * 800;
+
+                _qSpots[Game.Time] = end;
+            }
+        }
+
+        private static void RemovePairsNear(Vector3 pos)
+        {
+            foreach (var pair in _qSpots.ToArray().Where(o => o.Value.Distance(pos) <= 30))
+            {
+                _qSpots.Remove(pair.Key);
             }
         }
     }

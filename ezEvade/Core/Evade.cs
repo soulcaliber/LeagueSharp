@@ -144,7 +144,7 @@ namespace ezEvade
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
                 miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
                 miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
-                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu", "GuessWho"}, 0)));
+                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho"}, 0)));
                 miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
 
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
@@ -260,7 +260,7 @@ namespace ezEvade
             if (kappa)
             {
                 menu.Item("EvadeMode")
-                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu", "GuessWho" }, 0));
+                    .SetValue(new StringList(new[] { "Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho" }, 0));
             }
         }
 
@@ -268,7 +268,16 @@ namespace ezEvade
         {
             var mode = e.GetNewValue<StringList>().SelectedValue;
 
-            if (mode == "Very Smooth")
+            if (mode == "Fastest")
+            {
+                ResetConfig(false);
+                menu.Item("FastMovementBlock").SetValue(true);
+                menu.Item("FastEvadeActivationTime").SetValue(new Slider(120, 0, 500));
+                menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
+                menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
+                menu.Item("ExtraPingBuffer").SetValue(new Slider(100, 0, 200));
+            }
+            else if (mode == "Very Smooth")
             {
                 ResetConfig(false);
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(0, 0, 500));
@@ -280,6 +289,7 @@ namespace ezEvade
             else if (mode == "Smooth")
             {
                 ResetConfig(false);
+                menu.Item("FastMovementBlock").SetValue(true);
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
                 menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
@@ -332,7 +342,7 @@ namespace ezEvade
                 menu.Item("CalculateWindupDelay").SetValue(true);
                 menu.Item("CheckSpellCollision").SetValue(true);
                 menu.Item("DodgeCheckHP").SetValue(true);
-                menu.Item("FastMovementBlock").SetValue(false);
+                menu.Item("FastMovementBlock").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
                 menu.Item("PreventDodgingNearEnemy").SetValue(true);
                 menu.Item("AdvancedSpellDetection").SetValue(false);

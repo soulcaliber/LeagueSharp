@@ -169,17 +169,6 @@ namespace ezEvade
                 posTable.Add(InitPositionInfo(pos, extraDelayBuffer, extraEvadeDistance, lastMovePos, lowestEvadeTimeSpell));
             }
 
-            /*if (SpellDetector.spells.Count() == 1)
-            {
-                var sortedFastestTable =
-                posTable.OrderBy(p => p.posDangerLevel);
-
-                if (sortedFastestTable.First() != null && sortedFastestTable.First().posDangerLevel > 0)
-                {
-                    //use fastest
-                }
-            }*/
-
             while (posChecked < maxPosToCheck)
             {
                 radiusIndex++;
@@ -200,21 +189,29 @@ namespace ezEvade
 
             IOrderedEnumerable<PositionInfo> sortedPosTable;
 
-            if (ObjectCache.menuCache.cache["FastestPosition"].GetValue<bool>())
+            if (ObjectCache.menuCache.cache["EvadeMode"].GetValue<StringList>().SelectedValue == "Fastest")
             {
                 sortedPosTable =
-                posTable.OrderBy(p => p.isDangerousPos)
+                    posTable.OrderBy(p => p.isDangerousPos)
                         .ThenByDescending(p => p.intersectionTime)
                         .ThenBy(p => p.posDangerLevel)
                         .ThenBy(p => p.posDangerCount);
 
                 fastEvadeMode = true;
             }
-            else if (ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value > 0
-               && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer > lowestEvadeTime)
+            else if (fastEvadeMode)
             {
                 sortedPosTable =
-                posTable.OrderBy(p => p.isDangerousPos)
+                    posTable.OrderBy(p => p.isDangerousPos)
+                        .ThenByDescending(p => p.intersectionTime)
+                        .ThenBy(p => p.posDangerLevel)
+                        .ThenBy(p => p.posDangerCount);
+            }
+            else if (ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value > 0
+                     && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer > lowestEvadeTime)
+            {
+                sortedPosTable =
+                    posTable.OrderBy(p => p.isDangerousPos)
                         .ThenByDescending(p => p.intersectionTime)
                         .ThenBy(p => p.posDangerLevel)
                         .ThenBy(p => p.posDangerCount);
@@ -224,7 +221,7 @@ namespace ezEvade
             else
             {
                 sortedPosTable =
-                posTable.OrderBy(p => p.rejectPosition)
+                    posTable.OrderBy(p => p.rejectPosition)
                         .ThenBy(p => p.posDangerLevel)
                         .ThenBy(p => p.posDangerCount)
                         .ThenBy(p => p.distanceToMouse);
@@ -232,10 +229,10 @@ namespace ezEvade
                 if (sortedPosTable.First().posDangerCount != 0) //if can't dodge smoothly, dodge fast
                 {
                     var sortedPosTableFastest =
-                    posTable.OrderBy(p => p.isDangerousPos)
-                        .ThenByDescending(p => p.intersectionTime)
-                        .ThenBy(p => p.posDangerLevel)
-                        .ThenBy(p => p.posDangerCount);
+                        posTable.OrderBy(p => p.isDangerousPos)
+                            .ThenByDescending(p => p.intersectionTime)
+                            .ThenBy(p => p.posDangerLevel)
+                            .ThenBy(p => p.posDangerCount);
 
                     if (sortedPosTableFastest.First().posDangerCount == 0)
                     {

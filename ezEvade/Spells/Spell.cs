@@ -367,6 +367,11 @@ namespace ezEvade
             return spellPos;
         }
 
+        public static SpellData CopyData(this SpellData data)
+        {
+            return data;
+        }
+
         public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0, 
             float extraDistance = 0)
         {
