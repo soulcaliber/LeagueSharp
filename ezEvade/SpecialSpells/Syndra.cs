@@ -81,7 +81,7 @@ namespace ezEvade.SpecialSpells
             if (spellData.spellName.ToLower() == "syndrae")
             {
                 var estart = args.Start;
-                var eend = args.End;
+                var eend = args.Start + (args.End - args.Start).Normalized() * 700;
 
                 foreach (var sphere in _spheres.Where(s => s.IsValid && !s.IsDead))
                 {
