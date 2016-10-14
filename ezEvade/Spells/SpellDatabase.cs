@@ -908,7 +908,6 @@ namespace ezEvade
             {
                 charName = "Ezreal",
                 dangerlevel = 2,
-                missileName = "EzrealTrueshotBarrag",
                 name = "Trueshot Barrage",
                 projectileSpeed = 2000,
                 radius = 160,
