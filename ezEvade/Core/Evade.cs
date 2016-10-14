@@ -183,8 +183,8 @@ namespace ezEvade
 
                 miscMenu.AddSubMenu(bufferMenu);
 
-                Menu resetMenu = new Menu("Reset Config (Wont reset Spells/Evade Spells)", "ResetConfig");
-                resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
+                Menu resetMenu = new Menu("Reset Config", "ResetConfig");
+                resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config  (Wont reset Spells/Evade Spells)").SetValue(false));
                 resetMenu.AddItem(new MenuItem("ResetConfig200", "Set Patch Config").SetValue(true));
 
                 miscMenu.AddSubMenu(resetMenu);
