@@ -158,7 +158,7 @@ namespace ezEvade
                 miscMenu.AddSubMenu(limiterMenu);
 
                 Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
-                fastEvadeMenu.AddItem(new MenuItem("FastMovementBlock", "Quickyly block Movement")).SetValue(false);
+                fastEvadeMenu.AddItem(new MenuItem("FastMovementBlock", "Quickyly Block Movement")).SetValue(false);
                 fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "FastEvade Activation Time").SetValue(new Slider(65, 0, 500)));
                 fastEvadeMenu.AddItem(new MenuItem("SpellActivationTime", "Spell Activation Time").SetValue(new Slider(200, 0, 1000)));
                 fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(10, 0, 100)));
