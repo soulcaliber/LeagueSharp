@@ -200,7 +200,7 @@ namespace ezEvade
 
             IOrderedEnumerable<PositionInfo> sortedPosTable;
 
-            if (ObjectCache.menuCache.cache["EvadeMode"].GetValue<StringList>().SelectedValue == "Fastest")
+            if (ObjectCache.menuCache.cache["FastestPosition"].GetValue<bool>())
             {
                 sortedPosTable =
                 posTable.OrderBy(p => p.isDangerousPos)
@@ -209,7 +209,6 @@ namespace ezEvade
                         .ThenBy(p => p.posDangerCount);
 
                 fastEvadeMode = true;
-
             }
             else if (ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value > 0
                && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer > lowestEvadeTime)
