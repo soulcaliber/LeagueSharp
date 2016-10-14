@@ -349,6 +349,14 @@ namespace ezEvade
                 menu.Item("ExtraAvoidDistance").SetValue(new Slider(60, 0, 300));
                 menu.Item("MinComfortZone").SetValue(new Slider(420, 0, 1000));
             }
+            
+            else if (mode == "GuessWho")
+            {
+                ResetConfig(false);
+                menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
+                menu.Item("HigherPrecision").SetValue(true);
+                menu.Item("PreventDodgingUnderTower").SetValue(true);
+            }
         }
 
         private void OnLoadPingTesterChange(object sender, OnValueChangeEventArgs e)
