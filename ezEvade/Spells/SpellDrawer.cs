@@ -100,7 +100,7 @@ namespace ezEvade
                 {                    
                     if (Evade.isDodging)
                     {
-                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Orange, "Evade: ON");
+                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "Evade: ON");
                     }
                     else
                     {

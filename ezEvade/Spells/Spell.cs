@@ -316,32 +316,32 @@ namespace ezEvade
             spell.currentNegativePosition = spell.GetCurrentSpellPosition(true, 0);
             spell.dangerlevel = spell.GetSpellDangerLevel();
 
-            if (spell.info.name == "TaricE")
+            if (spell.info.spellName == "TaricE")
             {
                 var taric = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taric");
                 if (taric != null)
                 {
-                    spell.currentSpellPosition = taric.ServerPosition.To2D();
+                    spell.startPos = taric.ServerPosition.To2D();
                     spell.endPos = taric.ServerPosition.To2D() + spell.direction * spell.info.range;
                 }
             }
 
-            if (spell.info.name == "TaliyahQ")
+            if (spell.info.spellName == "TaliyahQ")
             {
                 var taliyah = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taliyah");
                 if (taliyah != null)
                 {
-                    spell.currentSpellPosition = taliyah.ServerPosition.To2D();
+                    spell.startPos = taliyah.ServerPosition.To2D();
                     spell.endPos = taliyah.ServerPosition.To2D() + spell.direction * spell.info.range;
                 }
             }
 
-            if (spell.info.name == "TaricE2")
+            if (spell.info.spellName == "TaricE2")
             {
                 var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive") && x.ChampionName != "Taric");
                 if (partner != null)
                 {
-                    spell.currentSpellPosition = partner.ServerPosition.To2D();
+                    spell.startPos = partner.ServerPosition.To2D();
                     spell.endPos = partner.ServerPosition.To2D() + spell.direction * spell.info.range;
                 }
             }
