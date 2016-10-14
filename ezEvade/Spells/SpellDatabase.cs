@@ -3898,17 +3898,15 @@ namespace ezEvade
             {
                 charName = "Yasuo",
                 dangerlevel = 3,
-                missileName = "YasuoQ3",
-                extraMissileNames = new[] { "YasuoQ3Mis" },
+                missileName = "YasuoQ3Mis",
                 name = "Steel Tempest (Tornado)",
                 projectileSpeed = 1500,
                 radius = 90,
                 range = 1150,
                 spellDelay = 100,
                 spellKey = SpellSlot.Q,
-                spellName = "YasuoQ3",
-                extraSpellNames = new[] { "YasuoQ3W" },
-                spellType = SpellType.Line,
+                spellName = "YasuoQ3W",
+                spellType = SpellType.Line             
             });
 
             Spells.Add(

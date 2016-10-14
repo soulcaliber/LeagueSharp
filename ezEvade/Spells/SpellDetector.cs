@@ -77,8 +77,8 @@ namespace ezEvade
 
             SpellData spellData;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
-                missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
+            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team && 
+                missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name.ToLower(), out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
 
@@ -106,16 +106,6 @@ namespace ezEvade
                             {
                                 if (spell.info.missileName == missile.SData.Name.ToLower() ||
                                    (spell.info.missileName + "urf").ToLower() == missile.SData.Name.ToLower())
-                                {
-                                    if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
-                                    {
-                                        spell.spellObject = obj;
-                                        objectAssigned = true;
-                                        break;
-                                    }
-                                }
-
-                                if (spell.info.extraMissileNames.Any(x => missile.SData.Name.ToLower() == x.ToLower()))
                                 {
                                     if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
                                     {
@@ -168,13 +158,12 @@ namespace ezEvade
                 DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }
-
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
             try
             {
                 SpellData spellData;
-                if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
+                if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name.ToLower(), out spellData))
                 {
                     if (spellData.usePackets == false)
                     {
@@ -197,15 +186,6 @@ namespace ezEvade
                                     {
                                         if (spell.info.spellName.ToLower() == args.SData.Name.ToLower() ||
                                            (spell.info.spellName + "_urf").ToLower() == args.SData.Name.ToLower())
-                                        {
-                                            if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
-                                            {
-                                                foundMissile = true;
-                                                break;
-                                            }
-                                        }
-
-                                        if (spell.info.extraMissileNames.Any(x => args.SData.Name.ToLower() == x.ToLower()))
                                         {
                                             if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
                                             {
@@ -865,19 +845,19 @@ namespace ezEvade
                             }
                         }
 
-                        if (!onProcessSpells.ContainsKey(spell.spellName))
+                        if (!onProcessSpells.ContainsKey(spell.spellName.ToLower()))
                         {
                             if (spell.missileName == "")
                                 spell.missileName = spell.spellName;
 
-                            onProcessSpells.Add(spell.spellName, spell);
-                            onMissileSpells.Add(spell.missileName, spell);
+                            onProcessSpells.Add(spell.spellName.ToLower(), spell);
+                            onMissileSpells.Add(spell.missileName.ToLower(), spell);
 
                             if (spell.extraSpellNames != null)
                             {
                                 foreach (string spellName in spell.extraSpellNames)
                                 {
-                                    onProcessSpells.Add(spellName, spell);
+                                    onProcessSpells.Add(spellName.ToLower(), spell);
                                 }
                             }
 
@@ -885,7 +865,7 @@ namespace ezEvade
                             {
                                 foreach (string spellName in spell.extraMissileNames)
                                 {
-                                    onMissileSpells.Add(spellName, spell);
+                                    onMissileSpells.Add(spellName.ToLower(), spell);
                                 }
                             }
 
