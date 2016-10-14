@@ -184,7 +184,7 @@ namespace ezEvade
                 miscMenu.AddSubMenu(bufferMenu);
 
                 Menu resetMenu = new Menu("Reset Config", "ResetConfig");
-                resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
+                resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config  (Wont reset Spells/Evade Spells)").SetValue(false));
                 resetMenu.AddItem(new MenuItem("ResetConfig200", "Set Patch Config").SetValue(true));
 
                 miscMenu.AddSubMenu(resetMenu);
@@ -242,12 +242,15 @@ namespace ezEvade
             menu.Item("LoadPingTester").SetValue(true);
 
             menu.Item("EvadeMode").SetValue(new StringList(new[] { "Smooth", "Fastest", "Very Smooth", "Hawk", "Kurisu" }, 0));
-
+            
+            menu.Item("ClickOnlyOnce").SetValue(true));
+            menu.Item("EnableEvadeDistance").SetValue(false));  
             menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
             menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
             menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
             menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
 
+            menu.Item("FastMovementBlock").SetValue(false);
             menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
             menu.Item("SpellActivationTime").SetValue(new Slider(200, 0, 1000));
             menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
