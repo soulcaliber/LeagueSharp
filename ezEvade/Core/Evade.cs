@@ -222,6 +222,10 @@ namespace ezEvade
             menu.Item("DodgeDangerousKeyEnabled").SetValue(false);
             menu.Item("DodgeDangerousKey").SetValue(new KeyBind(32, KeyBindType.Press));
             menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('V', KeyBindType.Press));
+            menu.Item("DodgeOnlyOnComboKeyEnabled").SetValue(false));
+            menu.Item("DodgeComboKey").SetValue(new KeyBind(32, KeyBindType.Press)));
+            menu.Item("DontDodgeKeyEnabled").SetValue(false));
+            menu.Item("DontDodgeKey").SetValue(new KeyBind('Z', KeyBindType.Press)));
 
             menu.Item("FastestPosition").GetValue<bool>();
             menu.Item("HigherPrecision").SetValue(false);
@@ -236,13 +240,13 @@ namespace ezEvade
             menu.Item("LoadPingTester").SetValue(true);
 
             menu.Item("ClickOnlyOnce").SetValue(true);
-            menu.Item("FastMovementBlock").SetValue(false);
             menu.Item("EnableEvadeDistance").SetValue(false);
             menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
             menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
             menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
             menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
 
+            menu.Item("FastMovementBlock").SetValue(false);
             menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
             menu.Item("SpellActivationTime").SetValue(new Slider(200, 0, 1000));
             menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
