@@ -222,10 +222,10 @@ namespace ezEvade
             menu.Item("DodgeDangerousKeyEnabled").SetValue(false);
             menu.Item("DodgeDangerousKey").SetValue(new KeyBind(32, KeyBindType.Press));
             menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('V', KeyBindType.Press));
-            menu.Item("DodgeOnlyOnComboKeyEnabled").SetValue(false));
-            menu.Item("DodgeComboKey").SetValue(new KeyBind(32, KeyBindType.Press)));
-            menu.Item("DontDodgeKeyEnabled").SetValue(false));
-            menu.Item("DontDodgeKey").SetValue(new KeyBind('Z', KeyBindType.Press)));
+            menu.Item("DodgeOnlyOnComboKeyEnabled").SetValue(false);
+            menu.Item("DodgeComboKey").SetValue(new KeyBind(32, KeyBindType.Press));
+            menu.Item("DontDodgeKeyEnabled").SetValue(false);
+            menu.Item("DontDodgeKey").SetValue(new KeyBind('Z', KeyBindType.Press));
 
             menu.Item("FastestPosition").GetValue<bool>();
             menu.Item("HigherPrecision").SetValue(false);
@@ -358,7 +358,7 @@ namespace ezEvade
             {
                 ResetConfig(false);
                 menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
-                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('109', KeyBindType.Press));
+                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind(109, KeyBindType.Press));
                 menu.Item("HigherPrecision").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
             }
