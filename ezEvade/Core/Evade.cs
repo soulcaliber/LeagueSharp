@@ -144,7 +144,7 @@ namespace ezEvade
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
                 miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
                 miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
-                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu"}, 0)));
+                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu", "GuessWho"}, 0)));
                 miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
 
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
@@ -261,7 +261,7 @@ namespace ezEvade
             if (kappa)
             {
                 menu.Item("EvadeMode")
-                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu"}, 0));
+                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu", "GuessWho"}, 0));
             }
         }
 
