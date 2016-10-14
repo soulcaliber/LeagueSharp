@@ -33,7 +33,7 @@ namespace ezEvade.SpecialSpells
                 sdata.fixedRange = true;
                 sdata.spellDelay = 1000;
                 sdata.projectileSpeed = int.MaxValue;
-                sdata.dangerlevel = 3;
+                sdata.dangerlevel = spellData.dangerlevel;
 
                 var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
                 if (partner != null && partner.ChampionName != "Taric")

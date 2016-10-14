@@ -203,7 +203,6 @@ namespace ezEvade
                 //Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
 
                 Console.WriteLine("ezEvade Loaded");
-
             }
             catch (Exception e)
             {
@@ -261,7 +260,7 @@ namespace ezEvade
             if (kappa)
             {
                 menu.Item("EvadeMode")
-                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu", "GuessWho"}, 0));
+                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Hawk", "Kurisu", "GuessWho" }, 0));
             }
         }
 

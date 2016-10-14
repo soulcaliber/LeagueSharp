@@ -2070,6 +2070,23 @@ namespace ezEvade
             });
 
             //TODO: Add LeeSin R?
+            //Spells.Add(
+            //new SpellData
+            //{
+            //    charName = "LeeSin",
+            //    dangerlevel = 3,
+            //    missileName = "",
+            //    name = "Dragon's Rage",
+            //    projectileSpeed = 1000,
+            //    radius = 0,
+            //    range = 850,
+            //    spellDelay = 250,
+            //    spellKey = SpellSlot.R,
+            //    isSpecial = true,
+            //    spellName = "blindmonkrkick",
+            //    spellType = SpellType.Line,
+            //    noProcess = true
+            //});
 
             #endregion LeeSin
 
@@ -3197,16 +3214,15 @@ namespace ezEvade
                 dangerlevel = 3,
                 name = "Scatter the Weak",
                 missileName = "SyndraE",
-                extraMissileNames = new[] { "syndrae5" },
-                usePackets = true,
                 projectileSpeed = 2000,
-                radius = 100,
-                range = 950,
-                spellDelay = 0,
+                radius = 60,
+                range = 850,
+                spellDelay = 250,
                 spellKey = SpellSlot.E,
                 spellName = "SyndraE",
-                extraSpellNames = new[] { "syndrae5" },
                 spellType = SpellType.Line,
+                noProcess = true,
+                isSpecial = true
             });
 
             Spells.Add(
@@ -3233,7 +3249,6 @@ namespace ezEvade
                 dangerlevel = 2,
                 missileName = "SyndraQSpell",
                 name = "Dark Sphere",
-                projectileSpeed = float.MaxValue,
                 radius = 210,
                 range = 800,
                 spellDelay = 600,
@@ -3242,6 +3257,7 @@ namespace ezEvade
                 spellType = SpellType.Circular,
 
             });
+
             #endregion Syndra
 
             #region TahmKench
