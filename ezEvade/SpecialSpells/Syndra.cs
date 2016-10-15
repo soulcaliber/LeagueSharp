@@ -119,6 +119,8 @@ namespace ezEvade.SpecialSpells
                         SpellDetector.CreateSpellData(hero, start, end, data, null);
                     }
                 }
+
+                specialSpellArgs.noProcess = true;
             }
 
             if (spellData.spellName == "syndraq")
@@ -128,6 +130,8 @@ namespace ezEvade.SpecialSpells
                     end = args.Start + (args.End - args.Start).Normalized() * 800;
 
                 _qSpots[Game.Time] = end;
+
+                specialSpellArgs.noProcess = true;
             }
         }
 
