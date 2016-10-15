@@ -18,20 +18,16 @@ namespace ezEvade.SpecialSpells
 
         static Syndra()
         {
-            var syndra = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Syndra");
-            if (syndra != null)
-            {
-                Game.OnUpdate += Game_OnUpdate;
-                Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
-                GameObject.OnCreate += GameObject_OnCreate;
-                GameObject.OnDelete += GameObject_OnDelete;
-            }
         }
 
         public void LoadSpecialSpell(SpellData spellData)
         {
             if (spellData.spellName.ToLower() == "syndrae")
             {
+                Game.OnUpdate += Game_OnUpdate;
+                Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
+                GameObject.OnCreate += GameObject_OnCreate;
+                GameObject.OnDelete += GameObject_OnDelete;
                 SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
             }
         }
@@ -114,7 +110,7 @@ namespace ezEvade.SpecialSpells
 
                     // check if e whill hit the sphere
                     var proj = spherePosition.To2D().ProjectOn(estart.To2D(), eend.To2D());
-                    if (spherePosition.To2D().Distance(proj.SegmentPoint) <= 155)
+                    if (proj.IsOnSegment && spherePosition.To2D().Distance(proj.SegmentPoint) <= 155)
                     {
                         var start = spherePosition;
                         var end = hero.ServerPosition + (spherePosition - hero.ServerPosition).Normalized() * spellData.range;

@@ -22,6 +22,7 @@ namespace ezEvade
     {
         EnemyChampions,
         EnemyMinions,
+        YasuoWall
     }
 
     public class SpellData

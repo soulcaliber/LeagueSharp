@@ -315,36 +315,6 @@ namespace ezEvade
             spell.currentSpellPosition = spell.GetCurrentSpellPosition();
             spell.currentNegativePosition = spell.GetCurrentSpellPosition(true, 0);
             spell.dangerlevel = spell.GetSpellDangerLevel();
-
-            if (spell.info.spellName == "TaricE")
-            {
-                var taric = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taric");
-                if (taric != null)
-                {
-                    spell.startPos = taric.ServerPosition.To2D();
-                    spell.endPos = taric.ServerPosition.To2D() + spell.direction * spell.info.range;
-                }
-            }
-
-            if (spell.info.spellName == "TaliyahQ")
-            {
-                var taliyah = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taliyah");
-                if (taliyah != null)
-                {
-                    spell.startPos = taliyah.ServerPosition.To2D();
-                    spell.endPos = taliyah.ServerPosition.To2D() + spell.direction * spell.info.range;
-                }
-            }
-
-            if (spell.info.spellName == "TaricE2")
-            {
-                var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive") && x.ChampionName != "Taric");
-                if (partner != null)
-                {
-                    spell.startPos = partner.ServerPosition.To2D();
-                    spell.endPos = partner.ServerPosition.To2D() + spell.direction * spell.info.range;
-                }
-            }
         }
 
         public static Vector2 GetLinearSpellPosition(this Vector2 startPos, Vector2 endPos, float startTick, SpellData data, bool allowNegative = false, float processDelay = 0f)

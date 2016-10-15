@@ -14,7 +14,6 @@ namespace ezEvade.SpecialSpells
     {
         static Twitch()
         {
-
         }
 
         public void LoadSpecialSpell(SpellData spellData)
@@ -29,7 +28,16 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "TwitchSprayandPrayAttack")
             {
-                spellData.spellDelay = hero.AttackCastDelay * 1000;
+                if (args.Target != null)
+                {
+                    var start = hero.ServerPosition;
+                    var end = hero.ServerPosition + (args.Target.Position - hero.ServerPosition) * spellData.range;
+
+                    var data = spellData.CopyData();
+                    data.spellDelay = hero.AttackCastDelay * 1000;
+
+                    SpellDetector.CreateSpellData(hero, start, end, data);
+                }
             }
         }
     }

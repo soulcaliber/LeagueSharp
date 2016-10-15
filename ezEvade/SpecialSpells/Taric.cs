@@ -9,14 +9,39 @@ namespace ezEvade.SpecialSpells
     {
         static Taric()
         {
-
+            // taric E rework
+            // todo: fix for multiple tarics on same team (one for all)
         }
 
         public void LoadSpecialSpell(SpellData spellData)
         {
             if (spellData.spellName == "TaricE")
             {
+                Game.OnUpdate += Game_OnUpdate;
                 SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+            }
+        }
+
+        private void Game_OnUpdate(EventArgs args)
+        {
+            var taric = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taric");
+            if (taric != null)
+            {
+                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == taric.NetworkId))
+                {
+                    spell.Value.startPos = taric.ServerPosition.To2D();
+                    spell.Value.endPos = taric.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                }
+            }
+
+            var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
+            if (partner != null)
+            {
+                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == partner.NetworkId))
+                {
+                    spell.Value.startPos = partner.ServerPosition.To2D();
+                    spell.Value.endPos = partner.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                }
             }
         }
 
@@ -24,17 +49,6 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "TaricE")
             {
-                var sdata = new SpellData();
-                sdata.charName = "Taric";
-                sdata.name = "TaricE2";
-                sdata.spellName = "TaricE";
-                sdata.range = 750;
-                sdata.radius = 100;
-                sdata.fixedRange = true;
-                sdata.spellDelay = 1000;
-                sdata.projectileSpeed = int.MaxValue;
-                sdata.dangerlevel = spellData.dangerlevel;
-
                 var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
                 if (partner != null && partner.ChampionName != "Taric")
                 {
@@ -42,7 +56,7 @@ namespace ezEvade.SpecialSpells
                     var direction = (args.End.To2D() - start).Normalized();
                     var end = start + direction * spellData.range;
 
-                    SpellDetector.CreateSpellData(partner, start.To3D(), end.To3D(), sdata);
+                    SpellDetector.CreateSpellData(partner, start.To3D(), end.To3D(), spellData);
                 }
             }
         }
