@@ -1927,7 +1927,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "KledRiderQ",
                 spellType = SpellType.Line,
-                splits = 5
+                //splits = 5 this "splits" is not even implemented
             });
 
             Spells.Add(
@@ -2538,7 +2538,7 @@ namespace ezEvade
                 projectileSpeed = 2500,
                 radius = 150,
                 range = 850,
-                spellDelay = 250,
+                spellDelay = 450,
                 spellKey = SpellSlot.Q,
                 spellName = "namiq",
                 spellType = SpellType.Circular
@@ -3037,7 +3037,7 @@ namespace ezEvade
                 spellKey = SpellSlot.R,
                 spellName = "shyvanafireballdragon2",
                 spellType = SpellType.Line,
-                splits = 5
+                //splits = 5 this "splits" is not even implemented
             });
 
             Spells.Add(
@@ -3315,7 +3315,7 @@ namespace ezEvade
                 spellType = SpellType.Line,
                 fixedRange = true,
                 isSpecial = true,
-                splits = 3
+                //splits = 3 this "splits" is not even implemented
             });
 
             #endregion Talon

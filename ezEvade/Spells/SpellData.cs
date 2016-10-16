@@ -43,7 +43,7 @@ namespace ezEvade
         public bool useEndPosition = false;
         public float angle;
         public float sideRadius;
-        public int splits;
+        //public int splits; no idea when this was added xd
         public bool usePackets = false;
         public bool invert = false;
         public float extraDelay = 0;

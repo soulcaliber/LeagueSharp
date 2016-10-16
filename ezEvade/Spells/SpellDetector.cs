@@ -104,8 +104,7 @@ namespace ezEvade
 
                             if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                             {
-                                if (spell.info.missileName == missile.SData.Name.ToLower() ||
-                                   (spell.info.missileName + "urf").ToLower() == missile.SData.Name.ToLower())
+                                if (spell.info.missileName == missile.SData.Name.ToLower()) // todo: fix urf spells
                                 {
                                     if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
                                     {
@@ -184,8 +183,7 @@ namespace ezEvade
 
                                     if (spell.spellObject != null)
                                     {
-                                        if (spell.info.spellName.ToLower() == args.SData.Name.ToLower() ||
-                                           (spell.info.spellName + "_urf").ToLower() == args.SData.Name.ToLower())
+                                        if (spell.info.spellName.ToLower() == args.SData.Name.ToLower()) // todo: fix urf spells
                                         {
                                             if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
                                             {
@@ -594,9 +592,8 @@ namespace ezEvade
                                 continue;
                             }
 
-                            if (myHero.HealthPercent <=
-                                ObjectCache.menuCache.cache[spell.info.spellName + "DodgeIgnoreHP"].GetValue<Slider>()
-                                    .Value || !ObjectCache.menuCache.cache["DodgeCheckHP"].GetValue<bool>())
+                            var healthThreshold =ObjectCache.menuCache.cache[spell.info.spellName + "DodgeIgnoreHP"].GetValue<Slider>() .Value;
+                            if (myHero.HealthPercent <= healthThreshold)
                             {
                                 spells.Add(spellID, newSpell);
                                 spellAdded = true;
@@ -612,9 +609,9 @@ namespace ezEvade
                 }
             }
 
-            if (spellAdded && OnProcessDetectedSpells != null)
+            if (spellAdded)
             {
-                OnProcessDetectedSpells();
+                OnProcessDetectedSpells?.Invoke();
             }
         }
 
@@ -886,7 +883,7 @@ namespace ezEvade
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "FastEvade", "Force Fast Evade"))
                                 .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Dodge Only Below HP % <="))
-                                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check My Hero HP% must be enabled.");
+                                .SetValue(new Slider(spell.dangerlevel == 1 ? 90 : 100)).SetTooltip("Check My Hero HP% must be enabled.");
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 

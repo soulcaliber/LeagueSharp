@@ -136,14 +136,12 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(false));
-                miscMenu.AddItem(new MenuItem("DodgeCheckHP", "Check My Hero HP%").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
-                miscMenu.AddItem(new MenuItem("FastestPosition", "Force Fast Pathfinding").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("AllowCrossing", "Allow Crossing").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
-                miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
+                miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Evade Config").SetValue(false));
                 miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
                     .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho"}, 0)));
                 miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
@@ -227,13 +225,11 @@ namespace ezEvade
             menu.Item("DontDodgeKeyEnabled").SetValue(false);
             menu.Item("DontDodgeKey").SetValue(new KeyBind('Z', KeyBindType.Press));
 
-            menu.Item("FastestPosition").GetValue<bool>();
             menu.Item("HigherPrecision").SetValue(false);
             menu.Item("RecalculatePosition").SetValue(true);
             menu.Item("ContinueMovement").SetValue(true);
             menu.Item("CalculateWindupDelay").SetValue(true);
             menu.Item("CheckSpellCollision").SetValue(false);
-            menu.Item("DodgeCheckHP").SetValue(false);
             menu.Item("PreventDodgingUnderTower").SetValue(false);
             menu.Item("PreventDodgingNearEnemy").SetValue(true);
             menu.Item("AdvancedSpellDetection").SetValue(false);
@@ -314,7 +310,6 @@ namespace ezEvade
                 menu.Item("ContinueMovement").SetValue(true);
                 menu.Item("CalculateWindupDelay").SetValue(true);
                 menu.Item("CheckSpellCollision").SetValue(true);
-                menu.Item("DodgeCheckHP").SetValue(false);
                 menu.Item("PreventDodgingUnderTower").SetValue(false);
                 menu.Item("PreventDodgingNearEnemy").SetValue(true);
                 menu.Item("AdvancedSpellDetection").SetValue(true);
@@ -347,7 +342,6 @@ namespace ezEvade
                 menu.Item("ContinueMovement").SetValue(true);
                 menu.Item("CalculateWindupDelay").SetValue(true);
                 menu.Item("CheckSpellCollision").SetValue(true);
-                menu.Item("DodgeCheckHP").SetValue(true);
                 menu.Item("FastMovementBlock").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
                 menu.Item("PreventDodgingNearEnemy").SetValue(true);
