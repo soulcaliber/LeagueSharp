@@ -122,7 +122,18 @@ namespace ezEvade
                 {
                     if (ObjectCache.menuCache.cache["ActivateEvadeSpells"].GetValue<KeyBind>().Active)
                     {
-                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Fuchsia, "Evade: Spell");
+                        if (ObjectCache.menuCache.cache["DodgeOnlyOnComboKeyEnabled"].GetValue<bool>() == true
+                         && ObjectCache.menuCache.cache["DodgeComboKey"].GetValue<KeyBind>().Active == false)
+                        {
+                            Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: OFF");
+                        }
+                        else
+                        {
+                            if (Evade.isDodgeDangerousEnabled())
+                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Yellow, "Evade: Spell");
+                            else
+                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Fuchsia, "Evade: Spell");
+                        }
                     }
                     else
                     {
