@@ -130,8 +130,6 @@ namespace ezEvade.SpecialSpells
                     end = args.Start + (args.End - args.Start).Normalized() * 800;
 
                 _qSpots[Game.Time] = end;
-
-                specialSpellArgs.noProcess = true;
             }
         }
 
