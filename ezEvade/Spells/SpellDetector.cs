@@ -452,6 +452,9 @@ namespace ezEvade
                 var collisionObj = cand.currentPos.To3D().CheckPositionCollision(cand.endPos.To3D(), cand.spellInfo, false);
                 if (collisionObj != null)
                 {
+                    var data = cand.spellInfo.CopyData();
+                    data.spellDelay = 0;
+
                     foreach (KeyValuePair<int, Spell> value in detectedSpells)
                     {
                         Spell spell = value.Value;
@@ -466,7 +469,7 @@ namespace ezEvade
                     }
 
                     CreateSpellData(cand.candidateHero, cand.startPos.To3D(), collisionObj.ServerPosition,
-                        cand.spellInfo, null, 0, true, SpellType.Circular, false, true); // create the explosion
+                        data, null, 0, true, SpellType.Circular, false, true); // create the explosion
 
                     collisionObjs.Remove(cand.candidateId);
                     break;

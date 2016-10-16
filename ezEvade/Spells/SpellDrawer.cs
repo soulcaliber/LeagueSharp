@@ -122,7 +122,7 @@ namespace ezEvade
                 {
                     if (ObjectCache.menuCache.cache["ActivateEvadeSpells"].GetValue<KeyBind>().Active)
                     {
-                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Lime, "Evade: Spell");
+                        Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Fuchsia, "Evade: Spell");
                     }
                     else
                     {

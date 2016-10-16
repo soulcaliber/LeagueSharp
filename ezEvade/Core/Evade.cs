@@ -108,6 +108,7 @@ namespace ezEvade
                 mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
                 mainMenu.Item("DodgeSkillShots").Permashow();
                 mainMenu.AddItem(new MenuItem("ActivateEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
+                mainMenu.Item("ActivateEvadeSpells").Permashow();
                 mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
                 mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
                 mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
@@ -257,6 +258,11 @@ namespace ezEvade
             menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
             menu.Item("MinComfortZone").SetValue(new Slider(550, 0, 1000));
 
+            menu.Item("DrawSkillShots").SetValue(true);
+            menu.Item("ShowStatus").SetValue(true);
+            menu.Item("DrawSpellPos").SetValue(false);
+            menu.Item("DrawEvadePosition").SetValue(false);
+
             if (kappa)
             {
                 menu.Item("EvadeMode")
@@ -370,6 +376,8 @@ namespace ezEvade
                 menu.Item("DodgeDangerousKey2").SetValue(new KeyBind(109, KeyBindType.Press));
                 menu.Item("HigherPrecision").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
+                menu.Item("ShowStatus").SetValue(false);
+                menu.Item("DrawSpellPos").SetValue(true);
             }
         }
 
