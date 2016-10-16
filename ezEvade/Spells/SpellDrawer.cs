@@ -132,7 +132,7 @@ namespace ezEvade
                             if (Evade.isDodgeDangerousEnabled())
                                 Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Yellow, "Evade: Spell");
                             else
-                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.SkyBlue, "Evade: Spell");
+                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Fuchsia, "Evade: Spell");
                         }
                     }
                     else
