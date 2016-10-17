@@ -83,9 +83,13 @@ namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Circular)
                     {
-                        if (myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
+                        if (EvadeUtils.TickCount - spell.startTime >= spell.endTime - spell.startTime)
                         {
-
+                            if (myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
+                            {
+                                Draw.RenderObjects.Add(new Draw.RenderCircle(spellPos, 1000, Color.Red, (int) spell.radius, 5));
+                                DelayAction.Add(1, () => SpellDetector.DeleteSpell(spell.spellID));
+                            }
                         }
                     }
                 }

@@ -142,7 +142,7 @@ namespace ezEvade
                 name = "Pulverize",
                 radius = 365,
                 range = 365,
-                spellDelay = 125,
+                spellDelay = 0,
                 spellKey = SpellSlot.Q,
                 spellName = "Pulverize",
                 spellType = SpellType.Circular
@@ -2497,9 +2497,9 @@ namespace ezEvade
                 dangerlevel = 4,
                 defaultOff = true,
                 name = "Cyclone",
-                radius = 225,
-                range = 225,
-                spellDelay = 125,
+                radius = 450,
+                range = 450,
+                spellDelay = 0,
                 spellKey = SpellSlot.R,
                 spellName = "MonkeyKingSpinToWin",
                 spellType = SpellType.Circular
@@ -2873,10 +2873,9 @@ namespace ezEvade
                 defaultOff = true,
                 missileName = "RivenMartyr",
                 name = "Ki Burst",
-                projectileSpeed = 1500,
                 radius = 280,
                 range = 650,
-                spellDelay = 125,
+                spellDelay = 0,
                 spellKey = SpellSlot.W,
                 spellName = "RivenMartyr",
                 spellType = SpellType.Circular

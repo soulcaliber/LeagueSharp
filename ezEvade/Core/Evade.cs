@@ -921,7 +921,7 @@ namespace ezEvade
                 {
                     if (lastIssueOrderArgs != null && lastIssueOrderArgs.Order == GameObjectOrder.MoveTo)
                     {
-                        if (Game.Time * 1000 - lastIssueOrderGameTime < 850)
+                        if (Game.Time * 1000 - lastIssueOrderGameTime < 500)
                         {
                             Game_OnIssueOrder(myHero, lastIssueOrderArgs);
                             lastIssueOrderArgs = null;
