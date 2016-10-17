@@ -1841,7 +1841,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Khazix",
-                dangerlevel = 2,
+                dangerlevel = 1,
                 missileName = "KhazixWMissile",
                 name = "Void Spike",
                 projectileSpeed = 1700,
@@ -1851,8 +1851,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "KhazixW",
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                fixedRange = true
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions }
             });
 
             Spells.Add(
@@ -1862,7 +1861,6 @@ namespace ezEvade
                 charName = "Khazix",
                 dangerlevel = 2,
                 isThreeWay = true,
-                missileName = "khazixwlong",
                 name = "Void Spike Evolved",
                 projectileSpeed = 1700,
                 radius = 70,
@@ -1870,10 +1868,8 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "khazixwlong",
-                extraMissileNames = new [] { "khazixwmissile" },
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                fixedRange = true
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions }
             });
 
             Spells.Add(
@@ -3271,9 +3267,8 @@ namespace ezEvade
                 range = 950,
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
-                spellName = "SyndraWCast",
-                spellType = SpellType.Circular,
-
+                spellName = "syndrawcast",
+                spellType = SpellType.Circular
             });
 
             Spells.Add(

@@ -94,7 +94,7 @@ namespace ezEvade.SpecialSpells
                 {
                     // check if e whill hit the sphere
                     var proj = sphere.Position.To2D().ProjectOn(estart.To2D(), eend.To2D());
-                    if (sphere.Position.To2D().Distance(proj.SegmentPoint) <= sphere.BoundingRadius + 110)
+                    if (proj.IsOnSegment && sphere.Position.To2D().Distance(proj.SegmentPoint) <= sphere.BoundingRadius + 155)
                     {
                         var start = sphere.Position;
                         var end = hero.ServerPosition + (sphere.Position - hero.ServerPosition).Normalized() * spellData.range;
@@ -123,13 +123,22 @@ namespace ezEvade.SpecialSpells
                 specialSpellArgs.noProcess = true;
             }
 
-            if (spellData.spellName == "syndraq")
+            if (spellData.spellName.ToLower() == "syndraq")
             {
                 var end = args.End;
-                if (args.Start.Distance(end) > 800)
-                    end = args.Start + (args.End - args.Start).Normalized() * 800;
+                if (args.Start.Distance(end) > spellData.range)
+                    end = args.Start + (args.End - args.Start).Normalized() * spellData.range;
 
-                _qSpots[Game.Time] = end;
+                _qSpots.Add(Game.Time, end);
+            }
+
+            if (spellData.spellName.ToLower() == "syndrawcast")
+            {
+                var end = args.End;
+                if (args.Start.Distance(end) > spellData.range)
+                    end = args.Start + (args.End - args.Start).Normalized() * spellData.range;
+
+                _qSpots.Add(Game.Time, end);
             }
         }
 
