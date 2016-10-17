@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -157,7 +156,7 @@ namespace ezEvade
                 miscMenu.AddSubMenu(limiterMenu);
 
                 Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
-                fastEvadeMenu.AddItem(new MenuItem("FastMovementBlock", "Quickyly Block Movement")).SetValue(false);
+                fastEvadeMenu.AddItem(new MenuItem("FastMovementBlock", "Fast Movement Block")).SetValue(false);
                 fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "FastEvade Activation Time").SetValue(new Slider(65, 0, 500)));
                 fastEvadeMenu.AddItem(new MenuItem("SpellActivationTime", "Spell Activation Time").SetValue(new Slider(200, 0, 1000)));
                 fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(10, 0, 100)));
@@ -277,7 +276,7 @@ namespace ezEvade
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(120, 0, 500));
                 menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
-                menu.Item("ExtraPingBuffer").SetValue(new Slider(100, 0, 200));
+                menu.Item("ExtraPingBuffer").SetValue(new Slider(120, 0, 200));
             }
             else if (mode == "Very Smooth")
             {
@@ -918,12 +917,16 @@ namespace ezEvade
         {
             if (EvadeHelper.fastEvadeMode || ObjectCache.menuCache.cache["FastMovementBlock"].GetValue<bool>())
             {
-                if (isDodging == false && lastIssueOrderArgs != null
-                && lastIssueOrderArgs.Order == GameObjectOrder.MoveTo
-                && Game.Time * 1000 - lastIssueOrderGameTime < 500)
+                if (isDodging == false)
                 {
-                    Game_OnIssueOrder(myHero, lastIssueOrderArgs);
-                    lastIssueOrderArgs = null;
+                    if (lastIssueOrderArgs != null && lastIssueOrderArgs.Order == GameObjectOrder.MoveTo)
+                    {
+                        if (Game.Time * 1000 - lastIssueOrderGameTime < 850)
+                        {
+                            Game_OnIssueOrder(myHero, lastIssueOrderArgs);
+                            lastIssueOrderArgs = null;
+                        }
+                    }
                 }
             }
         }

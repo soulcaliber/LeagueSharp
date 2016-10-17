@@ -142,11 +142,12 @@ namespace ezEvade
                 name = "Pulverize",
                 radius = 365,
                 range = 365,
-                spellDelay = 0,
+                spellDelay = 125,
                 spellKey = SpellSlot.Q,
                 spellName = "Pulverize",
                 spellType = SpellType.Circular
             });
+                
             #endregion Alistar
 
             #region Amumu
@@ -2875,11 +2876,10 @@ namespace ezEvade
                 projectileSpeed = 1500,
                 radius = 280,
                 range = 650,
-                spellDelay = 267,
+                spellDelay = 125,
                 spellKey = SpellSlot.W,
                 spellName = "RivenMartyr",
-                spellType = SpellType.Circular,
-
+                spellType = SpellType.Circular
             });
 
             Spells.Add(
@@ -3369,13 +3369,15 @@ namespace ezEvade
                 dangerlevel = 3,
                 missileName = "TaliyahWVC",
                 name = "Seismic Shove",
-                radius = 150,
+                radius = 165,
                 range = 900,
-                spellDelay = 1000,
+                spellDelay = 450,
+                extraEndTime = 1000,
                 spellKey = SpellSlot.W,
                 spellName = "TaliyahWVC",
                 spellType = SpellType.Circular
             });
+
             #endregion Taliyah
 
             #region Taric
