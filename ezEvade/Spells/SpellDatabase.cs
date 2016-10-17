@@ -142,7 +142,6 @@ namespace ezEvade
                 name = "Pulverize",
                 radius = 365,
                 range = 365,
-                spellDelay = 0,
                 spellKey = SpellSlot.Q,
                 spellName = "Pulverize",
                 spellType = SpellType.Circular
@@ -2490,20 +2489,20 @@ namespace ezEvade
 
             #region MonkeyKing
 
-            Spells.Add(
-            new SpellData
-            {
-                charName = "MonkeyKing",
-                dangerlevel = 4,
-                defaultOff = true,
-                name = "Cyclone",
-                radius = 450,
-                range = 450,
-                spellDelay = 0,
-                spellKey = SpellSlot.R,
-                spellName = "MonkeyKingSpinToWin",
-                spellType = SpellType.Circular
-            });
+            //Spells.Add(
+            //new SpellData
+            //{
+            //    charName = "MonkeyKing",
+            //    dangerlevel = 4,
+            //    defaultOff = true,
+            //    name = "Cyclone",
+            //    radius = 450,
+            //    range = 450,
+            //    spellDelay = 0,
+            //    spellKey = SpellSlot.R,
+            //    spellName = "MonkeyKingSpinToWin",
+            //    spellType = SpellType.Circular
+            //});
 
             #endregion MonkeyKing
 
