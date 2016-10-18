@@ -3002,14 +3002,14 @@ namespace ezEvade
             {
                 charName = "Shen",
                 dangerlevel = 3,
-                missileName = "ShenShadowDash",
+                missileName = "ShenE",
                 name = "Shadow Dash",
-                projectileSpeed = 1200,
-                radius = 75,
+                projectileSpeed = 1450,
+                radius = 50,
                 range = 600,
                 spellDelay = 0,
                 spellKey = SpellSlot.E,
-                spellName = "ShenShadowDash",
+                spellName = "ShenE",
                 spellType = SpellType.Line,
             });
 
@@ -3368,6 +3368,7 @@ namespace ezEvade
                 extraEndTime = 1000,
                 spellKey = SpellSlot.W,
                 spellName = "TaliyahWVC",
+                extraSpellNames =  new []{ "TaliyahW", },
                 spellType = SpellType.Circular
             });
 
@@ -3428,6 +3429,7 @@ namespace ezEvade
                 spellDelay = 125,
                 spellKey = SpellSlot.E,
                 spellName = "ThreshE",
+                extraSpellNames = new [] { "ThreshEFlay" },
                 spellType = SpellType.Line,
                 fixedRange = true,
                 usePackets = true
@@ -3580,16 +3582,13 @@ namespace ezEvade
                 dangerlevel = 1,
                 name = "Hail of Arrows",
                 missileName = "VarusE",
-                extraMissileNames = new[] { "VarusEMissile", },
                 projectileSpeed = 1500,
                 radius = 235,
                 range = 925,
                 spellDelay = 1000,
                 spellKey = SpellSlot.E,
                 spellName = "VarusE",
-                extraSpellNames = new[] { "VarusEMissile" },
-                spellType = SpellType.Circular,
-
+                spellType = SpellType.Circular
             });
 
             Spells.Add(
