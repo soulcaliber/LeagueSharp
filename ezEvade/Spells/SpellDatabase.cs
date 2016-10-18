@@ -1338,7 +1338,6 @@ namespace ezEvade
                 charName = "Heimerdinger",
                 dangerlevel = 3,
                 missileName = "HeimerdingerESpell",
-                extraMissileNames = new[] { "heimerdingerespell_ult" },
                 name = "CH-2 Electron Storm Grenade",
                 projectileSpeed = 1200,
                 radius = 150,
@@ -1346,6 +1345,7 @@ namespace ezEvade
                 spellDelay = 325,
                 spellKey = SpellSlot.E,
                 spellName = "HeimerdingerE",
+                extraMissileNames = new[] { "heimerdingerespell_ult", "heimerdingerespell_ult2", "heimerdingerespell_ult3" },
                 spellType = SpellType.Circular
             });
 
@@ -1598,10 +1598,10 @@ namespace ezEvade
                 projectileSpeed = 2350,
                 radius = 70,
                 range = 1600,
-                spellDelay = 250,
+                spellDelay = 0,
                 spellKey = SpellSlot.Q,
                 hasEndExplosion = true,
-                spellName = "jayceshockblastwallmis",
+                spellName = "jayceqaccel",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 secondaryRadius = 210,
