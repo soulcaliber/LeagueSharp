@@ -57,7 +57,7 @@ namespace ezEvade.SpecialSpells
                 missile.SData.Name == "FizzMarinerDoomMissile")
             {
                 SpellDetector.CreateSpellData(missile.SpellCaster, missile.StartPosition, missile.EndPosition,
-                spellData, null, 1000, true, SpellType.Circular, false, false, 350);
+                spellData, null, 1000, true, SpellType.Circular, false, 350);
             }
         }
 
@@ -72,7 +72,7 @@ namespace ezEvade.SpecialSpells
                 missile.SData.Name == "FizzMarinerDoomMissile")
             {
                 SpellDetector.CreateSpellData(missile.SpellCaster, missile.StartPosition, missile.EndPosition,
-                spellData, null, 500, true, SpellType.Circular, false, false, spellData.secondaryRadius);
+                spellData, null, 500, true, SpellType.Circular, false, spellData.secondaryRadius);
 
                 /*foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
                 {

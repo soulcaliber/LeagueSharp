@@ -347,7 +347,8 @@ namespace ezEvade
         {
             Vector2 spellPos = spell.startPos;
 
-            if (spell.spellType == SpellType.Line || spell.spellType == SpellType.Arc)
+            if (spell.spellType == SpellType.Line || spell.spellType == SpellType.Arc || 
+                spell.info.name.Contains("_exp"))
             {
                 float spellTime = EvadeUtils.TickCount - spell.startTime - spell.info.spellDelay;
 
@@ -359,7 +360,7 @@ namespace ezEvade
                     spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
                 }
             }
-            else if (spell.spellType == SpellType.Circular)
+            else if (spell.spellType == SpellType.Circular && !spell.info.name.Contains("_exp"))
             {
                 spellPos = spell.endPos;
             }

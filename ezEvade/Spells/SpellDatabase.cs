@@ -200,6 +200,8 @@ namespace ezEvade
                 range = 1250,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
+                hasEndExplosion = true,
+                secondaryRadius = 210,
                 spellName = "FlashFrostSpell",
                 spellType = SpellType.Line
             });
@@ -451,16 +453,16 @@ namespace ezEvade
             {
                 charName = "Brand",
                 dangerlevel = 2,
-                missileName = "BrandFissure",
+                missileName = "BrandW",
                 name = "Pillar of Flame",
                 radius = 250,
                 range = 1100,
-                spellDelay = 500,
+                spellDelay = 850,
                 spellKey = SpellSlot.W,
                 spellName = "BrandW",
-                spellType = SpellType.Circular,
-
+                spellType = SpellType.Circular
             });
+
             #endregion Brand
 
             #region Braum
@@ -546,13 +548,13 @@ namespace ezEvade
                 angle = 60,
                 charName = "Cassiopeia",
                 dangerlevel = 4,
-                missileName = "CassiopeiaPetrifyingGaze",
+                missileName = "CassiopeiaR",
                 name = "Petrifying Gaze",
                 radius = 20,
                 range = 825,
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
-                spellName = "CassiopeiaPetrifyingGaze",
+                spellName = "CassiopeiaR",
                 spellType = SpellType.Cone
             });
 
@@ -926,8 +928,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "EzrealEssenceFlux",
-                spellType = SpellType.Line,
-
+                spellType = SpellType.Line
             });
 
             #endregion Ezreal
@@ -1160,8 +1161,7 @@ namespace ezEvade
                 spellDelay = 500,
                 spellKey = SpellSlot.Q,
                 spellName = "GragasQ",
-                spellType = SpellType.Circular,
-
+                spellType = SpellType.Circular
             });
 
             Spells.Add(
@@ -2253,7 +2253,7 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "lucianw",
                 hasEndExplosion = true,
-                secondaryRadius = 100,
+                secondaryRadius = 145,
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 fixedRange = true
@@ -2534,8 +2534,8 @@ namespace ezEvade
                 missileName = "namiqmissile",
                 name = "Aqua Prison",
                 projectileSpeed = 2500,
-                radius = 150,
-                range = 850,
+                radius = 200,
+                range = 875,
                 spellDelay = 450,
                 spellKey = SpellSlot.Q,
                 spellName = "namiq",
@@ -2824,9 +2824,9 @@ namespace ezEvade
                 dangerlevel = 3,
                 missileName = "ReksaiWBurrowed",
                 name = "Unburrow",
-                projectileSpeed = 1750,
-                radius = 115,
-                range = 120,
+                projectileSpeed = 2300,
+                radius = 160,
+                range = 160,
                 spellDelay = 250f,
                 spellKey = SpellSlot.W,
                 spellName = "ReksaiWBurrowed",
@@ -3086,7 +3086,7 @@ namespace ezEvade
                 name = "Roar of the Slayer",
                 projectileSpeed = 1800,
                 radius = 80,
-                range = 800,
+                range = 850,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
                 spellName = "SionE",

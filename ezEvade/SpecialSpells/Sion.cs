@@ -47,8 +47,12 @@ namespace ezEvade.SpecialSpells
                     spell.Value.startPos = sion.ServerPosition.To2D();
                     spell.Value.endPos = endPos;
 
-                    SpellDetector.CreateSpellData(sion, sion.ServerPosition, endPos.To3D(), spell.Value.info, null, 0, false, SpellType.Line, false, true);
-                    break;
+                    if (EvadeUtils.TickCount - spell.Value.startTime >= 1000)
+                    {
+                        SpellDetector.CreateSpellData(sion, sion.ServerPosition, endPos.To3D(), spell.Value.info, null, 0, false, SpellType.Line, false);
+                        spell.Value.startTime = EvadeUtils.TickCount;
+                        break;
+                    }
                 }
             }
         }
