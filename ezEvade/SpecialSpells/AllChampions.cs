@@ -27,7 +27,7 @@ namespace ezEvade.SpecialSpells
                 pDict["ProcessSpell_ProcessThreeWay"] = true;
             }    
 
-            if (spellData.hasEndExplosion && !pDict.ContainsKey("ProcessSpell_EndExplosion"))
+            if (spellData.hasEndExplosion && !pDict.ContainsKey("OnUpdate_EndExplosion"))
             {
                 Game.OnUpdate += OnUpdate_EndExplosion;
                 pDict["OnUpdate_EndExplosion"] = true;
