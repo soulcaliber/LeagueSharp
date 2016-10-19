@@ -202,6 +202,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 hasEndExplosion = true,
                 secondaryRadius = 210,
+                extraDrawHeight = 165,
                 spellName = "FlashFrostSpell",
                 spellType = SpellType.Line
             });

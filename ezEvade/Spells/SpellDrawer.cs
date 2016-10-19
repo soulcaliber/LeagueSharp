@@ -38,19 +38,19 @@ namespace ezEvade
 
             Menu dangerMenu = new Menu("DangerLevel Drawings", "DangerLevelDrawings");
             Menu lowDangerMenu = new Menu("Low", "LowDrawing");
-            lowDangerMenu.AddItem(new MenuItem("LowWidth", "Line Width").SetValue(new Slider(2, 1, 15)));
+            lowDangerMenu.AddItem(new MenuItem("LowWidth", "Line Width").SetValue(new Slider(3, 1, 15)));
             lowDangerMenu.AddItem(new MenuItem("LowColor", "Color").SetValue(new Circle(true, Color.FromArgb(60, 255, 255, 255))));
 
             Menu normalDangerMenu = new Menu("Normal", "NormalDrawing");
-            normalDangerMenu.AddItem(new MenuItem("NormalWidth", "Line Width").SetValue(new Slider(2, 1, 15)));
+            normalDangerMenu.AddItem(new MenuItem("NormalWidth", "Line Width").SetValue(new Slider(3, 1, 15)));
             normalDangerMenu.AddItem(new MenuItem("NormalColor", "Color").SetValue(new Circle(true, Color.FromArgb(140, 255, 255, 255))));
 
             Menu highDangerMenu = new Menu("High", "HighDrawing");
-            highDangerMenu.AddItem(new MenuItem("HighWidth", "Line Width").SetValue(new Slider(2, 1, 15)));
+            highDangerMenu.AddItem(new MenuItem("HighWidth", "Line Width").SetValue(new Slider(3, 1, 15)));
             highDangerMenu.AddItem(new MenuItem("HighColor", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
 
             Menu extremeDangerMenu = new Menu("Extreme", "ExtremeDrawing");
-            extremeDangerMenu.AddItem(new MenuItem("ExtremeWidth", "Line Width").SetValue(new Slider(3, 1, 15)));
+            extremeDangerMenu.AddItem(new MenuItem("ExtremeWidth", "Line Width").SetValue(new Slider(4, 1, 15)));
             extremeDangerMenu.AddItem(new MenuItem("ExtremeColor", "Color").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
 
             /*
@@ -211,7 +211,7 @@ namespace ezEvade
                             /*if (spell.spellObject != null && spell.spellObject.IsValid && spell.spellObject.IsVisible &&
                                   spell.spellObject.Position.To2D().Distance(ObjectCache.myHeroCache.serverPos2D) < spell.info.range + 1000)*/
 
-                            Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int) spell.radius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
+                            Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, spell.height), (int) spell.radius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
                         }
 
                     }
