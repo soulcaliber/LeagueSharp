@@ -279,7 +279,7 @@ namespace ezEvade
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(120, 0, 500));
                 menu.Item("RejectMinDistance").SetValue(new Slider(25, 0, 100));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(25, 0, 150));
-                menu.Item("ExtraPingBuffer").SetValue(new Slider(120, 0, 200));
+                menu.Item("ExtraPingBuffer").SetValue(new Slider(80, 0, 200));
             }
             else if (mode == "Very Smooth")
             {

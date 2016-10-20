@@ -326,7 +326,7 @@ namespace ezEvade
             int posRadius = 50;
             int radiusIndex = 0;
 
-            var extraEvadeDistance = 100;//Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraAvoidDistance").GetValue<Slider>().Value;
+            var extraEvadeDistance = Math.Max(100, ObjectCache.menuCache.cache["ExtraEvadeDistance"].GetValue<Slider>().Value);
 
             Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2DPing;
             Vector2 lastMovePos = Game.CursorPos.To2D();
@@ -385,7 +385,7 @@ namespace ezEvade
             int radiusIndex = 0;
 
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-            var extraEvadeDistance = 100;// Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraEvadeDistance").GetValue<Slider>().Value;
+            var extraEvadeDistance = Math.Max(100, ObjectCache.menuCache.cache["ExtraEvadeDistance"].GetValue<Slider>().Value);
             var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
 
             Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2DPing;
@@ -453,16 +453,8 @@ namespace ezEvade
 
         public static PositionInfo GetBestPositionTargetedDash(EvadeSpellData spell)
         {
-            /*if (spell.spellDelay > 0)
-            {
-                if (CheckWindupTime(spell.spellDelay))
-                {
-                    return null;
-                }
-            }*/
-
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-            var extraEvadeDistance = 100;// Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraEvadeDistance").GetValue<Slider>().Value;
+            var extraEvadeDistance = Math.Max(100, ObjectCache.menuCache.cache["ExtraEvadeDistance"].GetValue<Slider>().Value);
             var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
 
             Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2DPing;
@@ -852,13 +844,6 @@ namespace ezEvade
             foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
             {
                 Spell spell = entry.Value;
-
-                var moveBuff = EvadeSpell.evadeSpells.OrderBy(s => s.dangerlevel).FirstOrDefault(s => s.evadeType == EvadeType.MovementSpeedBuff);
-                if (moveBuff != null && EvadeSpell.ShouldUseMovementBuff(spell))
-                {
-                    speed += speed * moveBuff.speedArray[myHero.GetSpell(moveBuff.spellKey).Level - 1] / 100;
-                    delay += moveBuff.spellDelay;
-                }
 
                 closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist));
 

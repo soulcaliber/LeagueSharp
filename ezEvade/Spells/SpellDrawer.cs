@@ -183,7 +183,8 @@ namespace ezEvade
                 if (ObjectCache.menuCache.cache[spell.info.spellName + "DrawSpell"].GetValue<bool>()
                     && spellDrawingConfig.Active)
                 {
-                    bool canEvade = !(Evade.lastPosInfo != null && Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID));
+                    bool canEvade = true;
+                    //bool canEvade = !(Evade.lastPosInfo != null && Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID));
                   
                     if (spell.spellType == SpellType.Line)
                     {

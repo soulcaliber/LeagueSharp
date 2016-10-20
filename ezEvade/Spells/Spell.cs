@@ -264,11 +264,13 @@ namespace ezEvade
             float evadeTime = 0;
             float spellHitTime = 0;
             float speed = hero.MoveSpeed;
+            float delay = 0;
 
             var moveBuff = EvadeSpell.evadeSpells.OrderBy(s => s.dangerlevel).FirstOrDefault(s => s.evadeType == EvadeType.MovementSpeedBuff);
             if (moveBuff != null && EvadeSpell.ShouldUseMovementBuff(spell))
             {
                 speed += speed * moveBuff.speedArray[ObjectManager.Player.GetSpell(moveBuff.spellKey).Level - 1] / 100;
+                delay += moveBuff.spellDelay;
             }
 
             if (spell.spellType == SpellType.Line)
@@ -286,7 +288,7 @@ namespace ezEvade
             rEvadeTime = evadeTime;
             rSpellHitTime = spellHitTime;
 
-            return spellHitTime > evadeTime;
+            return spellHitTime > evadeTime + delay;
         }
 
         public static BoundingBox GetLinearSpellBoundingBox(this Spell spell)

@@ -889,7 +889,7 @@ namespace ezEvade
                 charName = "Sona",
                 dangerlevel = 3,
                 name = "Song of Celerity",
-                spellName = "SonaW",
+                spellName = "SonaE",
                 spellDelay = 50,
                 spellKey = SpellSlot.E,
                 speedArray = new[] { 13f, 14f, 15f, 16f, 25f },
