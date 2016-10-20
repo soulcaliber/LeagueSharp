@@ -142,7 +142,7 @@ namespace ezEvade
                 var extraWindupDelay = Evade.lastWindupTime - EvadeUtils.TickCount;
                 if (extraWindupDelay > 0)
                 {
-                    extraDelayBuffer += (int)extraWindupDelay;
+                    extraDelayBuffer += (int) extraWindupDelay;
                 }
             }
 
@@ -181,8 +181,6 @@ namespace ezEvade
                     posChecked++;
                     var cRadians = (2 * Math.PI / (curCircleChecks - 1)) * i; //check decimals
                     var pos = new Vector2((float)Math.Floor(heroPoint.X + curRadius * Math.Cos(cRadians)), (float)Math.Floor(heroPoint.Y + curRadius * Math.Sin(cRadians)));
-
-
                     posTable.Add(InitPositionInfo(pos, extraDelayBuffer, extraEvadeDistance, lastMovePos, lowestEvadeTimeSpell));
                 }
             }
@@ -859,11 +857,12 @@ namespace ezEvade
                 if (moveBuff != null && EvadeSpell.ShouldUseMovementBuff(spell))
                 {
                     speed += speed * moveBuff.speedArray[myHero.GetSpell(moveBuff.spellKey).Level - 1] / 100;
+                    delay += moveBuff.spellDelay;
                 }
 
                 closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist));
 
-                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 6)
+                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 10) 
                     || PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist, useServerPosition)
                     || (spell.info.spellType != SpellType.Line && pos.isNearEnemy(minComfortDistance)))
                 {

@@ -216,14 +216,6 @@ namespace ezEvade
             menu.Item("DodgeFOWSpells").SetValue(true);
             menu.Item("DodgeCircularSpells").SetValue(true);
 
-            menu.Item("DodgeDangerousKeyEnabled").SetValue(false);
-            menu.Item("DodgeDangerousKey").SetValue(new KeyBind(32, KeyBindType.Press));
-            menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('V', KeyBindType.Press));
-            menu.Item("DodgeOnlyOnComboKeyEnabled").SetValue(false);
-            menu.Item("DodgeComboKey").SetValue(new KeyBind(32, KeyBindType.Press));
-            menu.Item("DontDodgeKeyEnabled").SetValue(false);
-            menu.Item("DontDodgeKey").SetValue(new KeyBind('Z', KeyBindType.Press));
-
             menu.Item("HigherPrecision").SetValue(false);
             menu.Item("RecalculatePosition").SetValue(true);
             menu.Item("ContinueMovement").SetValue(true);
@@ -253,6 +245,7 @@ namespace ezEvade
             menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
             menu.Item("MinComfortZone").SetValue(new Slider(550, 0, 1000));
 
+            // drawings
             menu.Item("DrawSkillShots").SetValue(true);
             menu.Item("ShowStatus").SetValue(true);
             menu.Item("DrawSpellPos").SetValue(false);
@@ -260,8 +253,18 @@ namespace ezEvade
 
             if (kappa)
             {
+                // profiles
                 menu.Item("EvadeMode")
                     .SetValue(new StringList(new[] { "Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho" }, 0));
+
+                // keys
+                menu.Item("DodgeDangerousKeyEnabled").SetValue(false);
+                menu.Item("DodgeDangerousKey").SetValue(new KeyBind(32, KeyBindType.Press));
+                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('V', KeyBindType.Press));
+                menu.Item("DodgeOnlyOnComboKeyEnabled").SetValue(false);
+                menu.Item("DodgeComboKey").SetValue(new KeyBind(32, KeyBindType.Press));
+                menu.Item("DontDodgeKeyEnabled").SetValue(false);
+                menu.Item("DontDodgeKey").SetValue(new KeyBind('Z', KeyBindType.Press));
             }
         }
 
@@ -274,8 +277,8 @@ namespace ezEvade
                 ResetConfig(false);
                 menu.Item("FastMovementBlock").SetValue(true);
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(120, 0, 500));
-                menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
-                menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
+                menu.Item("RejectMinDistance").SetValue(new Slider(25, 0, 100));
+                menu.Item("ExtraCPADistance").SetValue(new Slider(25, 0, 150));
                 menu.Item("ExtraPingBuffer").SetValue(new Slider(120, 0, 200));
             }
             else if (mode == "Very Smooth")
