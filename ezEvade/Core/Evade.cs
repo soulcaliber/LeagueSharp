@@ -371,6 +371,7 @@ namespace ezEvade
                 menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
                 menu.Item("DodgeDangerousKey2").SetValue(new KeyBind(109, KeyBindType.Press));
                 menu.Item("HigherPrecision").SetValue(true);
+                menu.Item("CheckSpellCollision").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
                 menu.Item("ShowStatus").SetValue(false);
                 menu.Item("DrawSpellPos").SetValue(true);
