@@ -262,10 +262,11 @@ namespace ezEvade
                 angle = 5,
                 charName = "Ashe",
                 dangerlevel = 2,
+                //missileName = "VolleyAttack",
                 name = "Volley",
                 projectileSpeed = 1500,
                 radius = 20,
-                range = 1200,
+                range = 1350,
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "Volley",
@@ -448,7 +449,6 @@ namespace ezEvade
             {
                 charName = "Brand",
                 dangerlevel = 2,
-                missileName = "BrandW",
                 name = "Pillar of Flame",
                 radius = 250,
                 range = 1100,
@@ -1450,11 +1450,10 @@ namespace ezEvade
             {
                 charName = "Ivern",                  
                 dangerlevel = 3,
-                missileName = "IvernQMis",
                 name = "Rootcaller",
                 projectileSpeed = 1300,
                 radius = 65,
-                range = 1100,
+                range = 1150,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "IvernQ",
@@ -2195,7 +2194,7 @@ namespace ezEvade
                 missileName = "lissandraqshards",
                 projectileSpeed = 2200,
                 radius = 90,
-                range = 825,
+                range = 1025,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "LissandraQShards",
@@ -2215,15 +2214,14 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
                 spellName = "LissandraE",
-                extraSpellNames = new[] { "LissandraEMissile" },
-                spellType = SpellType.Line
+                spellType = SpellType.Line,
+                fixedRange = true
             });
 
             #endregion Lissandra
 
             #region Lucian
 
-            //TODO: Add explosion
             Spells.Add(
             new SpellData
             {
@@ -3298,7 +3296,6 @@ namespace ezEvade
 
             #region Talon
 
-
             Spells.Add(
             new SpellData
             {
@@ -3366,13 +3363,12 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Taric",
-                dangerlevel = 3,
+                dangerlevel = 2,
                 missileName = "TaricEMissile",
                 name = "Dazzle",
                 radius = 100,
                 range = 750,
                 fixedRange = true,
-                defaultOff = true,
                 spellDelay = 1000,
                 spellKey = SpellSlot.E,
                 spellName = "TaricE",
@@ -3730,8 +3726,7 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "VelkozQ",
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                fixedRange = true
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions }
             });
             #endregion Velkoz
 

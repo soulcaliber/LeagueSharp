@@ -79,7 +79,6 @@ namespace ezEvade
                 missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name.ToLower(), out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
-
                 if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
                 {
                     var hero = missile.SpellCaster;
@@ -100,11 +99,11 @@ namespace ezEvade
 
                             var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
 
-                            if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
+                            if (spell.info.missileName.ToLower() == missile.SData.Name.ToLower()) // todo: fix urf spells
                             {
-                                if (spell.info.missileName == missile.SData.Name.ToLower()) // todo: fix urf spells
+                                if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
                                 {
-                                    if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
+                                    if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                     {
                                         spell.spellObject = obj;
                                         objectAssigned = true;
@@ -155,6 +154,7 @@ namespace ezEvade
                 DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }
+
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
             try
@@ -178,7 +178,6 @@ namespace ezEvade
                                     Spell spell = entry.Value;
 
                                     var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
-
                                     if (spell.spellObject != null)
                                     {
                                         if (spell.info.spellName.ToLower() == args.SData.Name.ToLower()) // todo: fix urf spells
@@ -195,7 +194,7 @@ namespace ezEvade
 
                             if (foundMissile == false || spellData.dontcheckDuplicates)
                             {
-                                CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
+                                CreateSpellData(hero, hero.ServerPosition, args.End, spellData);
                             }
                         }
                     }
@@ -229,10 +228,10 @@ namespace ezEvade
 
             if (spellStartPos.Distance(myHero.Position) < spellData.range + 1000)
             {
-                Vector2 startPosition = spellStartPos.To2D();
-                Vector2 endPosition = spellEndPos.To2D();
-                Vector2 direction = (endPosition - startPosition).Normalized();
-                float endTick = 0;
+                var startPosition = spellStartPos.To2D();
+                var endPosition = spellEndPos.To2D();
+                var direction = (endPosition - startPosition).Normalized();
+                var endTick = 0f;
 
                 if (spellType == SpellType.None)
                 {
@@ -249,6 +248,15 @@ namespace ezEvade
                 {
                     endTick = spellData.spellDelay + (spellData.range / spellData.projectileSpeed) * 1000;
                     endPosition = startPosition + direction * spellData.range;
+
+                    if (spellData.fixedRange) // for all lines
+                    {
+                        if (endPosition.Distance(startPosition) > spellData.range)
+                            endPosition = startPosition + direction * spellData.range;
+
+                        if (endPosition.Distance(startPosition) < spellData.range)
+                            endPosition = startPosition + direction * spellData.range;
+                    }
 
                     if (spellData.useEndPosition)
                     {
@@ -396,12 +404,15 @@ namespace ezEvade
             foreach (KeyValuePair<int, Spell> entry in detectedSpells)
             {
                 Spell spell = entry.Value;
+
                 var collisionObject = spell.CheckSpellCollision();
                 if (collisionObject != null)
                 {
                     spell.predictedEndPos = spell.GetSpellProjection(collisionObject.ServerPosition.To2D());
 
-                    var radius = spell.info.name.Contains("_exp") ? spell.info.secondaryRadius : spell.radius;
+                    var radius = spell.info.name.Contains("_exp") && spell.spellType == SpellType.Circular
+                        ? spell.info.secondaryRadius / 2f
+                        : spell.radius;
 
                     if (spell.currentSpellPosition.Distance(collisionObject.ServerPosition) <
                         collisionObject.BoundingRadius + radius)
