@@ -1188,23 +1188,23 @@ namespace ezEvade
 
             #region Graves
 
-            //TODO: add end split
             Spells.Add(
             new SpellData
             {
                 charName = "Graves",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "GravesQLineMis",
-                extraMissileNames = new[] { "GravesQReturn" },
                 name = "End of the Line",
                 projectileSpeed = 3000,
-                radius = 40,
+                radius = 72,
                 range = 800,
                 spellDelay = 250,
+                extraEndTime = 1300,
                 spellKey = SpellSlot.Q,
                 spellName = "GravesQLineSpell",
                 spellType = SpellType.Line,
-
+                fixedRange = true,
+                isSpecial = true
             });
 
             Spells.Add(
@@ -3691,7 +3691,8 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "VelkozW",
-                spellType = SpellType.Line
+                spellType = SpellType.Line,
+                fixedRange = true
             });
 
             Spells.Add(
@@ -3699,14 +3700,13 @@ namespace ezEvade
             {
                 charName = "Velkoz",
                 dangerlevel = 2,
-                missileName = "VelkozQMissileSplit",
                 name = "Plasma Fission (Split)",
                 projectileSpeed = 2100,
                 radius = 50,
                 range = 1100,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                spellName = "VelkozQSplitActivate",
+                spellName = "VelkozQMissileSplit",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 usePackets = true
@@ -3721,12 +3721,13 @@ namespace ezEvade
                 name = "Plasma Fission",
                 projectileSpeed = 1300,
                 radius = 55,
-                range = 1200,
-                spellDelay = 0,
+                range = 1250,
+                spellDelay = 250f,
                 spellKey = SpellSlot.Q,
                 spellName = "VelkozQ",
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions }
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+                fixedRange = true
             });
             #endregion Velkoz
 
@@ -3979,7 +3980,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Zed",
-                dangerlevel = 2,
+                dangerlevel = 3,
                 missileName = "ZedQMissile",
                 name = "Razor Shuriken",
                 projectileSpeed = 1700,

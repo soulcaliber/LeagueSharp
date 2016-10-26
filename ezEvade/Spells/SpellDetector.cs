@@ -215,7 +215,7 @@ namespace ezEvade
                 CreateSpellData(hero, spellStartPos, spellEndPos, spellData,
                     obj, extraEndTick, false, spellData.spellType, false);
 
-                var expData = spellData.CopyData();
+                var expData = (SpellData) spellData.Clone();
 
                 if (expData.spellType == SpellType.Line && !expData.name.Contains("_exp"))
                     expData.name = spellData.name + "_exp";

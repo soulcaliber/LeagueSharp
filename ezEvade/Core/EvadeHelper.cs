@@ -783,6 +783,38 @@ namespace ezEvade
             return sumIntersectDist;
         }
 
+        public static Vector3 GetNearWallPoint(Vector3 start, Vector3 end)
+        {
+            var direction = (end - start).Normalized();
+            var distance = start.Distance(end);
+            for (var i = 20; i < distance; i += 20)
+            {
+                var v = end - direction * i;
+                if (!v.IsWall())
+                {
+                    return v;
+                }
+            }
+
+            return Vector3.Zero;
+        }
+
+        public static Vector3 GetNearWallPoint(Vector2 start, Vector2 end)
+        {
+            var direction = (end - start).Normalized();
+            var distance = start.Distance(end);
+            for (var i = 20; i < distance; i += 20)
+            {
+                var v = end - direction * i;
+                if (!v.IsWall())
+                {
+                    return v.To3D();
+                }
+            }
+
+            return Vector3.Zero;
+        }
+
         public static float GetIntersectDistance(Spell spell, Vector2 start, Vector2 end)
         {
             if (spell == null)

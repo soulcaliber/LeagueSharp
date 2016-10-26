@@ -339,23 +339,40 @@ namespace ezEvade
             return spellPos;
         }
 
-        public static SpellData CopyData(this SpellData data)
-        {
-            return data;
-        }
-
         public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0, 
             float extraDistance = 0)
         {
             Vector2 spellPos = spell.startPos;
 
-            if (spell.spellType == SpellType.Line || spell.spellType == SpellType.Arc || 
-                spell.info.name.Contains("_exp"))
+            if (spell.info.updatePosition == false)
             {
-                float spellTime = EvadeUtils.TickCount - spell.startTime - spell.info.spellDelay;
+                return spellPos;
+            }
+
+            if (spell.spellType == SpellType.Line || spell.spellType == SpellType.Arc)
+            {
+                var spellTime = EvadeUtils.TickCount - spell.startTime - 
+                    spell.info.spellDelay - Math.Max(0, spell.info.extraEndTime);
 
                 if (spell.info.projectileSpeed == float.MaxValue)
+                {
                     return spell.startPos;
+                }
+
+                if (spellTime >= 0 || allowNegative)
+                {
+                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
+                }
+            }
+            else if (spell.info.name.Contains("_exp") && spell.spellType == SpellType.Circular)
+            {
+                var spellTime = EvadeUtils.TickCount - spell.startTime - 
+                                spell.info.spellDelay - Math.Max(0, spell.info.extraEndTime);
+
+                if (spell.info.projectileSpeed == float.MaxValue)
+                {
+                    return spell.startPos;
+                }
 
                 if (spellTime >= 0 || allowNegative)
                 {

@@ -33,7 +33,7 @@ namespace ezEvade.SpecialSpells
                     var start = hero.ServerPosition;
                     var end = hero.ServerPosition + (args.Target.Position - hero.ServerPosition) * spellData.range;
 
-                    var data = spellData.CopyData();
+                    var data = (SpellData) spellData.Clone();
                     data.spellDelay = hero.AttackCastDelay * 1000;
 
                     SpellDetector.CreateSpellData(hero, start, end, data);

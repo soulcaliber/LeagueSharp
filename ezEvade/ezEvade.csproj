@@ -66,6 +66,7 @@
     <Compile Include="SpecialSpells\ChampionPlugin.cs" />
     <Compile Include="SpecialSpells\Ekko.cs" />
     <Compile Include="SpecialSpells\Fizz.cs" />
+    <Compile Include="SpecialSpells\Graves.cs" />
     <Compile Include="SpecialSpells\Heimerdinger.cs" />
     <Compile Include="SpecialSpells\JarvanIV.cs" />
     <Compile Include="SpecialSpells\Jayce.cs" />
