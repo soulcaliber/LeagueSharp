@@ -323,14 +323,15 @@ namespace ezEvade
                 charName = "Azir",
                 dangerlevel = 2,
                 name = "Conquering Sands",
-                projectileSpeed = 1000,
+                projectileSpeed = 1600,
                 radius = 80,
-                range = 1000,
-                spellDelay = 250,
+                range = 1150, // estimate radius can q
+                spellDelay = 0,
                 spellKey = SpellSlot.Q,
                 spellName = "AzirQWrapper",
                 spellType = SpellType.Line,
-                isSpecial = true
+                isSpecial = true,
+                noProcess = true
             });
 
             Spells.Add(
