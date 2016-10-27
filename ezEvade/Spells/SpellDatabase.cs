@@ -1567,10 +1567,10 @@ namespace ezEvade
                 range = 1170,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
+                hasEndExplosion = true,
                 spellName = "jayceshockblast",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                hasEndExplosion = true,
                 secondaryRadius = 210
             });
 
@@ -1583,7 +1583,7 @@ namespace ezEvade
                 projectileSpeed = 2350,
                 radius = 70,
                 range = 1600,
-                spellDelay = 0,
+                spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 hasEndExplosion = true,
                 spellName = "jayceshockblastwallmis",
@@ -4106,11 +4106,12 @@ namespace ezEvade
                 name = "Time Bomb",
                 radius = 150,
                 range = 900,
-                extraEndTime = 400,
+                extraEndTime = 1000,
                 spellDelay = 650,
                 spellKey = SpellSlot.Q,
                 spellName = "ZileanQ",
-                spellType = SpellType.Circular
+                spellType = SpellType.Circular,
+                isSpecial = true
             });
 
             #endregion Zilean

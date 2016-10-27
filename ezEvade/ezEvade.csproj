@@ -78,6 +78,7 @@
     <Compile Include="SpecialSpells\Taric.cs" />
     <Compile Include="SpecialSpells\Twitch.cs" />
     <Compile Include="SpecialSpells\Yorick.cs" />
+    <Compile Include="SpecialSpells\Zilean.cs" />
     <Compile Include="Spells\ObjectTracker.cs" />
     <Compile Include="SpecialSpells\Orianna.cs" />
     <Compile Include="SpecialSpells\Sion.cs" />

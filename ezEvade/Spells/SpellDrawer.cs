@@ -185,7 +185,7 @@ namespace ezEvade
                 {
                     bool canEvade = true;
                     //bool canEvade = !(Evade.lastPosInfo != null && Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID));
-                  
+             
                     if (spell.spellType == SpellType.Line)
                     {
                         Vector2 spellPos = spell.currentSpellPosition;
