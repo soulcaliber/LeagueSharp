@@ -39,11 +39,11 @@ namespace ezEvade.SpecialSpells
                 && SpellDetector.onMissileSpells.TryGetValue("viktordeathray3", out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
+                var newData = (SpellData) spellData.Clone();
                 var missileDist = missile.EndPosition.To2D().Distance(missile.StartPosition.To2D());
-                var delay = missileDist / 1.5f + 1000;
 
-                spellData.spellDelay = delay;
-                SpellDetector.CreateSpellData(missile.SpellCaster, missile.StartPosition, missile.EndPosition, spellData);
+                newData.spellDelay = missileDist / 1.5f + 1000;
+                SpellDetector.CreateSpellData(missile.SpellCaster, missile.StartPosition, missile.EndPosition, newData);
             }
         }
     }
