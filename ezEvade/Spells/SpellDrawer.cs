@@ -224,6 +224,10 @@ namespace ezEvade
                         {
                             Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius - 125, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
                         }
+                        else if (spell.info.spellName == "DariusCleave")
+                        {
+                            Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius - 220, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
+                        }
                     }
                     else if (spell.spellType == SpellType.Arc)
                     {                      

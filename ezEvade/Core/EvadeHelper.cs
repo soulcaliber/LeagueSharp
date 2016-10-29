@@ -988,6 +988,26 @@ namespace ezEvade
                     }
                 }
 
+                if (spell.info.spellName == "DariusCleave")
+                {
+                    var wallRadius = 225;
+                    var midRadius = spell.radius - wallRadius;
+
+                    if (spellHitTime == 0)
+                    {
+                        return 0;
+                    }
+
+                    if (tHeroPos.Distance(spell.endPos) >= spell.radius)
+                    {
+                        return Math.Max(0, tHeroPos.Distance(spell.endPos) - midRadius - wallRadius);
+                    }
+                    else
+                    {
+                        return Math.Max(0, midRadius - tHeroPos.Distance(spell.endPos) - wallRadius);
+                    }
+                }
+
                 var closestDist = Math.Max(0, tHeroPos.Distance(spell.endPos) - (spell.radius + extraDist));
                 if (spell.info.extraEndTime > 0 && closestDist != 0)
                 {
@@ -1181,7 +1201,8 @@ namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Circular)
                     {
-                        if (spell.info.spellName == "VeigarEventHorizon")
+                        if (spell.info.spellName == "VeigarEventHorizon" || 
+                            spell.info.spellName == "DariusCleave")
                         {
                             var cpa2 = MathUtilsCPA.CPAPointsEx(from, dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, new Vector2(0, 0), movePos, spell.endPos);
 

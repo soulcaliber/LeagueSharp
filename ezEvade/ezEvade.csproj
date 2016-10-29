@@ -64,6 +64,7 @@
     <Compile Include="SpecialSpells\Ashe.cs" />
     <Compile Include="SpecialSpells\Azir.cs" />
     <Compile Include="SpecialSpells\ChampionPlugin.cs" />
+    <Compile Include="SpecialSpells\Darius.cs" />
     <Compile Include="SpecialSpells\Ekko.cs" />
     <Compile Include="SpecialSpells\Fizz.cs" />
     <Compile Include="SpecialSpells\Graves.cs" />
