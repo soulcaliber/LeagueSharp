@@ -1148,6 +1148,7 @@ namespace ezEvade
                     return CheckMoveToDirection(EvadeSpell.lastSpellEvadeCommand.targetPosition, movePos);
                 }
             }*/
+
             var startPoint = myHero.Position;
             
             if (myHero.IsDashing())
@@ -1201,8 +1202,7 @@ namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Circular)
                     {
-                        if (spell.info.spellName == "VeigarEventHorizon" || 
-                            spell.info.spellName == "DariusCleave")
+                        if (spell.info.spellName == "VeigarEventHorizon")
                         {
                             var cpa2 = MathUtilsCPA.CPAPointsEx(from, dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, new Vector2(0, 0), movePos, spell.endPos);
 
@@ -1213,6 +1213,21 @@ namespace ezEvade
                                 return true;
                             }
                             else if (from.Distance(spell.endPos) > spell.radius && cpa2 < spell.radius + 10)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (spell.info.spellName == "DariusCleave")
+                        {
+                            var cpa3 = MathUtilsCPA.CPAPointsEx(from, dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, new Vector2(0, 0), movePos, spell.endPos);
+
+                            if (from.Distance(spell.endPos) < spell.radius &&
+                                !(from.Distance(spell.endPos) < spell.radius - 230 &&
+                                  movePos.Distance(spell.endPos) < spell.radius - 230))
+                            {
+                                return true;
+                            }
+                            else if (from.Distance(spell.endPos) > spell.radius && cpa3 < spell.radius + 10)
                             {
                                 return true;
                             }

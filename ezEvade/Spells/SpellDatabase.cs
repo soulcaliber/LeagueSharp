@@ -194,7 +194,6 @@ namespace ezEvade
                 range = 1250,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                hasEndExplosion = true,
                 secondaryRadius = 210,
                 extraDrawHeight = 165,
                 spellName = "FlashFrostSpell",
@@ -1571,7 +1570,6 @@ namespace ezEvade
             {
                 charName = "Jayce",
                 dangerlevel = 2,
-                missileName = "jayceshockblastmis",
                 name = "Shock Blast",
                 projectileSpeed = 1450,
                 radius = 70,
@@ -1579,7 +1577,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 hasEndExplosion = true,
-                spellName = "jayceshockblast",
+                spellName = "jayceshockblastmis",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 secondaryRadius = 210

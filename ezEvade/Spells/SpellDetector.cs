@@ -135,13 +135,10 @@ namespace ezEvade
                 return;
 
             MissileClient missile = (MissileClient)obj;
-            //SpellData spellData;
 
             foreach (var spell in spells.Values.ToList().Where(
                     s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
             {
-                //Console.WriteLine("Distance: " + obj.Position.Distance(myHero.Position));
-
                 DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
         }      
@@ -215,12 +212,7 @@ namespace ezEvade
                 CreateSpellData(hero, spellStartPos, spellEndPos, spellData,
                     obj, extraEndTick, false, spellData.spellType, false);
 
-                var expData = (SpellData) spellData.Clone();
-
-                if (expData.spellType == SpellType.Line && !expData.name.Contains("_exp"))
-                    expData.name = spellData.name + "_exp";
-
-                CreateSpellData(hero, spellStartPos, spellEndPos, expData,
+                CreateSpellData(hero, spellStartPos, spellEndPos, spellData,
                     obj, extraEndTick, true, SpellType.Circular, false);
 
                 return;
@@ -280,14 +272,14 @@ namespace ezEvade
                     {
                         endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
 
-                        if (spellData.spellType == SpellType.Line && spellData.hasEndExplosion && !spellData.useEndPosition)
+                        if (spellData.spellType == SpellType.Line && spellData.hasEndExplosion)
                         {
-                            if (ObjectCache.menuCache.cache["CheckSpellCollision"].GetValue<bool>())
-                                endPosition = startPosition;
-                            else
+                            if (!spellData.useEndPosition)
+                            {
                                 endPosition = startPosition + direction * spellData.range;
+                            }
                         }
-                    }
+                    }              
                 }
                 else if (spellType == SpellType.Arc)
                 {
@@ -410,12 +402,8 @@ namespace ezEvade
                 {
                     spell.predictedEndPos = spell.GetSpellProjection(collisionObject.ServerPosition.To2D());
 
-                    var radius = spell.info.name.Contains("_exp") && spell.spellType == SpellType.Circular
-                        ? spell.info.secondaryRadius / 2f
-                        : spell.radius;
-
                     if (spell.currentSpellPosition.Distance(collisionObject.ServerPosition) <
-                        collisionObject.BoundingRadius + radius)
+                        collisionObject.BoundingRadius + spell.radius)
                     {
                         DelayAction.Add(1, () => DeleteSpell(entry.Key));
                     }

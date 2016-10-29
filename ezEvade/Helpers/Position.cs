@@ -40,15 +40,6 @@ namespace ezEvade
                 return projection.IsOnSegment && projection.SegmentPoint.Distance(position) <= spell.radius + radius;
             }
 
-            if (spell.spellType == SpellType.Circular && spell.info.name.Contains("_exp"))
-            {
-                Vector2 spellPos = spell.currentSpellPosition;
-                Vector2 spellEndPos = predictCollision ? spell.GetSpellEndPosition() : spell.endPos;
-
-                var projection = position.ProjectOn(spellPos, spellEndPos);
-                return projection.IsOnSegment && projection.SegmentPoint.Distance(position) <= spell.info.secondaryRadius + radius;
-            }
-
             if (spell.spellType == SpellType.Circular)
             {
                 if (spell.info.spellName == "VeigarEventHorizon")
