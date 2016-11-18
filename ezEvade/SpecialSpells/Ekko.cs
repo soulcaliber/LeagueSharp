@@ -32,7 +32,7 @@ namespace ezEvade.SpecialSpells
             {
                 foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
                 {
-                    if (obj != null && obj.IsValid && !obj.IsDead && obj.Name == "Ekko" && obj.IsEnemy)
+                    if (obj != null && obj.IsValid && !obj.IsDead && obj.Name == "Ekko" && obj.CheckTeam())
                     {
                         var blinkPos = obj.ServerPosition.To2D();
 

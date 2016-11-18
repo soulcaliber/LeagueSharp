@@ -166,7 +166,7 @@ namespace ezEvade
         private void Game_OnGameLoad()
         {
             ConsolePrinter.Print("EvadeTester loaded");
-            menu.AddSubMenu(new Menu("Test", "Test"));
+            //menu.AddSubMenu(new Menu("Test", "Test"));
 
             //ConsolePrinter.Print("Ping:" + ObjectCache.gamePing);
             if (testMenu.Item("ShowBuffs").GetValue<bool>())
@@ -243,8 +243,7 @@ namespace ezEvade
                 {
                     var range = sender.Position.To2D().Distance(testMissile.StartPosition.To2D());
                     ConsolePrinter.Print("Est.Missile range: " + range);
-
-                    ConsolePrinter.Print("Est.Missile speed: " + range / (EvadeUtils.TickCount - testMissileStartTime));
+                    ConsolePrinter.Print("Est.Missile speed: " + 1000 * (range / (EvadeUtils.TickCount - testMissileStartTime)));
                 }
             }
         }
@@ -269,24 +268,18 @@ namespace ezEvade
 
             ConsolePrinter.Print(sender.Type + " : " + sender.Name);*/
 
-            var minion = obj as Obj_AI_Minion;
-            if(minion != null){
-
-                ConsolePrinter.Print(minion.CharData.BaseSkinName);
-            }
-
             if (obj.IsValid<MissileClient>())
             {
                 MissileClient autoattack = (MissileClient)obj;
 
-                /*if (!autoattack.SpellCaster.IsMinion)
+                if (autoattack.SpellCaster is Obj_AI_Hero)
                 {
                     ConsolePrinter.Print("Missile Name " + autoattack.SData.Name);
                     ConsolePrinter.Print("Missile Speed " + autoattack.SData.MissileSpeed);
                     ConsolePrinter.Print("LineWidth " + autoattack.SData.LineWidth);
                     ConsolePrinter.Print("Range " + autoattack.SData.CastRange);
                     ConsolePrinter.Print("Accel " + autoattack.SData.MissileAccel);
-                }*/
+                }
             }
 
 
@@ -303,11 +296,10 @@ namespace ezEvade
 
             MissileClient missile = (MissileClient)obj;
 
-            if (!missile.SpellCaster.IsValid<Obj_AI_Hero>())
+            if (!(missile.SpellCaster is Obj_AI_Hero))
             {
-                //return;
+                return;
             }
-
 
             var testMissileSpeedStartTime = EvadeUtils.TickCount;
             var testMissileSpeedStartPos = missile.Position.To2D();
@@ -389,6 +381,8 @@ namespace ezEvade
         {
             if (hero.IsMinion)
                 return;
+
+
 
             if (testMenu.Item("ShowProcessSpell").GetValue<bool>())
             {

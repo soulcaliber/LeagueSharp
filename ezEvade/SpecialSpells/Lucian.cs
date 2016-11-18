@@ -29,7 +29,6 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "LucianQ")
             {
-
                 if (args.Target.IsValid<Obj_AI_Base>())
                 {
                     var target = args.Target as Obj_AI_Base;

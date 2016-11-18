@@ -114,6 +114,7 @@ namespace ezEvade
                 charName = "Ahri",
                 dangerlevel = 3,
                 name = "Orb of Deception Back",
+                missileName = "AhriOrbReturn",
                 projectileSpeed = 915,
                 radius = 100,
                 range = 925,
@@ -121,8 +122,9 @@ namespace ezEvade
                 spellKey = SpellSlot.Q,
                 spellName = "AhriOrbofDeception2",
                 spellType = SpellType.Line,
-
+                isSpecial = true
             });
+
             #endregion Ahri
 
             #region Alistar
@@ -665,7 +667,7 @@ namespace ezEvade
             {
                 charName = "Darius",
                 dangerlevel = 2,
-                name = "Decimate",
+                name = "Decimate [Beta]",
                 radius = 425,
                 range = 425,
                 spellDelay = 750,
@@ -961,13 +963,13 @@ namespace ezEvade
             {
                 charName = "Fizz",
                 dangerlevel = 2,
-                name = "FizzPiercingStrike",
+                name = "Urchin Strike",
                 projectileSpeed = 1400,
                 radius = 150,
                 range = 550,
                 spellDelay = 0,
                 spellKey = SpellSlot.Q,
-                spellName = "FizzPiercingStrike",
+                spellName = "FizzQ",
                 spellType = SpellType.Line,
                 isSpecial = true
             });
@@ -976,20 +978,20 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Fizz",
-                dangerlevel = 3,
-                missileName = "FizzMarinerDoomMissile",
-                name = "Chum the Waters",
+                dangerlevel = 4,
+                missileName = "FizzRMissile",
+                name = "Chum the Waters [Beta]",
                 projectileSpeed = 1350,
                 radius = 120,
                 range = 1275,
                 spellDelay = 250,
                 spellKey = SpellSlot.R,
-                spellName = "FizzMarinerDoom",
+                spellName = "FizzR",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
                 secondaryRadius = 250,
-                hasEndExplosion = true
-                //useEndPosition = true
+                hasEndExplosion = true,
+                useEndPosition = true
 
             });
 
@@ -2013,30 +2015,15 @@ namespace ezEvade
             {
                 charName = "Leblanc",
                 dangerlevel = 3,
-                name = "Ethereal Chains (Mimic)",
+                name = "Ethereal Chains [Beta]",
+                missileName = "LeblancEMissile",
                 projectileSpeed = 1750,
-                radius = 70,
-                range = 960,
-                spellDelay = 250,
-                spellKey = SpellSlot.R,
-                spellName = "LeblancSoulShackleM",
-                spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                fixedRange = true
-            });
-
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Leblanc",
-                dangerlevel = 3,
-                name = "Ethereal Chains",
-                projectileSpeed = 1750,
-                radius = 70,
+                radius = 55,
                 range = 960,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
-                spellName = "LeblancSoulShackle",
+                spellName = "LeblancE",
+                extraMissileNames = new []{ "LeblancRE" },
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 fixedRange = true
@@ -2047,30 +2034,13 @@ namespace ezEvade
             {
                 charName = "Leblanc",
                 dangerlevel = 2,
-                missileName = "LeblancSlideM",
-                name = "Distortion (Mimic)",
+                name = "Distortion [Beta]",
                 projectileSpeed = 1450,
-                radius = 220,
-                range = 600,
-                spellDelay = 250,
-                spellKey = SpellSlot.R,
-                spellName = "LeblancSlideM",
-                spellType = SpellType.Circular
-            });
-
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Leblanc",
-                dangerlevel = 2,
-                missileName = "LeblancSlide",
-                name = "Distortion",
-                projectileSpeed = 1450,
-                radius = 220,
+                radius = 250,
                 range = 600,
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
-                spellName = "LeblancSlide",
+                spellName = "LeblancW",
                 spellType = SpellType.Circular
             });
 
@@ -2830,16 +2800,32 @@ namespace ezEvade
             {
                 charName = "Rengar",
                 dangerlevel = 3,
-                missileName = "RengarEFinal",
-                name = "Bola Strike",
+                name = "Savagery [Beta]",
+                radius = 150,
+                range = 500,
+                spellDelay = 250,
+                spellKey = SpellSlot.Q,
+                spellName = "RengarQ2",
+                extraSpellNames = new[] { "RengarQ2Emp" },
+                spellType = SpellType.Line
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Rengar",
+                dangerlevel = 3,
+                missileName = "RengarEMis",
+                name = "Bola Strike [Beta]",
                 projectileSpeed = 1500,
                 radius = 70,
                 range = 1000,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
                 spellName = "RengarE",
+                extraSpellNames = new []{ "RengarEEmp" },
+                extraMissileNames = new [] { "RengerEEmpMis" },
                 spellType = SpellType.Line,
-                extraMissileNames = new[] { "RengarEFinalMAX" },
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
 
             });
@@ -3303,22 +3289,54 @@ namespace ezEvade
             Spells.Add(
             new SpellData
             {
-                angle = 20,
                 charName = "Talon",
-                dangerlevel = 2,
+                dangerlevel = 4,
+                name = "Shadow Assault [Beta]",
+                projectileSpeed = 2400,
+                radius = 140,
+                range = 550,
+                spellKey = SpellSlot.R,
+                spellName = "talonrmisone",
+                extraMissileNames = new []{ "talonrmistwo" },
+                spellType = SpellType.Line,
+                fixedRange = true
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                angle = 14,
+                charName = "Talon",
+                dangerlevel = 3,
                 isThreeWay = true,
-                missileName = "talonrakemissileone",
-                name = "Rake",
+                missileName = "talonwmissile",
+                name = "Rake [Beta]",
                 projectileSpeed = 2300,
                 radius = 75,
-                range = 700,
+                range = 900,
                 spellKey = SpellSlot.W,
-                spellName = "TalonRake",
-                extraMissileNames = new [] { "talonrakemissiletwo" },
+                spellName = "talonw",
                 spellType = SpellType.Line,
                 fixedRange = true,
-                isSpecial = true,
-                //splits = 3 this "splits" is not even implemented
+                isSpecial = true
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                angle = 14,
+                charName = "Talon",
+                dangerlevel = 3,
+                isThreeWay = true,
+                name = "Rake Return [Beta]",
+                projectileSpeed = 3000,
+                radius = 75,
+                range = 900,
+                spellKey = SpellSlot.W,
+                spellName = "talonwmissiletwo",
+                spellType = SpellType.Line,
+                fixedRange = true,
+                isSpecial = true
             });
 
             #endregion Talon
@@ -3942,7 +3960,7 @@ namespace ezEvade
              {
                  charName = "Yorick",
                  dangerlevel = 3,
-                 name = "Dark Procession",
+                 name = "Dark Procession [Beta]",
                  radius = 250,
                  range = 600,
                  spellDelay = 500,
@@ -3959,7 +3977,7 @@ namespace ezEvade
                  charName = "Yorick",
                  dangerlevel = 3,
                  //missileName = "YorickEMissile",
-                 name = "Mourning Mist",
+                 name = "Mourning Mist [Beta]",
                  projectileSpeed = 750,
                  radius = 125,
                  range = 580,
@@ -3996,7 +4014,7 @@ namespace ezEvade
             {
                 charName = "Zac",
                 dangerlevel = 3,
-                name = "Elastic Slingshot",
+                name = "Elastic Slingshot [Beta]",
                 projectileSpeed = 1000,
                 radius = 300,
                 range = 1800,

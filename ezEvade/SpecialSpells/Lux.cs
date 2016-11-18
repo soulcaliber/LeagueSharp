@@ -21,8 +21,8 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "LuxMaliceCannon")
             {
-                var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Lux");
-                if (hero != null)
+                var hero = HeroManager.AllHeroes.FirstOrDefault(h => h.ChampionName == "Lux");
+                if (hero != null && hero.CheckTeam())
                 {
                     GameObject.OnCreate += (obj, args) => OnCreateObj_LuxMaliceCannon(obj, args, hero, spellData);
                 }

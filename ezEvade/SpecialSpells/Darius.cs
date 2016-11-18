@@ -23,8 +23,8 @@ namespace ezEvade.SpecialSpells
 
         private void Game_OnUpdate(EventArgs args)
         {
-            var darius = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Darius");
-            if (darius != null)
+            var darius = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Darius");
+            if (darius != null && darius.CheckTeam())
             {
                 foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == darius.NetworkId))
                 {

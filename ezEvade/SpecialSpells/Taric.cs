@@ -24,8 +24,8 @@ namespace ezEvade.SpecialSpells
 
         private void Game_OnUpdate(EventArgs args)
         {
-            var taric = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Taric");
-            if (taric != null)
+            var taric = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Taric");
+            if (taric != null && taric.CheckTeam())
             {
                 foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == taric.NetworkId))
                 {
@@ -34,8 +34,8 @@ namespace ezEvade.SpecialSpells
                 }
             }
 
-            var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
-            if (partner != null)
+            var partner = HeroManager.AllHeroes.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
+            if (partner != null && taric.CheckTeam())
             {
                 foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == partner.NetworkId))
                 {
@@ -49,8 +49,8 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "TaricE")
             {
-                var partner = HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
-                if (partner != null && partner.ChampionName != "Taric")
+                var partner = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName != "Taric" && x.HasBuff("taricwleashactive"));
+                if (partner != null && partner.CheckTeam())
                 {
                     var start = partner.ServerPosition.To2D();
                     var direction = (args.End.To2D() - start).Normalized();

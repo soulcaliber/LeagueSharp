@@ -23,17 +23,15 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "JarvanIVDragonStrike")
             {
-                Obj_AI_Hero hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "JarvanIV");
-                if (hero == null)
+                var jarvaniv = HeroManager.AllHeroes.FirstOrDefault(h => h.ChampionName == "JarvanIV");
+                if (jarvaniv != null && jarvaniv.CheckTeam())
                 {
-                    return;
+                    Game.OnUpdate += Game_OnUpdate;
+                    Obj_AI_Hero.OnProcessSpellCast += ProcessSpell_JarvanIVDemacianStandard;
+                    SpellDetector.OnProcessSpecialSpell += ProcessSpell_JarvanIVDragonStrike;
+                    Obj_AI_Minion.OnCreate += OnCreateObj_JarvanIVDragonStrike;
+                    Obj_AI_Minion.OnDelete += OnDeleteObj_JarvanIVDragonStrike;
                 }
-
-                Game.OnUpdate += Game_OnUpdate;
-                Obj_AI_Hero.OnProcessSpellCast += ProcessSpell_JarvanIVDemacianStandard;
-                SpellDetector.OnProcessSpecialSpell += ProcessSpell_JarvanIVDragonStrike;
-                Obj_AI_Minion.OnCreate += OnCreateObj_JarvanIVDragonStrike;
-                Obj_AI_Minion.OnDelete += OnDeleteObj_JarvanIVDragonStrike;
             }            
         }
 

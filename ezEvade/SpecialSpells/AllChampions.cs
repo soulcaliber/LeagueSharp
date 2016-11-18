@@ -36,6 +36,8 @@ namespace ezEvade.SpecialSpells
 
         private void OnUpdate_EndExplosion(EventArgs args)
         {
+            return;
+
             if (ObjectCache.menuCache.cache["CheckSpellCollision"].GetValue<bool>() == false)
             {
                 return;

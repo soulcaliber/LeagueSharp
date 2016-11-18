@@ -50,7 +50,7 @@ namespace ezEvade.SpecialSpells
         {
             var sphere = sender as Obj_AI_Minion;
             if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.Team != ObjectManager.Player.Team)
+                sphere.CheckTeam())
             {
                 if (args.Animation == "Death")
                 {
@@ -63,7 +63,7 @@ namespace ezEvade.SpecialSpells
         {
             var sphere = sender as Obj_AI_Minion;
             if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.Team != ObjectManager.Player.Team) 
+                sphere.CheckTeam()) 
             {
                 if (!_spheres.Contains(sphere))
                 {
@@ -77,7 +77,7 @@ namespace ezEvade.SpecialSpells
         {
             var sphere = sender as Obj_AI_Minion;
             if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.Team != ObjectManager.Player.Team)
+                sphere.CheckTeam())
             {
                 _spheres.RemoveAll(i => i.NetworkId == sphere.NetworkId);
             }

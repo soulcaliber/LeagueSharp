@@ -46,6 +46,7 @@ namespace ezEvade
         public static bool isDodging = false;
         public static bool dodgeOnlyDangerous = false;
 
+        public static bool devModeOn = false;
         public static bool hasGameEnded = false;
         public static bool isChanneling = false;
         public static Vector2 channelPosition = Vector2.Zero;
@@ -87,6 +88,8 @@ namespace ezEvade
         {
             try
             {
+                //devModeOn = true;
+
                 Obj_AI_Hero.OnIssueOrder += Game_OnIssueOrder;
                 Spellbook.OnCastSpell += Game_OnCastSpell;
                 Game.OnUpdate += Game_OnGameUpdate;
@@ -97,9 +100,8 @@ namespace ezEvade
                 SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
                 Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
-                Game.PrintChat("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
-                   "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
 
+                Game.PrintChat(devModeOn ? "<b>ezEvade: Developer Mode On</b>" : "<b>ezEvade: Loaded!");
 
                 menu = new Menu("ezEvade", "ezEvade", true);
 
@@ -140,10 +142,10 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("AllowCrossing", "Allow Crossing").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
-                miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Evade Config").SetValue(false));
                 miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
                     .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho"}, 0)));
                 miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
+                miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Evade Config").SetValue(false));
 
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
                 limiterMenu.AddItem(new MenuItem("ClickOnlyOnce", "Click Only Once").SetValue(true));
@@ -158,7 +160,7 @@ namespace ezEvade
                 Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
                 fastEvadeMenu.AddItem(new MenuItem("FastMovementBlock", "Fast Movement Block")).SetValue(false);
                 fastEvadeMenu.AddItem(new MenuItem("FastEvadeActivationTime", "FastEvade Activation Time").SetValue(new Slider(65, 0, 500)));
-                fastEvadeMenu.AddItem(new MenuItem("SpellActivationTime", "Spell Activation Time").SetValue(new Slider(200, 0, 1000)));
+                fastEvadeMenu.AddItem(new MenuItem("SpellActivationTime", "Spell Activation Time").SetValue(new Slider(400, 0, 1000)));
                 fastEvadeMenu.AddItem(new MenuItem("RejectMinDistance", "Collision Distance Buffer").SetValue(new Slider(10, 0, 100)));
 
                 miscMenu.AddSubMenu(fastEvadeMenu);
@@ -197,8 +199,13 @@ namespace ezEvade
 
                 var initCache = ObjectCache.myHeroCache;
 
-                //evadeTester = new EvadeTester(menu);
-                //Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
+                if (devModeOn)
+                {
+                    var rootTestMenu = new Menu("ezEvade Tester", "ezEvadeTester", true);
+                    evadeTester = new EvadeTester(rootTestMenu);
+                    Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
+                    rootTestMenu.AddToMainMenu();
+                }
 
                 Console.WriteLine("ezEvade Loaded");
             }
@@ -235,7 +242,7 @@ namespace ezEvade
 
             menu.Item("FastMovementBlock").SetValue(false);
             menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
-            menu.Item("SpellActivationTime").SetValue(new Slider(200, 0, 1000));
+            menu.Item("SpellActivationTime").SetValue(new Slider(400, 0, 1000));
             menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
 
             menu.Item("ExtraPingBuffer").SetValue(new Slider(65, 0, 200));
@@ -355,7 +362,7 @@ namespace ezEvade
                 menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
                 menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(60, 0, 500));
-                menu.Item("SpellActivationTime").SetValue(new Slider(200, 0, 1000));
+                menu.Item("SpellActivationTime").SetValue(new Slider(400, 0, 1000));
                 menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
                 menu.Item("ExtraPingBuffer").SetValue(new Slider(65, 0, 200));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));

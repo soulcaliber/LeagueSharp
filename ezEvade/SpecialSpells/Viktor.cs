@@ -34,7 +34,7 @@ namespace ezEvade.SpecialSpells
 
             SpellData spellData;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != ObjectManager.Player.Team &&
+            if (missile.SpellCaster != null && missile.SpellCaster.CheckTeam() &&
                 missile.SData.Name != null && missile.SData.Name.ToLower() == "viktoreaugmissile"
                 && SpellDetector.onMissileSpells.TryGetValue("viktordeathray3", out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)

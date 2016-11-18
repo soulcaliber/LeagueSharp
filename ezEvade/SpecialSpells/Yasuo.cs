@@ -21,8 +21,8 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "YasuoQW" || spellData.spellName == "YasuoQ3W")
             {
-                var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Yasuo");
-                if (hero != null)
+                var hero = HeroManager.AllHeroes.FirstOrDefault(h => h.ChampionName == "Yasuo");
+                if (hero != null && hero.CheckTeam())
                 {
                     Obj_AI_Hero.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
                 }

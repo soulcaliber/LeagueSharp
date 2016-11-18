@@ -12,11 +12,16 @@ namespace ezEvade
 {
     public static class Situation
     {
-        private static Obj_AI_Hero myHero { get { return ObjectManager.Player; } }
-        
+        private static Obj_AI_Hero myHero => ObjectManager.Player;
+
         static Situation()
         {
 
+        }
+
+        public static bool CheckTeam(this Obj_AI_Base unit)
+        {
+            return unit.Team != myHero.Team || Evade.devModeOn;
         }
 
         public static bool isNearEnemy(this Vector2 pos, float distance, bool alreadyNear = true)
