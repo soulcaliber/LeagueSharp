@@ -131,7 +131,7 @@ namespace ezEvade
                 keyMenu.AddItem(new MenuItem("DontDodgeKey", "Don't Dodge Key").SetValue(new KeyBind('Z', KeyBindType.Press)));
                 menu.AddSubMenu(keyMenu);
 
-                Menu miscMenu = new Menu("Misc Settings", "MiscSettings");               
+                Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
                 miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(false));
                 miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
@@ -140,6 +140,8 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
+                miscMenu.AddItem(new MenuItem("ClickRemove", "Allow Left Click Removal")
+                    .SetValue(true).SetTooltip("Left Click to Remove Circular Spells and Globals"));
                 //miscMenu.AddItem(new MenuItem("AllowCrossing", "Allow Crossing").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
                 miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")

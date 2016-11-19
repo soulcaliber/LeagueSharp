@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Color = SharpDX.Color;
 
 namespace ezEvade
 {
@@ -34,6 +35,7 @@ namespace ezEvade
 
         public static Dictionary<string, string> channeledSpells = new Dictionary<string, string>();
 
+        public static Dictionary<string, SpellData> onProcessTraps = new Dictionary<string, SpellData>();
         public static Dictionary<string, SpellData> onProcessSpells = new Dictionary<string, SpellData>();
         public static Dictionary<string, SpellData> onMissileSpells = new Dictionary<string, SpellData>();
 
@@ -48,6 +50,7 @@ namespace ezEvade
 
         public static Menu menu;
         public static Menu spellMenu;
+        public static Menu trapMenu;
 
         public SpellDetector(Menu mainMenu)
         {
@@ -62,6 +65,9 @@ namespace ezEvade
 
             spellMenu = new Menu("Spells", "Spells");
             menu.AddSubMenu(spellMenu);
+
+            trapMenu = new Menu("Traps", "Traps");
+            menu.AddSubMenu(trapMenu);
 
             LoadSpellDictionary();
             InitChannelSpells();
@@ -140,7 +146,10 @@ namespace ezEvade
             foreach (var spell in spells.Values.ToList().Where(
                     s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
             {
-                DelayAction.Add(1, () => DeleteSpell(spell.spellID));
+                if (!spell.info.name.Contains("_trap"))
+                {
+                    DelayAction.Add(1, () => DeleteSpell(spell.spellID));
+                }
             }
         }      
     
@@ -268,7 +277,7 @@ namespace ezEvade
                     if (endPosition.Distance(startPosition) > spellData.range)
                         endPosition = startPosition + direction * spellData.range;
 
-                    if (spellData.projectileSpeed == 0)
+                    if (spellData.projectileSpeed == 0 && hero != null)
                     {
                         endPosition = hero.ServerPosition.To2D();
                     }
@@ -323,10 +332,14 @@ namespace ezEvade
                 newSpell.endPos = endPosition;
                 newSpell.height = spellEndPos.Z + spellData.extraDrawHeight;
                 newSpell.direction = direction;
-                newSpell.heroID = hero.NetworkId;
                 newSpell.info = spellData;
                 newSpell.spellType = spellType;
                 newSpell.radius = spellRadius > 0 ? spellRadius : newSpell.GetSpellRadius();
+
+                if (hero != null)
+                {
+                    newSpell.heroID = hero.NetworkId;
+                }
 
                 if (obj != null)
                 {
@@ -336,7 +349,10 @@ namespace ezEvade
 
                 int spellID = CreateSpell(newSpell, processSpell);
 
-                DelayAction.Add((int)(endTick + spellData.extraEndTime), () => DeleteSpell(spellID));
+                if (extraEndTick != 1337f) // traps
+                {
+                    DelayAction.Add((int)(endTick + spellData.extraEndTime), () => DeleteSpell(spellID));
+                }
             }
         }
 
@@ -371,7 +387,9 @@ namespace ezEvade
         {
             foreach (KeyValuePair<int, Spell> entry in detectedSpells)
             {
-                Spell spell = entry.Value;
+                var spell = entry.Value;
+                if (spell.info.spellName.Contains("_trap"))
+                    continue;
 
                 foreach (var hero in HeroManager.Enemies)
                 {
@@ -470,8 +488,15 @@ namespace ezEvade
 
             foreach (KeyValuePair<int, Spell> entry in detectedSpells)
             {
-                Spell spell = entry.Value;
-                EvadeHelper.fastEvadeMode = ObjectCache.menuCache.cache[spell.info.spellName + "FastEvade"].GetValue<bool>();
+                var spell = entry.Value;
+                if (spell.info.spellName.Contains("_trap"))
+                {
+                    // todo:
+                }
+                else
+                {
+                    EvadeHelper.fastEvadeMode = ObjectCache.menuCache.cache[spell.info.spellName + "FastEvade"].GetValue<bool>();
+                }
 
                 float evadeTime, spellHitTime;
                 spell.CanHeroEvade(myHero, out evadeTime, out spellHitTime);
@@ -681,15 +706,15 @@ namespace ezEvade
             Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
 
             if (isnewSpell)
-                newSpellMenu.SetFontStyle(FontStyle.Regular, SharpDX.Color.SkyBlue);
+                newSpellMenu.SetFontStyle(FontStyle.Regular, Color.SkyBlue);
 
             newSpellMenu.AddItem(
                 new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(true));
 
             var whichMenu = isnewSpell
-                ? new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell [Beta]")
-                    .SetValue(enableSpell).SetFontStyle(FontStyle.Regular, SharpDX.Color.SkyBlue).SetTooltip("Spell is NEW and/or BUGGY.")
-                : new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell")
+                ? new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell [Beta]").SetTooltip(spell.name)
+                    .SetValue(enableSpell).SetFontStyle(FontStyle.Regular, Color.SkyBlue)
+                : new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetTooltip(spell.name)
                     .SetValue(enableSpell);
 
             newSpellMenu.AddItem(whichMenu);
@@ -697,8 +722,10 @@ namespace ezEvade
                 .SetValue(new Slider((int) spell.radius, (int) spell.radius - 100, (int) spell.radius + 100)));
             newSpellMenu.AddItem(new MenuItem(spell.spellName+ "FastEvade", "Force Fast Evade"))
                 .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
+
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Dodge Only Below HP % <="))
                 .SetValue(new Slider(spell.dangerlevel == 1 ? 90 : 100));
+
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
@@ -780,80 +807,131 @@ namespace ezEvade
                     foreach (var spell in SpellDatabase.Spells.Where(
                         s => (s.charName == hero.ChampionName) || (s.charName == "AllChampions")))
                     {
-                        //Console.WriteLine(spell.spellName); 
-
-                        if (!(spell.spellType == SpellType.Circular
-                            || spell.spellType == SpellType.Line
-                            || spell.spellType == SpellType.Arc))
-                            continue;
-
-                        if (spell.charName == "AllChampions")
+                        if (spell.hasTrap && spell.projectileSpeed > 3000)
                         {
-                            SpellSlot slot = hero.GetSpellSlot(spell.spellName);
-                            if (slot == SpellSlot.Unknown)
+                            if (spell.charName == "AllChampions")
                             {
-                                continue;
+                                var slot = hero.GetSpellSlot(spell.spellName);
+                                if (slot == SpellSlot.Unknown)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            if (!onProcessSpells.ContainsKey(spell.spellName.ToLower() + "trap"))
+                            {
+                                onProcessTraps.Add(spell.trapBaseName.ToLower(), spell);
+                                onProcessTraps.Add(spell.trapTroyName.ToLower(), spell);
+                                onProcessSpells.Add(spell.spellName.ToLower() + "trap", spell);
+
+                                LoadSpecialSpell(spell);
+
+                                string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
+
+                                var enableSpell = !spell.defaultOff;
+                                var trapSpellName = spell.spellName + "_trap";
+
+                                Menu newSpellMenu = new Menu(menuName, spell.charName + trapSpellName + "Settings").SetFontStyle(FontStyle.Regular, Color.SkyBlue);
+                                newSpellMenu.AddItem(new MenuItem(trapSpellName + "DrawSpell", "Draw Trap").SetValue(true));
+                                newSpellMenu.AddItem(new MenuItem(trapSpellName + "DodgeSpell", "Dodge Trap [Beta]")
+                                    .SetValue(enableSpell)).SetTooltip(spell.name)
+                                    .SetFontStyle(FontStyle.Regular, Color.SkyBlue);
+                                newSpellMenu.AddItem(new MenuItem(trapSpellName + "SpellRadius", "Trap Radius")
+                                    .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
+                                newSpellMenu.AddItem(new MenuItem(trapSpellName + "DodgeIgnoreHP", "Dodge Only Below HP % <="))
+                                    .SetValue(new Slider(Math.Max(0, spell.dangerlevel - 1) == 1 ? 90 : 100));
+                                newSpellMenu.AddItem(new MenuItem(trapSpellName + "DangerLevel", "Danger Level")
+                                    .SetValue(new StringList(new[] { "Low", "Normal", "High" }, Math.Max(0, spell.dangerlevel - 1))));
+
+                                trapMenu.AddSubMenu(newSpellMenu);
                             }
                         }
+                    }
 
-                        if (!onProcessSpells.ContainsKey(spell.spellName.ToLower()))
+
+                    foreach (var spell in SpellDatabase.Spells.Where(
+                        s => (s.charName == hero.ChampionName) || (s.charName == "AllChampions")))
+                    {
+                        if (spell.hasTrap && spell.projectileSpeed < 3000 || !spell.hasTrap)
                         {
-                            if (spell.missileName == "")
-                                spell.missileName = spell.spellName;
+                            if (!(spell.spellType == SpellType.Circular
+                                  || spell.spellType == SpellType.Line
+                                  || spell.spellType == SpellType.Arc))
+                                continue;
 
-                            onProcessSpells.Add(spell.spellName.ToLower(), spell);
-                            onMissileSpells.Add(spell.missileName.ToLower(), spell);
-
-                            if (spell.extraSpellNames != null)
+                            if (spell.charName == "AllChampions")
                             {
-                                foreach (string spellName in spell.extraSpellNames)
+                                var slot = hero.GetSpellSlot(spell.spellName);
+                                if (slot == SpellSlot.Unknown)
                                 {
-                                    onProcessSpells.Add(spellName.ToLower(), spell);
+                                    continue;
                                 }
                             }
 
-                            if (spell.extraMissileNames != null)
+                            if (!onProcessSpells.ContainsKey(spell.spellName.ToLower()))
                             {
-                                foreach (string spellName in spell.extraMissileNames)
+                                if (spell.missileName == "")
+                                    spell.missileName = spell.spellName;
+
+                                onProcessSpells.Add(spell.spellName.ToLower(), spell);
+                                onMissileSpells.Add(spell.missileName.ToLower(), spell);
+
+                                if (spell.extraSpellNames != null)
                                 {
-                                    onMissileSpells.Add(spellName.ToLower(), spell);
+                                    foreach (string spellName in spell.extraSpellNames)
+                                    {
+                                        onProcessSpells.Add(spellName.ToLower(), spell);
+                                    }
                                 }
+
+                                if (spell.extraMissileNames != null)
+                                {
+                                    foreach (string spellName in spell.extraMissileNames)
+                                    {
+                                        onMissileSpells.Add(spellName.ToLower(), spell);
+                                    }
+                                }
+
+                                LoadSpecialSpell(spell);
+
+                                string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
+
+                                var enableSpell = !spell.defaultOff;
+                                var isnewSpell = spell.name.Contains("[Beta]");
+
+                                Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
+
+                                if (isnewSpell)
+                                    newSpellMenu.SetFontStyle(FontStyle.Regular, Color.SkyBlue);
+
+                                newSpellMenu.AddItem(
+                                    new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(true));
+
+                                var isBetaDodge = isnewSpell
+                                    ? new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell [Beta]")
+                                    .SetTooltip(spell.name)
+                                        .SetValue(enableSpell)
+                                        .SetFontStyle(FontStyle.Regular, Color.SkyBlue)
+                                    : new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetTooltip(spell.name)
+                                        .SetValue(enableSpell);
+
+                                newSpellMenu.AddItem(isBetaDodge);
+
+                                newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
+                                    .SetValue(new Slider((int) spell.radius, (int) spell.radius - 100,
+                                        (int) spell.radius + 100)));
+                                newSpellMenu.AddItem(new MenuItem(spell.spellName + "FastEvade", "Force Fast Evade"))
+                                    .SetValue(spell.dangerlevel == 4);
+
+                                newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP",
+                                    "Dodge Only Below HP % <=")).SetValue(new Slider(spell.dangerlevel == 1 ? 90 : 100));
+
+                                newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
+                                    .SetValue(new StringList(new[] {"Low", "Normal", "High", "Extreme"},
+                                        spell.dangerlevel - 1)));
+
+                                spellMenu.AddSubMenu(newSpellMenu);
                             }
-
-                            LoadSpecialSpell(spell);
-
-                            string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
-
-                            var enableSpell = !spell.defaultOff;
-                            var isnewSpell = spell.name.Contains("[Beta]");
-
-                            Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
-
-                            if (isnewSpell)
-                                newSpellMenu.SetFontStyle(FontStyle.Regular, SharpDX.Color.SkyBlue);
-
-                            newSpellMenu.AddItem(
-                                new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(true));
-
-                            var isBetaDodge = isnewSpell
-                                ? new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell [Beta]")
-                                    .SetValue(enableSpell).SetFontStyle(FontStyle.Regular, SharpDX.Color.SkyBlue).SetTooltip("Spell is NEW and/or BUGGY.")
-                                : new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell")
-                                    .SetValue(enableSpell);
-
-                            newSpellMenu.AddItem(isBetaDodge);
-
-                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
-                                .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
-                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "FastEvade", "Force Fast Evade"))
-                                .SetValue(spell.dangerlevel == 4);
-                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP",
-                                "Dodge Only Below HP % <="))
-                                .SetValue(new Slider(spell.dangerlevel == 1 ? 90 : 100));
-                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
-                                .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
-
-                            spellMenu.AddSubMenu(newSpellMenu);
                         }
                     }
 

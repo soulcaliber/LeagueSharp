@@ -55,6 +55,7 @@ namespace ezEvade
         public bool isPerpendicular = false;
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
+        public bool hasTrap = false;
         public bool dontcheckDuplicates = false;
         public bool isSpecial = false;
         public bool updatePosition = true;
@@ -62,6 +63,8 @@ namespace ezEvade
         public string[] extraSpellNames = { };
         public string[] extraMissileNames = { };
         public CollisionObjectType[] collisionObjects = { };
+        public string trapBaseName = "";
+        public string trapTroyName = "";
 
         public SpellData()
         {

@@ -24,6 +24,16 @@ namespace ezEvade
             return unit.Team != myHero.Team || Evade.devModeOn;
         }
 
+        public static bool CheckTeam(this Obj_GeneralParticleEmitter emitter)
+        {
+            return emitter.Name.ToLower().Contains("red") || Evade.devModeOn && emitter.Name.ToLower().Contains("green");
+        }
+
+        public static string EmitterTeam()
+        {
+            return Evade.devModeOn ? "green" : "red";
+        }
+
         public static bool isNearEnemy(this Vector2 pos, float distance, bool alreadyNear = true)
         {
             if (ObjectCache.menuCache.cache["PreventDodgingNearEnemy"].GetValue<bool>())

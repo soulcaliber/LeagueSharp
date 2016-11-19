@@ -522,6 +522,21 @@ namespace ezEvade
             {
                 charName = "Caitlyn",
                 dangerlevel = 3,
+                name = "Yordle Trap",
+                radius = 75,
+                range = 800,
+                spellKey = SpellSlot.W,
+                spellName = "CaitlynYordleTrap",
+                trapBaseName = "CaitlynTrap",
+                spellType = SpellType.Circular,
+                hasTrap = true
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Caitlyn",
+                dangerlevel = 3,
                 missileName = "CaitlynEntrapmentMissile",
                 name = "90 Caliber Net",
                 projectileSpeed = 2000,
@@ -557,11 +572,31 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Cassiopeia",
+                dangerlevel = 2,
+                name = "Miasama",
+                //missileName = "CassiopeiaWMissile",
+                //projectileSpeed = 2800,
+                radius = 200,
+                range = 900,
+                spellDelay = 250,
+                extraEndTime = 500,
+                spellKey = SpellSlot.W,
+                spellName = "CassiopeiaW",
+                spellType = SpellType.Circular,
+                trapTroyName = "cassiopeia_base_w_wcircle_tar_" + Situation.EmitterTeam() + ".troy",
+                //updatePosition = false,
+                hasTrap = true
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Cassiopeia",
                 dangerlevel = 1,
                 missileName = "CassiopeiaQ",
                 name = "Noxious Blast",
                 radius = 200,
-                range = 600,
+                range = 850,
                 spellDelay = 825,
                 spellKey = SpellSlot.Q,
                 spellName = "CassiopeiaQ",
@@ -1643,6 +1678,25 @@ namespace ezEvade
                 fixedRange = true
             });
 
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Jinx",
+                dangerlevel = 3,
+                name = "Flame Chompers!",
+                //missileName = "JinxEHit",
+                //projectileSpeed = 2300,
+                radius = 120,
+                range = 900,
+                spellDelay = 1200,
+                spellKey = SpellSlot.E,
+                spellName = "JinxE",
+                spellType = SpellType.Circular,
+                hasTrap = true,
+                trapBaseName = "jinxmine",
+                updatePosition = false
+            });
+
             #endregion Jinx
 
             #region Jhin   
@@ -2295,6 +2349,23 @@ namespace ezEvade
                 spellKey = SpellSlot.E,
                 spellName = "LuxLightStrikeKugel",
                 spellType = SpellType.Circular
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Lux",
+                dangerlevel = 3,
+                name = "Lucent Singularity",
+                radius = 330,
+                range = 1100,
+                spellDelay = 250,
+                spellKey = SpellSlot.E,
+                spellName = "LuxLightStrikeKugel",
+                spellType = SpellType.Circular,
+                trapTroyName = "lux_base_e_tar_aoe_" + Situation.EmitterTeam() + ".troy",
+                extraDrawHeight = -100,
+                hasTrap = true
             });
 
             Spells.Add(

@@ -97,7 +97,7 @@ namespace ezEvade
                 var dimension = Drawing.GetTextExtent("Evade: ON");
 
                 if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active)
-                {                    
+                {
                     if (Evade.isDodging)
                     {
                         Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "Evade: ON");
@@ -111,11 +111,14 @@ namespace ezEvade
                         }
                         else
                         {
-                            if (Evade.isDodgeDangerousEnabled())
+                            if (ObjectCache.menuCache.cache["DontDodgeKeyEnabled"].GetValue<bool>() == true
+                         && ObjectCache.menuCache.cache["DontDodgeKey"].GetValue<KeyBind>().Active == true)
+                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: OFF");
+                            else if (Evade.isDodgeDangerousEnabled())
                                 Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Yellow, "Evade: ON");
                             else
                                 Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Lime, "Evade: ON");
-                        }                        
+                        }
                     }
                 }
                 else
@@ -179,20 +182,22 @@ namespace ezEvade
                 var dangerStr = spell.GetSpellDangerString();
                 var spellDrawingConfig = ObjectCache.menuCache.cache[dangerStr + "Color"].GetValue<Circle>();
                 var spellDrawingWidth = ObjectCache.menuCache.cache[dangerStr + "Width"].GetValue<Slider>().Value;
+                var avoidRadius = ObjectCache.menuCache.cache["ExtraAvoidDistance"].GetValue<Slider>().Value;
 
                 if (ObjectCache.menuCache.cache[spell.info.spellName + "DrawSpell"].GetValue<bool>()
                     && spellDrawingConfig.Active)
                 {
                     bool canEvade = true;
                     //bool canEvade = !(Evade.lastPosInfo != null && Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID));
-             
+
                     if (spell.spellType == SpellType.Line)
                     {
                         Vector2 spellPos = spell.currentSpellPosition;
                         Vector2 spellEndPos = spell.GetSpellEndPosition();
 
-                        
-                        DrawLineRectangle(spellPos, spellEndPos, (int)spell.radius, spellDrawingWidth, !canEvade ? Color.Yellow : spellDrawingConfig.Color);
+
+                        DrawLineRectangle(spellPos, spellEndPos, (int) spell.radius, spellDrawingWidth, !canEvade ? Color.Yellow : spellDrawingConfig.Color);
+                        DrawLineRectangle(spellPos, spellEndPos, (int) spell.radius + avoidRadius, Math.Max(spellDrawingWidth - 1, 1), !canEvade ? Color.Yellow : spellDrawingConfig.Color);
 
                         /*foreach (var hero in ObjectManager.Get<Obj_AI_Hero>())
                         {
@@ -218,7 +223,9 @@ namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Circular)
                     {
+
                         Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
+                        Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius + avoidRadius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, Math.Max(spellDrawingWidth - 1, 1));
 
                         if (spell.info.spellName == "VeigarEventHorizon")
                         {
@@ -230,7 +237,7 @@ namespace ezEvade
                         }
                     }
                     else if (spell.spellType == SpellType.Arc)
-                    {                      
+                    {
                         /*var spellRange = spell.startPos.Distance(spell.endPos);
                         var midPoint = spell.startPos + spell.direction * (spellRange / 2);
 
