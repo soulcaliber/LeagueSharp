@@ -101,7 +101,7 @@ namespace ezEvade
                 Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
 
-                Game.PrintChat(devModeOn ? "<b>ezEvade: Developer Mode On</b>" : "<b>ezEvade: Loaded!");
+                Game.PrintChat(devModeOn ? "ezEvade: Developer Mode On</b>" : "ezEvade: Loaded!");
 
                 menu = new Menu("ezEvade", "ezEvade", true);
 
