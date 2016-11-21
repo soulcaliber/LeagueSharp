@@ -203,10 +203,7 @@ namespace ezEvade
 
                 if (devModeOn)
                 {
-                    var rootTestMenu = new Menu("ezEvade Tester", "ezEvadeTester", true);
-                    evadeTester = new EvadeTester(rootTestMenu);
                     Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
-                    rootTestMenu.AddToMainMenu();
                 }
 
                 Console.WriteLine("ezEvade Loaded");

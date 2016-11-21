@@ -26,12 +26,19 @@ namespace ezEvade
 
         public static bool CheckTeam(this Obj_GeneralParticleEmitter emitter)
         {
-            return emitter.Name.ToLower().Contains("red") || Evade.devModeOn && emitter.Name.ToLower().Contains("green");
+            return emitter.Name.ToLower().Contains("red") || 
+                  (emitter.Name.ToLower().Contains("green") || emitter.Name.ToLower().Contains("ally")) && Evade.devModeOn ||
+                  !emitter.Name.ToLower().Contains("green") && !emitter.Name.ToLower().Contains("ally");
+        }
+
+        public static string EmitterColor()
+        {
+            return Evade.devModeOn ? "green" : "red";
         }
 
         public static string EmitterTeam()
         {
-            return Evade.devModeOn ? "green" : "red";
+            return Evade.devModeOn ? "ally" : "enemy";
         }
 
         public static bool isNearEnemy(this Vector2 pos, float distance, bool alreadyNear = true)

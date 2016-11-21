@@ -130,7 +130,7 @@ namespace ezEvade.SpecialSpells
                     continue;
                 }
 
-                if (spell.spellObject.IsDead || !spell.spellObject.IsVisible || !spell.spellObject.IsValid)
+                if (spell.spellObject.IsDead || !spell.spellObject.IsValid)
                 {
                     DelayAction.Add(1, () => SpellDetector.DeleteSpell(entry.Key));
                     entry.Value.spellObject = null;
@@ -153,10 +153,10 @@ namespace ezEvade.SpecialSpells
             foreach (var entry in SpellDetector.detectedSpells.Where(x => Game.CursorPos.To2D().InSkillShot(x.Value, 50 + x.Value.info.radius, false)))
             {
                 var spell = entry.Value;
-                if (spell.info.range > 9000 /*global*/ || spell.info.spellType == SpellType.Circular)
+                if (spell.info.range > 9000 /*global*/ || spell.info.spellName.Contains("_trap"))
                 {
                     DelayAction.Add(1, () => SpellDetector.DeleteSpell(entry.Key));
-                    Game.PrintChat("<b>ezEvade</b>: " + spell.info.charName + " (" + spell.info.spellKey + ") removed!");
+                    //Game.PrintChat("<b>ezEvade</b>: " + spell.info.charName + " (" + spell.info.spellKey + ") removed!");
                 }
             }
         }
