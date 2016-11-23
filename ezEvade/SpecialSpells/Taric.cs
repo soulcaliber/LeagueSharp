@@ -29,8 +29,11 @@ namespace ezEvade.SpecialSpells
             {
                 foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == taric.NetworkId))
                 {
-                    spell.Value.startPos = taric.ServerPosition.To2D();
-                    spell.Value.endPos = taric.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                    if (spell.Value.info.spellName.ToLower() == "tarice")
+                    {
+                        spell.Value.startPos = taric.ServerPosition.To2D();
+                        spell.Value.endPos = taric.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;                
+                    }
                 }
             }
 
@@ -39,8 +42,11 @@ namespace ezEvade.SpecialSpells
             {
                 foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == partner.NetworkId))
                 {
-                    spell.Value.startPos = partner.ServerPosition.To2D();
-                    spell.Value.endPos = partner.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                    if (spell.Value.info.spellName.ToLower() == "tarice")
+                    {
+                        spell.Value.startPos = partner.ServerPosition.To2D();
+                        spell.Value.endPos = partner.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                    }
                 }
             }
         }
