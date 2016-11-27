@@ -216,10 +216,6 @@ namespace ezEvade
                         DrawLineRectangle(spellPos, spellEndPos, (int) spell.radius, 
                             spellDrawingWidth, !canEvade ? Color.Yellow : spellDrawingConfig.Color);
 
-                        if (Evade.devModeOn)
-                            DrawLineRectangle(spellPos, spellEndPos, (int) spell.radius + avoidRadius,
-                                Math.Max(spellDrawingWidth - 1, 1), !canEvade ? Color.Yellow : spellDrawingConfig.Color);
-
                         if (ObjectCache.menuCache.cache["DrawSpellPos"].GetValue<bool>())// && spell.spellObject != null)
                         {
                             Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, spell.height), (int) spell.radius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
@@ -228,13 +224,7 @@ namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Circular)
                     {
-
                         Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
-
-                        if (Evade.devModeOn)
-                            Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height),
-                                (int) spell.radius + avoidRadius, !canEvade ? Color.Yellow : spellDrawingConfig.Color,
-                                Math.Max(spellDrawingWidth - 1, 1));
 
                         if (spell.info.spellName == "VeigarEventHorizon")
                         {

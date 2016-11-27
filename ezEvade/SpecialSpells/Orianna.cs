@@ -132,14 +132,14 @@ namespace ezEvade.SpecialSpells
                     {
                         if (info.usePosition)
                         {
-                            SpellDetector.CreateSpellData(null, info.position, args.End, spellData, null, 0, false);
+                            SpellDetector.CreateSpellData(hero, info.position, args.End, spellData, null, 0, false);
                             SpellDetector.CreateSpellData(hero, info.position, args.End, spellData, null, 150, true, SpellType.Circular, false, spellData.secondaryRadius);
                         }
                         else
                         {
                             if (info.obj != null && info.obj.IsValid && !info.obj.IsDead)
                             {
-                                SpellDetector.CreateSpellData(null, info.obj.Position, args.End, spellData, null, 0, false);
+                                SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 0, false);
                                 SpellDetector.CreateSpellData(hero, info.obj.Position, args.End, spellData, null, 150, true, SpellType.Circular, false, spellData.secondaryRadius);
                             }
                         }

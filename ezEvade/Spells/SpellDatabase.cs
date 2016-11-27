@@ -593,7 +593,7 @@ namespace ezEvade
                 name = "Noxious Blast",
                 radius = 200,
                 range = 850,
-                spellDelay = 825,
+                spellDelay = 750,
                 spellKey = SpellSlot.Q,
                 spellName = "CassiopeiaQ",
                 spellType = SpellType.Circular
@@ -846,11 +846,11 @@ namespace ezEvade
             {
                 charName = "Ekko",
                 dangerlevel = 2,
-                missileName = "ekkowmis",
                 name = "Parallel Convergence",
+                projectileSpeed = 1650,
                 radius = 375,
-                range = 1600,
-                spellDelay = 2250,
+                range = 1750,
+                spellDelay = 3750,
                 spellKey = SpellSlot.W,
                 spellName = "ekkow",
                 spellType = SpellType.Circular
@@ -860,12 +860,13 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Ekko",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 missileName = "EkkoR",
                 name = "Chronobreak",
+                projectileSpeed = 1650,
                 radius = 375,
                 range = 1600,
-                spellDelay = 100,
+                spellDelay = 250,
                 spellKey = SpellSlot.R,
                 spellName = "EkkoR",
                 spellType = SpellType.Circular,
@@ -1011,19 +1012,21 @@ namespace ezEvade
                 charName = "Fizz",
                 dangerlevel = 4,
                 missileName = "FizzRMissile",
-                name = "Chum the Waters [Beta]",
+                name = "Chum the Waters",
                 projectileSpeed = 1350,
                 radius = 120,
-                range = 1275,
+                range = 1300,
                 spellDelay = 250,
                 spellKey = SpellSlot.R,
                 spellName = "FizzR",
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
-                secondaryRadius = 250,
                 hasEndExplosion = true,
-                useEndPosition = true
+                useEndPosition = true,
+                isSpecial = true,
 
+                // this will be the radius if it come from FoW, 
+                // if vissible will be updated accordingly
+                secondaryRadius = 300
             });
 
             #endregion Fizz
