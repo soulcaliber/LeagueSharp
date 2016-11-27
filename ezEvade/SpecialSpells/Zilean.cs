@@ -19,10 +19,14 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "ZileanQ")
             {
-                Game.OnUpdate += Game_OnUpdate;
-                GameObject.OnCreate += GameObject_OnCreate;
-                GameObject.OnDelete += GameObject_OnDelete;
-                SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                var hero = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Zilean");
+                if (hero != null && hero.CheckTeam())
+                {
+                    Game.OnUpdate += Game_OnUpdate;
+                    GameObject.OnCreate += GameObject_OnCreate;
+                    GameObject.OnDelete += GameObject_OnDelete;
+                    SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                }
             }
         }
 

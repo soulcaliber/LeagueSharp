@@ -14,25 +14,25 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "AhriOrbofDeception2")
             {
-                Game.OnUpdate += Game_OnUpdate;
+                var hero = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Ahri");
+                if (hero != null && hero.CheckTeam())
+                {
+                    Game.OnUpdate += (args) => Game_OnUpdate(args, hero);
+                }
             }
         }
 
-        private void Game_OnUpdate(EventArgs args)
+        private void Game_OnUpdate(EventArgs args, Obj_AI_Hero hero)
         {
-            var ahri = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Ahri");
-            if (ahri != null && ahri.CheckTeam())
+            foreach (
+                var spell in
+                    SpellDetector.detectedSpells.Where(
+                        s =>
+                            s.Value.heroID == hero.NetworkId &&
+                            s.Value.info.spellName.ToLower() == "ahriorbofdeception2"))
             {
-                foreach (
-                    var spell in
-                        SpellDetector.detectedSpells.Where(
-                            s =>
-                                s.Value.heroID == ahri.NetworkId &&
-                                s.Value.info.spellName.ToLower() == "ahriorbofdeception2"))
-                {
-                    spell.Value.endPos = ahri.ServerPosition.To2D();
-                }
-            }
+                spell.Value.endPos = hero.ServerPosition.To2D();
+            }           
         }
     }
 }

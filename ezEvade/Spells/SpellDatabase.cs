@@ -1105,13 +1105,13 @@ namespace ezEvade
             {
                 charName = "Gnar",
                 dangerlevel = 4,
-                missileName = "GnarR",
+                projectileSpeed = 0,
                 name = "GNAR!",
-                radius = 590,
-                range = 590,
+                radius = 500,
+                range = 500,
                 spellDelay = 250,
                 spellKey = SpellSlot.R,
-                spellName = "GnarR", // todo: check wall
+                spellName = "GnarR",
                 spellType = SpellType.Circular
             });
 
@@ -1127,7 +1127,6 @@ namespace ezEvade
                 spellKey = SpellSlot.W,
                 spellName = "gnarbigw",
                 spellType = SpellType.Line,
-
             });
 
             Spells.Add(
@@ -3196,7 +3195,7 @@ namespace ezEvade
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
                 spellName = "SionR",
-                spellType = SpellType.Line,
+                spellType = SpellType.Cone, // temp removal
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions },
                 isSpecial = true
             });

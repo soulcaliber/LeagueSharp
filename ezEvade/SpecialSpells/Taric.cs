@@ -17,35 +17,38 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "TaricE")
             {
-                Game.OnUpdate += Game_OnUpdate;
-                SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                var hero = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Taric");
+                if (hero != null)
+                {
+                    Game.OnUpdate += (args) => Game_OnUpdate(args, hero);
+                    SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                }
             }
         }
 
-        private void Game_OnUpdate(EventArgs args)
+        private void Game_OnUpdate(EventArgs args, Obj_AI_Hero hero)
         {
-            var taric = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Taric");
-            if (taric != null && taric.CheckTeam())
+            if (hero != null && hero.CheckTeam())
             {
-                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == taric.NetworkId))
+                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == hero.NetworkId))
                 {
                     if (spell.Value.info.spellName.ToLower() == "tarice")
                     {
-                        spell.Value.startPos = taric.ServerPosition.To2D();
-                        spell.Value.endPos = taric.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;                
+                        spell.Value.startPos = hero.ServerPosition.To2D();
+                        spell.Value.endPos = hero.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
                     }
                 }
-            }
 
-            var partner = HeroManager.AllHeroes.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
-            if (partner != null && taric.CheckTeam())
-            {
-                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == partner.NetworkId))
+                var partner = HeroManager.AllHeroes.FirstOrDefault(x => x.HasBuff("taricwleashactive"));
+                if (partner != null && partner.CheckTeam())
                 {
-                    if (spell.Value.info.spellName.ToLower() == "tarice")
+                    foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == partner.NetworkId))
                     {
-                        spell.Value.startPos = partner.ServerPosition.To2D();
-                        spell.Value.endPos = partner.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                        if (spell.Value.info.spellName.ToLower() == "tarice")
+                        {
+                            spell.Value.startPos = partner.ServerPosition.To2D();
+                            spell.Value.endPos = partner.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                        }
                     }
                 }
             }

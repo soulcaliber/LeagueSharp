@@ -16,33 +16,24 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "DariusCleave")
             {
-                Game.OnUpdate += Game_OnUpdate;
-                SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
-            }
-        }
-
-        private void Game_OnUpdate(EventArgs args)
-        {
-            var darius = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Darius");
-            if (darius != null && darius.CheckTeam())
-            {
-                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == darius.NetworkId))
+                var hero = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Darius");
+                if (hero != null && hero.CheckTeam())
                 {
-                    if (spell.Value.info.spellName == "DariusCleave")
-                    {
-                        spell.Value.startPos = darius.ServerPosition.To2D();
-                        spell.Value.endPos = darius.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;                   
-                    }
+                    Game.OnUpdate += (args) => Game_OnUpdate(args, hero);
                 }
             }
         }
 
-        private void SpellDetector_OnProcessSpecialSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData, SpecialSpellEventArgs specialSpellArgs)
+        private void Game_OnUpdate(EventArgs args, Obj_AI_Hero hero)
         {
-            if (spellData.spellName == "DariusCleave")
+            foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == hero.NetworkId))
             {
-                //SpellDetector.CreateSpellData(hero, start.To3D(), end.To3D(), spellData);
-            }
+                if (spell.Value.info.spellName == "DariusCleave")
+                {
+                    spell.Value.startPos = hero.ServerPosition.To2D();
+                    spell.Value.endPos = hero.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;                   
+                }
+            }           
         }
     }
 }

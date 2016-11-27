@@ -21,11 +21,15 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName.ToLower() == "syndrae")
             {
-                Game.OnUpdate += Game_OnUpdate;
-                Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
-                GameObject.OnCreate += GameObject_OnCreate;
-                GameObject.OnDelete += GameObject_OnDelete;
-                SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                var hero = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Syndra");
+                if (hero != null && hero.CheckTeam())
+                {
+                    Game.OnUpdate += Game_OnUpdate;
+                    Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
+                    GameObject.OnCreate += GameObject_OnCreate;
+                    GameObject.OnDelete += GameObject_OnDelete;
+                    SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                }
             }
         }
 
@@ -46,8 +50,7 @@ namespace ezEvade.SpecialSpells
         private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.CheckTeam())
+            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName && sphere.CheckTeam())
             {
                 if (args.Animation == "Death")
                 {
@@ -59,8 +62,7 @@ namespace ezEvade.SpecialSpells
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.CheckTeam()) 
+            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName && sphere.CheckTeam()) 
             {
                 if (!_spheres.Contains(sphere))
                 {
@@ -73,8 +75,7 @@ namespace ezEvade.SpecialSpells
         private static void GameObject_OnDelete(GameObject sender, EventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.CheckTeam())
+            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName && sphere.CheckTeam())
             {
                 _spheres.RemoveAll(i => i.NetworkId == sphere.NetworkId);
             }

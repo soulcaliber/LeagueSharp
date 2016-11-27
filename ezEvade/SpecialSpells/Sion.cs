@@ -21,8 +21,12 @@ namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "SionR")
             {
-                Game.OnUpdate += Game_OnUpdate;
-                SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                var hero = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Sion");
+                if (hero != null && hero.CheckTeam())
+                {
+                    Game.OnUpdate += (args) => Game_OnUpdate(args, hero);
+                    SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                }
             }
         }
 
@@ -31,30 +35,27 @@ namespace ezEvade.SpecialSpells
             if (spellData.spellName == "SionR")
             {
                 spellData.projectileSpeed = hero.MoveSpeed;
+                specialSpellArgs.spellData = spellData;
             }
         }
 
-        private void Game_OnUpdate(EventArgs args)
+        private void Game_OnUpdate(EventArgs args, Obj_AI_Hero hero)
         {
-            var sion = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Sion");
-            if (sion != null && sion.CheckTeam() && sion.HasBuff("SionR"))
+            foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == hero.NetworkId && x.Value.info.spellName == "SionR"))
             {
-                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == sion.NetworkId && x.Value.info.spellName == "SionR"))
+                var facingPos = hero.ServerPosition.To2D() + hero.Direction.To2D().Perpendicular();
+                var endPos = hero.ServerPosition.To2D() + (facingPos - hero.ServerPosition.To2D()).Normalized() * 450;
+
+                spell.Value.startPos = hero.ServerPosition.To2D();
+                spell.Value.endPos = endPos;
+
+                if (EvadeUtils.TickCount - spell.Value.startTime >= 1000)
                 {
-                    var facingPos = sion.ServerPosition.To2D() + sion.Direction.To2D().Perpendicular();
-                    var endPos = sion.ServerPosition.To2D() + (facingPos - sion.ServerPosition.To2D()).Normalized() * 450;
-
-                    spell.Value.startPos = sion.ServerPosition.To2D();
-                    spell.Value.endPos = endPos;
-
-                    if (EvadeUtils.TickCount - spell.Value.startTime >= 1000)
-                    {
-                        SpellDetector.CreateSpellData(sion, sion.ServerPosition, endPos.To3D(), spell.Value.info, null, 0, false, SpellType.Line, false);
-                        spell.Value.startTime = EvadeUtils.TickCount;
-                        break;
-                    }
+                    SpellDetector.CreateSpellData(hero, hero.ServerPosition, endPos.To3D(), spell.Value.info, null, 0, false, SpellType.Line, false);
+                    spell.Value.startTime = EvadeUtils.TickCount;
+                    break;
                 }
-            }
+            }        
         }
     }
 }

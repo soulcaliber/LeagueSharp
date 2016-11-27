@@ -24,6 +24,7 @@ namespace ezEvade.SpecialSpells
                 var hero = HeroManager.AllHeroes.FirstOrDefault(h => h.ChampionName == "Lux");
                 if (hero != null && hero.CheckTeam())
                 {
+                    ObjectTracker.HuiTrackerForceLoad();
                     GameObject.OnCreate += (obj, args) => OnCreateObj_LuxMaliceCannon(obj, args, hero, spellData);
                 }
             }
@@ -31,11 +32,12 @@ namespace ezEvade.SpecialSpells
 
         private static void OnCreateObj_LuxMaliceCannon(GameObject obj, EventArgs args, Obj_AI_Hero hero, SpellData spellData)
         {
-            if (obj.IsEnemy && !hero.IsVisible &&
-                obj.Name.Contains("Lux") && obj.Name.Contains("R_mis_beam_middle"))
+            if (obj.Name.Contains("Lux") && obj.Name.Contains("R_mis_beam_middle"))
             {
+                if (hero.IsVisible) return;
+
                 var objList = ObjectTracker.objTracker.Values.Where(o => o.Name == "hiu");
-                if (objList.Count() > 3)
+                if (objList.Count() >= 2)
                 {
                     var dir = ObjectTracker.GetLastHiuOrientation();
                     var pos1 = obj.Position.To2D() - dir * 1750;
