@@ -1826,7 +1826,6 @@ namespace ezEvade
             {
                 charName = "Karthus",
                 dangerlevel = 2,
-                missileName = "KarthusLayWasteA1",
                 name = "Lay Waste",
                 radius = 190,
                 range = 875,
@@ -2217,7 +2216,7 @@ namespace ezEvade
                 name = "Ice Shard",
                 projectileSpeed = 2200,
                 radius = 75,
-                range = 700,
+                range = 825,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "LissandraQ",
@@ -2231,10 +2230,9 @@ namespace ezEvade
                 charName = "Lissandra",
                 dangerlevel = 2,
                 name = "Ice Shard Extended",
-                missileName = "lissandraqshards",
                 projectileSpeed = 2200,
                 radius = 90,
-                range = 1025,
+                range = 825,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "LissandraQShards",
@@ -2526,20 +2524,21 @@ namespace ezEvade
 
             #region MonkeyKing
 
-            //Spells.Add(
-            //new SpellData
-            //{
-            //    charName = "MonkeyKing",
-            //    dangerlevel = 4,
-            //    defaultOff = true,
-            //    name = "Cyclone",
-            //    radius = 450,
-            //    range = 450,
-            //    spellDelay = 0,
-            //    spellKey = SpellSlot.R,
-            //    spellName = "MonkeyKingSpinToWin",
-            //    spellType = SpellType.Circular
-            //});
+            Spells.Add(
+            new SpellData
+            {
+                charName = "MonkeyKing",
+                dangerlevel = 4,
+                name = "Cyclone [Beta]",
+                projectileSpeed = 0,
+                radius = 250,
+                range = 250,
+                spellDelay = 125,
+                spellKey = SpellSlot.R,
+                spellName = "MonkeyKingSpinToWin",
+                spellType = SpellType.Circular,
+                defaultOff = true
+            });
 
             #endregion MonkeyKing
 
@@ -2893,12 +2892,12 @@ namespace ezEvade
             {
                 charName = "RekSai",
                 dangerlevel = 3,
-                missileName = "ReksaiWBurrowed",
                 name = "Unburrow",
                 projectileSpeed = 2300,
                 radius = 160,
                 range = 160,
                 spellDelay = 250f,
+                extraEndTime = 500f,
                 spellKey = SpellSlot.W,
                 spellName = "ReksaiWBurrowed",
                 spellType = SpellType.Circular

@@ -189,9 +189,11 @@ namespace ezEvade
                 name = "Rappel",
                 spellName = "EliseSpiderEInitial",
                 spellDelay = 50,
+                checkSpellName = true,
                 spellKey = SpellSlot.E,
                 evadeType = EvadeType.SpellShield,
                 castType = CastType.Self,
+                untargetable = true,
                 isSpecial = true
             });
 
