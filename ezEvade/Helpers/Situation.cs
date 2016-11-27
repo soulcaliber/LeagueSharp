@@ -24,6 +24,11 @@ namespace ezEvade
             return unit.Team != myHero.Team || Evade.devModeOn;
         }
 
+        public static bool CheckTeam(this GameObject unit)
+        {
+            return unit.Team != myHero.Team || Evade.devModeOn;
+        }
+
         public static bool CheckTeam(this Obj_GeneralParticleEmitter emitter)
         {
             return emitter.Name.ToLower().Contains("red") || 

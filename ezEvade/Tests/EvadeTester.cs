@@ -242,8 +242,8 @@ namespace ezEvade
                 if (testMissile != null && testMissile.NetworkId == sender.NetworkId)
                 {
                     var range = sender.Position.To2D().Distance(testMissile.StartPosition.To2D());
-                    ConsolePrinter.Print("Est.Missile range: " + range);
-                    ConsolePrinter.Print("Est.Missile speed: " + 1000 * (range / (EvadeUtils.TickCount - testMissileStartTime)));
+                    ConsolePrinter.Print("[" + testMissile.SData.Name + "]: Est.Missile range: " + range);
+                    ConsolePrinter.Print("[" + testMissile.SData.Name + "]: Est.Missile speed: " + 1000 * (range / (EvadeUtils.TickCount - testMissileStartTime)));
                 }
             }
         }
@@ -270,15 +270,14 @@ namespace ezEvade
 
             if (obj.IsValid<MissileClient>())
             {
-                MissileClient autoattack = (MissileClient)obj;
+                MissileClient mis = (MissileClient)obj;
 
-                if (autoattack.SpellCaster is Obj_AI_Hero)
+                if (mis.SpellCaster is Obj_AI_Hero && mis.SData.IsAutoAttack())
                 {
-                    ConsolePrinter.Print("Missile Name " + autoattack.SData.Name);
-                    ConsolePrinter.Print("Missile Speed " + autoattack.SData.MissileSpeed);
-                    ConsolePrinter.Print("LineWidth " + autoattack.SData.LineWidth);
-                    ConsolePrinter.Print("Range " + autoattack.SData.CastRange);
-                    ConsolePrinter.Print("Accel " + autoattack.SData.MissileAccel);
+                    ConsolePrinter.Print("[" + mis.SData.Name + "]: Missile Speed " + mis.SData.MissileSpeed);
+                    ConsolePrinter.Print("[" + mis.SData.Name + "]: LineWidth " + mis.SData.LineWidth);
+                    ConsolePrinter.Print("[" + mis.SData.Name + "]: Range " + mis.SData.CastRange);
+                    ConsolePrinter.Print("[" + mis.SData.Name + "]: Accel " + mis.SData.MissileAccel);
                 }
             }
 
@@ -316,12 +315,13 @@ namespace ezEvade
             testMissile = missile;
             testMissileStartTime = EvadeUtils.TickCount;
 
-            ConsolePrinter.Print("Est.CastTime: " + (EvadeUtils.TickCount - lastHeroSpellCastTime));
-            ConsolePrinter.Print("Missile Name " + missile.SData.Name);
-            ConsolePrinter.Print("Missile Speed " + missile.SData.MissileSpeed);
-            ConsolePrinter.Print("Max Speed " + missile.SData.MissileMaxSpeed);
-            ConsolePrinter.Print("LineWidth " + missile.SData.LineWidth);
-            ConsolePrinter.Print("Range " + missile.SData.CastRange);
+            ConsolePrinter.Print("[" + missile.SData.Name + "]: Est.CastTime: " + (EvadeUtils.TickCount - lastHeroSpellCastTime));
+            ConsolePrinter.Print("[" + missile.SData.Name + "]: Missile Name " + missile.SData.Name);
+            ConsolePrinter.Print("[" + missile.SData.Name + "]: Missile Speed " + missile.SData.MissileSpeed);
+            ConsolePrinter.Print("[" + missile.SData.Name + "]: Accel " + missile.SData.MissileAccel);
+            ConsolePrinter.Print("[" + missile.SData.Name + "]: Max Speed " + missile.SData.MissileMaxSpeed);
+            ConsolePrinter.Print("[" + missile.SData.Name + "]: LineWidth " + missile.SData.LineWidth);
+            ConsolePrinter.Print("[" + missile.SData.Name + "]: Range " + missile.SData.CastRange);
             //ConsolePrinter.Print("Angle " + missile.SData.CastConeAngle);
             /*ConsolePrinter.Print("Offset: " + missile.SData.ParticleStartOffset);
             ConsolePrinter.Print("Missile Speed " + missile.SData.MissileSpeed);
@@ -340,7 +340,7 @@ namespace ezEvade
                 if (missile != null && missile.IsValid && !missile.IsDead)
                 {
                     var dist = missile.Position.To2D().Distance(testMissileSpeedStartPos);
-                    ConsolePrinter.Print("Est.Missile speed: " + dist / (EvadeUtils.TickCount - testMissileSpeedStartTime));
+                    ConsolePrinter.Print("[" + missile.SData.Name + "]: Est.Missile speed: " + 1000 * (dist / (EvadeUtils.TickCount - testMissileSpeedStartTime)));
                 }
             });
 
@@ -379,7 +379,7 @@ namespace ezEvade
 
         private void Game_ProcessSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
-            if (hero.IsMinion)
+            if (!(hero is Obj_AI_Hero))
                 return;
 
 

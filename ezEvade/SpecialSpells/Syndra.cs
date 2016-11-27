@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -88,7 +85,7 @@ namespace ezEvade.SpecialSpells
             if (spellData.spellName.ToLower() == "syndrae")
             {
                 var estart = args.Start;
-                var eend = args.Start + (args.End - args.Start).Normalized() * 700;
+                var eend = args.Start + (args.End - args.Start).Normalized() * 800;
 
                 foreach (var sphere in _spheres.Where(s => s.IsValid && !s.IsDead))
                 {

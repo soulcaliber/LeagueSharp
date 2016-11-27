@@ -46,10 +46,9 @@ namespace ezEvade
                 dangerlevel = 3,
                 missileName = "AatroxQ",
                 name = "Dark Flight",
-                projectileSpeed = 450,
                 radius = 285,
                 range = 650,
-                spellDelay = 250,
+                spellDelay = 650,
                 spellKey = SpellSlot.Q,
                 spellName = "AatroxQ",
                 spellType = SpellType.Circular
@@ -60,14 +59,13 @@ namespace ezEvade
             {
                 charName = "Aatrox",
                 dangerlevel = 2,
-                missileName = "AatroxE",
-                name = "Blade of Torment",
+                name = "Blade of Torment [Beta]",
                 projectileSpeed = 1200,
-                radius = 100,
+                radius = 40,
                 range = 1075,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
-                spellName = "AatroxE",
+                spellName = "AatroxEConeMissile",
                 spellType = SpellType.Line,
 
             });
@@ -196,8 +194,6 @@ namespace ezEvade
                 range = 1250,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                secondaryRadius = 210,
-                extraDrawHeight = 165,
                 spellName = "FlashFrostSpell",
                 spellType = SpellType.Line
             });
@@ -271,7 +267,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "Volley",
-                spellType = SpellType.Line,
+                spellType = SpellType.Cone, // temp removal
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 isSpecial = true
             });
@@ -1790,7 +1786,7 @@ namespace ezEvade
                 missileName = "KarmaQMissile",
                 name = "Inner Flame",
                 projectileSpeed = 1700,
-                radius = 70,
+                radius = 60,
                 range = 1050,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
@@ -1800,7 +1796,6 @@ namespace ezEvade
                 fixedRange = true
             });
 
-            //TODO: Fix end circle extra end time
             Spells.Add(
             new SpellData
             {
@@ -1809,16 +1804,15 @@ namespace ezEvade
                 missileName = "KarmaQMissileMantra",
                 name = "Soulflare (Mantra)",
                 projectileSpeed = 1700,
-                radius = 90,
+                radius = 80,
                 range = 1050,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "KarmaQMissileMantra",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                hasEndExplosion = true,
-                secondaryRadius = 250,
-                usePackets = true
+                //hasEndExplosion = true,
+                secondaryRadius = 250
 
             });
             #endregion Karma

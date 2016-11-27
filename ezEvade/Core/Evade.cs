@@ -141,7 +141,7 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
                 miscMenu.AddItem(new MenuItem("ClickRemove", "Allow Left Click Removal")
-                    .SetValue(true).SetTooltip("Left Click to Remove Circular Spells and Globals"));
+                    .SetValue(true).SetTooltip("Left Click to Remove Traps and Globals"));
                 //miscMenu.AddItem(new MenuItem("AllowCrossing", "Allow Crossing").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
                 miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
@@ -204,6 +204,11 @@ namespace ezEvade
                 if (devModeOn)
                 {
                     Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
+
+                    var evadeTester = new Menu("ezEvade: Test", "ezEvadeTest", true);
+                    var o = new EvadeTester(evadeTester);
+                    evadeTester.AddToMainMenu();
+
                 }
 
                 Console.WriteLine("ezEvade Loaded");
@@ -247,7 +252,7 @@ namespace ezEvade
             menu.Item("ExtraPingBuffer").SetValue(new Slider(65, 0, 200));
             menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
             menu.Item("ExtraSpellRadius").SetValue(new Slider(0, 0, 100));
-            menu.Item("ExtraEvadeDistance").SetValue(new Slider(100, 0, 300));
+            menu.Item("ExtraEvadeDistance").SetValue(new Slider(200, 0, 300));
             menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
             menu.Item("MinComfortZone").SetValue(new Slider(550, 0, 1000));
 
@@ -294,7 +299,6 @@ namespace ezEvade
                 menu.Item("RejectMinDistance").SetValue(new Slider(0, 0, 100));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(0, 0, 150));
                 menu.Item("ExtraPingBuffer").SetValue(new Slider(40, 0, 200));
-                menu.Item("AdvancedSpellDetection").SetValue(true);
             }
             else if (mode == "Smooth")
             {
@@ -486,6 +490,7 @@ namespace ezEvade
                                 EvadeCommand.MoveTo(Game.CursorPos.To2D());
                                 lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
                             }
+
                             return;
                         }
                     }
