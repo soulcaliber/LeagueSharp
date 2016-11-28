@@ -127,7 +127,7 @@ namespace ezEvade.SpecialSpells
                 if (args.Start.Distance(end) > spellData.range)
                     end = args.Start + (args.End - args.Start).Normalized() * spellData.range;
 
-                _qSpots.Add(Game.Time, end);
+                _qSpots[Game.Time] = end;
             }
 
             if (spellData.spellName.ToLower() == "syndrawcast")
@@ -136,7 +136,7 @@ namespace ezEvade.SpecialSpells
                 if (args.Start.Distance(end) > spellData.range)
                     end = args.Start + (args.End - args.Start).Normalized() * spellData.range;
 
-                _qSpots.Add(Game.Time, end);
+                _qSpots[Game.Time] = end;
             }
         }
 

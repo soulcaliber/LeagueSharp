@@ -823,10 +823,10 @@ namespace ezEvade
 
                             if (!onProcessSpells.ContainsKey(spell.spellName.ToLower() + "trap"))
                             {
-                                if (spell.trapBaseName == "")
+                                if (string.IsNullOrEmpty(spell.trapBaseName))
                                     spell.trapBaseName = spell.spellName + "1";
   
-                                if (spell.trapTroyName == "")
+                                if (string.IsNullOrEmpty(spell.trapTroyName))
                                     spell.trapTroyName = spell.spellName + "2";
 
                                 onProcessTraps.Add(spell.trapBaseName.ToLower(), spell);
@@ -879,7 +879,7 @@ namespace ezEvade
 
                             if (!onProcessSpells.ContainsKey(spell.spellName.ToLower()))
                             {
-                                if (spell.missileName == "")
+                                if (string.IsNullOrEmpty(spell.missileName))
                                     spell.missileName = spell.spellName;
 
                                 onProcessSpells.Add(spell.spellName.ToLower(), spell);

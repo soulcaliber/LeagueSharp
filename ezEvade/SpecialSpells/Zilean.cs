@@ -11,7 +11,7 @@ namespace ezEvade.SpecialSpells
 {
     class Zilean : ChampionPlugin
     {
-        internal const string ObjName = "TimeBombGroundRed";
+        internal const string ObjName = "TimeBombGround";
         private static readonly List<GameObject> _bombs = new List<GameObject>();
         private static readonly Dictionary<float, Vector3> _qSpots = new Dictionary<float, Vector3>();
 
@@ -46,7 +46,7 @@ namespace ezEvade.SpecialSpells
 
         private void GameObject_OnCreate(GameObject bomb, EventArgs args)
         {
-            if (bomb.Name.Contains(ObjName))
+            if (bomb.Name.Contains(ObjName) && bomb.CheckTeam())
             {
                 if (!_bombs.Contains(bomb))
                 {
@@ -58,7 +58,7 @@ namespace ezEvade.SpecialSpells
 
         private void GameObject_OnDelete(GameObject bomb, EventArgs args)
         {
-            if (bomb.Name.Contains(ObjName))
+            if (bomb.Name.Contains(ObjName) && bomb.CheckTeam())
             {
                 _bombs.RemoveAll(i => i.NetworkId == bomb.NetworkId);
             }
@@ -91,7 +91,7 @@ namespace ezEvade.SpecialSpells
                     var newData = (SpellData) spellData.Clone();
                     newData.radius = 350;
 
-                    if (end.Distance(bombPosition) <= newData.radius)
+                    if (end.Distance(bombPosition) <= newData.radius && _qSpots.Count > 1)
                     {
                         SpellDetector.CreateSpellData(hero, hero.ServerPosition, bombPosition, newData, null, 0, true, SpellType.Circular, false, newData.radius);
                         SpellDetector.CreateSpellData(hero, hero.ServerPosition, end, newData, null, 0, true, SpellType.Circular, false, newData.radius);
@@ -99,7 +99,7 @@ namespace ezEvade.SpecialSpells
                     }
                 }
 
-                _qSpots.Add(Game.Time, end);
+                _qSpots[Game.Time] = end;
             }
         }
 
