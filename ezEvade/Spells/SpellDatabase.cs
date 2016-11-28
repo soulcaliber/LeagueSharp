@@ -1349,13 +1349,19 @@ namespace ezEvade
             {
                 charName = "Hecarim",
                 dangerlevel = 4,
-                name = "Onslaught of Shadows",
-                projectileSpeed = 1250,
-                radius = 40,
-                range = 1500,
-                spellDelay = 100,
+                name = "Onslaught of Shadows [Beta]",
+                projectileSpeed = 1100,
+                radius = 60,
+                range = 1525,
+                spellDelay = 0,
                 spellKey = SpellSlot.R,
                 spellName = "HecarimUltMissile",
+                extraMissileNames =
+                    new[]
+                    {
+                        "HecarimUltMissileSkn4R1", "HecarimUltMissileSkn4c", "HecarimUltMissileSkn4R2",
+                        "HecarimUltMissileSKn4L2", "HecarimUltMissileSkn4L1"
+                    },
                 spellType = SpellType.Line,
                 usePackets = true,
                 fixedRange = true
