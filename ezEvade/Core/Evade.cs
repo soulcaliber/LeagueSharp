@@ -203,12 +203,10 @@ namespace ezEvade
 
                 if (devModeOn)
                 {
-                    Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
-
                     var evadeTester = new Menu("ezEvade: Test", "ezEvadeTest", true);
                     var o = new EvadeTester(evadeTester);
                     evadeTester.AddToMainMenu();
-
+                    //Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
                 }
 
                 Console.WriteLine("ezEvade Loaded");
@@ -345,34 +343,13 @@ namespace ezEvade
             else if (mode == "Kurisu")
             {
                 ResetConfig(false);
-                menu.Item("DodgeDangerous").SetValue(false);
                 menu.Item("DodgeFOWSpells").SetValue(false);
-                menu.Item("DodgeCircularSpells").SetValue(true);
                 menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
-                menu.Item("HigherPrecision").SetValue(false);
                 menu.Item("RecalculatePosition").SetValue(true);
                 menu.Item("ContinueMovement").SetValue(true);
                 menu.Item("CalculateWindupDelay").SetValue(true);
-                menu.Item("CheckSpellCollision").SetValue(true);
-                menu.Item("FastMovementBlock").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
                 menu.Item("PreventDodgingNearEnemy").SetValue(true);
-                menu.Item("AdvancedSpellDetection").SetValue(false);
-                menu.Item("ClickOnlyOnce").SetValue(true);
-                menu.Item("EnableEvadeDistance").SetValue(false);
-                menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
-                menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
-                menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
-                menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
-                menu.Item("FastEvadeActivationTime").SetValue(new Slider(60, 0, 500));
-                menu.Item("SpellActivationTime").SetValue(new Slider(400, 0, 1000));
-                menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
-                menu.Item("ExtraPingBuffer").SetValue(new Slider(65, 0, 200));
-                menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
-                menu.Item("ExtraSpellRadius").SetValue(new Slider(0, 0, 100));
-                menu.Item("ExtraEvadeDistance").SetValue(new Slider(165, 0, 300));
-                menu.Item("ExtraAvoidDistance").SetValue(new Slider(60, 0, 300));
-                menu.Item("MinComfortZone").SetValue(new Slider(420, 0, 1000));
             }
             
             else if (mode == "GuessWho")
@@ -464,34 +441,18 @@ namespace ezEvade
 
             foreach (var evadeSpell in EvadeSpell.evadeSpells)
             {
-                if (evadeSpell.isItem == false &&  evadeSpell.spellKey == args.Slot && evadeSpell.untargetable == false)
+                if (evadeSpell.isItem == false &&  evadeSpell.spellKey == args.Slot && 
+                    evadeSpell.untargetable == false)
                 {
                     if (evadeSpell.evadeType == EvadeType.Blink)
                     {
-                        var dir = (args.StartPosition.To2D() - myHero.ServerPosition.To2D()).Normalized();
+                        var blinkPos = args.StartPosition.To2D();
 
-                        var end = myHero.ServerPosition.To2D() + dir * myHero.ServerPosition.To2D().Distance(Game.CursorPos.To2D());
-                        if (evadeSpell.fixedRange || end.Distance(myHero.ServerPosition.To2D()) > evadeSpell.range)
+                        var posInfo = EvadeHelper.CanHeroWalkToPos(blinkPos, evadeSpell.speed, ObjectCache.gamePing, 0);
+                        if (posInfo != null && posInfo.posDangerLevel == 0)
                         {
-                            end = myHero.ServerPosition.To2D() + dir * evadeSpell.range;
-                        }
-
-                        var posInfo = EvadeHelper.CanHeroWalkToPos(end, evadeSpell.speed, ObjectCache.gamePing, 0);
-                        if (posInfo.posDangerCount < 1)
-                        {
-                            if (lastPosInfo != null)                              
-                                lastPosInfo = posInfo;
-
-                            if (lastPosInfo == null)
-                                lastPosInfo = posInfo;
-
-                            if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 250)
-                            {
-                                EvadeCommand.MoveTo(Game.CursorPos.To2D());
-                                lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
-                            }
-
-                            return;
+                            EvadeCommand.MoveTo(posInfo.position);
+                            lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + evadeSpell.spellDelay;
                         }
                     }
 
@@ -511,28 +472,21 @@ namespace ezEvade
                         }
 
                         var posInfo = EvadeHelper.CanHeroWalkToPos(dashPos, evadeSpell.speed, ObjectCache.gamePing, 0);
-                        if (posInfo.posDangerLevel > 0)
+                        if (posInfo != null && posInfo.posDangerLevel > 0)
                         {
                             args.Process = false;
-                        }
-                        else
-                        {
-                            if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 500)
-                            {
-                                EvadeCommand.MoveTo(Game.CursorPos.To2D());
-                                lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
-                            }
-
                             return;
                         }
-                    }
 
-                    lastPosInfo = PositionInfo.SetAllUndodgeable();
+                        if (isDodging || EvadeUtils.TickCount < lastDodgingEndTime + 500)
+                        {
+                            EvadeCommand.MoveTo(Game.CursorPos.To2D());
+                            lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
+                        }
+                    }
                     return;
                 }
             }
-
-
         }
 
         private void Game_OnIssueOrder(Obj_AI_Base hero, GameObjectIssueOrderEventArgs args)
@@ -736,11 +690,14 @@ namespace ezEvade
                 }
 
                 var limitDelay = ObjectCache.menuCache.cache["TickLimiter"].GetValue<Slider>().Value; //Tick limiter                
-                if (EvadeHelper.fastEvadeMode || EvadeUtils.TickCount - lastTickCount > limitDelay&& EvadeUtils.TickCount > lastStopEvadeTime)
+                if (EvadeHelper.fastEvadeMode || EvadeUtils.TickCount - lastTickCount > limitDelay)
                 {
-                    DodgeSkillShots(); //walking           
-                    ContinueLastBlockedCommand();
-                    lastTickCount = EvadeUtils.TickCount;
+                    if (EvadeUtils.TickCount > lastStopEvadeTime)
+                    {
+                        DodgeSkillShots(); //walking           
+                        ContinueLastBlockedCommand();
+                        lastTickCount = EvadeUtils.TickCount;
+                    }
                 }
 
                 EvadeSpell.UseEvadeSpell(); //using spells
