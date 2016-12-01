@@ -56,7 +56,6 @@ namespace ezEvade
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
         public bool hasTrap = false;
-        public bool dontcheckDuplicates = false;
         public bool isSpecial = false;
         public bool updatePosition = true;
         public float extraDrawHeight = 0;

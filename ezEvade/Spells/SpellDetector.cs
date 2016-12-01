@@ -203,7 +203,7 @@ namespace ezEvade
                                 }
                             }
 
-                            if (foundMissile == false || spellData.dontcheckDuplicates)
+                            if (foundMissile == false)
                             {
                                 CreateSpellData(hero, hero.ServerPosition, args.End, spellData);
                             }
@@ -306,7 +306,20 @@ namespace ezEvade
                 }
                 else if (spellType == SpellType.Cone)
                 {
-                    return;
+                    endPosition = startPosition + direction * spellData.range;
+                    endTick = spellData.spellDelay;
+
+                    if (endPosition.Distance(startPosition) > spellData.range)
+                        endPosition = startPosition + direction * spellData.range;
+
+                    if (spellData.projectileSpeed == 0 && hero != null)
+                    {
+                        endPosition = hero.ServerPosition.To2D();
+                    }
+                    else if (spellData.projectileSpeed > 0)
+                    {
+                        endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
+                    }
                 }
                 else
                 {
@@ -328,7 +341,6 @@ namespace ezEvade
                 endTick += extraEndTick;
 
                 Spell newSpell = new Spell();
-
                 newSpell.startTime = EvadeUtils.TickCount;
                 newSpell.endTime = EvadeUtils.TickCount + endTick;
                 newSpell.startPos = startPosition;
@@ -339,11 +351,17 @@ namespace ezEvade
                 newSpell.spellType = spellType;
                 newSpell.radius = spellRadius > 0 ? spellRadius : newSpell.GetSpellRadius();
 
-                if (hero != null)
+                if (spellType == SpellType.Cone)
                 {
-                    newSpell.heroID = hero.NetworkId;
+                    newSpell.radius = 100 + (newSpell.radius * 3); // for now.. eh
+                    newSpell.cnStart = startPosition + direction;
+                    newSpell.cnLeft = endPosition + direction.Perpendicular() * newSpell.radius;
+                    newSpell.cnRight = endPosition - direction.Perpendicular() * newSpell.radius;
                 }
 
+                if (hero != null)
+                    newSpell.heroID = hero.NetworkId;
+ 
                 if (obj != null)
                 {
                     newSpell.spellObject = obj;
@@ -861,11 +879,11 @@ namespace ezEvade
                     foreach (var spell in SpellDatabase.Spells.Where(
                         s => (s.charName == hero.ChampionName) || (s.charName == "AllChampions")))
                     {
+
                         if (spell.hasTrap && spell.projectileSpeed < 3000 || !spell.hasTrap)
                         {
-                            if (!(spell.spellType == SpellType.Circular
-                                  || spell.spellType == SpellType.Line
-                                  || spell.spellType == SpellType.Arc))
+                            if (spell.spellType != SpellType.Circular && spell.spellType != SpellType.Line &&
+                                spell.spellType != SpellType.Arc && spell.spellType != SpellType.Cone)
                                 continue;
 
                             if (spell.charName == "AllChampions")
@@ -906,7 +924,7 @@ namespace ezEvade
                                 string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
 
                                 var enableSpell = !spell.defaultOff;
-                                var isnewSpell = spell.name.Contains("[Beta]");
+                                var isnewSpell = spell.name.Contains("[Beta]") || spell.spellType == SpellType.Cone;
 
                                 Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
 
@@ -943,10 +961,8 @@ namespace ezEvade
                             }
                         }
                     }
-
                 }
             }
-
         }
     }
 }

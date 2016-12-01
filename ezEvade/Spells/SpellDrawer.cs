@@ -248,7 +248,7 @@ namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Cone)
                     {
-                        DrawLineTriangle(spell.startPos, spell.endPos, (int) spell.radius, spellDrawingWidth, spellDrawingConfig.Color);
+                        DrawLineTriangle(spell.startPos, spell.endPos, (int) spell.radius, spellDrawingWidth, !canEvade ? Color.Yellow : spellDrawingConfig.Color);
                     }
                 }
             }

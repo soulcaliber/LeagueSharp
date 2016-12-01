@@ -214,7 +214,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "Incinerate",
-                spellType = SpellType.Cone,
+                spellType = SpellType.Cone
             });
 
             Spells.Add(
@@ -222,7 +222,6 @@ namespace ezEvade
             {
                 charName = "Annie",
                 dangerlevel = 4,
-                missileName = "Incinerate",
                 name = "Summom: Tibbers",
                 radius = 290,
                 range = 600,
@@ -258,7 +257,7 @@ namespace ezEvade
             {
                 angle = 5,
                 charName = "Ashe",
-                dangerlevel = 2,
+                dangerlevel = 1,
                 //missileName = "VolleyAttack",
                 name = "Volley",
                 projectileSpeed = 1500,
@@ -267,7 +266,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "Volley",
-                spellType = SpellType.Cone, // temp removal
+                spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 isSpecial = true
             });
@@ -556,7 +555,7 @@ namespace ezEvade
                 charName = "Cassiopeia",
                 dangerlevel = 4,
                 name = "Petrifying Gaze",
-                radius = 20,
+                radius = 145,
                 range = 825,
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
@@ -611,7 +610,7 @@ namespace ezEvade
                 dangerlevel = 2,
                 missileName = "FeralScream",
                 name = "Feral Scream",
-                radius = 20,
+                radius = 80,
                 range = 650,
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
@@ -716,7 +715,7 @@ namespace ezEvade
                 dangerlevel = 3,
                 missileName = "DariusAxeGrabCone",
                 name = "Axe Cone Grab",
-                radius = 20,
+                radius = 55,
                 range = 570,
                 spellDelay = 320,
                 spellKey = SpellSlot.E,
@@ -1868,7 +1867,7 @@ namespace ezEvade
                 charName = "Kassadin",
                 dangerlevel = 2,
                 name = "Force Pulse",
-                radius = 20,
+                radius = 80,
                 range = 700,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
@@ -2319,7 +2318,7 @@ namespace ezEvade
                 extraMissileNames = new[] { "lucianrmissileoffhand" },
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                dontcheckDuplicates = true,
+                usePackets = true,
                 fixedRange = true
             });
             
@@ -2477,7 +2476,7 @@ namespace ezEvade
                 charName = "Mordekaiser",
                 dangerlevel = 3,
                 name = "Syphon Of Destruction",
-                radius = 160,
+                radius = 80,
                 range = 675,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
@@ -2788,7 +2787,7 @@ namespace ezEvade
                 charName = "Pantheon",
                 dangerlevel = 2,
                 name = "Heartseeker",
-                radius = 50,
+                radius = 80,
                 range = 600,
                 extraEndTime = 750,
                 spellDelay = 1000,
@@ -3200,7 +3199,7 @@ namespace ezEvade
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
                 spellName = "SionR",
-                spellType = SpellType.Cone, // temp removal
+                spellType = SpellType.None, // temp removal
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions },
                 isSpecial = true
             });

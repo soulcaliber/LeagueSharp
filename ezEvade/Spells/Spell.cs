@@ -24,6 +24,9 @@ namespace ezEvade
         public GameObject spellObject = null;
         public SpellType spellType;
 
+        public Vector2 cnLeft;
+        public Vector2 cnRight;
+        public Vector2 cnStart;
         public Vector2 currentSpellPosition = Vector2.Zero;
         public Vector2 currentNegativePosition = Vector2.Zero;
         public Vector2 predictedEndPos = Vector2.Zero;
@@ -110,8 +113,7 @@ namespace ezEvade
 
         public static Vector2 GetSpellProjection(this Spell spell, Vector2 pos, bool predictPos = false)
         {
-            if (spell.spellType == SpellType.Line
-                || spell.spellType == SpellType.Arc)
+            if (spell.spellType == SpellType.Line)
             {
                 if (predictPos)
                 {
@@ -120,14 +122,31 @@ namespace ezEvade
 
                     return pos.ProjectOn(spellPos, spellEndPos).SegmentPoint;
                 }
-                else
-                {
-                    return pos.ProjectOn(spell.startPos, spell.endPos).SegmentPoint;
-                }
+            
+                 return pos.ProjectOn(spell.startPos, spell.endPos).SegmentPoint;
             }
-            else if (spell.spellType == SpellType.Circular)
+
+            if (spell.spellType == SpellType.Arc)
+            {
+                if (predictPos)
+                {
+                    var spellPos = spell.currentSpellPosition;
+                    var spellEndPos = spell.GetSpellEndPosition();
+
+                    return pos.ProjectOn(spellPos, spellEndPos).SegmentPoint;
+                }
+
+               return pos.ProjectOn(spell.startPos, spell.endPos).SegmentPoint;
+            }
+
+            if (spell.spellType == SpellType.Circular)
             {
                 return spell.endPos;
+            }
+
+            if (spell.spellType == SpellType.Cone)
+            {
+                
             }
 
             return Vector2.Zero;
@@ -188,20 +207,17 @@ namespace ezEvade
 
         public static float GetSpellHitTime(this Spell spell, Vector2 pos)
         {
-
-            if (spell.spellType == SpellType.Line)
+            switch (spell.spellType)
             {
-                if (spell.info.projectileSpeed == float.MaxValue)
-                {
+                case SpellType.Line:
+                    if (spell.info.projectileSpeed == float.MaxValue)
+                        return Math.Max(0, spell.endTime - EvadeUtils.TickCount - ObjectCache.gamePing);
+
+                    var spellPos = spell.GetCurrentSpellPosition(true, ObjectCache.gamePing);
+                    return 1000 * spellPos.Distance(pos) / spell.info.projectileSpeed;
+                case SpellType.Cone:
+                case SpellType.Circular:
                     return Math.Max(0, spell.endTime - EvadeUtils.TickCount - ObjectCache.gamePing);
-                }
-
-                var spellPos = spell.GetCurrentSpellPosition(true, ObjectCache.gamePing);
-                return 1000 * spellPos.Distance(pos) / spell.info.projectileSpeed;
-            }
-            else if (spell.spellType == SpellType.Circular)
-            {
-                return Math.Max(0, spell.endTime - EvadeUtils.TickCount - ObjectCache.gamePing);
             }
 
             return float.MaxValue;
@@ -219,7 +235,7 @@ namespace ezEvade
             if (moveBuff != null && EvadeSpell.ShouldUseMovementBuff(spell))
             {
                 speed += speed * moveBuff.speedArray[ObjectManager.Player.GetSpell(moveBuff.spellKey).Level - 1] / 100;
-                delay += moveBuff.spellDelay;
+                delay += (moveBuff.spellDelay > 50 ? moveBuff.spellDelay : 0) + ObjectCache.gamePing;
             }
 
             if (spell.spellType == SpellType.Line)
@@ -233,11 +249,24 @@ namespace ezEvade
                 evadeTime = 1000 * (spell.radius - heroPos.Distance(spell.endPos)) / speed;
                 spellHitTime = spell.GetSpellHitTime(heroPos);
             }
+            else if (spell.spellType == SpellType.Cone)
+            {
+                var sides = new[]
+                {
+                    heroPos.ProjectOn(spell.cnStart, spell.cnLeft).SegmentPoint,
+                    heroPos.ProjectOn(spell.cnLeft, spell.cnRight).SegmentPoint,
+                    heroPos.ProjectOn(spell.cnRight, spell.cnStart).SegmentPoint
+                };
+
+                var p = sides.OrderBy(x => x.Distance(x)).First();
+                evadeTime = 1000 * (spell.info.range / 2 - heroPos.Distance(p) + hero.BoundingRadius) / speed;
+                spellHitTime = spell.GetSpellHitTime(heroPos);
+            }
 
             rEvadeTime = evadeTime;
             rSpellHitTime = spellHitTime;
 
-            return spellHitTime > evadeTime + delay;
+            return spellHitTime - delay > evadeTime;
         }
 
         public static BoundingBox GetLinearSpellBoundingBox(this Spell spell)
@@ -293,7 +322,7 @@ namespace ezEvade
                     spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
                 }
             }
-            else if (spell.spellType == SpellType.Circular)
+            else if (spell.spellType == SpellType.Circular || spell.spellType == SpellType.Cone)
             {
                 spellPos = spell.endPos;
             }

@@ -829,7 +829,7 @@ namespace ezEvade
             if (spell.spellType == SpellType.Line)
             {
                 Vector2 intersection;
-                bool hasIntersection = spell.LineIntersectLinearSpellEx(start, end, out intersection);
+                var hasIntersection = spell.LineIntersectLinearSpellEx(start, end, out intersection);
                 if (hasIntersection)
                 {
                     return start.Distance(intersection);
@@ -1046,6 +1046,24 @@ namespace ezEvade
                     }
                 }
             }
+            else if (spell.spellType == SpellType.Cone)
+            {
+                var spellHitTime = Math.Max(0, spell.endTime - EvadeUtils.TickCount - delay);  //extraDelay
+                var walkRange = heroPos.Distance(pos);
+                var predictedRange = speed * (spellHitTime / 1000);
+                var tHeroPos = heroPos + walkDir * Math.Min(predictedRange, walkRange); //Hero predicted pos
+
+                var sides = new[]
+{
+                    heroPos.ProjectOn(spell.cnStart, spell.cnLeft).SegmentPoint,
+                    heroPos.ProjectOn(spell.cnLeft, spell.cnRight).SegmentPoint,
+                    heroPos.ProjectOn(spell.cnRight, spell.cnStart).SegmentPoint
+                };
+
+                var p = sides.OrderBy(x => x.Distance(x)).First();
+
+                return Math.Max(0, tHeroPos.Distance(p) - (spell.radius + ObjectCache.myHeroCache.boundingRadius + extraDist));
+            }
 
             return 1;
         }
@@ -1166,6 +1184,34 @@ namespace ezEvade
             return false;
         }
 
+
+        public static bool LineIntersectLinearSegment(Vector2 a1, Vector2 b1, Vector2 a2, Vector2 b2)
+        {
+            const int segmentRadius = 55;
+
+            var myBoundingRadius = ObjectManager.Player.BoundingRadius;
+            var segmentDir = (b1 - a1).Normalized().Perpendicular();
+            var segmentStart = a1;
+            var segmentEnd = b1;
+
+            var startRightPos = segmentStart + segmentDir * (segmentRadius + myBoundingRadius);
+            var startLeftPos = segmentStart - segmentDir * (segmentRadius + myBoundingRadius);
+            var endRightPos = segmentEnd + segmentDir * (segmentRadius + myBoundingRadius);
+            var endLeftPos = segmentEnd - segmentDir * (segmentRadius + myBoundingRadius);
+
+            bool int1 = MathUtils.CheckLineIntersection(a2, b2, startRightPos, startLeftPos);
+            bool int2 = MathUtils.CheckLineIntersection(a2, b2, endRightPos, endLeftPos);
+            bool int3 = MathUtils.CheckLineIntersection(a2, b2, startRightPos, endRightPos);
+            bool int4 = MathUtils.CheckLineIntersection(a2, b2, startLeftPos, endLeftPos);
+
+            if (int1 || int2 || int3 || int4)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static bool CheckMoveToDirection(Vector2 from, Vector2 movePos, float extraDelay = 0)
         {
             var dir = (movePos - from).Normalized();
@@ -1258,7 +1304,10 @@ namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Cone)
                     {
-
+                        if (LineIntersectLinearSegment(spell.cnStart, spell.cnLeft, from, movePos) ||
+                            LineIntersectLinearSegment(spell.cnLeft, spell.cnRight, from, movePos) ||
+                            LineIntersectLinearSegment(spell.cnRight, spell.cnStart, from, movePos))
+                            return true;
                     }
                 }
             }

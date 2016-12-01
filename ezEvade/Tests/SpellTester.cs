@@ -92,6 +92,18 @@ namespace ezEvade
                             }
                         }
                     }
+                    else if (spell.spellType == SpellType.Cone)
+                    {
+                        // SPELL TESTER
+                        if (EvadeUtils.TickCount - spell.startTime >= spell.endTime - spell.startTime)
+                        {
+                            if (myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
+                            {
+                                Game.ShowPing(PingCategory.Danger, myHero.Position);
+                                DelayAction.Add(1, () => SpellDetector.DeleteSpell(spell.spellID));
+                            }
+                        }
+                    }
                 }
             }
         }
