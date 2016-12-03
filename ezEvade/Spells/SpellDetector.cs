@@ -697,24 +697,24 @@ namespace ezEvade
 
         public static void InitChannelSpells()
         {
-            channeledSpells["Drain"] = "FiddleSticks";
-            channeledSpells["Crowstorm"] = "FiddleSticks";
-            channeledSpells["KatarinaR"] = "Katarina";
-            channeledSpells["AbsoluteZero"] = "Nunu";
-            channeledSpells["GalioIdolOfDurand"] = "Galio";
-            channeledSpells["MissFortuneBulletTime"] = "MissFortune";
-            channeledSpells["Meditate"] = "MasterYi";
-            channeledSpells["NetherGrasp"] = "Malzahar";
-            channeledSpells["ReapTheWhirlwind"] = "Janna";
-            channeledSpells["KarthusFallenOne"] = "Karthus";
-            channeledSpells["KarthusFallenOne2"] = "Karthus";
-            channeledSpells["VelkozR"] = "Velkoz";
-            channeledSpells["XerathLocusOfPower2"] = "Xerath";
-            channeledSpells["ZacE"] = "Zac";
-            channeledSpells["Pantheon_Heartseeker"] = "Pantheon";
-            channeledSpells["JhinR"] = "Jhin";
-            channeledSpells["OdinRecall"] = "AllChampions";
-            channeledSpells["Recall"] = "AllChampions";
+            channeledSpells["drain"] = "FiddleSticks";
+            channeledSpells["crowstorm"] = "FiddleSticks";
+            channeledSpells["katarinar"] = "Katarina";
+            channeledSpells["absolutezero"] = "Nunu";
+            channeledSpells["galioidolofdurand"] = "Galio";
+            channeledSpells["missfortunebullettime"] = "MissFortune";
+            channeledSpells["meditate"] = "MasterYi";
+            channeledSpells["malzaharr"] = "Malzahar";
+            channeledSpells["reapthewhirlwind"] = "Janna";
+            channeledSpells["karthusfallenone"] = "Karthus";
+            channeledSpells["karthusfallenone2"] = "Karthus";
+            channeledSpells["velkozr"] = "Velkoz";
+            channeledSpells["xerathlocusofpower2"] = "Xerath";
+            channeledSpells["zace"] = "Zac";
+            channeledSpells["pantheon_heartseeker"] = "Pantheon";
+            channeledSpells["jhinr"] = "Jhin";
+            channeledSpells["odinrecall"] = "AllChampions";
+            channeledSpells["recall"] = "AllChampions";
         }
 
         public static void LoadDummySpell(SpellData spell)

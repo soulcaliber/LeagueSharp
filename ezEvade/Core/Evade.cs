@@ -350,6 +350,7 @@ namespace ezEvade
                 menu.Item("CalculateWindupDelay").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
                 menu.Item("PreventDodgingNearEnemy").SetValue(true);
+                menu.Item("MinComfortZone").SetValue(new Slider(850, 0, 1000));
             }
             
             else if (mode == "GuessWho")
@@ -631,24 +632,11 @@ namespace ezEvade
                 return;
             }
 
-            if (hero.NetworkId != myHero.NetworkId)
-            {
-                Console.WriteLine("IS NOT ME");
-            }
-
-            /*if (args.SData.Name.Contains("Recall"))
-            {
-                var distance = lastStopPosition.Distance(args.Start.To2D());
-                float moveTime = 1000 * distance / myHero.MoveSpeed;
-
-                Console.WriteLine("Extra dist: " + distance + " Extra Delay: " + moveTime);
-            }*/
-
             string name;
-            if (SpellDetector.channeledSpells.TryGetValue(args.SData.Name, out name))
+            if (SpellDetector.channeledSpells.TryGetValue(args.SData.Name.ToLower(), out name))
             {
-                Evade.isChanneling = true;
-                Evade.channelPosition = myHero.ServerPosition.To2D();
+                isChanneling = true;
+                channelPosition = myHero.ServerPosition.To2D();
             }
 
             if (ObjectCache.menuCache.cache["CalculateWindupDelay"].GetValue<bool>())
@@ -658,9 +646,9 @@ namespace ezEvade
                 if (castTime > 0 && !Orbwalking.IsAutoAttack(args.SData.Name)
                     && Math.Abs(castTime - myHero.AttackCastDelay * 1000) > 1)
                 {
-                    Evade.lastWindupTime = EvadeUtils.TickCount + castTime - Game.Ping / 2;
+                    lastWindupTime = EvadeUtils.TickCount + castTime - Game.Ping / 2;
 
-                    if (Evade.isDodging)
+                    if (isDodging)
                     {
                         SpellDetector_OnProcessDetectedSpells(); //reprocess
                     }
@@ -696,8 +684,9 @@ namespace ezEvade
                     {
                         DodgeSkillShots(); //walking           
                         ContinueLastBlockedCommand();
-                        lastTickCount = EvadeUtils.TickCount;
                     }
+
+                    lastTickCount = EvadeUtils.TickCount;
                 }
 
                 EvadeSpell.UseEvadeSpell(); //using spells
@@ -962,7 +951,6 @@ namespace ezEvade
                 {
 
                     var posInfo = EvadeHelper.GetBestPosition();
-
                     var calculationTimer = EvadeUtils.TickCount;
                     var caculationTime = EvadeUtils.TickCount - calculationTimer;
 
@@ -990,7 +978,12 @@ namespace ezEvade
                     }
 
                     CheckHeroInDanger();
-                    DodgeSkillShots(); //walking
+
+                    if (EvadeUtils.TickCount > lastStopEvadeTime)
+                    {
+                        DodgeSkillShots(); //walking           
+                    }
+
                     CheckLastMoveTo();
                     EvadeSpell.UseEvadeSpell(); //using spells
                 }
