@@ -272,6 +272,46 @@ namespace ezEvade
             });
 
             #endregion Ashe
+            
+            #region Aurelion Sol
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "AurelionSol",
+                dangerlevel = 2,
+                name = "AurelionSolQ",
+                projectileSpeed = 850,
+                radius = 180,
+                range = 1500,
+                spellDelay = 250,
+                fixedRange = true,
+                spellKey = SpellSlot.Q,
+                spellName = "AurelionSolQMissile",
+                spellType = SpellType.Line,
+                // collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
+            });
+            
+            Spells.Add(
+            new SpellData
+            {
+            
+                charName = "AurelionSol",
+                dangerlevel = 3,
+                name = "AurelionSolR",
+                projectileSpeed = 4500,
+                radius = 120,
+                range = 1420,
+                spellDelay = 250,
+                fixedRange = true,
+                spellKey = SpellSlot.R,
+                spellName = "AurelionSolRBeamMissile",
+                spellType = SpellType.Line,
+                isSpecial = true,
+                collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
+                });
+            
+            #endregion Aurelion Sol
 
             #region Aurelion Sol
 
