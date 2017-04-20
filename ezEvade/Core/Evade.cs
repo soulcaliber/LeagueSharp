@@ -356,11 +356,18 @@ namespace ezEvade
             else if (mode == "GuessWho")
             {
                 ResetConfig(false);
-                menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
-                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind(109, KeyBindType.Press));
                 menu.Item("HigherPrecision").SetValue(true);
                 menu.Item("CheckSpellCollision").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
+                menu.Item("AdvancedSpellDetection").SetValue(true);
+                menu.Item("FastMovementBlock").SetValue(true);
+                menu.Item("FastEvadeActivationTime").SetValue(new Slider(120, 0, 500));
+                menu.Item("RejectMinDistance").SetValue(new Slider(25, 0, 100));
+                menu.Item("ExtraCPADistance").SetValue(new Slider(25, 0, 150));
+                menu.Item("ExtraEvadeDistance").SetValue(new Slider(20, 0, 300));
+                menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
+                menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
+                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind(109, KeyBindType.Press));
                 menu.Item("ShowStatus").SetValue(false);
                 menu.Item("DrawSpellPos").SetValue(true);
             }
